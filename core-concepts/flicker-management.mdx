@@ -23,9 +23,9 @@ Kameleoon's anti-flicker technology is unique and powerful for the following rea
 - **Deferred Experiment Loading**: Kameleeon allows you to select which experiments to include in our application file, `engine.js` (previously named `kameleoon.js`) at the time of the initial page load, on a case-by-case basis, and [defer non-essential experiments](https://developers.kameleoon.com/web-experimentation/faq/#can-i-delay-non-essential-experiments-until-after-the-first-page-load) for after the first load.
 - **Real time update**: To provide more frequent updates without being hindered by browser caching, our Live Update Experiments feature refreshes any experiment labeled “LIVE-UPDATE” within a minute.
 
-## How to prevent flicker in your experiments
+## How to prevent flicker in experiments
 
-To eliminate flickering that occurs when loading our application file, we recommend using our [asynchronous tag with anti-flicker prevention](https://developers.kameleoon.com/web-experimentation/simple-implementation#asynchronous-tag-with-anti-flicker).
+To eliminate flickering that occurs when loading the Kameleoon application file, use the [asynchronous tag with anti-flicker prevention](https://developers.kameleoon.com/web-experimentation/simple-implementation#asynchronous-tag-with-anti-flicker).
 
 Our snippet includes a “blocking CSS rule” that initially hides all the content on the page while our script is being downloaded by the browser. This rule is removed as soon as Kameleoon’s application code has loaded, which typically takes less than 50 milliseconds. If the application code does not load within the specified timeout period (default set to 1000 milliseconds), the rule will also be removed to prevent displaying a blank page indefinitely. This approach ensures that Kameleoon cannot disrupt your website in any situation.
 
