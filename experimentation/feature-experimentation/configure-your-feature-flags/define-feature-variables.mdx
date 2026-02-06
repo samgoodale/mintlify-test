@@ -1,6 +1,6 @@
 ---
 title: "Define feature variables"
-description: "You can define feature variables to remotely update your feature flags' content in your chosen environment. You must create feature variables [to create feature variations](https://help.kameleoon.com/experimentation/feature-experimentation/configure-your-feature-flags/define-feature-variations/). There is no limit on the number of feature variables you can create."
+description: "Define feature variables to remotely update feature flag content in the chosen environment. Create feature variables [to create feature variations](https://help.kameleoon.com/experimentation/feature-experimentation/configure-your-feature-flags/define-feature-variations/). There is no limit on the number of feature variables."
 ---
 
 ## Creating feature variables
@@ -12,13 +12,13 @@ description: "You can define feature variables to remotely update your feature f
 
 <Steps>
 <Step>
-Navigate to your feature flag or create a new one.
+Navigate to the feature flag or create a new one.
 </Step>
 <Step>
 In the left sidebar, click **Set Up** > **Variables** > **Add Variable**.
 </Step>
 <Step>
-Select your variable's **Type**, **Variable Key**, and **Default Value**.
+Select the variable's **Type**, **Variable Key**, and **Default Value**.
 </Step>
 <Step>
 Click **Save**.
@@ -28,18 +28,18 @@ Click **Save**.
 <Note>
 **Note:**
 
-To retrieve a feature variable from your source code, you must call the `getVariation()` method. Please note that if you use feature variations, Kameleoon will automatically bucket the user in a variation and return the value of the variable that has been defined in the variation (you do not need to call the `getVariation()` method).
+To retrieve a feature variable from source code, call the `getVariation()` method. Note that if feature variations are used, Kameleoon automatically buckets the user in a variation and returns the value of the variable that has been defined in the variation (calling the `getVariation()` method is not required).
 </Note>
 
 ## Benefits of feature variables
 
-Feature variables let you variabilize parts of your feature flag code, so you can dynamically assign values to variables without coding them in your source code.
+Feature variables variabilize parts of feature flag code, enabling dynamic assignment of values to variables without coding the values in source code.
 
-Once the feature variable's code is in production, changing it does not require redeployment. For example, if your feature is a discount offer for premium customers, but you're not sure what the discount percentage will be, you can create a **Discount Percentage** variable in your code and update it from the Kameleoon app without changing or pushing new code.
+Once the feature variable's code is in production, changing the variable does not require redeployment. For example, if a feature is a discount offer for premium customers, but the discount percentage is uncertain, create a **Discount Percentage** variable in the code and update the variable from the Kameleoon app without changing or pushing new code.
 
-Developers and product owners can work together to variablize parts of your feature that might change, so product updates are not blocked by development and deployments.
+Developers and product owners can work together to variabilize parts of a feature that might change, so product updates are not blocked by development and deployments.
 
-Choose your SDK language and use the sample code provided to set up the SDK in your application in any of the following languages:
+Choose the SDK language and use the sample code provided to set up the SDK in the application in any of the following languages:
 
 - Android
 - Swift
