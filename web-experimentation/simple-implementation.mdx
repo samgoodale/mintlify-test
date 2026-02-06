@@ -1,0 +1,193 @@
+---
+title: "Simple implementation"
+description: "This article provides a quick guide to implementing Kameleoon on your website. The implementation process is straightforward, as it only requires adding a JavaScript installation tag to the HTML source code of your pages."
+---
+
+## Implementing Kameleoon into the HTML source code
+
+For web experimentation, it is important that you always add the Kameleoon tag in the `<head>` section of your HTML source code. Placing the Kameleoon installation tags in the `<body>` section, particularly at the end of the page, increases the risk of having [flickering](https://developers.kameleoon.com/core-concepts/flicker-management) in your experiments. Additionally, it is highly recommended to add our tag as high as possible in the `<head>` section. Ideally, it should be placed just after the initial opening `<head>` tag, so that the browser can load the Kameleoon application file before anything else. Any resources such as CSS or other scripts placed before the Kameleoon tag increase the risk of flickering.
+
+<Note>
+**Note:**
+
+If you're using hybrid mode (both an SDK and the JavaScript installation tag), you can place the tag later in the body. For example, right before the closing `</body>` tag. This is because flicker is not an issue when using a web SDK.
+</Note>
+
+The recommended method for web experimentation is the [Asynchronous tag with anti-flicker](https://developers.kameleoon.com/web-experimentation/simple-implementation/#asynchronous-tag-with-anti-flicker). This implementation may not load Kameleoon in the fastest possible way, but it is the safest. Using an asynchronous script guarantees that Kameleoon cannot block the load of your website. The added white overlay on the page "simulates" the effect of a synchronously loaded script, preventing [flickering](https://developers.kameleoon.com/core-concepts/flicker-management). To prioritize faster loading times, you can consider the [synchronous tag](https://developers.kameleoon.com/web-experimentation/simple-implementation/#synchronous-tag) instead.
+
+<Tip>
+**Tip:**
+
+If your website uses multiple subdomains, it is important to remember to include the additional [unified session data across subdomains](https://developers.kameleoon.com/core-concepts/unify-session-data-across-subdomains) code in the implementation script. Otherwise, Kameleoon will not work correctly if you intend to use session data across all your subdomains for advanced behavioral targeting purposes.
+</Tip>
+
+<Info>
+**Info:**
+
+Adding any script or resource to your website naturally adds some extra load. However, at Kameleoon, our engineers have always placed a high priority on performance. They have dedicated countless hours to refining our code and technology to achieve the best possible results. We are confident that we offer the most performance-optimized solution on the market.
+</Info>
+
+### Asynchronous tag with anti-flicker
+
+This implementation method loads the Kameleoon script asynchronously and includes anti-flickering code. Specifically, we use a "blocking CSS rule" to hide the entire page's contents, which we remove as soon as Kameleoon's application code has loaded (usually less than 50ms), or if the specified timeout (default at 1000ms) is reached, preventing a blank page from displaying indefinitely if the Kameleoon application file is not yet loaded. This ensures that Kameleoon can never cause your website to crash.
+
+You can adjust the timeout using the `kameleoonLoadingTimeout` JavaScript variable in the installation snippet, but we recommend leaving it at the default value of 1000 milliseconds. This variable determines the maximum time that the Kameleoon installation tag can delay the display of your site while waiting for the Kameleoon application file.
+
+<Tip>
+**Tip:**
+
+If a timeout occurs and the Kameleoon code eventually loads, the next steps are configurable in the [advanced confirmation settings](https://help.kameleoon.com/manage-your-sites/#Add_a_new_project) of your Kameleoon project. You have two options:
+
+- disable Kameleoon entirely (meaning that no experiments or personalizations will be run for that particular visitor if a timeout occurs),
+- or run Kameleoon's code normally (which will cause flickering since it will run late).
+</Tip>
+
+<Info>
+**Info:**
+
+`kameleoon.js` is deprecated and has been replaced by `engine.js` in all Kameleoon implementation snippets. `kameleoon.js` will no longer be supported after **June 1st, 2026**. After this date, any campaigns on websites still referencing `kameleoon.js` will stop functioning. We strongly recommend updating your implementation snippet accordingly.
+</Info>
+
+```html expandable
+<script>
+  // Duration in milliseconds to wait while the Kameleoon application file is loaded
+  var kameleoonLoadingTimeout = 1000;
+  window.kameleoonQueue = window.kameleoonQueue || [];
+  window.kameleoonStartLoadTime = new Date().getTime();
+  if (! document.getElementById("kameleoonLoadingStyleSheet") && ! window.kameleoonDisplayPageTimeOut) {
+    var kameleoonS = document.getElementsByTagName("script")[0];
+    var kameleoonCc = "* { visibility: hidden !important; background-image: none !important; }";
+    var kameleoonStn = document.createElement("style");
+    kameleoonStn.type = "text/css";
+    kameleoonStn.id = "kameleoonLoadingStyleSheet";
+    if (kameleoonStn.styleSheet) {
+      kameleoonStn.styleSheet.cssText = kameleoonCc;
+    } else {
+      kameleoonStn.appendChild(document.createTextNode(kameleoonCc));
+    }
+    kameleoonS.parentNode.insertBefore(kameleoonStn, kameleoonS);
+    window.kameleoonDisplayPage = function(fromEngine) {
+      if (!fromEngine) {
+        window.kameleoonTimeout = true;
+      }
+      if (kameleoonStn.parentNode) {
+        kameleoonStn.parentNode.removeChild(kameleoonStn);
+      }
+    };
+    window.kameleoonDisplayPageTimeOut = window.setTimeout(window.kameleoonDisplayPage, kameleoonLoadingTimeout);
+  }
+</script>
+<script type="text/javascript" src="//SITE_CODE.kameleoon.io/engine.js" fetchpriority="high" async></script>
+```
+
+Make sure you replace the `SITE_CODE` placeholder with your own project [site code](https://help.kameleoon.com/question/how-do-i-find-my-site-id/).
+
+<Note>
+**Note:**
+
+The domain for your Kameleoon scripts may vary from one project to another. Your projects may be hosted on either `kameleoon.eu` or `kameleoon.io` depending on their creation date. Make sure you use the domain displayed in your project in the Kameleoon App.
+</Note>
+
+<Note>
+**Note:**
+
+The timeout counter starts as soon as the Kameleoon code above is executed, and not when the browser starts downloading the `engine.js` file. Therefore, setting the timeout too low, such as 100ms, may not provide enough time for the browser to download the Kameleoon application file due to the way that browsers handle script loading and execution. When a browser encounters a script tag on a web page, it first downloads the script file from the URL specified in the `src` attribute. Once the script file is downloaded, the browser then adds the script to the page's execution context and executes it. However, if the browser is currently downloading or executing other scripts on the page, it may queue the Kameleoon script to be executed later. This could result in the Kameleoon script not being executed until after the timeout duration has expired. Furthermore, some users may have network latency or slow internet connections, which could cause the Kameleoon script to take longer to download.
+</Note>
+
+<Danger>
+**Danger:**
+
+It is crucial to include the Kameleoon installation tag within the `<head>` tag of your HTML code, or at the beginning of the `<body>` tag at the latest. Placing it inside the `<body>` tag, particularly towards the end of it, may cause the page to initially load, disappear, and then reappear due to the anti-flickering code, which is only intended to function inside the `<head>` tag.
+
+While it is a general recommendation to add the installation code in the `<head>` section of your HTML code for all implementation methods, it is particularly important in this case as failure to do so can have significant consequences.
+</Danger>
+
+### Synchronous tag
+
+This implementation method loads the Kameleoon script synchronously, without causing any flickering. However, it's worth noting that this approach involves blocking the loading of the page until the Kameleoon code is fully downloaded and executed, which is generally not recommended.
+
+<Info>
+**Info:**
+
+`kameleoon.js` is deprecated and has been replaced by `engine.js` in all Kameleoon implementation snippets. `kameleoon.js` will no longer be supported after **June 1st, 2026**. After this date, any campaigns on websites still referencing `kameleoon.js` will stop functioning. We strongly recommend updating your implementation snippet accordingly.
+</Info>
+
+```html
+<script>window.kameleoonQueue = window.kameleoonQueue || [];</script>
+<script type="text/javascript" src="//SITE_CODE.kameleoon.io/engine.js" fetchpriority="high"></script>
+```
+
+Make sure you replace the `SITE_CODE` placeholder with your own project [site code](https://help.kameleoon.com/question/how-do-i-find-my-site-id/).
+
+<Note>
+**Note:**
+
+The domain for your Kameleoon scripts may vary from one project to another. Your projects may be hosted on either `kameleoon.eu` or `kameleoon.io` depending on their creation date. Make sure you use the domain displayed in your project in the Kameleoon App.
+</Note>
+
+### Asynchronous tag without anti-flicker
+
+This tag installs the Kameleoon application file asynchronously without attempting to prevent the [flicker effect](https://developers.kameleoon.com/core-concepts/flicker-management). Use this tag if flicker is not a concern, for example, if you are using hybrid mode.
+
+<Info>
+**Info:**
+
+`kameleoon.js` is deprecated and has been replaced by `engine.js` in all Kameleoon implementation snippets. `kameleoon.js` will no longer be supported after **June 1st, 2026**. After this date, any campaigns on websites still referencing `kameleoon.js` will stop functioning. We strongly recommend updating your implementation snippet accordingly.
+</Info>
+
+```html
+<script>window.kameleoonQueue = window.kameleoonQueue || [];</script>
+<script type="text/javascript" src="//SITE_CODE.kameleoon.io/engine.js" fetchpriority="high" async></script>
+```
+
+Make sure you replace the `SITE_CODE` placeholder with your own project [site code](https://help.kameleoon.com/question/how-do-i-find-my-site-id/).
+
+<Note>
+**Note:**
+
+The domain for your Kameleoon scripts may vary from one project to another. Your projects may be hosted on either `kameleoon.eu` or `kameleoon.io` depending on their creation date. Make sure you use the domain displayed in your project in the Kameleoon App.
+</Note>
+
+## Implementing Kameleoon into a Tag Manager
+
+Kameleoon is fully compatible with all major Tag Management Systems (TMS). However, we strongly recommend installing Kameleoon directly in the source code of your pages to avoid the [flickering](https://developers.kameleoon.com/core-concepts/flicker-management) effect. When using a TMS, the loading of Kameleoon is delayed, resulting in a very noticeable flicker, especially if your TMS is loaded at the bottom of your HTML page. However, we understand that some customers may have no choice but to use a TMS.
+<Note>
+Please note that Kameleoon cannot provide technical support for flickering issues when using Kameleoon via a Tag Management system. Loading external JavaScript code synchronously is not possible within a TMS.
+</Note>
+For a TMS, the only possible implementation method is the **asynchronous JavaScript tag**.
+
+<Info>
+**Info:**
+
+`kameleoon.js` is deprecated and has been replaced by `engine.js` in all Kameleoon implementation snippets. `kameleoon.js` will no longer be supported after **June 1st, 2026**. After this date, any campaigns on websites still referencing `kameleoon.js` will stop functioning. We strongly recommend updating your implementation snippet accordingly.
+</Info>
+
+```javascript
+window.kameleoonStartLoadTime = new Date().getTime();
+var scriptNode = document.createElement("script");
+scriptNode.src = "//SITE_CODE.kameleoon.io/engine.js"; //replace the SITE_CODE variable by your Kameleoon project Sitecode.
+scriptNode.type = "text/javascript";
+scriptNode.async = true;
+scriptNode.setAttribute("data-tagmanager", true);
+document.head.appendChild(scriptNode);
+```
+
+<Note>
+**Note:**
+
+The domain for your Kameleoon scripts may vary from one project to another. Your projects may be hosted on either `kameleoon.eu` or `kameleoon.io` depending on their creation date. Make sure you use the domain displayed in your project in the Kameleoon App.
+</Note>
+
+<Tip>
+**Tip:**
+
+Please note that some TMS may offer server-side support, which allows you to install Kameleoon without causing any issues. This is because, in essence, it is the same as having the Kameleoon installation code directly embedded in your HTML code.
+</Tip>
+
+<Warning>
+**Caution:**
+
+Please ensure that you do not configure your TMS to cache and combine the Kameleoon script, as the Kameleoon application file comprises a dynamic component, which contains configuration data necessary to execute ongoing experiments and personalizations. If your TMS caches the Kameleoon application file, starting and running experiments or personalizations will be impossible.
+
+**Lastly, please avoid utilizing our anti-flicker prevention technology as it is not designed to operate correctly within a TMS.**
+</Warning>

@@ -1,0 +1,56 @@
+---
+title: "Product targeting"
+description: "You can create **product based targeting** in Kameleoon using **Triggers**. Before proceeding, ensure you have correctly implemented **product tracking** as described in [Get Started](https://help.kameleoon.com/product-targeting-and-social-proofing/get-started)."
+---
+
+This page focuses on the **Visiting Behaviours → Product Pages** conditions of a trigger. To learn more about Triggers, see the [Triggers documentation](https://help.kameleoon.com/assets/triggers/create-a-trigger/).
+
+## Overview
+
+There are three main **dimensions** of product states you can use for targeting.
+
+### Price of the displayed product page
+
+<Note>
+**Note:**
+
+Product data and history are retrieved based on **the consulted page** , the value is then stored in **SessionStorage**. It makes the compute of price changes for targeting.
+</Note>
+
+Includes or excludes product pages where the price is **higher than**, **lower than** and **equal to** a certain amount or or **increased** and **decreased** during a period.
+
+This comparison can be based on:
+
+- A fixed price
+- The price of a specific product
+- The average price of a selected group of products
+
+<Frame>
+![price-of-the-product-pages-displayed](https://help.kameleoon.com/assets/images/price-of-the-product-pages-displayed-23b20ed5f7f33e18b36d956c0410acb0.png)
+</Frame>
+
+### Number of visited product pages
+
+<Note>
+**Note:**
+
+Visited products and category data are retrieved based on **the consulted page** , each products are then stored in **SessionStorage**.
+</Note>
+
+Includes or excludes visitors based on:
+
+- The **number** of product pages they visited
+- The **category** of those products
+- Their **price**
+
+<Frame>
+![number-of-visited-product-pages](https://help.kameleoon.com/assets/images/number-of-visited-product-pages-150ea5430fee62602356789466155ac1.png)
+</Frame>
+
+### Visited product pages
+
+Includes or excludes visitors based on the **specific product pages** they have visited.
+
+<Frame>
+![visited-product-pages](https://help.kameleoon.com/assets/images/visited-product-pages-7cfc74aa30f1fceff575664a6a3dc377.png)
+</Frame>

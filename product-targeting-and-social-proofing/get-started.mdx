@@ -1,0 +1,33 @@
+---
+title: "Get started"
+description: "Kameleoon’s **Product API** powers both [**social proofing messages**](https://help.kameleoon.com/product-targeting-and-social-proofing/social-proofing) and [**advanced targeting conditions**](https://help.kameleoon.com/product-targeting-and-social-proofing/product-targeting)."
+---
+
+To fully leverage Kameleoon’s **social proofing** and **targeting** features, ensure you correctly implement the tracking methods described below. Once implemented, you can retrieve **product and transaction data** through the [`obtainProductInteractions()`](https://developers.kameleoon.com/apis/activation-api-js/api-reference/#obtainproductinteractions) and [`obtainProductData()`](https://developers.kameleoon.com/apis/activation-api-js/api-reference/#obtainproductdata) endpoints.
+
+## trackProductView()
+
+Use the `trackProductView()` method on **product pages** to track when a visitor views a product. Read more about the method [here](https://developers.kameleoon.com/apis/activation-api-js/api-reference/#trackproductview).
+
+<Note>
+**Note:**
+
+Ensure you provide all necessary data for your social proofing setup. Only the data sent via the `trackProductView()` method can be retrieved later through the [`obtainProductData()`](https://developers.kameleoon.com/apis/activation-api-js/api-reference/#obtainproductdata) endpoint.
+</Note>
+
+## trackCategoryView()
+
+Use the `trackCategoryView()` method on **category pages** to track when a visitor views a product category. Read more about the method [here](https://developers.kameleoon.com/apis/activation-api-js/api-reference/#trackcategoryview).
+
+Ensure the **category ID** used here matches the one sent with the `trackProductView()` method. Read more about the Category object [here](https://developers.kameleoon.com/apis/activation-api-js/api-reference/#properties-of-the-category-object).
+
+## trackAddToCart()
+
+Use the `trackAddToCart()` method on **any page where a visitor can add a product to their cart**—for example, the home page, product page, category page, or cart page.
+
+Read more about the `trackAddToCart()` method [here](https://developers.kameleoon.com/apis/activation-api-js/api-reference/#trackaddtocart).
+
+
+## trackTransaction()
+
+Use the `trackTransaction()` method on any page displayed after a visitor completes a **purchase or transaction**. Read more about the method [here](https://developers.kameleoon.com/apis/activation-api-js/api-reference/#tracktransaction).

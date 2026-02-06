@@ -1,0 +1,382 @@
+---
+title: "Advanced Options"
+description: "This guide helps you get familiar with additional advanced implementation options Kameleoon provides."
+---
+
+## Consent management
+
+Depending on the country you are operating your website in, you may need to manage consent before collecting any data about your visitors. You can read more about it in our [documentation](https://developers.kameleoon.com/privacy-and-compliance/consent-management).
+
+## Cross-device history reconciliation
+
+Kameleoon provides a powerful feature that enables the merging of a user's history and actions made across different devices. When a user visits a website multiple times via different devices, Kameleoon can identify them as a returning visitor and accurately report the number of visits. This feature is straightforward to enable as long as there's a way to identify users on your end, usually through a customer login.
+
+By using cross-device history reconciliation, you can take advantage of three significant benefits:
+
+- a coherent targeting system that takes into account all visits and actions across devices,
+- ensuring that a visitor sees the same variation for a given A/B experiment, regardless of the device they're using,
+- and a precise and accurate reporting system that correctly counts unique visitors.
+
+To learn more about this feature, you can refer to this [documentation](https://developers.kameleoon.com/core-concepts/cross-device-experimentation).
+
+## ITP management
+
+If a significant portion of your website's traffic comes from mobile devices, we recommend that you implement a cookie synchronization method to prevent issues with Intelligent Tracking Prevention (ITP) on Safari. For more technical details about ITP management, please refer to our [documentation](https://developers.kameleoon.com/core-concepts/itp-management/).
+
+There are several options available for synchronizing the **visitorCode** identifier (via the **kameleoonVisitorCode** cookie) between the front-end and back-end to avoid ITP issues on Safari. These options include:
+
+- Modifying your front-facing web server or Content Delivery Network (CDN) configuration to generate and add the **kameleoonVisitorCode** cookie. We can provide instructions for Akamai.
+- Implementing a specific code snippet on your [backend server](https://developers.kameleoon.com/web-experimentation/advanced-implementation/#java) (Java, NodeJS, or another language).
+
+### Nginx code snippet
+
+For integration with Nginx, use the following code snippet:
+
+```bash expandable
+server {
+    listen 80;
+    server_name MY_DOMAIN;
+
+    set $visitorCode "";
+
+        if ($http_cookie ~* "kameleoonVisitorCode=([^;]+)") {
+        set $visitorCode $1;
+    }
+
+        if ($visitorCode = "") {
+        set_by_lua_block $visitorCode '{
+            local alphabet = "abcdefghijklmnopqrstuvwxyz0123456789"
+            local code = ""
+            for i = 1, 16 do
+                local randomNumber = math.random(1, #alphabet)
+                code = code .. alphabet:sub(randomNumber, randomNumber)
+            end
+            return code
+        }';
+    }
+
+    location / {
+        add_header Set-Cookie "kameleoonVisitorCode=$visitorCode; Expires=$expires; Path=/; Domain=MY_DOMAIN;";
+        return 204;
+    }
+}
+```
+
+### Backend code snippets
+
+You can choose to host one of our back-end code snippets either on a single URL belonging to your main top-level domain or on every page. If you opt for a single endpoint, Kameleoon will make one call per session to the specified endpoint to ensure that your server sets the **kameleoonVisitorCode** cookie. This call is asynchronous and occurs after the page has finished loading. Please contact your Customer Success Manager to activate this option. We will need your chosen URL.
+
+<Note>
+**Note:**
+
+The synchronization endpoint you create should not return any data. A `204 No Content` response code is sufficient. This endpoint is solely used to set a server-side cookie and should accept a `GET` request sent to the sync URL you define, using the following code:
+
+```javascript
+const e = new XMLHttpRequest();
+e.open(
+  "GET",
+  Kameleoon.Internals.configuration.synchronizationEndpointURL +
+    "?visitorCode=" +
+    this.visitorCode,
+  !0,
+);
+```
+
+</Note>
+
+If you embed the back-end code snippet on every page, no additional actions are needed. The cookie will be automatically created when normal page requests are made to your servers.
+
+<Tip>
+**Tip:**
+
+You can provide your own **visitor code**, typically a unique identifier from your database, instead of relying on our automatic generation. Ensure the visitorCode you provide is unique for each visitor to guarantee accurate data for your experiments.
+
+If you're using both Kameleoon Web and Feature Experiments with one of our [server-side SDKs](https://developers.kameleoon.com/feature-management-and-experimentation/overview#server-side-sdks), you can directly use the `getVisitorCode()` method. This helper method automatically retrieves the Kameleoon **visitor code** for the current visitor and creates the cookie on the back end.
+
+</Tip>
+
+#### Java
+
+```java expandable
+javax.servlet.http.HttpServletRequest request; // Provide a reference to the HttpServletRequest
+javax.servlet.http.HttpServletResponse response; // Provide a reference to the HttpServletResponse
+String topLevelDomain = "MY_DOMAIN";// Here you must provide your own base domain, eg mydomain.com
+String visitorCode = null; // Here you can provide your own identifier if needed, else it will be generated randomly
+
+String cookiesHeader = request.getHeader("Cookie");
+if (cookiesHeader != null) {
+	String[] cookies = cookiesHeader.split(";");
+	for (String cookieNameAndValue : cookies) {
+		String[] cookieNameAndValuePair = cookieNameAndValue.split("=");
+		if (cookieNameAndValuePair[0].trim().equals("kameleoonVisitorCode")) {
+			visitorCode = cookieNameAndValuePair[1];
+		}
+	}
+}
+if (visitorCode == null) {
+	final String alphabet = "abcdefghijklmnopqrstuvwxyz0123456789";
+	final int alphabetLength = alphabet.length();
+	final int visitorCodeLength = 16;
+	final StringBuilder visitorCodeBuilder = new StringBuilder(visitorCodeLength);
+	for (int i = 0; i < visitorCodeLength; ++i) {
+		visitorCodeBuilder.append(
+				alphabet.charAt(java.util.concurrent.ThreadLocalRandom.current().nextInt(alphabetLength))
+		);
+	}
+	visitorCode = visitorCodeBuilder.toString();
+}
+
+javax.servlet.http.Cookie cookie = new Cookie("kameleoonVisitorCode", visitorCode);
+cookie.setMaxAge(32_832_000);
+cookie.setHttpOnly(false); // The cookie must be accessible from the front-end since it stores the visitorCode, which Kameleoon uses to bucket users into experiments and track their activity.
+cookie.setPath("/");
+cookie.setDomain(topLevelDomain);
+response.addCookie(cookie);
+```
+
+#### NodeJS
+
+```javascript expandable
+let topLevelDomain = "MY_DOMAIN"; // Here you must provide your own base domain, eg mydomain.com
+let visitorCode = null; // Here you can provide your own identifier if needed, else it will be generated randomly
+
+request.headers &&
+  request.headers.cookie.split(";").forEach(function (cookie) {
+    let cookieNameAndValuePair = cookie.match(/(.*?)=(.*)$/);
+    if (cookieNameAndValuePair[1].trim() == "kameleoonVisitorCode") {
+      visitorCode = cookieNameAndValuePair[2].trim();
+    }
+  });
+if (!visitorCode) {
+  let alphabet = "abcdefghijklmnopqrstuvwxyz0123456789";
+  let alphabetLength = alphabet.length;
+  visitorCode = "";
+  for (let i = 0; i < 16; ++i) {
+    let randomNumber = Math.floor(Math.random() * alphabetLength);
+    visitorCode += alphabet[randomNumber];
+  }
+}
+
+let expires = new Date(new Date().getTime() + 32832000000);
+response.writeHead(200, {
+  "Set-Cookie": [
+    `kameleoonVisitorCode=${visitorCode}; expires=${expires}; path=/; domain=${topLevelDomain};`,
+  ],
+});
+```
+
+#### PHP
+
+```bash expandable
+<?php
+$topLevelDomain = "MY_DOMAIN";// Here you must provide your own base domain, eg mydomain.com
+$visitorCode = NULL; // Here you can provide your own identifier if needed, else it will be generated randomly
+
+if (isset($_COOKIE["kameleoonVisitorCode"])) {
+	$visitorCode = $_COOKIE["kameleoonVisitorCode"];
+}
+if (is_null($visitorCode)) {
+	$alphabet = "abcdefghijklmnopqrstuvwxyz0123456789";
+	$alphabetLength = strlen($alphabet);
+	$visitorCode = "";
+	for ($i = 0; $i < 16; $i++) {
+		$randomNumber = floor((mt_rand() / mt_getrandmax()) * $alphabetLength);
+		$visitorCode .= substr($alphabet, $randomNumber, 1);
+	}
+}
+
+setcookie("kameleoonVisitorCode", $visitorCode, time() + 32832000, "/", $topLevelDomain);
+?>
+```
+
+Copy and paste this code, and replace MY_DOMAIN by your base top-level domain (ie, mydomain.com).
+
+#### C#
+
+<CodeGroup>
+```bash .NET Core
+System.Security.Cryptography.RandomNumberGenerator rng; // A concurrent RNG for generating unique visitor codes
+Microsoft.AspNetCore.Http.HttpRequest request; // Provide a reference to the HttpRequest
+Microsoft.AspNetCore.Http.HttpResponse response; // Provide a reference to the HttpResponse
+string topLevelDomain = "MY_DOMAIN";// Here you must provide your own base domain, eg mydomain.com
+string visitorCode = null; // Here you can provide your own identifier if needed, else it will be generated randomly
+
+if (request.Cookies.ContainsKey("kameleoonVisitorCode"))
+visitorCode = request.Cookies["kameleoonVisitorCode"];
+
+if (visitorCode == null)
+{
+const string alphabet = "abcdefghijklmnopqrstuvwxyz0123456789";
+const int visitorCodeLength = 16;
+char[] visitorCodeBuffer = new char[visitorCodeLength];
+byte[] randBuffer = new byte[visitorCodeLength];
+rng.GetBytes(randBuffer);
+for (int i = 0; i < visitorCodeLength; i++)
+visitorCodeBuffer[i] = alphabet[randBuffer[i] % alphabet.Length];
+visitorCode = new string(visitorCodeBuffer);
+}
+
+var cookieOptions = new Microsoft.AspNetCore.Http.CookieOptions.CookieOptions();
+cookieOptions.Expires = DateTime.Now.AddSeconds(32_832_000);
+cookieOptions.HttpOnly = false; // The cookie must be accessible from the front-end since it stores the visitorCode, which Kameleoon uses to bucket users into experiments and track their activity.
+cookieOptions.Path = "/";
+cookieOptions.Domain = topLevelDomain;
+response.Cookies.Append("kameleoonVisitorCode", visitorCode, cookieOptions);
+
+````
+
+```bash .NET Framework
+System.Security.Cryptography.RandomNumberGenerator rng; // A concurrent RNG for generating unique visitor codes
+System.Web.HttpRequest request; // Provide a reference to the HttpRequest
+System.Web.HttpResponse response; // Provide a reference to the HttpResponse
+string topLevelDomain = "MY_DOMAIN";// Here you must provide your own base domain, eg mydomain.com
+string visitorCode = null; // Here you can provide your own identifier if needed, else it will be generated randomly
+
+if (request.Cookies.Get("kameleoonVisitorCode") != null)
+    visitorCode = request.Cookies.Get("kameleoonVisitorCode").Value;
+
+if (visitorCode == null)
+{
+    const string alphabet = "abcdefghijklmnopqrstuvwxyz0123456789";
+    const int visitorCodeLength = 16;
+    char[] visitorCodeBuffer = new char[visitorCodeLength];
+    byte[] randBuffer = new byte[visitorCodeLength];
+    rng.GetBytes(randBuffer);
+    for (int i = 0; i < visitorCodeLength; i++)
+        visitorCodeBuffer[i] = alphabet[randBuffer[i] % alphabet.Length];
+    visitorCode = new string(visitorCodeBuffer);
+}
+
+var cookie = new System.Web.HttpCookie("kameleoonVisitorCode", visitorCode);
+cookie.Expires = DateTime.Now.AddDays(380);
+cookie.HttpOnly = false; // The cookie must be accessible from the front-end since it stores the visitorCode, which Kameleoon uses to bucket users into experiments and track their activity.
+cookie.Path = "/";
+cookie.Domain = topLevelDomain;
+response.Cookies.Add(cookie);
+````
+
+</CodeGroup>
+
+#### Go
+
+```go expandable
+var request *fasthttp.Request // Provide a reference to the Request
+var response *fasthttp.Response // Provide a reference to the Response
+const topLevelDomain = "MY_DOMAIN" // Here you must provide your own base domain, eg mydomain.com
+var visitorCode string // Here you can provide your own identifier if needed, else it will be generated randomly
+
+if binaryVisitorCode := request.Header.Cookie("kameleoonVisitorCode"); binaryVisitorCode != nil {
+	visitorCode = string(binaryVisitorCode)
+}
+if visitorCode == "" {
+	const alphabet = "abcdefghijklmnopqrstuvwxyz0123456789"
+	const visitorCodeLength = 16
+	visitorCodeBuilder := strings.Builder{}
+	visitorCodeBuilder.Grow(visitorCodeLength)
+	randomBuffer := make([]byte, visitorCodeLength)
+	if _, err := rand.Read.Read(randomBuffer); err != nil { // crypto/rand
+		// handle error
+	}
+	for i := 0; i < visitorCodeLength; i++ {
+		visitorCodeBuilder.WriteByte(alphabet[randomBuffer[i] % len(alphabet)])
+	}
+	visitorCode = visitorCodeBuilder.String()
+}
+
+ck := fasthttp.AcquireCookie()
+ck.SetKey("kameleoonVisitorCode")
+ck.SetValue(visitorCode)
+ck.SetExpire(time.Now().Add(380 * 24 * time.Hour))
+ck.SetHTTPOnly(false) // The cookie must be accessible from the front-end since it stores the visitorCode, which Kameleoon uses to bucket users into experiments and track their activity.
+ck.SetPath("/")
+ck.SetDomain(topLevelDomain)
+response.Header.SetCookie(ck)
+fasthttp.ReleaseCookie(ck)
+```
+
+#### Python
+
+```python expandable
+import random
+
+topLevelDomain = "MY_DOMAIN" # Here you must provide your own base domain, eg mydomain.com
+
+# Here you can provide your own identifier via customer_visitor_code if needed, else it will be generated randomly
+def fill_visitor_code(request, response, customer_visitor_code):
+    visitor_code = request.cookies.get("kameleoonVisitorCode")
+    if "kameleoonVisitorCode" in request.cookies:
+        visitor_code = request.cookies.get("kameleoonVisitorCode")
+    else:
+        visitor_code = customer_visitor_code if customer_visitor_code is not None else "".join(
+            random.choice(string.ascii_lowercase + string.digits) for _ in range(16)
+        )
+    response.set_cookie("kameleoonVisitorCode", visitor_code, max_age=32832000, domain=topLevelDomain)
+
+fill_visitor_code(request, response) # The method must be called with correct arguments (depending on your Python web framework)
+```
+
+#### Ruby
+
+```ruby expandable
+# Define constants
+KAMELEOON_COOKIE_VALUE_LENGTH = 16
+KAMELEOON_COOKIE_NAME = 'kameleoonVisitorCode'.freeze
+EXPIRE_DAYS = 365
+
+# Method to generate a random visitor code
+def generate_visitor_code(length)
+  alphabet = 'abcdefghijklmnopqrstuvwxyz0123456789'
+  alphabet_length = alphabet.length
+  visitor_code = ''
+
+  length.times do
+    random_number = rand(alphabet_length)
+    visitor_code.concat(alphabet[random_number])
+  end
+
+  visitor_code
+end
+
+# Main code
+top_level_domain = 'MY_DOMAIN' # Replace with your actual domain
+visitor_code = cookies[KAMELEOON_COOKIE_NAME]
+
+visitor_code = generate_visitor_code(KAMELEOON_COOKIE_VALUE_LENGTH) if visitor_code.nil? || visitor_code.empty?
+
+kameleoon_cookie = {
+  value: visitor_code,
+  expires: Time.now + 60 * 60 * 24 * EXPIRE_DAYS,
+  path: '/',
+  domain: top_level_domain
+}
+
+cookies[KAMELEOON_COOKIE_NAME] = kameleoon_cookie
+```
+
+## Using a custom domain
+
+If you want to use your own domain instead of Kameleoon’s default domain, or if ad blockers are preventing some users from being included in experiments, Kameleoon offers a premium option to set up a custom domain and bypass detection.
+
+<CardGroup>
+  <Card
+    title="Learn more about how to enable a custom domain."
+    icon="globe"
+    href="https://developers.kameleoon.com/feature-management-and-experimentation/faq/#how-do-ad-blockers-affect-kameleoon"
+    horizontal
+  />
+</CardGroup>
+
+## Using your own CDN or hosting server (self-hosting)
+
+<Note>
+  Please note that the Kameleoon application file `engine.js` (previously named
+  `kameleoon.js`), can be hosted either on the Kameleoon CDN or on your own CDN
+  or servers. If you host it on your own servers, it can offer a slight
+  performance improvement by avoiding an additional DNS query and SSL handshake
+  that is required when using the Kameleoon CDN. Additionally, self-hosting may
+  be preferred for security reasons, as you can ensure compliance with your
+  internal security policies and take responsibility for the security of your
+  hosting servers.
+</Note>
+
+If you want to self-host the Kameleoon application file, see the [self hosting](https://developers.kameleoon.com/web-experimentation/simple-self-hosting-and-on-premises-options#application-file-self-hosting) documentation.

@@ -1,0 +1,185 @@
+---
+title: "Implementation with Nuxt"
+description: "This guide describes how to integrate **Nuxt 4** with **Kameleoon Web Experimentation**, including the steps required to preload the Kameleoon engine with **anti-flicker protection** and execute the `engine.js` script **after client hydration**. This setup ensures optimal performance, visual stability, and compatibility with Nuxt’s rendering lifecycle."
+---
+
+Reference implementations are also available for:
+
+<CardGroup>
+<Card title="Nuxt 3" icon="code" horizontal href="https://github.com/Kameleoon/setup-engine-nuxt-3"/>
+<Card title="Nuxt 2" icon="code" horizontal href="https://github.com/Kameleoon/setup-engine-nuxt-2"/>
+</CardGroup>
+
+A **production-ready Nuxt 4 integration** is available here:
+
+[https://github.com/Kameleoon/setup-engine-nuxt-4](https://github.com/Kameleoon/setup-engine-nuxt-4)
+
+Before using it, ensure that you **replace the sitecode value** in [`integrations/Kameleoon/sitecode.ts`](https://github.com/Kameleoon/setup-engine-nuxt-4/blob/main/integrations/Kameleoon/sitecode.ts)
+
+<Note>
+**Note:**
+
+Depending on the creation date of your Kameleoon project, your scripts may be hosted on either `kameleoon.eu` or `kameleoon.io`.  
+Always use the domain provided in your project settings within the Kameleoon App.
+</Note>
+
+## Overview
+
+### Workflow
+
+| Phase | What Happens | Component |
+|:-|:-|:-|
+| **SSR Rendering** | Preload link and anti-flicker CSS are injected | `KameleoonHead.vue` |
+| **Client Hydration** | Vue hydrates the DOM with no mismatches | — |
+| **Post Hydration** | Kameleoon engine loads asynchronously and initializes | `KameleoonScriptLoader.client.vue` |
+| **Fallback Safe-Exit** | Anti-flicker CSS removed if the script is slow or fails | `KameleoonScriptLoader.client.vue` |
+
+### Quick setup
+
+<Steps>
+<Step>
+Add the folder `integrations/Kameleoon` to your Nuxt project.
+</Step>
+<Step>
+Import and register both integration components in your layout (recommended: `layouts/default.vue`).  
+	
+    See: [Usage in `default.vue`](https://developers.kameleoon.com/web-experimentation/implementation-with-nuxt/#usage-in-defaultvue)
+</Step>
+</Steps>
+## Components
+
+The integration consists of **two Vue components**, each executed at a different stage of the Nuxt rendering pipeline:
+
+| Component | Execution Context | Purpose |
+|:-|:-|:-|
+| `KameleoonHead.vue` | **Server-side (SSR)** | Injects the preload directive and anti-flicker CSS before hydration |
+| `KameleoonScriptLoader.client.vue` | **Client-side (post hydration)** | Loads the engine script, removes anti-flicker CSS, and manages timeout |
+
+This approach ensures fast page rendering, stable UI behavior, and full compatibility with Nuxt's hydration process.
+
+### 1. `KameleoonHead.vue`
+
+`KameleoonHead.vue` runs **exclusively during server-side rendering**. It prepares the page for a flicker-free experience by:
+
+- Injecting anti-flicker CSS during SSR
+- Preloading the Kameleoon engine (`engine.js`) so the browser fetches it as early as possible
+
+```bash
+<script setup>
+import { SITECODE_SRC } from "../sitecode";
+
+// No process.server checks—Nuxt automatically syncs head between SSR & client
+</script>
+
+<template>
+    <Head>
+        <!-- preload script early -->
+        <Link rel="preload" :href="SITECODE_SRC" as="script" fetchpriority="high" />
+
+        <!-- anti-flicker CSS -->
+        <Style id="kameleoonLoadingStyleSheet">
+            * { visibility: hidden !important; background-image: none !important; background-color: inherit !important;
+            }
+        </Style>
+    </Head>
+</template>
+```
+
+See [`KameleoonHead.vue`](https://github.com/Kameleoon/setup-engine-nuxt-4/blob/main/integrations/Kameleoon/components/KameleoonHead.vue)
+
+
+### 2. `KameleoonScriptLoader.client.vue`
+
+`KameleoonScriptLoader.client.vue` executes **only on the client** and **after hydration**.
+
+Its responsibilities include:
+
+- Removing the anti-flicker stylesheet once the page is ready
+- Loading Kameleoon’s `engine.js` dynamically
+- Handling timing and fallback behavior for slow or failed script loading
+
+```bash expandable
+<script setup>
+defineOptions({ name: "KameleoonScriptLoader" });
+
+import { nextTick, onMounted } from "vue";
+import { SITECODE_SRC } from "~/integrations/Kameleoon/sitecode";
+
+onMounted(async () => {
+    await nextTick();
+
+    const kameleoonLoadingTimeout = 500;
+
+    window.kameleoonQueue = window.kameleoonQueue || [];
+    window.kameleoonStartLoadTime = Date.now();
+
+    window.kameleoonDisplayPage = function (fromEngine) {
+        if (!fromEngine) {
+            window.kameleoonTimeout = true;
+        }
+        document.getElementById("kameleoonLoadingStyleSheet")?.remove();
+    };
+
+    window.kameleoonDisplayPageTimeOut = setTimeout(window.kameleoonDisplayPage, kameleoonLoadingTimeout);
+
+    const alreadyLoaded = document.querySelector(`script[src*="${SITECODE_SRC}"]`);
+    if (!alreadyLoaded) {
+        const script = document.createElement("script");
+        script.src = SITECODE_SRC;
+        script.async = true;
+        document.head.appendChild(script);
+    }
+});
+</script>
+
+<template>
+    <!-- nothing rendered -->
+</template>
+```
+
+See [`KameleoonScriptLoader.client.vue`](https://github.com/Kameleoon/setup-engine-nuxt-4/blob/main/integrations/Kameleoon/components/KameleoonScriptLoader.client.vue)
+
+<Note>
+**Note:**
+
+The default anti-flicker timeout is `1000 ms`. You may adjust `kameleoonLoadingTimeout` as required.
+</Note>
+
+## Usage in `default.vue`
+
+The example below shows how to use both components in your layout:
+
+```bash
+<script setup>
+import KameleoonHead from "~/integrations/Kameleoon/components/KameleoonHead.vue";
+import KameleoonScriptLoader from "~/integrations/Kameleoon/components/KameleoonScriptLoader.client.vue";
+</script>
+
+<template>
+    <!-- SSR: preload + anti-flicker -->
+    <KameleoonHead />
+
+    <!-- Client: load script after hydration -->
+    <KameleoonScriptLoader />
+
+    <!-- Layout UI -->
+    <div class="min-h-screen bg-background font-inter">
+        <Navigation />
+
+        <main class="container mx-auto px-4 py-8">
+            <NuxtPage />
+        </main>
+    </div>
+</template>
+```
+
+See [`default.vue`](https://github.com/Kameleoon/setup-engine-nuxt-4/blob/main/layouts/default.vue)
+
+## Key takeaways
+
+- Prevents hydration mismatch warnings
+- Ensures a flicker-free experience prior to Kameleoon initialization
+- Script loads **only once**, including during SPA navigation
+- Compatible with layouts, pages, dynamic routes, and conditional rendering
+
+With this configuration, your Nuxt application will load and execute Kameleoon reliably, without affecting rendering stability or user experience.

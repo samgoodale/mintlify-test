@@ -1,0 +1,154 @@
+---
+title: "Implementation with SvelteKit"
+description: "This guide explains how to preload **Kameleoon Web Experimentation** with **anti-flicker protection**, and how to execute the `engine.js` script **after React hydration** to ensure a smooth user experience. This setup ensures optimal performance, visual stability, and compatibility with SvelteKit’s rendering lifecycle."
+---
+
+A **production-ready integration** is available in [this repository](https://github.com/Kameleoon/setup-engine-sveltekit).
+
+Be sure to **replace the sitecode with your own** in [`src/lib/integrations/Kameleoon/sitecode.ts`](https://github.com/Kameleoon/setup-engine-sveltekit/blob/main/src/lib/integrations/Kameleoon/sitecode.ts).
+
+## Script Domain
+
+Your Kameleoon script domain may differ between projects. Depending on their creation date, your projects may be hosted under `kameleoon.eu` or `kameleoon.io`. Always use the domain displayed for your project inside the Kameleoon App.
+
+## Overview
+
+1. **Preload the Kameleoon engine** so the browser downloads it early and caches it.
+2. **Apply anti-flicker CSS** to hide content until the engine is ready, preventing layout shifts.
+3. **Run the engine after hydration** to avoid React hydration warnings or mismatches.
+
+## Components
+
+This integration uses **two components** that work together to ensure smooth loading and prevent flickering during hydration.
+
+
+### 1. Server component
+
+Its responsibilities are:
+
+- Injecting anti-flicker CSS during SSR to prevent UI flashing
+- Preloading the `engine.js` file so downloading starts as soon as possible
+
+```bash
+<script lang="ts">
+  import { SITECODE_SRC } from './sitecode';
+</script>
+
+<svelte:head>
+  <link
+    rel="preload"
+    href={SITECODE_SRC}
+    as="script"
+    fetchpriority="high"
+  />
+
+  <style id="kameleoonLoadingStyleSheet">
+    * {
+      visibility: hidden !important;
+      background-image: none !important;
+    }
+  </style>
+</svelte:head>
+```
+
+See [`KameleoonHead.svelte`](https://github.com/Kameleoon/setup-engine-sveltekit/blob/main/src/lib/integrations/Kameleoon/KameleoonHead.svelte)
+
+### 2. Client component
+
+This component:
+
+- Removes the anti-flicker styles after hydration
+- Dynamically loads Kameleoon’s `engine.js`
+- Ensures the script loads without blocking rendering
+
+```bash expandable
+<script lang="ts">
+  import { onMount } from 'svelte';
+  import { SITECODE_SRC } from './sitecode';
+
+  // custom value
+  const kameleoonLoadingTimeout = 500;
+
+  function removeAntiflickerStyles(): void {
+    window.kameleoonQueue = window.kameleoonQueue || [];
+    window.kameleoonStartLoadTime = Date.now();
+
+    window.kameleoonDisplayPage = (fromEngine?: boolean): void => {
+      if (!fromEngine) {
+        window.kameleoonTimeout = true;
+      }
+      document
+        .getElementById('kameleoonLoadingStyleSheet')
+        ?.remove();
+    };
+
+    window.kameleoonDisplayPageTimeOut = setTimeout(
+      window.kameleoonDisplayPage,
+      kameleoonLoadingTimeout
+    );
+  }
+
+  function loadEngine(): void {
+    if (document.getElementById('kameleoon-engine')) return;
+
+    const script = document.createElement('script');
+    script.src = SITECODE_SRC;
+    script.async = true;
+    script.id = 'kameleoon-engine';
+    document.head.appendChild(script);
+  }
+
+  
+  // Execute Kameleoon after hydration
+  onMount(() => {
+    removeAntiflickerStyles();
+    loadEngine();
+  });
+</script>
+```
+
+See [`KameleoonHydrationReady.svelte`](https://github.com/Kameleoon/setup-engine-sveltekit/blob/main/src/lib/integrations/Kameleoon/KameleoonHydrationReady.svelte)
+
+<Note>
+**Note:**
+
+The default anti-flicker timeout is `1000 ms`. Adjust `kameleoonLoadingTimeout` if needed.
+</Note>
+
+## Usage in RootLayout
+
+Here is an example of how to combine both components:
+
+```bash 
+<script lang="ts">
+  import KameleoonHead from '$lib/integrations/Kameleoon/KameleoonHead.svelte';
+  import KameleoonHydrationReady from '$lib/integrations/Kameleoon/KameleoonHydrationReady.svelte';
+</script>
+
+<!-- SSR head injection -->
+<KameleoonHead />
+
+<!-- Optional: other head tags -->
+<svelte:head>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+</svelte:head>
+
+<!-- Client bootstrap after hydration -->
+<KameleoonHydrationReady />
+
+<slot />
+```
+
+See [`layout.svelte`](https://github.com/Kameleoon/setup-engine-sveltekit/blob/main/src/routes/%2Blayout.svelte)
+
+## Key Takeaways
+
+- **Anti-flicker protection on SSR**
+- **Hydration-aware script execution**
+- **Asynchronous engine loading**
+- **Fallback timeout for reliability**
+- **No blocking scripts**
+- **Works with SvelteKit layouts, SSR, and client-side routing**
+
+With this setup, your Next.js application will load Kameleoon efficiently and avoid hydration-related issues.

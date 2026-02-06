@@ -1,0 +1,61 @@
+---
+title: "Feature Experimentation installation guide"
+description: "Kameleoon’s Feature Experimentation capabilities enable you to manage feature rollouts, control access, and run experiments using feature flags across web and mobile applications."
+---
+
+This guide walks you through the basic steps of installing and configuring Kameleoon Feature Experimentation
+
+## Create a project in Kameleoon
+
+Before you begin, create a new project in your Kameleoon account. A project represents your web app, mobile app, or both—depending on whether you want to manage them under a single project. From the feature flag creation page, you can easily add any environments (like production, staging, or development) that you use in your development workflow.
+
+Each project is assigned a **sitecode**—a unique identifier that is required to initialize the Kameleoon SDK.
+
+<Tip>
+**Tip:**
+
+If you're running experiments across multiple platforms (web and mobile), you can use the same sitecode for all SDKs to share flags and avoid duplication.
+</Tip>
+
+## Install an SDK
+
+Kameleoon provides a variety of SDKs for different environments:
+
+- **Server-side SDKs:** Java, Node.js, Python, Go, PHP, C#, Ruby
+- **Mobile SDKs:** Android, Flutter, iOS, React Native
+- **Client-side SDKs:** JavaScript, React
+- **Advanced SDK tools:** Edge toolkits, OpenFeature compatibility, SDK API (read more [here](https://help.kameleoon.com/account-and-team-management/api-credentials))
+
+Select the SDK appropriate for your stack. You’ll find installation instructions in Kameleoon's [developer documentation](https://developers.kameleoon.com/).
+
+To install an SDK, typically you will:
+
+
+- Provide credentials (`client_id` and `client_secret`) via a configuration file available in server-side SDKs. To learn how to retrieve API credentials, refer to [this](https://help.kameleoon.com/account-and-team-management/api-credentials) article.
+
+- Provide your project's [sitecode](https://help.kameleoon.com/question/how-do-i-find-my-site-id/) for initialization.
+
+- Specify the environment (for example, production, staging) in the SDK configuration to match your development workflow.
+
+- Choose between polling and streaming modes, which determine how the SDK fetches flag updates, either by regularly checking for changes (polling) or receiving them in real time (streaming). Note that streaming is a premium option.
+
+
+You should check the [SDK compatibility table](https://developers.kameleoon.com/feature-management-and-experimentation/overview/#supported-platforms) to see which features and methods are available for each SDK. Since Kameleoon regularly adds new features and support for additional languages, the minimum required version for certain features may vary by language. The compatibility table shows which features are supported per SDK and the version needed to implement them in your frontend or backend.
+
+For a full version history, refer to the changelog in the SDK [GitHub repository](https://github.com/Kameleoon?tab=repositories). You should subscribe to email notifications to stay updated on new releases.
+
+## Start using feature flags
+
+With the SDK initialized, you can now:
+
+- **Create feature flags** in the Kameleoon app.
+- **Roll out features progressively** using targeting rules, percentage rollouts, or user attributes.
+- **Run experiments** on feature flag variations and analyze their impact.
+
+For more information on feature flags, refer to these articles:
+
+<CardGroup>
+<Card title="Create a feature flag" icon="circle-plus" horizontal href="https://help.kameleoon.com/experimentation/feature-experimentation/create-and-manage-flags/create-a-feature-flag"/>
+<Card title="Manage your feature flags" icon="gear" horizontal href="https://help.kameleoon.com/experimentation/feature-experimentation/create-and-manage-flags/manage-your-feature-flags"/>
+<Card title="Demo: Feature Experimentation" icon="play" horizontal href="https://developers.kameleoon.com/feature-management-and-experimentation/demo-feature-experimentation"/>
+</CardGroup>

@@ -1,0 +1,102 @@
+---
+title: "Overview"
+description: "Kameleoon provides [web experimentation](https://kameleoon.com/en/platform/ab-testing-client-side) capabilities that let you run A/B/n or multivariate experiments on websites or web apps using a graphic editor, code editor, or AI-driven prompt-based experimentation (PBX)."
+---
+
+This guide covers the various implementation options Kameleoon offers. While the implementation process is simple—typically involving the installation of a JavaScript tag in your page's HTML source code—you must understand a few key details. Specifically, you need to know where to place tags, the trade-offs of different implementations, and when the browser loads and parses the Kameleoon application file. Correct configuration optimizes performance and ensures the platform functions correctly.
+
+Review the implementation methods below to decide which best suits your requirements. To create a basic implementation of Kameleoon on your website, follow the [Simple implementation](https://developers.kameleoon.com/web-experimentation/simple-implementation/) guide.
+
+<Note>
+**Note:**
+
+After you select an implementation method, you must configure it for your Kameleoon project. Kameleoon automatically generates the appropriate installation tag based on your configuration. To configure your project, follow the steps in [this guide](https://help.kameleoon.com/manage-your-sites/#Add_a_new_project).
+</Note>
+
+<Tip>
+**Tip:**
+
+Join our [Slack Community](https://join.slack.com/t/kameleooncommunity/shared_invite/zt-1s6m8s09e-~yA1EUgn5pLWW_mrgf8TrQ) to ask questions about product features and access the latest updates.
+</Tip>
+
+## Installation tags and features
+
+The following table outlines the implementation options, including the features and performance characteristics of each. Each row represents a different implementation option and indicates how the browser loads the Kameleoon JavaScript application file. The columns highlight factors such as performance, flickering, unified session data, and tag manager compatibility.
+
+Later sections of this guide provide detailed explanations of these characteristics and code snippets to help you get started.
+
+| Implementation method | [Flicker](https://developers.kameleoon.com/web-experimentation/overview/#flicker) | [May block page loading](https://developers.kameleoon.com/web-experimentation/overview/#may-block-page-loading) | [Prioritized script loading](https://developers.kameleoon.com/web-experimentation/overview/#prioritized-script-loading) | [Affected by ITP](https://developers.kameleoon.com/web-experimentation/overview/#affected-by-itp) | [Use with Tag manager](https://developers.kameleoon.com/web-experimentation/overview/#use-with-tag-manager) |
+|:-|:-|:-|:-|:-|:-|
+| [Asynchronous loading, with anti-flicker](https://developers.kameleoon.com/web-experimentation/simple-implementation#asynchronous-tag-with-anti-flicker) | No | No | Yes | No | No |
+| [Asynchronous loading](https://developers.kameleoon.com/web-experimentation/simple-implementation#asynchronous-tag-without-anti-flicker) | Yes | No | Yes (if not installed via a tag manager) | No | Yes |
+| [Synchronous loading](https://developers.kameleoon.com/web-experimentation/simple-implementation#synchronous-tag) | No | Yes | Yes | No | No |
+
+<Note>
+Note that all implementation methods support [unified session data across subdomains](https://developers.kameleoon.com/core-concepts/unify-session-data-across-subdomains).
+</Note>
+## Characteristics and features
+
+This section defines and explains the characteristics and features listed in the previous table.
+
+### Flicker
+
+Flicker (or the "flicker effect") is a common issue with JavaScript-based A/B testing solutions where the original page content briefly displays before the experiment variation loads. The **Flicker** column indicates if the installation method might cause this issue. For more information, see Kameleoon's [flicker management documentation](https://developers.kameleoon.com/core-concepts/flicker-management).
+
+### May block page loading
+
+**May block page loading** indicates whether your website's loading process stops if Kameleoon's Content Delivery Network (CDN) servers (or your own CDN/server hosting the Kameleoon file) become unresponsive. Only the `JavaScript file (synchronous loading)` method presents this risk. With all other methods, your website remains fully functional even if the hosting servers are unavailable.
+
+### Prioritized script loading
+
+When a browser loads an HTML page, it must download static resources (JavaScript files, CSS styles, Iframes, images) before using them. Browsers typically place these resources in a network queue and download them in a specific priority order.
+
+Two critical factors influence this process:
+
+- A browser must "discover" a resource before it can download it.
+- Major browsers assign higher priority to statically included scripts than to scripts loaded dynamically via JavaScript.
+
+For example, to ensure a JS file loads with higher priority, use this method:
+
+```html
+<script type="text/javascript" src="resources/scripts/example.js" async></script>
+```
+
+Avoid this method:
+
+```javascript
+<script type="text/javascript" >
+  var scriptNode = document.createElement("script");
+  scriptNode.type = "text/javascript";
+  scriptNode.src = "resources/scripts/example.js";
+  document.head.appendChild(scriptNode);
+</script>
+```
+
+<Note>
+**Note:**
+
+While not explicitly documented by browser vendors, empirical evidence suggests that HTML parsers give higher priority to discovered resources than to resources added through dynamic DOM modification.
+</Note>
+
+**Prioritized script loading** places the Kameleoon application file at the top of the browser's network queue, ensuring it loads faster than non-prioritized setups. You should use this option for Kameleoon. While it may slightly delay other resources, A/B testing is a critical feature that should load immediately, unlike analytics tools that can load later without affecting the page display. All current Kameleoon implementation methods provide prioritized script loading, except when you install Kameleoon via a tag manager.
+
+### Affected by ITP
+
+Apple developed Intelligent Tracking Prevention (ITP) for Safari (desktop and mobile) to prevent unwanted third-party tracking. Mozilla implemented similar technology in Firefox. ITP primarily blocks advertising trackers from tracking users across multiple websites.
+
+Kameleoon offers a solution to ITP restrictions. Since version 2.3 (March 2020), this solution requires an additional configuration step. For more information, see our [ITP management article](https://developers.kameleoon.com/core-concepts/itp-management).
+
+### Use with Tag manager
+
+**Use with Tag manager** indicates whether the implementation method supports a Tag Management System (TMS). Kameleoon works with all major TMS platforms. However, you should install Kameleoon directly into your page source code rather than using a TMS. Direct installation helps prevent the flicker effect, as explained in Kameleoon's [flicker management guide](https://developers.kameleoon.com/core-concepts/flicker-management).
+
+### Tracking unified session data across subdomains
+
+Kameleoon [unifies session data across subdomains](https://developers.kameleoon.com/core-concepts/unify-session-data-across-subdomains), which links user sessions across multiple subdomains into a single session. For example, if a visitor starts a session on `portal.myecommercesite.com` and continues to `transaction-engine.myecommercesite.com`, Kameleoon treats this as one continuous visit.
+
+This feature ensures accurate data collection across your subdomains. Without unified session data, Kameleoon treats a visitor who moves to a different subdomain as a new visitor, resetting collected data (such as page views and time on site). This reset can lead to unexpected targeting results.
+
+For example, suppose you have a personalization that triggers on the fourth page view. A visitor views three pages on your first website, then loads a fourth page on a different subdomain.
+
+- **With unified session data:** The personalization triggers as expected.
+- **Without unified session data:** The page view on the new domain counts as the first page view of a new visit, and the personalization does not trigger.

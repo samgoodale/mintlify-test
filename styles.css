@@ -1,0 +1,35 @@
+#topbar-cta-button span,
+#topbar-cta-button svg {
+  color: #1b1b1d;
+}
+
+#topbar-cta-button span {
+  background-color: #b4beff;
+}
+
+.dark #topbar-cta-button span,
+.dark #topbar-cta-button svg {
+  color: #ffffff;
+}
+
+.dark #topbar-cta-button span {
+  background-color: #1d352f;
+}
+
+/* Hero section dark mode */
+.dark #home-search-entry {
+  background: rgba(30, 30, 35, 0.9) !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.dark #home-search-entry:hover {
+  background: rgba(40, 40, 45, 1) !important;
+}
+
+.dark #home-search-entry span {
+  color: rgba(255, 255, 255, 0.5) !important;
+}
+
+.dark #home-search-entry svg {
+  color: rgba(255, 255, 255, 0.4) !important;
+}

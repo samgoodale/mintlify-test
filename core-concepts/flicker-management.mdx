@@ -1,0 +1,63 @@
+---
+title: "Flicker management and performance"
+description: "**Flicker** is a common issue associated with JavaScript-based A/B testing solutions. When your webpage loads, there may be a brief moment when the original page displays instead of the variation. This momentary display is known as the **flicker effect** or **flickering**. It can confuse visitors and significantly distort the results of any experiment. Our platform includes advanced techniques designed to completely eliminate flickering."
+---
+
+Flickering typically has two main causes:
+
+- The script is loaded and executed after the browser has already displayed the page or parts of it. This timing issue is directly related to how Kameleoon has been implemented on your website. If Kameleoon loads too late or is integrated within a Tag Management System, flickering cannot be avoided.
+- The engine processing the experiment’s variations is too slow and does not execute the modifications quickly enough.
+
+Kameleoon’s script includes a unique [anti-flickering engine](https://developers.kameleoon.com/core-concepts/flicker-management/#how-to-prevent-flicker-in-your-experiments) that ensures A/B tests run smoothly, allowing test variations to display without delays which leads to an improved user experience and more reliable test results.
+
+## What makes our technology feature stand out:
+
+Here are some reasons why Kameleoon's anti-flicker technology is unique and powerful:
+
+- **Asynchronous Snippet**: Kameleoon loads its script asynchronously from a reliable CDN (Cloudflare) to ensure a non-blocking first page load and utilizes browser caching for faster subsequent page loads. We uphold a Service Level Agreement (SLA) of over 99.99%.
+- **Low Script Size**: Our application file, created using TypeScript, has a size of just 29 kB (compressed with Brotli), which minimizes loading time on the first page.
+- **Preprocessing Approach**: The Kameleoon script is generated only from the components necessary for your specific setup, based on the features and options you are using.
+- **Unique Anti-Flickering Engine**: Our engine captures DOM events in real-time and alters the display of components involved in an experiment variation before they are fully rendered.
+- **Reduced Network Calls**: We group multiple tracking events into a single beacon call, significantly decreasing the total number of network calls required.
+- **Single Script Load**: Unlike other platforms that require multiple files, Kameleoon loads a single consolidated script. This reduces the number of HTTP requests.
+- **Deferred Experiment Loading**: Kameleeon allows you to select which experiments to include in our application file, `engine.js` (previously named `kameleoon.js`) at the time of the initial page load, on a case-by-case basis, and [defer non-essential experiments](https://developers.kameleoon.com/web-experimentation/faq/#can-i-delay-non-essential-experiments-until-after-the-first-page-load) for after the first load.
+- **Real time update**: To provide more frequent updates without being hindered by browser caching, our Live Update Experiments feature refreshes any experiment labeled “LIVE-UPDATE” within a minute.
+
+## How to prevent flicker in your experiments
+
+To eliminate flickering that occurs when loading our application file, we recommend using our [asynchronous tag with anti-flicker prevention](https://developers.kameleoon.com/web-experimentation/simple-implementation#asynchronous-tag-with-anti-flicker).
+
+Our snippet includes a “blocking CSS rule” that initially hides all the content on the page while our script is being downloaded by the browser. This rule is removed as soon as Kameleoon’s application code has loaded, which typically takes less than 50 milliseconds. If the application code does not load within the specified timeout period (default set to 1000 milliseconds), the rule will also be removed to prevent displaying a blank page indefinitely. This approach ensures that Kameleoon cannot disrupt your website in any situation.
+
+<Note>
+**Note:**
+
+The timeout is managed by the `kameleoonLoadingTimeout` JavaScript variable, which you can adjust to meet your requirements in the Kameleoon installation tag. By default, this variable is set to **1000 milliseconds**, and we recommend keeping it at this value. It indicates the maximum time the Kameleoon installation tag can prevent your site from displaying while it waits for the Kameleoon application file to load.
+
+
+In the event of a timeout, once the Kameleoon code finally loads, your chosen configuration will determine what happens next. You have two options in the advanced confirmation settings of your Kameleoon [project](https://help.kameleoon.com/manage-your-sites/#Add_a_new_project):
+
+
+**1. Disable Kameleoon entirely:** If a timeout occurs, no experiments or personalizations will be executed for that specific visitor.
+
+**2. Run Kameleoon's code normally:** In this case, the code will execute late, which may result in flickering on the page.
+
+Keep in mind that if you don't adjust the default timeout value, timeouts should be relatively rare under usual conditions, such as with an appropriate internet speed, occurring in only about 2-3% of your visitors.
+</Note>
+Although we do not recommend this option, you can also implement our synchronous tag. In the case of synchronous loading, automatic guarantees are provided as long as the tag is included in the HTML `<head>` section. This is because the browser will not render any content until the Kameleoon application file is fully downloaded and executed. However, loading resources in a blocking manner is not considered a good practice.
+
+Even if you implement the correct method, flickering effects can still occur if the underlying engine of your A/B testing solution is not optimized to prevent them. At Kameleoon, we automatically ensure these optimizations for any changes made through our graphical editor tool. For variations that utilize custom JavaScript code, we offer APIs to guarantee a smooth experience. However, it is essential to use these APIs correctly. Any modifications to an element or any actions waiting for an element to appear on the page should be done using our [JavaScript API method](https://developers.kameleoon.com/apis/activation-api-js/api-reference#kameleoonapicore), specifically `Kameleoon.API.Core.runWhenElementPresent()`, rather than by using hand-coded pollers or other custom code.
+
+<Note>
+**Note:**
+
+When implementing JavaScript code for a variation, it is important to consider the modifications you want to make and the specific DOM elements to which they will apply. Once you have identified the appropriate CSS selector for these elements, you should enclose the modification call within a callback function that you will provide to `Kameleoon.API.Core.runWhenElementPresent()`. This approach has two key benefits: first, it ensures that the code executes at the right time, only after the elements are present in the DOM, preventing potential issues that could arise if your code runs prematurely. Second, it eliminates the risk of unwanted flickering effects.
+</Note>
+
+## Impact of flicker management on performance
+
+While performance monitoring solutions offer valuable insights, they do not present a complete picture, particularly for experimentation platforms.
+
+True performance is about finding the right balance between speed, accuracy, and providing a seamless user experience. Kameleoon achieves this balance effectively: our experiment snippet is specifically crafted to optimize both performance and user experience - Kameleoon loads a single script that contains our engine and any configurations you have set up on our platform, including experiments, goals, and custom scripts. No additional scripts are loaded afterwards.
+
+Temporarily disabling our anti-flickering engine might improve performance metrics in monitoring tools, but it compromises the user experience and result accuracy by introducing flickers. We believe this trade-off is unacceptable.

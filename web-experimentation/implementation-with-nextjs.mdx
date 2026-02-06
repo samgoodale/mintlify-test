@@ -1,0 +1,160 @@
+---
+title: "Implementation with Next.js"
+description: "This guide explains how to preload **Kameleoon Web Experimentation** with **anti-flicker protection**, and how to execute the `engine.js` script **after React hydration** to ensure a smooth user experience."
+---
+
+A **production-ready integration** is available in this repository: [https://github.com/Kameleoon/setup-engine-nextjs](https://github.com/Kameleoon/setup-engine-nextjs)
+
+Be sure to **replace the sitecode with your own** in [`src/integrations/Kameleoon/sitecode.ts`](https://github.com/Kameleoon/setup-engine-nextjs/blob/main/src/integrations/Kameleoon/sitecode.ts).
+
+<Note>
+**Note:**
+
+Your Kameleoon script domain may differ between projects. Depending on their creation date, your projects may be hosted under `kameleoon.eu` or `kameleoon.io`.  
+Always use the domain displayed for your project inside the Kameleoon App.
+</Note>
+
+## Overview
+
+1. **Preload the Kameleoon engine** so the browser downloads it early and caches it.
+2. **Apply anti-flicker CSS** to hide content until the engine is ready, preventing layout shifts.
+3. **Run the engine after hydration** to avoid React hydration warnings or mismatches.
+
+
+## Components
+
+This integration uses **two components** that work together to ensure smooth loading and prevent flickering during hydration.
+
+### 1. `Server Component`
+
+Place this component **inside the `<head>` of your main layout**.
+
+Its responsibilities are:
+
+- Injecting anti-flicker CSS during SSR to prevent UI flashing
+- Preloading the `engine.js` file so downloading starts as soon as possible
+
+```typescript expandable
+// No "use client" here — must stay server-side
+import { SITECODE_SRC } from "./sitecode";
+
+const ANTIFLICKER_CSS = `
+  * {
+    visibility: hidden !important;
+    background-image: none !important;
+  }
+`;
+
+export function KameleoonHead() {
+    return (
+        <>
+            {/* Preload the engine so the browser starts downloading it ASAP */}
+            <link rel="preload" href={SITECODE_SRC} as="script" fetchPriority="high" />
+
+            {/* Anti-flicker stylesheet injected during SSR */}
+            <style
+                id="kameleoonLoadingStyleSheet"
+                suppressHydrationWarning
+                dangerouslySetInnerHTML={{ __html: ANTIFLICKER_CSS }}
+            />
+        </>
+    );
+}
+```
+
+See [`KameleoonHead.tsx`](https://github.com/Kameleoon/setup-engine-nextjs/blob/main/src/integrations/Kameleoon/KameleoonHead.tsx)
+
+### 2. `Client Component`
+
+Place this component **at the very top of the `<body>`** to accurately control execution timing.
+
+This component:
+
+- Removes the anti-flicker styles after hydration
+- Dynamically loads Kameleoon’s `engine.js`
+- Ensures the script loads without blocking rendering
+
+```typescript expandable
+"use client";
+
+import { useCallback, useEffect } from "react";
+import { SITECODE_SRC } from "./sitecode";
+
+export function KameleoonHydrationReady() {
+    const removeAntiflickerStyles = useCallback(() => {
+        const kameleoonLoadingTimeout = 500;
+        window.kameleoonQueue = window.kameleoonQueue || [];
+        window.kameleoonStartLoadTime = Date.now();
+
+        window.kameleoonDisplayPage = function (fromEngine) {
+            if (!fromEngine) {
+                window.kameleoonTimeout = true;
+            }
+            document.getElementById("kameleoonLoadingStyleSheet")?.remove();
+        };
+
+        window.kameleoonDisplayPageTimeOut = setTimeout(
+            window.kameleoonDisplayPage,
+            kameleoonLoadingTimeout
+        );
+    }, []);
+
+    const loadEngine = useCallback(() => {
+        if (document.getElementById("kameleoon-engine")) return;
+
+        const script = document.createElement("script");
+        script.src = SITECODE_SRC;
+        script.async = true;
+        script.id = "kameleoon-engine";
+        document.head.appendChild(script);
+    }, []);
+
+    // Execute Kameleoon after hydration
+    useEffect(() => {
+        removeAntiflickerStyles();
+        loadEngine();
+    }, [loadEngine, removeAntiflickerStyles]);
+
+    return null;
+}
+```
+
+See [`KameleoonHydrationReady.tsx`](https://github.com/Kameleoon/setup-engine-nextjs/blob/main/src/integrations/Kameleoon/KameleoonHydrationReady.tsx)
+
+<Note>
+**Note:** 
+
+The default anti-flicker timeout is `1000 ms`. Adjust `kameleoonLoadingTimeout` if needed.
+</Note>
+## Usage in `RootLayout`
+
+Example of how to combine both components:
+
+```typescript
+export default function RootLayout({ children }) {
+    return (
+        <html lang="en">
+            <head>
+                <KameleoonHead />
+            </head>
+            <body className={inter.className}>
+                <KameleoonHydrationReady />
+                {children}
+            </body>
+        </html>
+    );
+}
+```
+
+See [`layout.tsx`](https://github.com/Kameleoon/setup-engine-nextjs/blob/main/src/app/layout.tsx)
+
+## Key Takeaways
+
+- **Anti-flicker protection on SSR**
+- **Hydration-aware script execution**
+- **Asynchronous engine loading**
+- **Fallback timeout for reliability**
+- **No blocking scripts**
+- Works with **Next.js layouts, streaming, and React Server Components**
+
+With this setup, your Next.js application will load Kameleoon efficiently and avoid hydration-related issues.

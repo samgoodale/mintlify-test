@@ -1,0 +1,123 @@
+---
+title: "Overview"   
+description: "In addition to the client-side [web experimentation](https://kameleoon.com/en/platform/ab-testing-client-side) capabilities, Kameleoon has extensive support for server-side feature management and experimentation on web apps, mobile apps, TV and gaming apps, or any other apps connected to the internet."
+---
+
+Here are a few of the additional features you can implement using any of our SDKs:
+
+- Use [feature flags and feature experiments](https://help.kameleoon.com/category/user-manual/activate-and-manage-your-feature-flags/) with advanced rollout and targeted delivery rules.
+- Combine server-side experiments with client-side native capabilities using [Hybrid experimentation](https://developers.kameleoon.com/core-concepts/hybrid-experimentation).
+
+<Tip>
+**Tip:**
+
+Join our [Slack Community](https://join.slack.com/t/kameleooncommunity/shared_invite/zt-1s6m8s09e-~yA1EUgn5pLWW_mrgf8TrQ) for questions about product features and get access to the latest updates.
+</Tip>
+
+## Supported platforms
+
+Kameleoon continually adds support for new languages and enhances our existing SDKs with new features and methods. The minimum version you need for some SDK features varies depending on the language. The SDK compatibility table shows which features are available in each language and the minimum SDK version you need to implement it. For comprehensive version history, see the changelog file in the [SDK Github repository](https://github.com/Kameleoon). We recommend subscribing to receive email notifications.
+
+### Server-side SDKs
+
+| **SDK** | [Java](https://developers.kameleoon.com/feature-management-and-experimentation/web-sdks/java-sdk) | [C#](https://developers.kameleoon.com/feature-management-and-experimentation/web-sdks/csharp-sdk) | [PHP](https://developers.kameleoon.com/feature-management-and-experimentation/web-sdks/php-sdk) | [NodeJS](https://developers.kameleoon.com/feature-management-and-experimentation/web-sdks/nodejs-sdk) | [Ruby](https://developers.kameleoon.com/feature-management-and-experimentation/web-sdks/ruby-sdk) | [Python](https://developers.kameleoon.com/feature-management-and-experimentation/web-sdks/python-sdk) | [Go](https://developers.kameleoon.com/feature-management-and-experimentation/web-sdks/go-sdk) |
+|:-|:-|:-|:-|:-|:-|:-|:-|
+| [Real-time streaming](https://developers.kameleoon.com/feature-management-and-experimentation/technical-considerations#streaming-premium-option) | 2.0.6 | 2.2.0 | \- | 1.0.0 | 2.1.0 | 2.0.0 | 2.1.0 |
+| [Feature experiments](https://help.kameleoon.com/create-feature-experiments/) | 3.0.0 | 3.0.0 | 3.0.0 | 1.0.0 | 2.0.0 | 2.1.0 | 2.0.0 |
+| [Multi-environment feature flags](https://help.kameleoon.com/manage-environments/) | 2.0.4 | 2.1.4 | 2.0.9 | 1.0.0 | 1.0.10 | 1.0.2 | 1.0.5 |
+| [Feature flag variables](https://help.kameleoon.com/define-feature-variables/) | 2.0.4 | 2.1.7 | 2.0.9 | 1.0.0 | 1.0.10 | 1.0.2 | 1.0.5 |
+| [Predefined targeting conditions](https://developers.kameleoon.com/feature-management-and-experimentation/using-visit-history-in-feature-flags-and-experiments) | 2.0.6 | 2.2.0 | 2.1.3 | 1.0.0 | 2.0.0 | 2.0.0 | 2.0.0 |
+| Retrieve all targeted feature flags | 2.0.6 | 2.1.7 | 3.0.0 | 1.0.0 | 2.0.0 | 2.0.0 | 2.0.0 |
+| Retrieve all feature flags variables | 3.0.0 | 2.1.9 | 3.0.0 | 1.0.0 | 2.0.0 | 2.0.0 | 2.0.0 |
+| [Retrieve data for a user key (Data API Map endpoint)](https://developers.kameleoon.com/feature-management-and-experimentation/use-external-data-to-target-users) | 2.0.5 | 2.1.5 | 2.1.0 | 1.0.0 | 1.1.0 | 1.0.3 | 1.0.6 |
+| [Retrieve browsing data for a user (Data API Visitor endpoint)](https://developers.kameleoon.com/feature-management-and-experimentation/using-visit-history-in-feature-flags-and-experiments#handling-data-in-kameleoon-sdks) | 3.2.0 | 3.3.0 | 3.3.0 | 2.2.0 | 2.2.0 | 2.4.0 | 2.3.0 |
+| [Analytics integration](https://developers.kameleoon.com/core-concepts/hybrid-experimentation#sending-exposure-events-to-third-party-analytics) | 3.1.0 | 3.1.0 | 3.1.0 | 2.1.0 | 2.1.0 | 2.2.0 | 2.1.0 |
+| [Legal consent management](https://help.kameleoon.com/consent-management-policy/#For_web_experiments_feature_experiments_hybrid_experiments) | 4.0.0 | 4.0.0 | 4.0.0 | 3.1.0 | 3.0.0 | 3.0.0 | 3.0.0 |
+| [Data warehouse integration](https://help.kameleoon.com/?s=data+warehouse) | 4.1.0 | 4.3.0 | 4.1.0 | 2.8.0 | 3.1.0 | 3.1.0 | 3.1.0 |
+| [Cross-device experimentation](https://developers.kameleoon.com/core-concepts/cross-device-experimentation/) | 4.1.0 | 4.3.0 | 4.1.0 | 2.8.0 | 3.1.0 | 3.1.0 | 3.1.0 |
+
+### Client-side or mobile SDKs
+
+| **SDK** | [Android (Kotlin/Java)](https://developers.kameleoon.com/feature-management-and-experimentation/mobile-sdks/android-sdk) | [iOS (Swift)](https://developers.kameleoon.com/feature-management-and-experimentation/mobile-sdks/ios-sdk) | [JavaScript/TypeScript](https://developers.kameleoon.com/feature-management-and-experimentation/web-sdks/js-sdk) | [Flutter](https://developers.kameleoon.com/feature-management-and-experimentation/mobile-sdks/flutter-sdk) | [React/React Native](https://developers.kameleoon.com/feature-management-and-experimentation/web-sdks/react-js-sdk) |
+|:-|:-|:-|:-|:-|:-|
+| [Real-time streaming](https://developers.kameleoon.com/feature-management-and-experimentation/technical-considerations#streaming-premium-option) | 2.1.0 | 2.1.0 | 1.0.0 | 2.0.0 | 6.0.0 |
+| [Feature experiments](https://help.kameleoon.com/create-feature-experiments/) | 3.0.0 | 3.0.0 | 1.0.0 | 2.0.0 | 6.0.0 |
+| [Multi-environment feature flags](https://help.kameleoon.com/manage-environments/) | 2.0.12 | 2.0.14 | 1.0.0 | 1.0.3 | 6.0.0 |
+| [Feature flag variables](https://help.kameleoon.com/define-feature-variables/) | 2.0.12 | 2.0.14 | 1.0.0 | 1.0.3 | 1.0.0 |
+| [Predefined targeting conditions](https://developers.kameleoon.com/feature-management-and-experimentation/using-visit-history-in-feature-flags-and-experiments) | 2.1.1 | 2.1.2 | 1.0.0 | 2.0.0 | 4.0.0 |
+| Retrieve all targeted feature flags | 2.1.1 | 2.1.2 | 1.0.0 | 2.0.0 | 6.0.0 |
+| Retrieve all feature flags variables | 2.1.1 | 2.1.3 | 1.0.0 | 2.0.0 | 1.0.0 |
+| [Retrieve data for a user key (Data API Map endpoint)](https://developers.kameleoon.com/apis/data-api-rest/all-endpoints/get-map-map) | 2.0.13 | 2.0.15 | 1.0.0 | 1.0.3 | 2.1.0 |
+| [Retrieve browsing data for a user (Data API Visitor endpoint)](https://developers.kameleoon.com/feature-management-and-experimentation/using-visit-history-in-feature-flags-and-experiments#handling-data-in-kameleoon-sdks) | 3.2.0 | 4.1.0 | 1.4.0 | 7.2.2 | N/A |
+| [Legal consent management](https://help.kameleoon.com/consent-management-policy/#For_web_experiments_feature_experiments_hybrid_experiments) | 4.0.0 | 4.0.0 | 2.1.0 | 3.0.0 | 8.1.0 |
+| [Data warehouse integration](https://help.kameleoon.com/?s=data+warehouse) | 3.3.0 | 3.1.0 | 1.8.0 | 3.0.0 | 7.6.0 |
+| [Cross-device experimentation](https://developers.kameleoon.com/core-concepts/cross-device-experimentation/) | 3.3.0 | 3.1.0 | 1.8.0 | 3.0.0 | 7.6.0 |
+
+<Note>
+**Note:**
+
+All of our SDKs are zero-latency SDKs, which means client-side code performs all campaign allocations. Because the allocations are not completed using a remote server call, the impact on your website performance is under a millisecond compared to ~50 ms on average for API-based technologies.
+</Note>
+
+### Serverless edge compute platforms
+
+Kameleoon also supports feature management and experimentation at the edge by providing a set of starter kits to implement feature flags and experiments using [serverless edge compute platforms](https://developers.kameleoon.com/feature-management-and-experimentation/serverless-edge-compute-starter-kits) offered by modern Content Delivery Networks (CDNs), such as **Akamai EdgeWorkers**, **AWS Lambda@Edge**, **Cloudflare Workers**, **Fastly Compute@Edge** and **Vercel Edge Functions**.
+
+| **Module** | **Current Version** | **Release Date** |
+|:--- |:--- |:--- |
+| [Fastly starter kit](https://github.com/Kameleoon/fastly-compute-starter-kit) | 0.2.2 | September 2023 |
+| [Cloudflare Workers](https://github.com/Kameleoon/cloudflare-worker-starter-kit) | 1.0.2 | October 2024 |
+| [Akamai EdgeWorkers](https://github.com/Kameleoon/akamai-starter-kit) | 0.2.0 | December 2024 |
+| [AWS Lambda@Edge](https://github.com/Kameleoon/aws-lambda-edge-starter-kit) | 2.1.1 | July 2024 |
+| [Vercel Edge Functions](https://github.com/Kameleoon/vercel-examples) | 0.1.0 | April 2023 |
+
+### OpenFeature providers
+
+Kameleoon supports OpenFeature, an open-source standard for feature flag management backed by the CNCF. OpenFeature ensures seamless compatibility across tools and custom solutions.
+
+Kameleoon provides OpenFeature support for several of our SDKs. The full list can be found in our [dedicated article](https://developers.kameleoon.com/feature-management-and-experimentation/open-feature-providers).
+
+### Web Server Modules
+
+| **Module** | **Current Version** | **Release Date** |
+|:--- |:--- |:--- |
+| [Nginx web server module](https://developers.kameleoon.com/feature-management-and-experimentation/web-server-modules) | 1.0.24 | September 2022 |
+
+<Warning>
+**Caution:**
+
+The web server module for Nginx currently only supports experiments.
+</Warning>
+### API
+
+If our SDKs do not support the language used in your application, you can either build a service using one of our existing SDKs or implement a custom integration with the API.
+
+When low latency is a priority for updating targeting conditions and feature flag configurations in real time, opting for an API implementation instead of an SDK may result in increased latency. We strongly recommend using one of our SDKs whenever possible, as they provide better performance, automatic error handling, and ensure a more seamless integration with your codebase.
+
+Kameleoon supports all modern JavaScript frameworks, such as Angular, Vue.js, and Next.js, so you can always use a [JavaScript-based SDK](https://developers.kameleoon.com/feature-management-and-experimentation/overview/#selecting-a-javascript-sdk) for front-end development instead of relying on the API approach.
+
+Visit our [API documentation](https://customers.kameleoon.com/apisdk/doc) to learn more about the available methods.
+
+### Selecting a JavaScript SDK
+
+In addition to the JavaScript/TypeScript SDK, we also provide other Javascript-based SDKs: the React SDK, React Native SDK, and NodeJS SDK. Most JavaScript frameworks work with the JavaScript/TypeScript SDK, but there are some that are better suited to one of the other SDKs depending on the implementation. For example, apps that use server-side rendering (SSR) or [Edge integrations](https://developers.kameleoon.com/feature-management-and-experimentation/serverless-edge-compute-starter-kits) should use the NodeJS SDK. Here are the recommended SDKs based on JavaScript frameworks.
+
+| Framework | Recommended SDK |
+|:-|:-|
+| Edge integrations (any framework) | NodeJS SDK |
+| Angular/AngularJS | JavaScript/TypeScript SDK |
+| Express | NodeJS SDK |
+| Deno | NodeJS SDK |
+| Ionic | JavaScript/TypeScript SDK |
+| JQuery | JavaScript/TypeScript SDK |
+| NestJS | NodeJS SDK |
+| NextJS (with SSR) | NodeJS SDK |
+| NextJS (without SSR) | React SDK or JavaScript/TypeScript SDK |
+| NodeJS | NodeJS SDK |
+| Plain JavaScript | JavaScript/TypeScript SDK |
+| React Native | React Native SDK |
+| React | React SDK or JavaScript/TypeScript SDK |
+| Svelte (with SSR) | NodeJS SDK |
+| Svelte (without SSR) | JavaScript/TypeScript SDK |
+| Vue (with SSR) | NodeJS SDK |
+| Vue (without SSR ) | JavaScript/TypeScript SDK |

@@ -1,0 +1,43 @@
+---
+title: "How to collect data"
+description: "If your **Feature Flag** or **Experiment** is not collecting data, follow this checklist to identify the cause. The checks are divided between the **back office** and the **SDK**."
+---
+
+
+## In the back office
+
+Ensure the following conditions are met:
+
+- The **rule** is created for the correct **environment** (`production`, `staging`, or `development`).
+- The **rule** is **enabled** (turned **on**).
+- The **rule** targets **traffic** that can actually be exposed (i.e. matching segments or visitors).
+
+## In the SDK
+
+Check these points carefully:
+
+- The `KameleoonClient` is created with the **correct configuration**:
+	- `siteCode`
+	- `environment` variable
+	- `networkDomain` (if applicable)
+- `getVisitorCode()` is called **only once**, and its value is **reused** wherever the `visitorCode` is needed.
+- If using **Hybrid Mode** (with `engine.js` on the frontend):
+	- The `visitorCode` is correctly **synced** between the SDK and the frontend.
+- For **Experiment Rules**:
+	- `setLegalConsent(true)` is called to ensure that **data collection** is allowed.
+- For **Delivery Rules**:
+	- `isFeatureActive()` or `getVariation()` is called.
+	- The method returns `true` (or the expected variation).
+- For **Experiment Rules**:
+	- `getVariation()` is called and returns the **expected variation**.
+
+
+## Debugging tips
+
+If you’ve confirmed all of the above and data is still missing:
+
+- **Log in the console**:
+	- The consent value
+	- The `visitorCode`
+	- The variation values Verify that they match what you see in the browser.
+- **Enable SDK logging** and check for any **errors**.
