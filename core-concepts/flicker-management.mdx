@@ -5,7 +5,7 @@ description: "**Flicker** is a common issue associated with JavaScript-based A/B
 
 Flickering typically has two main causes:
 
-- The script is loaded and executed after the browser has already displayed the page or parts of it. This timing issue is directly related to how Kameleoon has been implemented on your website. If Kameleoon loads too late or is integrated within a Tag Management System, flickering cannot be avoided.
+- The script loads and executes after the browser has already displayed the page or parts of the page. The timing issue relates directly to how Kameleoon has been implemented on the website. If Kameleoon loads too late or is integrated within a Tag Management System, flickering cannot be avoided.
 - The engine processing the experiment’s variations is too slow and does not execute the modifications quickly enough.
 
 Kameleoon’s script includes a unique [anti-flickering engine](https://developers.kameleoon.com/core-concepts/flicker-management/#how-to-prevent-flicker-in-your-experiments) that ensures A/B tests run smoothly, allowing test variations to display without delays which leads to an improved user experience and more reliable test results.
