@@ -1,0 +1,36 @@
+import { Select, Text, Bold, Italic, Code, CodeRef, Ref, If } from '../../utils.mdx';
+import SharedDiv, { Shared } from '../../shared.mdx';
+
+<Select name={props.sec}>
+<div name="tip_qa">
+
+:::tip
+This method should not be used in production to fetch variations for every flag in the returned list, as it is not designed for performance. Instead, use <CodeRef x={props.c.GetVariations}/>. Some customers use this method for debugging or QA purposes, allowing internal users to select a variant for a given feature flag in production.
+:::
+
+</div>
+
+<div name="description">
+
+Returns the current SDK configuration as a <CodeRef x={props.c.DataFile}/> object.
+
+</div>
+
+<div name="return_value">
+
+| Type                             | Description                               |
+| -------------------------------- | ----------------------------------------- |
+| <CodeRef x={props.c.DataFile}/>     | The data file containing the SDK configuration. |
+
+</div>
+
+<div name="exceptions">
+
+
+| Type | Description |
+| ---- | ----------- |
+| <Code x={props.c.Exceptions.SdkNotReady}/> | <Text x={Shared.Exceptions.SdkNotReady}/> |
+
+
+</div>
+</Select>

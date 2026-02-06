@@ -1,0 +1,8 @@
+client_id: "client_id"
+client_secret: "client_secret"
+refresh_interval: 60m
+default_timeout: 10s
+session_duration_minute: 30m
+tracking_interval: 1000ms
+top_level_domain: ".domain.com"
+environment: "production"

@@ -1,0 +1,19 @@
+import { Select, Text, Bold, Italic, Code, CodeRef, Ref } from '../../utils.mdx';
+import { Shared } from '../../shared.mdx';
+
+<Select name={props.sec}>
+<div name="description">
+
+The <Code x={props.c.Browser}/> data set stored here can be used to filter experiment and personalization reports by any value associated with it.
+</div>
+
+<div name="arguments">
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| <Text x={props.c.Browser.Params.BrowserType.Name}/> _(required)_ | <Code x={props.c.Browser.Params.BrowserType.Type}/> | List of browsers: <Code x={props.c.Browser.Params.BrowserType.Chrome}/>, <Code x={props.c.Browser.Params.BrowserType.IE}/>, <Code x={props.c.Browser.Params.BrowserType.Firefox}/>, <Code x={props.c.Browser.Params.BrowserType.Safari}/>, <Code x={props.c.Browser.Params.BrowserType.Opera}/>, <Code x={props.c.Browser.Params.BrowserType.Other}/>. |
+| version _(optional)_  | <Code x={props.c.Browser.Params.Version.Type}/> | Version of the browser, floating point number represents major and minor version of the browser |
+
+</div>
+</Select>
+

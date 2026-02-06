@@ -1,0 +1,24 @@
+import { Select, Text, Bold, Italic, Code, CodeRef, Ref } from '../../utils.mdx';
+
+<Select name={props.sec}>
+<div name="description">
+
+The <Code x={props.c.Conversion}/> data set stored here can be used to filter experiment and personalization reports by any goal associated with it.
+
+:::tip
+- Each visitor can have multiple <Code x={props.c.Conversion}/> objects.
+- You can find the <Code x={props.c.Conversion.Params.GoalId}/> in the Kameleoon app.
+:::
+
+</div>
+<div name="arguments">
+
+| Name | Type | Description | Default |
+| ---- | ---- | ----------- | ------- |
+| <Text x={props.c.Conversion.Params.GoalId.Name}/> _(required)_ | <Code x={props.c.Common.Int}/> | ID of the goal. | |
+| <Text x={props.c.Conversion.Params.Revenue.Name}/> _(optional)_ | <Code x={props.c.Conversion.Params.Revenue.Type}/> | Revenue of the conversion | `0` |
+| <Text x={props.c.Conversion.Params.Negative.Name}/> _(optional)_ | <Code x={props.c.Common.Bool}/> | Defines if the revenue is positive or negative. | <Code x={props.c.Common.False}/> |
+| <Text x={props.c.Conversion.Params.Metadata.Name}/> _(optional)_ | <Code x={props.c.Conversion.Params.Metadata.Type}/> | Metadata of the conversion. | <Code x={props.c.Conversion.Params.Metadata.DefaultValue}/> |
+
+</div>
+</Select>

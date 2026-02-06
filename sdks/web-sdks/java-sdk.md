@@ -1,0 +1,1826 @@
+---
+sidebar_position: 2
+toc_max_heading_level: 4
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+import { Select, Text, Bold, Italic, Code, CodeRef, Ref, If } from '../commons/utils.mdx';
+import SharedDiv, { Shared } from '../commons/shared.mdx';
+import StarterKit from '../commons/developer-guide/getting-started/starter-kit.mdx';
+import CrossDeviceReconciliation from '../commons/developer-guide/cross-device-reconciliation.mdx';
+import ActivatingAFeatureFlag from '../commons/developer-guide/getting-started/activating-a-feature-flag.mdx';
+import TargetingConditions from '../commons/developer-guide/targeting-conditions.mdx';
+import Logging from '../commons/developer-guide/logging.mdx';
+import GetVariations from '../commons/reference/feature-flags-and-variations/get-variations.mdx';
+import GetVariation from '../commons/reference/feature-flags-and-variations/get-variation.mdx';
+import GetFeatureList from '../commons/reference/feature-flags-and-variations/get-feature-list.mdx';
+import SetForcedVariation from '../commons/reference/feature-flags-and-variations/set-forced-variation.mdx';
+import EvaluateAudiences from '../commons/reference/feature-flags-and-variations/evaluate-audiences.mdx';
+import GetDataFile from '../commons/reference/feature-flags-and-variations/get-data-file.mdx';
+import GetEngineTrackingCode from '../commons/reference/goals/get-engine-tracking-code.mdx';
+import Geolocation from '../commons/reference/data-types/geolocation.mdx';
+import Browser from '../commons/reference/data-types/browser.mdx';
+import Conversion from '../commons/reference/data-types/conversion.mdx';
+import TrackConversion from '../commons/reference/goals/track-conversion.mdx';
+import UpdateConfigurationHandler from '../commons/reference/events/update-configuration-handler.mdx';
+import AddData from '../commons/reference/visitor-data/add-data.mdx';
+import CustomBucketingKey from '../commons/developer-guide/custom-bucketing-key.mdx';
+import DataFile from '../commons/reference/returned-types/data-file.mdx';
+import FeatureFlag from '../commons/reference/returned-types/feature-flag.mdx';
+import Rule from '../commons/reference/returned-types/rule.mdx';
+
+# Java SDK
+
+export const Context = {
+    IsServer: true,
+    IsSnakeCase: false,
+    Common: {
+        Null: 'null',
+        True: 'true',
+        False: 'false',
+        Int: 'int',
+        String: 'String',
+        Bool: 'boolean',
+        Float: 'float',
+        SDK: 'Java',
+    },
+    Params: {
+        VisitorCode: 'visitorCode',
+        FeatureKey: 'featureKey',
+    },
+    Exceptions: {
+        Language: 'Exception',
+        Kameleoon: 'KameleoonException',
+        VisitorCodeInvalid: 'VisitorCodeInvalid',
+        FeatureNotFound: 'FeatureNotFound',
+        FeatureEnvironmentDisabled: 'FeatureEnvironmentDisabled',
+        FeatureExperimentNotFound: 'FeatureExperimentNotFound',
+        FeatureVariationNotFound: 'FeatureVariationNotFound',
+    },
+    Hook: {
+        UseData: "useData",
+    },
+    KameleoonClientConfig: {
+        Name: 'KameleoonClientConfig',
+        Ref: '#additional-configuration',
+        TrackingInterval: { FileName: 'tracking_interval_millisecond' },
+        IsUniqueIdentifier: { Name: '<>' },
+    },
+    StarterKit: {
+        Name: 'Starter kit for Java',
+        Ref: 'https://github.com/Kameleoon/java-examples',
+    },
+    // kameleoon.data
+    Conversion: {
+        Name: "Conversion",
+        FullName: "data.Conversion",
+        Ref: "#conversion",
+        Params: {
+            GoalId: { Name: "goalId" },
+            Revenue: { Name: "revenue", Type: "float" },
+            Negative: { Name: "negative" },
+            Metadata: { Name: "metadata", Type: "CustomData...", DefaultValue: "new CustomData[0]" },
+        },
+    },
+    CustomData: {
+        Name: 'CustomData',
+        FullName: 'data.CustomData',
+        Ref: '#customdata',
+    },
+    UniqueIdentifier: {
+        Name: 'UniqueIdentifier',
+        Ref: '#uniqueidentifier',
+    },
+    UserAgent: {
+        Name: 'UserAgent',
+        Ref: '#useragent',
+    },
+    Geolocation: {
+        Name: 'Geolocation',
+        Ref: '#geolocation',
+        Params: {
+            Region: { Type: 'String' },
+            City: { Type: 'String' },
+            PostalCode: { Name: 'postalCode', Type: 'String' },
+            Latitude: { Type: 'float' },
+            Longitude: { Type: 'float' },
+        },
+    },
+    Browser: {
+        Name: 'Browser',
+        Ref: '#browser',
+        Params: {
+            BrowserType: {
+                Name: 'type',
+                Type: 'Browser.Type',
+                Chrome: 'CHROME',
+                IE: 'INTERNET_EXPLORER',
+                Firefox: 'FIREFOX',
+                Safari: 'SAFARI',
+                Opera: 'OPERA',
+                Other: 'OTHER',
+            },
+            Version: { Type: 'Float' },
+        },
+    },
+    // kameleoon.types
+    Variation: {
+        Name: 'Variation',
+        FullName: 'types.Variation',
+        Ref: '#variation',
+    },
+    DataFile: {
+        Name: "DataFile",
+        FullName: "types.DataFile",
+        Ref: "#datafile",
+        Params: {
+            FeatureFlags: { Name: "featureFlags", Type: "Map<String, FeatureFlag>" },
+        }
+    },
+    FeatureFlag: {
+        Name: "FeatureFlag",
+        FullName: "types.FeatureFlag",
+        Ref: "#featureflag",
+        Params: {
+            EnvironmentEnabled: { Name: "environmentEnabled" },
+            Variations: { Name: "variations", Type: "Map<String, Variation>" },
+            Rules: { Name: "rules", Type: "List<Rule>" },
+            DefaultVariationKey: { Name: "defaultVariationKey", Type: "String" },
+        }
+    },
+    Rule: {
+        Name: "Rule",
+        FullName: "types.Rule",
+        Ref: "#rule",
+        Params: {
+            Variations: { Name: "variations", Type: "Map<String, Variation>" },
+        }
+    },
+    // methods
+    Flush: {
+        Name: 'flush()',
+        Ref: '#flush',
+        Params: {
+            Instant: { Name: 'instant' },
+        },
+    },
+    GetRemoteVisitorData: {
+        Name: 'getRemoteVisitorData()',
+        Ref: '#getremotevisitordata',
+    },
+    GetVisitorCode: {
+        Name: 'getVisitorCode()',
+        Ref: '#getvisitorcode',
+        Params: {
+            DefaultVisitorCode: { Name: 'defaultVisitorCode' },
+        },
+    },
+    TrackConversion: {
+        Name: 'trackConversion()',
+        Ref: '#trackconversion',
+        Params: {
+            GoalId: { Name: "goalId" },
+            Revenue: { Name: "revenue", Type: "float" },
+            IsUniqueIdentifier: { Name: "isUniqueIdentifier" },
+            Negative: { Name: "negative" },
+            Metadata: { Name: "metadata", Type: "CustomData...", DefaultValue: "new CustomData[0]" }
+        }
+    },
+    IsFeatureActive: {
+        Name: 'isFeatureActive()',
+        Ref: '#isfeatureactive',
+    },
+    AddData: {
+        Name: 'addData()',
+        Ref: '#adddata',
+        Params: {
+            Track: { Name: "track" },
+            Data: { Name: 'data', Type: 'Data...' },
+        },
+    },
+    GetEngineTrackingCode: {
+        Name: 'getEngineTrackingCode()',
+        Ref: '#getenginetrackingcode',
+    },
+    GetVariation: {
+        Name: 'getVariation()',
+        Ref: '#getvariation',
+        Return: 'Variation',
+        Params: {
+            Track: { Name: 'track' },
+        },
+    },
+    GetVariations: {
+        Name: 'getVariations()',
+        Ref: '#getvariations',
+        Return: 'Map<String, Variation>',
+        Params: {
+            OnlyActive: { Name: 'onlyActive' },
+            Track: { Name: 'track' },
+        },
+    },
+    SetForcedVariation: {
+        Name: 'setForcedVariation()',
+        Ref: '#setforcedvariation',
+        Params: {
+            ExperimentId: { Name: 'experimentId' },
+            VariationKey: { Name: 'variationKey', Type: 'String', RemVal: 'null' },
+            ForceTargeting: { Name: 'forceTargeting' },
+        },
+    },
+    EvaluateAudiences: {
+        Name: "evaluateAudiences()",
+        Ref: "#evaluateaudiences"
+    },
+    UpdateConfigurationHandler: {
+        Name: 'updateConfigurationHandler()',
+        Ref: '#updateconfigurationhandler',
+        Params: {
+            Handler: { Name: 'handler', Type: 'KameleoonUpdateConfigurationHandler' },
+        },
+    },
+    GetFeatureList: {
+        Name: 'getFeatureList()',
+        Ref: '#getfeaturelist',
+        Return: 'List<String>',
+    },
+    GetDataFile: {
+        Name: "getDataFile()",
+        Ref: "#getdatafile",
+    },
+};
+
+With the Kameleoon Java SDK, you can run experiments and activate feature flags on your Java EE / Jakarta EE application server.
+
+**Getting started**: For help getting started, see the [developer guide](#developer-guide)
+
+**Changelog**: Latest version of the Java SDK: 4.18.1 [Changelog](https://github.com/Kameleoon/client-java/blob/master/CHANGELOG.md).
+
+**SDK methods**: For the full reference documentation of the Java SDK, see the [reference](#reference) section.
+
+## Developer guide
+
+This guide is designed to help you integrate our SDK in a few minutes and start running experiments in your Java applications.
+
+### Getting started
+
+#### Starter kit
+
+<StarterKit sec="starter_kit_description" c={Context}/>
+
+#### Install the Java client
+
+The installation package is available on the Maven Central repository. You can install the Java SDK by adding a dependency into your project's `pom.xml` file, as shown in the example to the right. If you're using another project management system, see the [integrations](https://search.maven.org/artifact/com.kameleoon/kameleoon-client-java) page for additional examples.
+
+<Tabs>
+<TabItem value="javax" label="Java EE">
+
+```java title="pom.xml"
+<dependency>
+  <groupId>com.kameleoon</groupId>
+  <artifactId>kameleoon-client-java</artifactId>
+  <version>4.16.0</version>
+</dependency>
+```
+
+</TabItem>
+<TabItem value="jakarta" label="Jakarta EE">
+
+```java title="pom.xml"
+<dependency>
+  <groupId>com.kameleoon</groupId>
+  <artifactId>kameleoon-client-java-jakarta</artifactId>
+  <version>4.16.0</version>
+</dependency>
+```
+
+</TabItem>
+</Tabs>
+
+#### Additional configuration
+
+Create a `.properties` configuration file to provide credentials and customize SDK behavior. You can also [download our sample configuration](./assets/client%20configs/client-java.properties) file.
+
+We recommend saving this file to the default path, `/etc/kameleoon/client-java.conf`, but you can save it anywhere in the classpath as `kameleoon-client-java.properties`.
+
+The following table shows the available properties that you can set:
+
+| Key                             | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+| ------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `client_id`                     | Required for authentication to the Kameleoon service. To find your `client_id`, see the [API credentials](https://help.kameleoon.com/api-credentials/) documentation.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| `client_secret`                 | Required for authentication to the Kameleoon service. To find your `client_secret`, see the [API credentials](https://help.kameleoon.com/api-credentials/) documentation.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| `session_duration_minute`       | Designates the predefined time interval that Kameleoon stores the visitor and their associated data in memory (RAM). Note that increasing the session duration increases the amount of RAM that needs to be allocated to store visitor data. The default session duration is 30 minutes.                                                                                                                                                                                                                                                                                                                                                                  |
+| `refresh_interval_minute`       | Specifies the refresh interval, in minutes, that the SDK fetches the configuration for the active experiments and feature flags. The value determines the maximum time it takes to propagate changes, such as activating or deactivating feature flags or launching experiments, to your production servers. If left unspecified, the default interval is set to 60 minutes. Additionally, we offer a [streaming mode](/feature-management-and-experimentation/technical-considerations/#streaming-premium-option) that uses server-sent events (SSE) to push new configurations to the SDK automatically and apply new configurations in real-time, without any delays. |
+| `default_timeout_millisecond`   | Specifies the timeout, in milliseconds, for network requests from the SDK. Set the value to 30 seconds or more if you do not have a stable connection. The default value is `10000` ms. Some methods have an additional parameter that you can use to override the default timeout for that particular method. If you do not specify the timeout for a method explicitly, the SDK uses this default value.                                                                                                                                                                                                                                                |
+| `tracking_interval_millisecond` | Specifies the interval for tracking requests in milliseconds. All visitors who Kameleoon evaluated for any feature flag or had data flushed are included in this tracking request, which the SDK performs once per interval. The minimum value is `100` ms and the maximum value is `1000` ms, which is also the default value.                                                                                                                                                                                                                                                                                                                           |
+| `environment`                   | Environment from which the feature flag’s configuration is to be used. The value can be `production`, `staging`, `development`. The default environment value is `production`. See the [managing environments](https://help.kameleoon.com/manage-environments/) article for details.                                                                                                                                                                                                                                                                                                                                                                      |
+| `top_level_domain`              | The current top-level domain for your website . Use the format: `example.com`. Don't include `https://`, `www`, or other subdomains. Kameleoon uses this information to set the corresponding cookie on the top-level domain. This field is mandatory.                                                                                                                                                                                                                                                                                                                                                                                                    |
+| `proxy_host`                    | Sets the proxy host for all outgoing server calls made by the SDK.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| `network_domain`                | <Text x={Shared.ExternalConfigFile.NetworkDomain}/>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+
+#### Initialize the Kameleoon client
+
+After you've installed the SDK into your application and configured your credentials and SDK behavior (in `/etc/kameleoon/client-java.conf`), the next step is creating the Kameleoon client in your application code. For example:
+
+```java
+import com.kameleoon.KameleoonClientFactory;
+
+String siteCode = "a8st4f59bj";
+
+try {
+    KameleoonClient kameleoonClient = KameleoonClientFactory.create(siteCode, "custom/file/path/client-java.properties");
+} catch (KameleoonException.SiteCodeIsEmpty e) {
+    // indicates that provided site code is empty
+} catch (KameleoonException.ConfigCredentialsInvalid exception) {
+    // indicates that provided clientId / clientSecret are not valid
+}
+
+try {
+    KameleoonClientConfig config = new KameleoonClientConfig.Builder()
+    .clientId("<clientId>") // mandatory
+    .clientSecret("<clientSecret>") // mandatory
+    .configurationRefreshInterval(60) // in minutes, optional (60 minutes by default)
+    .sessionDuration(30) // in minutes, optional (30 minutes by default)
+    .defaultTimeout(10_000) // in milliseconds, optional (10000 ms by default)
+    .trackingInterval(1000) // in milliseconds, optional (1000 ms by default)
+    .topLevelDomain("example.com") // mandatory if you use hybrid mode (engine or web experiments)
+    .environment("development") // optional
+    .proxyHost(new HttpHost("192.168.0.25", 8080, "http")) // optional
+    .networkDomain("example.com") // optional
+    .build();
+    KameleoonClientFactory.create(siteCode, config);
+} catch (KameleoonException.SiteCodeIsEmpty e) {
+    // indicates that provided site code is empty
+} catch (KameleoonException.ConfigCredentialsInvalid exception) {
+    // indicates that provided clientId / clientSecret are not valid
+}
+```
+
+A KameleoonClient is a singleton object that bridges your application and the Kameleoon platform. It includes all the methods and properties you need to run an experiment. Note that we also support the use of an HTTP proxy in the Java SDK (see the [`create()` method reference](#create) for details).
+
+:::note
+It's your responsibility to ensure the proper logic of your application code within the context of A/B testing via Kameleoon. A good practice is to always assume that you can exclude the current visitor from the experiment if you haven't launched the experiment. This exclusion is simple because it corresponds to the implementation of the default and reference variation logic.
+:::
+
+You're now ready to begin creating and implementing experiments and feature flagging.
+
+#### Activating a feature flag
+
+##### Assigning a unique ID to a user
+
+<ActivatingAFeatureFlag sec="assigning_a_unique_id_to_a_user" c={Context}/>
+
+##### Retrieving a flag configuration
+
+<ActivatingAFeatureFlag sec="retrieving_a_feature_flag_configuration___default" c={Context}/>
+
+##### Adding data points to target a user or filter / breakdown visits in reports
+
+<ActivatingAFeatureFlag sec="adding_data_points_to_target_a_user_or_filter_breakdown_visits_in_reports___server" c={Context}/>
+
+##### Tracking goal conversions
+
+<ActivatingAFeatureFlag sec="tracking_goal_conversions___param" c={Context}/>
+
+##### Sending events to analytics solutions
+
+<ActivatingAFeatureFlag sec="sending_events_to_analytics_solutions" c={Context}/>
+
+### Using a custom bucketing key
+
+<CustomBucketingKey sec="description" c={Context}/>
+
+#### Use cases
+
+<CustomBucketingKey sec="use_cases" c={Context}/>
+
+#### Technical details
+
+<CustomBucketingKey sec="technical_details_1" c={Context}/>
+
+```java
+kameleoonClient.addData(visitorCode, new CustomData(index, "newVisitorCode"));
+```
+
+<CustomBucketingKey sec="technical_details_2" c={Context}/>
+
+#### Technical requirementes
+
+<CustomBucketingKey sec="technical_requirements" c={Context}/>
+
+### Targeting conditions
+
+<TargetingConditions sec="targeting_conditons_description" c={Context}/>
+
+### Cross-device experimentation
+
+<CrossDeviceReconciliation sec="cross_device_experimentation" c={Context}/>
+
+#### Synchronizing custom data across devices
+
+<CrossDeviceReconciliation sec="synchronizing_custom_data" c={Context}/>
+
+```java title="Device A"
+// In this example, a Custom data with index `90` was set to "Visitor" scope in Kameleoon.
+final int VISITOR_SCOPE_CUSTOM_DATA_INDEX = 90;
+
+kameleoonClient.addData(visitorCode, new CustomData(VISITOR_SCOPE_CUSTOM_DATA_INDEX, "your data"));
+kameleoonClient.flush(visitorCode);
+```
+
+```java title="Device B"
+// Before working with the data, call the `getRemoteVisitorData` method.
+kameleoonClient.getRemoteVisitorData(visitorCode).get();
+
+// After calling the method, the SDK on Device B will have access to CustomData of Visitor scope defined on Device A.
+// So, "your data" will be available for targeting and tracking the visitor.
+```
+
+#### Using custom data for session merging
+
+<CrossDeviceReconciliation sec="using_custom_data_session_merging" c={Context}/>
+
+```java
+// In this example, 91 represents the Custom Data's index configured as a unique identifier in Kameleoon.
+final int MAPPING_INDEX = 91;
+final String FEATURE_KEY = "ff123";
+
+// 1. Before the visitor is authenticated
+
+// Retrieve the variation for an unauthenticated visitor.
+// Assume anonymousVisitorCode is the randomly generated ID for that visitor.
+Variation anonymousVariation = kameleoonClient.getVariation(anonymousVisitorCode, FEATURE_KEY);
+
+// 2. After the visitor is authenticated
+
+// Assume `userId` is the visitor code of the authenticated visitor.
+kameleoonClient.addData(anonymousVisitorCode, new CustomData(MAPPING_INDEX, userId));
+kameleoonClient.flush(true, anonymousVisitorCode);
+
+// Indicate that `userId` is a unique identifier.
+kameleoonClient.addData(userId, new UniqueIdentifier(true));
+
+// 3. After the visitor was authorized
+
+// Retrieve the variation for the `userId`, which will match the anonymous visitor code's variation.
+Variation userVariation = kameleoonClient.getVariation(userId, FEATURE_KEY);
+boolean isSameVariation = userVariation.getKey().equals(anonymousVariation.getKey()); // true
+
+// `userId` and `anonymousVisitorCode` are now linked and can be tracked as a single visitor.
+kameleoonClient.trackConversion(userId, 123, 10.0);
+
+// Additionally, the linked visitors share all fetched previously tracked remote data.
+kameleoonClient.getRemoteVisitorData(userId).get();
+```
+
+<CrossDeviceReconciliation sec="cross_device_visitor_code" c={Context}/>
+
+### Logging
+
+<Logging sec="logging" c={Context}/>
+
+#### Log levels
+
+<Logging sec="log_levels" c={Context}/>
+
+```java
+// The `NONE` log level does not allow logging.
+com.kameleoon.logging.KameleoonLogger.setLogLevel(com.kameleoon.logging.LogLevel.NONE);
+
+// The `ERROR` log level only allows logging issues that may affect the SDK's primary behaviour.
+com.kameleoon.logging.KameleoonLogger.setLogLevel(com.kameleoon.logging.LogLevel.ERROR);
+
+// The `WARNING` log level allows logging issues which may require an attention.
+// It extends the `ERROR` log level.
+// The `WARNING` log level is a default log level.
+com.kameleoon.logging.KameleoonLogger.setLogLevel(com.kameleoon.logging.LogLevel.WARNING);
+
+// The `INFO` log level allows logging general information on the SDK's internal processes.
+// It extends the `WARNING` log level.
+com.kameleoon.logging.KameleoonLogger.setLogLevel(com.kameleoon.logging.LogLevel.INFO);
+
+// The `DEBUG` level logs additional details about the SDK’s internal processes and extends the `INFO` level
+// with more granular. diagnostic output.
+// This information is not intended for end-user interpretation but can be sent to our support team
+// to assist with internal troubleshooting.
+com.kameleoon.logging.KameleoonLogger.setLogLevel(com.kameleoon.logging.LogLevel.DEBUG);
+```
+
+#### Custom handling of logs
+
+<Logging sec="custom_handling_of_logs" c={Context}/>
+
+```java
+public class CustomLogger implements com.kameleoon.logging.Logger {
+    private final java.util.logging.Logger inner;
+
+    public CustomLogger(java.util.logging.Logger inner) {
+        this.inner = inner;
+    }
+
+    // `log` method accepts logs from the SDK
+    @Override
+    public void log(com.kameleoon.logging.LogLevel level, String message) {
+        // Custom log handling logic here. For example:
+        switch (level) {
+            case ERROR:
+                inner.log(java.util.logging.Level.SEVERE, message);
+                break;
+            case WARNING:
+                inner.log(java.util.logging.Level.WARNING, message);
+                break;
+            case INFO:
+                inner.log(java.util.logging.Level.INFO, message);
+                break;
+            case DEBUG:
+                inner.log(java.util.logging.Level.FINE, message);
+                break;
+        }
+    }
+}
+
+// Log level filtering is applied separately from log handling logic.
+// The custom logger will only accept logs that meet or exceed the specified log level.
+// Ensure the log level is set correctly.
+com.kameleoon.logging.KameleoonLogger.setLogLevel(com.kameleoon.logging.LogLevel.DEBUG); // Optional; defaults to `LogLevel.WARNING`.
+com.kameleoon.logging.KameleoonLogger.setLogger(new CustomLogger());
+```
+
+## Reference
+
+This is the full reference documentation for the Java SDK.
+
+### Initialization
+
+#### create()
+
+To use the SDK, you must finish initialization. Your app conducts all interactions with the SDK through an object of the `KameleoonClient` class. Create this object using the static method `create()` in `KameleoonClientFactory`.
+
+```java
+import com.kameleoon.KameleoonClientFactory;
+
+String siteCode = "a8st4f59bj";
+
+try {
+    KameleoonClient kameleoonClient = KameleoonClientFactory.create(siteCode, "custom/file/path/client-java.properties");
+} catch (KameleoonException.SiteCodeIsEmpty e) {
+    // indicates that provided site code is empty
+} catch (KameleoonException.ConfigCredentialsInvalid exception) {
+    // indicates that provided clientId / clientSecret are not valid
+}
+
+try {
+    KameleoonClientConfig config = new KameleoonClientConfig.Builder()
+    .clientId("<clientId>") // mandatory
+    .clientSecret("<clientSecret>") // mandatory
+    .configurationRefreshInterval(60) // in minutes, optional (60 minutes by default)
+    .sessionDuration(30) // in minutes, optional (30 minutes by default)
+    .defaultTimeout(10_000) // in milliseconds, optional (10000 ms by default)
+    .trackingInterval(1000) // in milliseconds, optional (1000 ms by default)
+    .topLevelDomain("example.com") // mandatory if you use hybrid mode (engine or web experiments)
+    .environment("development") // optional
+    .proxyHost(new HttpHost("192.168.0.25", 8080, "http")) // optional
+    .networkDomain("example.com") // optional
+    .build();
+    KameleoonClientFactory.create(siteCode, config);
+} catch (KameleoonException.SiteCodeIsEmpty e) {
+    // indicates that provided site code is empty
+} catch (KameleoonException.ConfigCredentialsInvalid exception) {
+    // indicates that provided clientId / clientSecret are not valid
+}
+```
+
+##### Arguments
+
+| Name              | Type                    | Description                                                                                                                                                                                                                                               |
+| ----------------- | ----------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| siteCode          | `String`                | This is a [unique key](https://help.kameleoon.com/question/how-do-i-find-my-site-id/) of the Kameleoon project you are using with the SDK. This field is mandatory.                                                                                       |
+| configurationPath | `String`                | Path to the SDK configuration file. This field is optional and set to `/etc/kameleoon/client-java.conf` by default.                                                                                                                                       |
+| kameleoonConfig   | `KameleoonClientConfig` | Configuration SDK object that you can pass instead of using a configuration file. This field is optional.                                                                                                                                                 |
+| proxyHost         | `HttpHost`              | Allows your app to set an HTTP proxy for all network calls made by the SDK. This field is optional. If not specified, the SDK uses a proxy specified in the configuration file. If the configuration file doesn't contain a proxy, no proxy will be used. |
+
+##### Return value
+
+| Type              | Description                                                                                                         |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------- |
+| `KameleoonClient` | An instance of the `KameleoonClient` class that your app can then use to manage your experiments and feature flags. |
+
+##### Exceptions thrown
+
+| Type                                        | Description                                                                                                                             |
+| ------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| KameleoonException.ConfigCredentialsInvalid | Exception indicating that the requested credentials were not provided (either in the configuration file or as arguments to the method). |
+| KameleoonException.SiteCodeIsEmpty          | Exception indicating that the specified site code is empty string which is invalid value.                                               |
+
+#### waitInit()
+
+`waitInit()` awaits the initialization of the `KameleoonClient`. This method allows you to check if the SDK has successfully initialized the client before proceeding with other operations.
+
+:::note
+If the `waitInit()` method fails, the initialization process will continue without interruption. Subsequent calls to the `waitInit()` method will return results that reflect the current state of the `KameleoonClient`. Thus, you can invoke the `waitInit()` method multiple times to check the status of the SDK.
+:::
+
+```java
+// Synchronized approach
+try {
+    kameleoonClient.waitInit().get();
+} catch (InterruptedException | ExecutionException exception) {
+    // Indicates that the client could not be initialized due to the thrown exception.
+}
+
+// Asynchronous approach
+kameleeoonClient.waitInit().handle((res, ex) -> {
+    if (ex != null) {
+        // Indicates that the client could not be initialized due to the thrown exception.
+    }
+    return res;
+});
+```
+
+##### Return value
+
+| Type                      | Description                                                               |
+| ------------------------- | ------------------------------------------------------------------------- |
+| `CompletableFuture<Void>` | The task will complete when the client has been successfully initialized. |
+
+##### Exceptions thrown
+
+| Type        | Description                                                                          |
+| ----------- | ------------------------------------------------------------------------------------ |
+| SDKNotReady | Exception indicating that client is not initialized properly and cannot be used yet. |
+
+### Feature flags and variations
+
+#### isFeatureActive()
+
+- _📨 Sends Tracking Data to Kameleoon (depending on the `track` parameter)_
+
+:::note
+This method was previously called `activeFeature`, which was removed in SDK version `4.0.0`.
+:::
+
+Call this method to check whether a feature flag should be active for a specified user. This method takes a `visitorCode` and a `featureKey` as mandatory arguments to check if the feature is active for the user.
+
+If the user has never been associated with this feature flag, the SDK returns a random boolean value (either `true` to add the user to this feature or `false` to exclude them from the feature). If a user with the specified `visitorCode` is already registered with this feature flag, the SDK detects the previous `featureFlag`value.
+
+Make sure you catch and handle potential exceptions.
+
+If you specify a `visitorCode`, the `isFeatureActive()` method uses it as the unique visitor identifier, which is useful for [Cross-device experimentation](/core-concepts/cross-device-experimentation). When you specify a `visitorCode` and set the `isUniqueIdentifier` parameter to `true`, the SDK links the flushed data with the visitor associated with the specified identifier.
+
+:::note
+The parameter `isUniqueIdentifier` is deprecated. Please use [`UniqueIdentifier`](#uniqueidentifier) instead.
+
+The `isUniqueIdentifier` can be helpful in unique situations; for example, if you cannot access the anonymous `visitorCode` given to a visitor, but you can use an internal ID linked to that visitor through session merging.
+:::
+
+```java
+String visitorCode = kameleoonClient.getVisitorCode(httpServletRequest, httpServletResponse);
+String featureKey = "new_checkout";
+Boolean hasNewCheckout = false;
+
+try {
+  hasNewCheckout = kameleoonClient.isFeatureActive(visitorCode, featureKey);
+  // disabling tracking
+  hasNewCheckout = kameleoonClient.isFeatureActive(false, visitorCode, featureKey);
+} catch (KameleoonException.FeatureNotFound e) {
+  // Feature toggle not yet activated on Kameleoon's side - we consider the feature inactive.
+  hasNewCheckout = false;
+} catch (Exception e) {
+  // This is a generic exception handler that handles all exceptions.
+  System.out.println("Exception occurred");
+}
+if (hasNewCheckout)
+{
+  // Implement new checkout code here
+}
+```
+
+##### Arguments
+
+| Name                            | Type      | Description                                                                                                                                           |
+| ------------------------------- | --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| track                           | `boolean` | An optional parameter to enable or disable tracking of the feature evaluation (`true` by default).                                                    |
+| visitorCode                     | `String`  | Unique identifier of the user. This field is required.                                                                                                |
+| featureKey                      | `String`  | Key of the feature that you want to check the status of for the user. This field is required.                                                         |
+| isUniqueIdentifier (Deprecated) | `boolean` | An optional parameter for specifying if the visitorCode is a unique identifier. If not provided, the default value is `false`. The field is optional. |
+
+##### Return value
+
+| Type      | Description                                                             |
+| --------- | ----------------------------------------------------------------------- |
+| `boolean` | Value of the feature that is registered for the specified `visitorCode`. |
+
+##### Exceptions thrown
+
+| Type                                  | Description                                                                                                                                                                                                                                                                           |
+| ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| KameleoonException.FeatureNotFound    | Exception indicating that the requested feature ID wasn't found in the SDK's internal configuration. This exception usually means that the feature flag has not yet been activated on Kameleoon's side (but code that implements the feature is already deployed in the application). |
+| KameleoonException.VisitorCodeInvalid | Exception indicating that the provided visitor code is not valid. It is either empty or longer than 255 characters.                                                                                                                                                                   |
+
+#### getVariation()
+
+<GetVariation sec="description" c={Context}/>
+
+```java
+String visitorCode = kameleoonClient.getVisitorCode(httpServletRequest, httpServletResponse);
+String featureKey = "new_checkout";
+Variation variation;
+
+try {
+  variation = kameleoonClient.getVariation(visitorCode, featureKey);
+  // disabling tracking
+  variation = kameleoonClient.getVariation(visitorCode, featureKey, false);
+} catch (KameleoonException.FeatureNotFound e) {
+  // The error has occurred; the feature flag isn't found in the current configuration.
+} catch (KameleoonException.FeatureEnvironmentDisabled e) {
+  // The feature flag is disabled for the environment.
+} catch (KameleoonException.VisitorCodeInvalid e) {
+  // The visitor code you passed to the method is invalid and can't be accepted by SDK.
+} catch (KameleoonException ex) {
+  // Handle the common Kameleoon Exception
+}
+
+// Fetch a variable value for the assigned variation
+String title = (String) variation.getVariables().get("title").getValue();
+
+switch (variation.getKey()) {
+  case 'on':
+    // Main variation key is selected for visitorCode
+    break;
+  case 'alternative_variation':
+    // Alternative variation key
+    break;
+  default:
+    // Default variation key
+    break;
+}
+```
+
+##### Arguments
+
+<GetVariation sec="arguments" c={Context}/>
+
+##### Return value
+
+<GetVariation sec="return_value" c={Context}/>
+
+##### Exceptions thrown
+
+<GetVariation sec="exceptions" c={Context}/>
+
+#### getVariations()
+
+<GetVariations sec="description" c={Context}/>
+
+```java
+try {
+    Map<String, Variation> variations = kameleoonClient.getVariations(visitorCode);
+    // only active variations
+    Map<String, Variation> variations = kameleoonClient.getVariations(visitorCode, true);
+    // disable tracking
+    Map<String, Variation> variations = kameleoonClient.getVariations(visitorCode, true, false);
+} catch (VisitorCodeInvalid e) {
+    //  Handle exception
+}
+```
+
+##### Arguments
+
+<GetVariations sec="arguments" c={Context}/>
+
+##### Return value
+
+<GetVariations sec="return_value" c={Context}/>
+
+##### Exceptions thrown
+
+<GetVariations sec="exceptions" c={Context}/>
+
+
+#### setForcedVariation()
+
+<SetForcedVariation sec="description" c={Context}/>
+
+```java
+try {
+    // Forcing the variation "on" for the feature flag "featureKey1" for the visitor
+    final int experimentId = 9516;
+    kameleoonClient.setForcedVariation(visitorCode, experimentId, "on");
+
+    // Resetting the forced variation for the feature flag "featureKey1" for the visitor
+    kameleoonClient.setForcedVariation(visitorCode, experimentId, null);
+} catch (KameleoonException ex) {
+    // Handle the common Kameleoon Exception
+}
+```
+
+##### Arguments
+
+<SetForcedVariation sec="arguments" c={Context}/>
+
+##### Exceptions thrown
+
+<SetForcedVariation sec="exceptions" c={Context}/>
+
+#### evaluateAudiences()
+
+<EvaluateAudiences sec="description" c={Context}/>
+
+```java
+try {
+    kameleoonClient.evaluateAudiences(visitorCode);
+} catch (KameleoonException ex) {
+    // Handle the common Kameleoon Exception
+}
+```
+
+##### Arguments
+
+<EvaluateAudiences sec="arguments" c={Context}/>
+
+##### Exceptions thrown
+
+<EvaluateAudiences sec="exceptions" c={Context}/>
+
+
+#### getFeatureList()
+
+:::note
+This method was previously called `obtainFeatureList`, which was removed in SDK version `4.0.0`.
+:::
+
+<GetFeatureList sec="description" c={Context}/>
+
+```java
+List<String> allFeatureFlagKey = kameleoonClient.getFeatureList();
+```
+
+##### Return value
+
+<GetFeatureList sec="return_value" c={Context}/>
+
+
+#### getDataFile()
+
+<GetDataFile sec="tip_qa" c={Context}/>
+
+<GetDataFile sec="description" c={Context}/>
+
+```java
+try {
+    DataFile dataFile = kameleoonClient.getDataFile();
+} catch (Exception e) {
+    // Recommended (but optional) safeguard for unexpected exceptions from third-party libraries
+}
+```
+
+##### Return value
+
+<GetDataFile sec="return_value" c={Context}/>
+
+
+### Visitor data
+
+#### getVisitorCode()
+
+:::note
+This method was previously called `obtainVisitorCode`, which was removed in SDK version `4.0.0`.
+:::
+
+The `getVisitorCode()` method should be called to obtain the Kameleoon `visitorCode` for the current visitor. This method is especially important when using Kameleoon in a mixed front-end and back-end environment, where user identification consistency must be guaranteed. The implementation logic is described here:
+
+1. We check if a `kameleoonVisitorCode` cookie or query parameter associated with the current HTTP request can be found. If it can, we use this `kameleoonVisitorCode` as the visitor identifier.
+
+2. If no cookie / parameter is found in the current request, we either randomly generate a new identifier or use the `defaultVisitorCode` argument as identifier if it is passed. This process allows our customers to use their identifiers as visitor codes, should they wish to. This flexibility has the added benefit of matching Kameleoon visitors with their own users without any additional look-ups in a matching table.
+
+3. Regardless, the server-side (via HTTP header) `kameleoonVisitorCode` cookie is set with the relevant value. Then, the method returns this identifier value.
+
+For more information, refer to [this article](/core-concepts/hybrid-experimentation/).
+
+:::caution
+If you provide a `visitorCode`, its uniqueness must be guaranteed on your end - the SDK cannot check it. Also, note that the length of `visitorCode` is limited to `255` characters. Any excess characters will throw an exception.
+:::
+
+<SharedDiv sec="get_visitor_code_simulated" c={Context}/>
+
+```java
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+String visitorCode = kameleoonClient.getVisitorCode(httpServletRequest, httpServletResponse);
+
+String visitorCode = kameleoonClient.getVisitorCode(httpServletRequest, httpServletResponse, defaultVisitorCode);
+```
+
+##### Arguments
+
+| Name                | Type                  | Description                                                                                                                                                                                                                                                     |
+| ------------------- | --------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| httpServletRequest  | `HttpServletRequest`  | The current HttpServletRequest object should be passed as the first parameter. This field is mandatory.                                                                                                                                                         |
+| httpServletResponse | `HttpServletResponse` | The current HttpServletResponse object should be passed as the second parameter. This field is mandatory.                                                                                                                                                       |
+| defaultVisitorCode  | `String`              | This parameter will be used as the `visitorCode` when an existing `kameleoonVisitorCode` cookie is not found on the request. This field is optional. If not specified, the SDK generates a random `visitorCode` when no existing `kameleoonVisitorCode` cookie. |
+
+##### Return value
+
+| Type     | Description                                                                                                               |
+| -------- | ------------------------------------------------------------------------------------------------------------------------- |
+| `String` | A `visitorCode` that will be associated with this particular user and should be used with most of the methods of the SDK. |
+
+#### addData()
+
+<AddData sec="description" c={Context}/>
+
+```java
+kameleoonClient.addData(visitorCode, Browser.CHROME);
+kameleoonClient.addData(visitorCode, new PageView("https://url.com", "title", Array.asList(3)));
+kameleoonClient.addData(visitorCode, new Conversion(32, 10f, false));
+```
+
+##### Arguments
+
+<AddData sec="arguments" c={Context}/>
+
+##### Exceptions
+
+<AddData sec="exceptions" c={Context}/>
+
+#### flush()
+
+- _📨 Sends Tracking Data to Kameleoon_
+
+The `flush()` method collects the Kameleoon data linked to the visitor. It then sends a tracking request, along with all data added using the `addData` method, which has not yet been sent using one of [these methods](/feature-management-and-experimentation/faq#when-does-the-sdk-send-a-tracking-request-for-analytics). `flush()` is non-blocking as the server call is made asynchronously.
+
+`flush` allows you to control when data associated with a given `visitorCode` is sent to our servers. For instance, if you call `addData()` a dozen times, it would be inefficient to send data to the server each time `addData()` is invoked. So, all you have to do is call `flush()` once.
+
+If you specify a `visitorCode`, the `flush()` method uses this code as the unique visitor identifier, which is useful for [cross-device experimentation](/core-concepts/cross-device-experimentation). When you specify a `visitorCode` and set the `isUniqueIdentifier` parameter to `true`, the SDK links the flushed data to the visitor associated with the specified identifier.
+
+:::note
+The parameter `isUniqueIdentifier` is deprecated. Please use [`UniqueIdentifier`](#uniqueidentifier) instead.
+
+The `isUniqueIdentifier` can be helpful in unique situations; for example, if you cannot access the anonymous `visitorCode` given to a visitor, but you can use an internal ID linked to that visitor through session merging.
+:::
+
+```java
+
+try {
+    kameleoonClient.flush(visitorCode); // Interval tracking (most performant tracking method)
+    kameleoonClient.flush(true, visitorCode); // Instant tracking
+} catch (VisitorCodeInvalid e) {
+  // Catch exception
+}
+```
+
+##### Arguments
+
+| Name                            | Type      | Description                                                                                                                                                                                                                                                                          |
+| ------------------------------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| instant                         | `boolean` | Boolean flag indicating whether the data should be sent instantly (`true`) or according to the default tracking interval (`false`) set with the SDK parameter [`tracking_interval_millisecond`](#additional-configuration). This field is optional.                                  |
+| visitorCode                     | `String`  | User's unique identifier. This field is required.                                                                                                                                                                                                                                    |
+| isUniqueIdentifier (Deprecated) | `boolean` | An optional parameter for specifying if the visitorCode is a unique identifier. The `visitorCode` should be provided and not `null` to apply `isUniqueIdentifier` for a visitor, otherwise it will be ignored. If not provided, the default value is `false`. The field is optional. |
+
+#### getRemoteData()
+
+:::note
+This method was previously called `retrieveDataFromRemoteSource`, which was removed in SDK version `4.0.0`.
+:::
+
+The `getRemoteData()` method allows you to retrieve data (according to a `key` passed as argument) for the specified `siteCode` stored on the Kameleoon server. Your site code is specified in `KameleoonClientFactory.create()`. Usually, data is stored on our remote servers using our Data API. This method, along with the availability of our scalable servers, provides a convenient way to store additional data that you can later retrieve for your app.
+
+```java
+CompletableFuture<JsonObject> data = kameleoonClient.getRemoteData("key");
+
+try {
+  JsonObject test = kameleoonClient.getRemoteData("key").get(5_000, TimeUnit.MILLISECONDS);
+} catch (InterruptedException | ExecutionException | TimeoutException e) {
+  // Catch exception
+}
+```
+
+##### Arguments
+
+| Name | Type     | Description                                                                  |
+| ---- | -------- | ---------------------------------------------------------------------------- |
+| key  | `String` | The key that is associated with the retrieved data. This field is mandatory. |
+
+##### Return value
+
+| Type                            | Description                                                               |
+| ------------------------------- | ------------------------------------------------------------------------- |
+| `CompletableFuture<JsonObject>` | Future `JsonObject` associated with retrieving data for specific **key**. |
+
+#### getRemoteVisitorData()
+
+`getRemoteVisitorData()` is an asynchronous method for retrieving Kameleoon Visits Data for the `visitorCode` from the Kameleoon Data API. The method adds the data to storage for other methods to use when making targeting decisions.
+
+Data obtained using this method plays an important role when you want to:
+
+- use data collected from other devices.
+- access a user's history, such as previously visited pages during past visits.
+- use data that is only accessible on the client-side, like datalayer variables and goals that convert on the front-end.
+
+Read [this article](https://developers.kameleoon.com/feature-management-and-experimentation/using-visit-history-in-feature-flags-and-experiments/) for a better understanding of possible use cases.
+
+:::caution
+By default, `getRemoteVisitorData()` automatically retrieves the latest stored custom data with `scope=Visitor` and attaches them to the visitor without the need to call the method `addData()`. It is particularly useful for [synchronizing custom data between multiple devices](https://developers.kameleoon.com/feature-management-and-experimentation/web-sdks/nodejs-sdk/#synchronizing-custom-data-across-devices).
+:::
+
+:::note
+The parameter `isUniqueIdentifier` is deprecated. Please use [`UniqueIdentifier`](#uniqueidentifier) instead.
+
+The `isUniqueIdentifier` can be helpful in unique situations; for example, if you cannot access the anonymous `visitorCode` given to a visitor, but you can use an internal ID linked to that visitor through session merging.
+:::
+
+```java
+String visitorCode = "visitorCode";
+// Visitor data will be fetched and automatically added for `visitorCode`
+CompletableFuture<List<Data>> visitorData = kameleoonClient.getRemoteVisitorData(visitorCode);
+
+// If you only want to fetch data and add it yourself manually, set addData == `false`
+CompletableFuture<List<Data>> visitorData = kameleoonClient.getRemoteVisitorData(visitorCode, false);
+
+// If you want to fetch custom list of data types
+RemoteVisitorDataFilter filter = RemoteVisitorDataFilter.builder()
+    .previousVisitAmount(25)
+    .customData(false)
+    .conversions(true)
+    .build();
+CompletableFuture<List<Data>> visitorData = kameleoonClient.getRemoteVisitorData(visitorCode, filter, true, false);
+
+try {
+  List<Data> visitorData = kameleoonClient.getRemoteVisitorData(visitorCode).get(5_000, TimeUnit.MILLISECONDS);
+  // Your custom code
+} catch (CancellationException | InterruptedException | ExecutionException | TimeoutException e) {
+  // Catch exception
+}
+```
+
+##### Arguments
+
+| Name                            | Type                      | Description                                                                                                                                                                                                                                                                                                   |
+| ------------------------------- | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| visitorCode                     | string                    | The visitor code for the data you want to retrieve. This field is mandatory.                                                                                                                                                                                                                                  |
+| filter                          | `RemoteVisitorDataFilter` | Filter for specifying what data should be retrieved from visits. By default, only `CustomData` is retrieved from the current and latest previous visit (`RemoteVisitorDataFilter.builder().build()` or `new RemoteVisitorDataFilter()`). Other filters parameters are set to `false`. This field is optional. |
+| addData                         | `boolean`                 | A boolean indicating whether the method should automatically add retrieved data for a visitor. This field is optional.                                                                                                                                                                                        |
+| isUniqueIdentifier (Deprecated) | `boolean`                 | An optional parameter for specifying if the `visitorCode` is a unique identifier. If not provided, the default value is `false`. The field is optional.                                                                                                                                                       |
+
+##### Return value
+
+| Type                            | Description                                          |
+| ------------------------------- | ---------------------------------------------------- |
+| `CompletableFuture<List<Data>>` | Future `List<Data>` associated with a given visitor. |
+
+
+##### Using parameters in getRemoteVisitorData()
+
+The `getRemoteVisitorData()` method offers flexibility by allowing you to define various parameters when retrieving data on visitors. Whether you're targeting based on goals, experiments, or variations, the same approach applies across all data types.
+
+For example, let's say you want to retrieve data on visitors who completed a goal "Order transaction". You can specify parameters within the `getRemoteVisitorData()` method to refine your targeting. For instance, if you want to target only users who converted on the goal in their last five visits, you can set the `previousVisitAmount` parameter to 5 and `conversions` to true.
+
+The flexibility shown in this example is not limited to goal data. You can use parameters within the `getRemoteVisitorData()` method to retrieve data on a variety of visitor behaviors.
+
+
+:::note
+Here is the list of available `kameleoon.types.RemoteVisitorDataFilter` options:
+
+| Name                             | Type      | Description                                                                                                                                                                                                                                                                                                                                  | Default |
+| -------------------------------- | --------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| previousVisitAmount _(optional)_ | `int`     | Number of previous visits to retrieve data from. Number between `1` and `25`                                                                                                                                                                                                                                                                 | `1`     |
+| currentVisit _(optional)_        | `boolean` | If true, current visit data will be retrieved                                                                                                                                                                                                                                                                                                | `true`  |
+| customData _(optional)_          | `boolean` | If true, custom data will be retrieved.                                                                                                                                                                                                                                                                                                      | `true`  |
+| pageViews _(optional)_           | `boolean` | If true, page data will be retrieved.                                                                                                                                                                                                                                                                                                        | `false` |
+| geolocation _(optional)_         | `boolean` | If true, geolocation data will be retrieved.                                                                                                                                                                                                                                                                                                 | `false` |
+| device _(optional)_              | `boolean` | If true, device data will be retrieved.                                                                                                                                                                                                                                                                                                      | `false` |
+| browser _(optional)_             | `boolean` | If true, browser data will be retrieved.                                                                                                                                                                                                                                                                                                     | `false` |
+| operatingSystem _(optional)_     | `boolean` | If true, operating system data will be retrieved.                                                                                                                                                                                                                                                                                            | `false` |
+| conversions _(optional)_         | `boolean` | If true, conversion data will be retrieved.                                                                                                                                                                                                                                                                                                  | `false` |
+| experiments _(optional)_         | `boolean` | If true, experiment data will be retrieved.                                                                                                                                                                                                                                                                                                  | `false` |
+| kcs _(optional)_                 | `boolean` | If true, Kameleoon Conversion Score (KCS) will be retrieved. Requires the [AI Predictive Targeting add-on](https://help.kameleoon.com/target-users-by-ai-propensity-score-kameleoon-conversion-score/)                                                                                                                                       | `false` |
+| visitorCode _(optional)_         | `boolean` | If true, Kameleoon will retrieve the `visitorCode` from the most recent visit and use it for the current visit. This is necessary if you want to ensure that the visitor, identified by their `visitorCode`, always receives the same variation across visits for [Cross-device experimentation](/core-concepts/cross-device-experimentation). | `true`  |
+| personalization _(optional)_     | `boolean` | If true, personalization data will be retrieved. This is required for the personalization condition.                                                                                                                                                                                                                                         | `false` |
+| cbs _(optional)_                 | `boolean` | <Text x={Shared.RemoteVisitorDataFilter.CBS}/> | `false` |
+:::
+
+#### getVisitorWarehouseAudience()
+
+This method retrieves all audience data associated with the visitor in your data warehouse using the specified `visitorCode` and `warehouseKey`. The `warehouseKey` is typically your internal user ID. The `customDataIndex` parameter corresponds to the Kameleoon custom data that Kameleoon uses to target your visitors. You can refer to the [warehouse targeting documentation](https://help.kameleoon.com/warehouse-audience-targeting/) for additional details. The method passes the result to the returned future as a `CustomData` object, confirming that the data has been added to the visitor and is available for targeting purposes.
+
+```java
+CompletableFuture<CustomData> warehouseAudienceDataCF =
+  kameleoonClient.getVisitorWarehouseAudience(visitorCode, warehouseKeyValue, customDataIndex);
+
+// If you need to specify warehouse key
+CompletableFuture<CustomData> warehouseAudienceDataCF =
+  kameleoonClient.getVisitorWarehouseAudience(visitorCode, customDataIndex);
+
+try {
+  CustomData warehouseAudienceData = warehouseAudienceDataCF.get(5_000, TimeUnit.MILLISECONDS);
+  // Your custom code
+} catch (CancellationException | InterruptedException | ExecutionException | TimeoutException e) {
+  // Catch exception
+}
+```
+
+##### Arguments
+
+| Name            | Type     | Description                                                                                             |
+| --------------- | -------- | ------------------------------------------------------------------------------------------------------- |
+| visitorCode     | `String` | The unique identifier of the visitor for whom you want to retrieve and add the data.                    |
+| warehouseKey    | `String` | The unique key to identify the warehouse data (usually, your internal user ID). This field is optional. |
+| customDataIndex | `int`    | An integer representing the index of the custom data you want to use to target your BigQuery Audiences. |
+
+##### Return value
+
+| Type                            | Description                                                                          |
+| ------------------------------- | ------------------------------------------------------------------------------------ |
+| `CompletableFuture<CustomData>` | Future `CustomData` instance confirming that the data has been added to the visitor. |
+
+##### Exceptions thrown
+
+| Type                 | Description                                                                                                          |
+| -------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| `VisitorCodeInvalid` | Exception indicating that the provided visitor code is not valid (it is either empty or longer than 255 characters). |
+
+#### setLegalConsent()
+
+You must use this method to specify whether the visitor has given legal consent to use personal data. Setting the `legalConsent` parameter to `false` limits the types of data that you can include in tracking requests. This method helps you adhere to legal and regulatory requirements while responsibly managing visitor data. You can find more information on personal data in the [consent management policy](https://help.kameleoon.com/consent-management-policy/).
+
+```java
+// if you do not need to set the visitor code in a cookie to respond
+kameleoonClient.setLegalConsent(visitorCode, true);
+
+String visitorCode = kameleoonClient.getVisitorCode(httpServletRequest, httpServletResponse);
+kameleoonClient.setLegalConsent(visitorCode, true, httpServletResponse);
+```
+
+##### Arguments
+
+| Name         | Type                | Description                                                                                                                                                                                                             |
+| ------------ | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| visitorCode  | `String`            | The user's unique identifier. This field is required.                                                                                                                                                                   |
+| legalConsent | `boolean`           | A boolean value representing the legal consent status. `true` indicates the visitor has given legal consent, `false` indicates the visitor has never provided, or has withdrawn, legal consent. This field is required. |
+| response     | HttpServletResponse | The HTTP servlet response where values in the cookies will be adjusted based on the legal consent status. The field is optional.                                                                                        |
+
+##### Exceptions thrown
+
+| Type                                  | Description                                                                                                       |
+| ------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| KameleoonException.VisitorCodeInvalid | Exception indicating that the provided visitor code is invalid. It is either empty or longer than 255 characters. |
+
+### Goals and third-party analytics
+
+#### trackConversion()
+
+<TrackConversion sec="description" c={Context}/>
+
+```java
+String visitorCode = kameleoonClient.getVisitorCode(httpServletRequest, httpServletResponse);
+int goalId = 83023;
+
+kameleoonClient.trackConversion(visitorCode, goalId);
+
+// Add metadata
+CustomData cd = new CustomData(1, "metadata");
+kameleoonClient.trackConversion(visitorCode, goalId, cd);
+```
+
+##### Arguments
+<TrackConversion sec="arguments" c={Context}/>
+
+:::note
+<TrackConversion sec="note_metadata" c={Context}/>
+```java
+kameleoonClient.addData(visitorCode, new CustomData(5, "Credit Card"), new CustomData(9, "Express Delivery"));
+kameleoonClient.trackConversion(visitorCode, 1000, new CustomData(5, "Amex Credit Card"));
+```
+:::
+
+##### Exceptions
+<TrackConversion sec="exceptions" c={Context}/>
+
+#### getEngineTrackingCode()
+
+<GetEngineTrackingCode sec="description" c={Context}/>
+
+```java
+String engineTrackingCode = kameleoonClient.getEngineTrackingCode(visitorCode);
+```
+
+##### Arguments
+
+<GetEngineTrackingCode sec="arguments" c={Context}/>
+
+##### Return value
+
+<GetEngineTrackingCode sec="return_value" c={Context}/>
+
+### Events
+
+#### updateConfigurationHandler()
+
+<UpdateConfigurationHandler sec="description" c={Context}/>
+
+```java
+kameleoonClient.updateConfigurationHandler(() -> {
+  // Configuration was updated
+});
+```
+
+##### Arguments
+
+<UpdateConfigurationHandler sec="arguments" c={Context}/>
+
+### Data types
+
+This section lists the data types supported by Kameleoon in `com.kameleoon.Data`. We provide several standard data types as well as the `CustomData` type that allows you to define custom data types.
+
+#### Browser
+
+<Browser sec="description" c={Context}/>
+
+<Browser sec="arguments" c={Context}/>
+
+```java
+kameleoonClient.addData(visitorCode, Browser.chrome());
+kameleoonClient.addData(visitorCode, Browser.safari());
+
+kameleoonClient.addData(visitorCode, new Browser(Browser.Type.CHROME, 10.0));
+```
+
+#### Conversion
+
+<Conversion sec="description" c={Context}/>
+<Conversion sec="arguments" c={Context}/>
+
+```java
+kameleoonClient.addData(visitorCode, new Conversion(32, 10f));
+
+kameleoonClient.addData(visitorCode, new Conversion(33, null, true));
+
+kameleoonClient.addData(
+    visitorCode,
+    new Conversion(34, 5f, new CustomData(3, "metadata1", "md2"), new CustomData(5, "md3"))
+);
+```
+
+#### Cookie
+
+`Cookie` contains information about the cookie stored on the visitor's device.
+
+| Name    | Type                  | Description                                                                       |
+| ------- | --------------------- | --------------------------------------------------------------------------------- |
+| cookies | `Map<String, String>` | A string object map consisting of cookie keys and values. This field is required. |
+
+:::tip
+Each visitor can only have one `Cookie`. Adding a second `Cookie` overwrites the first one.
+:::
+
+```java
+Cookie cookie = new Cookie (new HashMap<String, String>() {{
+    put("my_key1", "my_value1");
+    put("my_key2", "my_value1");
+}});
+kameleoonClient.addData(visitorCode, cookie);
+```
+
+#### Geolocation
+
+<Geolocation sec="description" c={Context}/>
+
+<Geolocation sec="arguments" c={Context}/>
+
+```java
+kameleoonClient.addData(visitorCode, new Geolocation("France", "Île-de-France", "Paris"));
+```
+
+#### CustomData
+
+`CustomData` enables the association of any type of data with each visitor, making it an effective tool for targeting conditions in [segments](https://help.kameleoon.com/create-new-segment/). Additionally, it can be used as a filter or breakdown in experiment reports. For more information about custom data, please refer to this [article](/core-concepts/custom-data).
+
+Define custom data types in the Kameleoon app or the Data API and use them from the SDK.
+
+| Name | Type | Description | Default |
+| ---- | ---- | ----------- | ------- |
+| index/name _(required)_ | `int`/`String` | Index or Name of the custom data. **Either `index` or `name` must be provided** to identify the data.. | |
+| values _(required)_ | `String...`/`List<String>` | Values of the custom data to be stored. | |
+| overwrite _(optional)_ | `boolean` | Flag to explicitly control how the values are stored and how they appear in reports. [See more](https://developers.kameleoon.com/core-concepts/custom-data/#default-logic-when-overwrite-parameter-is-false-or-omitted) | `true` |
+
+:::note
+
+- Each visitor is allowed only one `CustomData` for each unique `index`. Adding another `CustomData` with the same `index` will replace the existing one.
+
+- The custom data ‘index’ can be found in the [Custom Data dashboard](https://help.kameleoon.com/manage-your-custom-data/) under the “INDEX” column.
+
+- To prevent the SDK from sending data with the selected index to Kameleoon servers for privacy reasons, enable the option: **Use this data only locally for targeting purposes** when creating custom data.
+
+
+- Adding a `CustomData` instance created with a name when the SDK instance is not initialized or the name is not registered, will result in the data being ignored.
+
+:::
+
+```java
+kameleoonClient.addData(visitorCode, new CustomData(1, "value"));
+
+// With several values
+kameleoonClient.addData(visitorCode, new CustomData(1, "value1", "value2"));
+
+// To set the 'overwrite' flag to false
+kameleoonClient.addData(visitorCode, new CustomData(1, false, "value"));
+
+// To use a name instead of the index
+kameleoonClient.addData(visitorCode, new CustomData("my-custom-data", "value"));
+```
+
+
+#### Device
+
+| Name   | Type     | Description                                                            |
+| ------ | -------- | ---------------------------------------------------------------------- |
+| device | `Device` | List of devices: `PHONE`, `TABLET`, `DESKTOP`. This field is required. |
+
+```java
+kameleoonClient.addData(visitorCode, Device.desktop());
+```
+
+#### PageView
+
+Store page view events.
+
+| Name      | Type            | Description                                        |
+| --------- | --------------- | -------------------------------------------------- |
+| url       | `String`        | URL of the page viewed. This field is required.    |
+| title     | `String`        | Title of the page viewed. This field is required.  |
+| referrers | `List<Integer>` | Referrers of viewed pages. This field is optional. |
+
+:::note
+The referrer's index (ID) is available in the Kameleoon app in the [acquisition channel configuration](https://help.kameleoon.com/create-acquisition-channel) page. Be careful: this index starts at 0, so the first acquisition channel you create for the specified site would have the ID 0, not 1.
+:::
+
+```java
+kameleoonClient.addData(
+  visitorCode,
+  new PageView("https://url.com", "title", Array.asList(3))
+);
+```
+
+#### UserAgent
+
+Server-side experiments are more likely to be affected by bot traffic than client-side experiments. Kameleoon uses the IAB/ABC International Spiders and Bots List to tackle this issue and recognize known bots and spiders. Kameleoon also uses the `UserAgent` field to filter out bots and other unwanted traffic that might distort your conversion metrics. For more details, see our help article on [bot filtering](https://help.kameleoon.com/question/how-does-kameleoon-filter-bot-traffic-from-my-results/).
+
+If you use internal bots, we suggest that you pass the value **curl/8.0** of the userAgent to exclude them from our analytics.
+
+| Name  | Type     | Description                                                                            |
+| ----- | -------- | -------------------------------------------------------------------------------------- |
+| value | `String` | The User-Agent value that will be sent with tracking requests. This field is required. |
+
+```java
+kameleoonClient.addData(visitorCode, new UserAgent("Your User Agent"));
+```
+
+#### UniqueIdentifier
+
+If you don't add `UniqueIdentifier` for a visitor, `visitorCode` is used as the unique visitor identifier, which is useful for [Cross-device experimentation](/core-concepts/cross-device-experimentation). When you add `UniqueIdentifier` for a visitor, the SDK links the flushed data with the visitor associated with the specified identifier.
+
+The `isUniqueIdentifier` can be helpful in unique situations; for example, if you cannot access the anonymous `visitorCode` given to a visitor, but you can use an internal ID linked to that visitor through session merging.
+
+| Name  | Type      | Description                                                                             |
+| ----- | --------- | --------------------------------------------------------------------------------------- |
+| value | `boolean` | Parameter specifying if the visitorCode is a unique identifier. This field is required. |
+
+```java
+kameleoonClient.addData(visitorCode, new UniqueIdentifier(true));
+```
+
+#### OperatingSystem
+
+`OperatingSystem` contains information about the operating system on the visitor's device.
+
+| Name | Type                   | Description                                                                                                          |
+| ---- | ---------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| type | `OperatingSystem.Type` | List of operating systems: `WINDOWS_PHONE`, `WINDOWS`, `ANDROID`, `LINUX`, `MAC`, and `IOS`. This field is required. |
+
+:::tip
+Each visitor can only have one `OperatingSystem`. Adding a second `OperatingSystem` overwrites the first one.
+:::
+
+```java
+kameleoonClient.addData(visitorCode, new OperatingSystem(OperatingSystem.Type.WINDOWS));
+
+kameleoonClient.addData(visitorCode, OperatingSystem.mac());
+```
+
+### Returned Types
+
+#### DataFile
+
+<DataFile sec="description" c={Context}/>
+
+<DataFile sec="arguments" c={Context}/>
+
+```java
+Map<String, FeatureFlag> featureFlags = dataFile.getFeatureFlags();
+```
+
+#### FeatureFlag
+
+<FeatureFlag sec="description_rules" c={Context}/>
+
+<FeatureFlag sec="arguments_rules" c={Context}/>
+
+```java
+// Check whether the feature flag is enabled in the current environment
+boolean isEnvironmentEnabled = featureFlag.isEnvironmentEnabled();
+
+// Retrieve the key of the default variation
+String defaultVariationKey = featureFlag.getDefaultVariationKey();
+
+// Retrieve the default variation object
+Variation defaultVariation = featureFlag.getDefaultVariation();
+
+// Retrieve all variations of the feature flag as a map (key = variation key, value = Variation object)
+Map<String, Variation> variations = featureFlag.getVariations();
+
+// Retrieve all targeting rules associated with the feature flag
+List<Rule> rules = featureFlag.getRules();
+```
+
+#### Rule
+
+<Rule sec="description" c={Context}/>
+
+<Rule sec="arguments" c={Context}/>
+
+```java
+// Retrieve all variations of the rule as a map (key = variation key, value = Variation object)
+Map<String, Variation> variations = rule.getVariations();
+```
+
+#### Variation
+
+`Variation` contains information about the visitor's assigned variation (or the default variation, if no specific assignment exists).
+
+| Name         | Type                    | Description                                                                                                                                          |
+| ------------ | ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| name       | `String`                     | The name of the variation.                                   |
+| key          | `String`                | The unique key identifying the variation.                                                                                                            |
+| id           | `Integer`               | The ID of the assigned variation (or `null` if it's the default variation).                                                                          |
+| experimentId | `Integer`               | The ID of the experiment associated with the variation (or `null` if default).                                                                       |
+| variables    | `Map<String, Variable>` | A map containing the variables of the assigned variation, keyed by variable names. This could be an empty collection if no variables are associated. |
+
+:::note
+
+- The `Variation` object provides details about the assigned variation and its associated experiment, while the [`Variable`](#variable) object contains specific details about each variable within a variation.
+- Ensure that your code handles the case where `id` or `experimentId` may be `null`, indicating a default variation.
+- The `variables` map might be empty if no variables are associated with the variation.
+  :::
+
+```java
+// Retrieving the variation name
+String variationName = variation.getName();
+
+// Retrieving the variation key
+String variationKey = variation.getKey();
+
+// Retrieving the variation id
+Integer variationId = variation.getId();
+
+// Retrieving the experiment id
+Integer experimentId = variation.getExperimentId();
+
+// Retrieving the variables map
+Map<String, Variable> variables = variation.getVariables();
+```
+
+#### Variable
+
+`Variable` contains information about a variable associated with the assigned variation.
+
+| Name  | Type     | Description                                                                                                                                                |
+| ----- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| key   | `String` | The unique key identifying the variable.                                                                                                                   |
+| type  | `String` | The type of the variable. Possible values: **BOOLEAN**, **NUMBER**, **STRING**, **JSON**, **JS**, **CSS**.                                                 |
+| value | `Object` | The value of the variable, which can be of the following types: **Boolean**, **Integer**, **Long**, **Double**, **String**, **JsonObject**, **JsonArray**. |
+
+```java
+// Retrieving the variables map
+Map<String, Variable> variables = variation.getVariables();
+
+// Variable type can be retrieved for further processing
+String type = variables.get("isDiscount").getType();
+
+// Retrieving the variable value by key
+Boolean isDiscount = (Boolean) variables.get("isDiscount").getValue();
+
+// Variable value can be of different types
+String title = (String) variables.get("title").getValue();
+```
+
+### Deprecated methods
+
+:::caution
+These methods are deprecated and will be removed in SDK version `5.0.0`.
+:::
+
+#### getFeatureVariationKey()
+
+- _📨 Sends Tracking Data to Kameleoon_
+
+:::note
+Use [`getVariation()`](#getvariation) instead.
+:::
+
+Call this method to get the feature variation key for a specified user and feature. This method takes a `visitorCode` and `featureKey` as mandatory arguments to get the variation key for the user and feature.
+
+If the user has never been associated with this feature flag, the SDK returns a randomly-assigned variation key (according to the feature flag rules). If a user with the specified `visitorCode` is already registered with this feature flag, the SDK detects the previous variation key value. If the user doesn't match any of the rules, the default value is returned, which you can customize in the Kameleoon app.
+
+Make sure you catch and handle potential exceptions.
+
+If you specify a `visitorCode`, the `flush()` method uses it as the unique visitor identifier, which is useful for [Cross-device experimentation](/core-concepts/cross-device-experimentation). When you specify a `visitorCode` and set the `isUniqueIdentifier` parameter to `true`, the SDK links the flushed data with the visitor associated with the specified identifier.
+
+:::note
+The parameter `isUniqueIdentifier` is deprecated. Please use [`UniqueIdentifier`](#uniqueidentifier) instead.
+
+The `isUniqueIdentifier` can be helpful in unique situations; for example, if you cannot access the anonymous `visitorCode` given to a visitor, but you can use an internal ID linked to that visitor through session merging.
+:::
+
+```java
+String visitorCode = kameleoonClient.getVisitorCode(httpServletRequest, httpServletResponse);
+String featureKey = "new_checkout";
+String variationKey = ""
+
+try {
+  variationKey = kameleoonClient.GetFeatureVariationKey(visitorCode, featureKey);
+} catch (KameleoonException.FeatureNotFound e) {
+  // The error has occurred; the feature flag isn't found in the current configuration
+} catch (KameleoonException.FeatureEnvironmentDisabled e) {
+  // The feature flag is disabled for the environment
+} catch (KameleoonException.VisitorCodeInvalid e) {
+  // The visitor code you passed to the method is invalid and can't be accepted by SDK.
+}
+
+switch (variationKey) {
+  case 'on':
+    // Main variation key is selected for visitorCode
+    break;
+  case 'alternative_variation':
+    // Alternative variation key
+    break;
+  default:
+    // Default variation key
+    break;
+}
+```
+
+##### Arguments
+
+| Name                            | Type      | Description                                                                                                                                           |
+| ------------------------------- | --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| visitorCode                     | `String`  | Unique identifier of the user. This field is required.                                                                                                |
+| featureKey                      | `String`  | Key of the feature you want to expose to a user. This field is required.                                                                              |
+| isUniqueIdentifier (Deprecated) | `boolean` | An optional parameter for specifying if the visitorCode is a unique identifier. If not provided, the default value is `false`. The field is optional. |
+
+##### Return value
+
+| Type     | Description                                                                           |
+| -------- | ------------------------------------------------------------------------------------- |
+| `String` | Variation key of the feature flag that is registered for the specified `visitorCode`. |
+
+##### Exceptions thrown
+
+| Type                                          | Description                                                                                                                                                                                                                                                                 |
+| --------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| KameleoonException.FeatureNotFound            | Exception indicating that the requested feature key wasn't found in the SDK's internal configuration. This exception usually means that the feature flag is not activated in the Kameleoon app (but code implementing the feature is already deployed on your application). |
+| KameleoonException.FeatureEnvironmentDisabled | Exception indicating that feature flag is disabled for the visitor's current environment (for example, production, staging, or development).                                                                                                                                |
+| KameleoonException.VisitorCodeInvalid         | Exception indicating that the provided visitor code is not valid. It is empty or longer than 255 characters.                                                                                                                                                                |
+
+#### getActiveFeatures()
+
+:::note
+Use [`getVariations()`](#getvariations) instead.
+:::
+
+This method takes a single **visitorCode** parameter. Result contains only active features for a given visitor.
+
+```java
+try {
+    Map<String, Variation> activeFeatures = kameleoonClient.getActiveFeatures(visitorCode);
+} catch (VisitorCodeInvalid e) {
+    //  Handle exception
+}
+```
+
+##### Arguments
+
+| Name        | Type   | Description                                       |
+| ----------- | ------ | ------------------------------------------------- |
+| visitorCode | String | User's unique identifier. This field is required. |
+
+##### Return value
+
+| Type                     | Description                                                                                                         |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------- |
+| `Map<String, Variation>` | Map that contains the assigned variations of the active features using the the corresponding active features' keys. |
+
+##### Exceptions thrown
+
+| Type               | Description                                                                                                         |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------- |
+| VisitorCodeInvalid | Exception indicating that the provided visitor code is not valid. It is either empty or longer than 255 characters. |
+
+#### getActiveFeatureListForVisitorCode()
+
+:::note
+
+- Use [`getVariations()`](#getvariations) instead.
+- This method was previously called `obtainFeatureListForVisitorCode`, which was removed in SDK version `4.0.0`.
+  :::
+
+This method takes a single `visitorCode` parameter. Return only the active feature flags for the specified visitor.
+
+```java
+List<String> listActiveFeatureFlags = kameleoonClient.getActiveFeatureListForVisitorCode(visitorCode);
+```
+
+##### Arguments
+
+| Name        | Type     | Description                                       |
+| ----------- | -------- | ------------------------------------------------- |
+| visitorCode | `String` | User's unique identifier. This field is required. |
+
+##### Return value
+
+| Type           | Description                                                           |
+| -------------- | --------------------------------------------------------------------- |
+| `List<String>` | List of active feature flag keys available for specific `visitorCode` |
+
+#### getFeatureVariable()
+
+- _📨 Sends Tracking Data to Kameleoon_
+
+:::note
+Use [`getVariation()`](#getvariation) instead.
+:::
+
+Call this method to get a user's associated feature variation value. This method takes a `visitorCode`, `featureKey` and `variableKey` as required arguments to get the variation key's variable for the specified user.
+
+If a user has never been associated with this feature flag, the SDK returns a randomly assigned variable value of the variation key according to the feature flag rules. If a user with the specified `visitorCode` is already registered with this feature flag, the SDK returns the variable value for previously associated variation. If the user does not match any of the rules, the default variable is returned.
+
+Make sure you catch and handle potential exceptions.
+
+If you specify a `visitorCode`, the `getFeatureVariable()` method uses the code as the unique visitor identifier, which is useful for [cross-device experimentation](https://developers.kameleoon.com/core-concepts/cross-device-experimentation). When you specify a `visitorCode` and set the `isUniqueIdentifier` parameter to `true`, the SDK links the flushed data with the visitor associated with the specified identifier.
+
+:::note
+The parameter `isUniqueIdentifier` is deprecated. Please use [`UniqueIdentifier`](#uniqueidentifier) instead.
+
+The `isUniqueIdentifier` can be helpful in unique situations; for example, if you cannot access the anonymous `visitorCode` given to a visitor, but you can use an internal ID linked to that visitor through session merging.
+:::
+
+```java
+String visitorCode = kameleoonClient.getVisitorCode(httpServletRequest, httpServletResponse);
+String featureKey = "feature_key";
+String variableKey = "var"
+
+try {
+  var variableValue = kameleoonClient.getFeatureVariable(visitorCode, featureKey, variableKey);
+  // Your custom code, depending on variableValue.
+} catch (KameleoonException.FeatureNotFound e) {
+  // The error has occurred; the feature flag isn't found in current configuration
+} catch (KameleoonException.FeatureEnvironmentDisabled e) {
+  // The feature flag is disabled for the environment.
+} catch (KameleoonException.FeatureVariableNotFound e) {
+  // Requested variable not defined on Kameleoon's side
+} catch (KameleoonException.VisitorCodeInvalid e) {
+  // The visitor code passed to the method is invalid and can't be accepted by SDK.
+}
+```
+
+##### Arguments
+
+| Name                            | Type      | Description                                                                                                                                           |
+| ------------------------------- | --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| visitorCode                     | `String`  | Unique identifier of the user. This field is required.                                                                                                |
+| featureKey                      | `String`  | Key of the feature you want to expose to a user. This field is required.                                                                              |
+| variableKey                     | `String`  | Name of the variable you want to get a value for. This field is required.                                                                             |
+| isUniqueIdentifier (Deprecated) | `boolean` | An optional parameter for specifying if the visitorCode is a unique identifier. If not provided, the default value is `false`. The field is optional. |
+
+##### Return value
+
+| Type   | Description                                                                                                                                                                     |
+| ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| object | Value of variable of variation that is registered for the specified `visitorCode` for this feature flag. Possible types: `bool`, `int`, `double`, `string`, `JObject`, `JArray` |
+
+##### Exceptions thrown
+
+| Type                                          | Description                                                                                                                                                                                                                                                               |
+| --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| KameleoonException.FeatureNotFound            | Exception indicating that the requested feature key wasn't found in the internal SDK configuration. This usually means that the feature flag has not yet been activated in the Kameleoon app (but code implementing the feature is already deployed in your application). |
+| KameleoonException.FeatureEnvironmentDisabled | Exception indicating that feature flag is disabled for the visitor's current environment (for example, production, staging, or development).                                                                                                                              |
+| KameleoonException.FeatureVariableNotFound    | Exception indicating that the requested variable wasn't found. Check that the variable's key in the Kameleoon app matches your code.                                                                                                                                      |
+| KameleoonException.VisitorCodeInvalid         | Exception indicating that the specified visitor code is not valid. (It is either empty or longer than 255 characters).                                                                                                                                                    |
+
+#### getFeatureVariables()
+
+- _📨 Sends Tracking Data to Kameleoon_
+
+:::note
+Use [`getVariation()`](#getvariation) instead.
+:::
+
+This method retrieves a map containing variable keys and their values assigned according the variation that the visitor is assigned in the specified feature flag. Feature variables can be modified in the Kameleoon app.
+
+If a user has never been associated with this feature flag, the SDK returns a randomly assigned set of variable values in the variation according to the feature flag rules. If a user with the specified `visitorCode` is already registered with this feature flag, the SDK returns the variable values for the variation used previously. If the user does not match any of the rules, the default variables are returned.
+
+Make sure you catch and handle potential exceptions.
+
+```java
+String visitorCode = kameleoonClient.getVisitorCode(httpServletRequest, httpServletResponse);
+String featureKey = "feature_key";
+String variableKey = "var"
+
+try {
+  var variableValue = kameleoonClient.getFeatureVariables(visitorCode, featureKey);
+  // Your custom code, depending on variable values.
+} catch (KameleoonException.FeatureNotFound e) {
+  // The error has occurred; the feature flag isn't found in current configuration.
+} catch (KameleoonException.FeatureEnvironmentDisabled e) {
+  // The feature flag is disabled for the environment.
+} catch (KameleoonException.FeatureVariableNotFound e) {
+  // Requested variable not defined on Kameleoon's side
+} catch (KameleoonException.VisitorCodeInvalid e) {
+  // The visitor code passed to the method is invalid and can't be accepted by SDK.
+}
+```
+
+##### Arguments
+
+| Name         | Type     | Description                                                      |
+| ------------ | -------- | ---------------------------------------------------------------- |
+| featureKey   | `String` | Key of the feature you want to obtain. This field is required.   |
+| variationKey | `String` | Key of the variation you want to obtain. This field is required. |
+
+##### Return value
+
+| Type                 | Description                                                                                                                                                                  |
+| -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Map<String,Object>` | Data associated with this feature flag. The values can be `Boolean`, `Integer`, `Double`, `String`, `JsonObject`, or `JsonArray` (the type is defined in the Kameleoon app). |
+
+##### Exceptions thrown
+
+| Type                                          | Description                                                                                                                                                                                                                                                                     |
+| --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| KameleoonException.FeatureNotFound            | Exception indicating that the requested feature key wasn't found in the internal SDK configuration. This exception usually means that the feature flag has not been activated in the Kameleoon app (but code implementing the feature is already deployed in your application). |
+| KameleoonException.FeatureEnvironmentDisabled | Exception indicating that feature flag is disabled for the visitor's current environment (for example, production, staging, or development).                                                                                                                                    |
+| KameleoonException.FeatureVariationNotFound   | Exception indicating that the requested variation key wasn't found in the internal configuration of the SDK. This usually means that the variation's corresponding experiment is not activated in the Kameleoon app.                                                            |
+| KameleoonException.VisitorCodeInvalid         | Exception indicating that the specified visitor code is not valid. (It is either empty or longer than 255 characters).                                                                                                                                                          |
+
+#### getFeatureVariationVariables()
+
+:::note
+
+- Use  [`getVariation()`](#getvariation) instead.
+- This method was previously called `getFeatureAllVariables`, which was removed in SDK version `4.0.0`.
+:::
+
+Call this method to retrieve all feature variables for a feature. You can modify feature variables in the Kameleoon app.
+
+This method takes two input parameters: `featureKey` and `variationKey`. It returns the data with the `Map<String, Object>` type as defined in the Kameleoon app. It throws an exception (`KameleoonException.FeatureNotFound`) if the feature you request isn't found in the SDK's internal configuration.
+
+```java
+String featureKey = "featureKey";
+String variationKey = "variationKey";
+
+try {
+  Map<String, Object> allVariables = kameleoonClient.getFeatureVariationVariables(featureKey, variationKey);
+} catch (KameleoonException.FeatureNotFound e) {
+  // The feature is not activated in the Kameleoon app.
+} catch (KameleoonException.FeatureEnvironmentDisabled e) {
+  // The feature flag is disabled for the environment.
+} catch (KameleoonException.FeatureVariationNotFound e) {
+  // The variation is not activated in the Kameleoon app (most likely, the associated experiment is not active)
+} catch (Exception e) {
+  // This is a generic Exception handler which will handle all exceptions.
+  System.out.println("Exception occurred");
+}
+```
+
+##### Arguments
+
+| Name         | Type   | Description                                                      |
+| ------------ | ------ | ---------------------------------------------------------------- |
+| featureKey   | String | Key of the feature you want to obtain. This field is required.   |
+| variationKey | String | Key of the variation you want to obtain. This field is required. |
+
+##### Return value
+
+| Type                 | Description                                                                                                                                                                         |
+| -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Map<String,Object>` | Data associated with this feature flag. The values can be `Boolean`, `Integer`, `Double`, `String`, `JsonObject`, `JsonArray` (depending on the type defined in the Kameleoon app). |
+
+##### Exceptions thrown
+
+| Type                                          | Description                                                                                                                                                                                                          |
+| --------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| KameleoonException.FeatureNotFound            | Exception indicating that the requested feature wasn't found in the internal configuration of the SDK. This exception usually means that the feature flag is not activated in the Kameleoon app.                     |
+| KameleoonException.FeatureEnvironmentDisabled | Exception indicating that feature flag is disabled for the visitor's current environment (for example, production, staging, or development).                                                                         |
+| KameleoonException.FeatureVariationNotFound   | Exception indicating that the requested variation key wasn't found in the internal configuration of the SDK. This usually means that the variation's corresponding experiment is not activated in the Kameleoon app. |

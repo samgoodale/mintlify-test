@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>refresh_interval_minute</key>
+	<integer>60</integer>
+	<key>default_timeout_millisecond</key>
+	<string>10000</string>
+	<key>tracking_interval_millisecond</key>
+	<string>1000</string>
+	<key>is_unique_identifier</key>
+	<false/>
+	<key>environment</key>
+	<string>production</string>
+</dict>
+</plist>
