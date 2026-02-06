@@ -1,0 +1,682 @@
+---
+title: "FAQ"
+---
+
+<AccordionGroup>
+<Accordion title="How do I find my sitecode?">
+
+**In the Kameleoon app**
+
+In the left sidebar in the Kameleoon app, click **Admin** > **Project**. You will find your sitecode on your project card.
+
+<Frame>
+![screenshot1](https://help.kameleoon.com/faq/screenshot1.png)
+</Frame>
+
+**In the Chrome extension**
+
+You can also find your sitecode on the [dashboard of the Kameleoon Debug Assistant Chrome extension.](https://help.kameleoon.com/faq/#how-do-i-install-and-use-the-kameleoon-chrome-extension)
+
+Click the **+** icon to add inserts to customize your dashboard. Add the **Site Code** insert.
+
+<Frame>
+![screenshot2](https://help.kameleoon.com/faq/screenshot2.png)
+</Frame>
+
+</Accordion>
+
+<Accordion title="Can I edit an online experiment?">
+
+You can edit anything in an online experiment; however, we don't recommend it.
+
+Any change will disrupt the interpretation of your results, making them less reliable.
+
+If you want to avoid these complexities and still make changes, we recommend the following approach:
+
+<Steps>
+<Step>
+Stop the experiment (if you want to).
+</Step>
+<Step>
+Duplicate the experiment.
+</Step>
+<Step>
+Edit is as you wish.
+</Step>
+<Step>
+Launch the new experiment.
+</Step>
+</Steps>
+
+By following these steps, you can ensure your results remain reliable.
+
+</Accordion>
+
+<Accordion title="How long should an A/B experiment last?">
+
+The duration of an A/B experiment depends on the kind of experiment and its traffic
+
+Suppose you have an experiment where the first visitors to the variation convert. You will quickly see how effective the experiment is, although this result is rare.
+
+Often, the conversion rate does not significantly change right after launching; however, if you keep your experiment running long enough, the variation will be seen by many visitors, and the results will be significant.
+
+<Note>
+**Note:**
+
+If you are using Google Analytics or Kameleoon's internal reporting tool, Kameleoon will automatically measure your experiment's significance the significance according to the goals you set. For more information, refer to our article about [Statistical significance.](https://help.kameleoon.com/experiment-analytics/statistical-methods/statistical-significance/)
+</Note>
+
+You can also estimate the duration of your experiment during its finalization. To learn more about estimating an experiment's duration, refer to [this](https://help.kameleoon.com/experimentation/web-experimentation/graphic-based-experiments/finalizing-an-experiment/#estimate-an-experiment's-duration) article.
+
+</Accordion>
+
+<Accordion title="How much traffic do I need for an A/B experiment?">
+
+A/B testing derives its primary data from the traffic your website receives. Therefore, keep these numbers in mind:
+
+- **Below 10,000** monthly visitors, it is difficult to perform effective A/B tests, other than a few use cases (for instance, on a landing page).
+- **From 10,000 to 200,000** monthly visitors, A/B testing is possible, but experiments will often take time to give results.
+- **From 200,000 to 1 million** monthly visitors, your traffic is large enough for A/B testing. You might still have difficulty with some less frequented pages, though (at the end of the conversion funnel, for example).
+- **Above 1 million** monthly visitors, traffic is rarely an issue.
+
+</Accordion>
+
+<Accordion title="How do I change the app's language?">
+
+Kameleoon and its interface are available in English, French, or German.
+
+Your browser's language is used by default. If your browser language is unavailable in Kameleoon, English is used instead.
+
+### In the Kameleoon app
+
+To change the language in your Kameleoon App:
+
+<Steps>
+<Step>
+Click your profile icon in the top-right corner > **Language**
+</Step>
+<Step>
+Choose your language and click **Confirm**.
+</Step>
+</Steps>
+
+<Frame>
+![screenshot25](https://help.kameleoon.com/faq/screenshot25.png)
+</Frame>
+
+</Accordion>
+
+<Accordion title="How to select a parent element?">
+
+Click the parent selector icon, then use the drop-down list to select an element.
+
+When you select an element, click the ellipsis (**...**) on the left of the hierarchy panel. A list appears, it contains:
+
+- **The selected element**, highlighted in green.
+- **The children elements**, above the selected element on the list.
+- **The parent elements**, below the selected element on the list.
+
+<Frame>
+![screenshot27](https://help.kameleoon.com/faq/screenshot27.png)
+</Frame>
+
+</Accordion>
+
+<Accordion title="What is the difference between an A/B experiment and a MVT?">
+
+### A/B experiment
+
+An A/B experiment allows you to make variations of one or several pages.
+
+For instance, an A/N experiment can measure the performance of product page A versus product page B.
+
+With an A/B experiment you can only change one element per page (for example, the text in an "Add to cart" button) to know if the modification impacts conversion rate. If you change multiple elements, you cannot know the impact of those changes individually.
+
+### Multivariate test
+
+A multivariate test (MVT) lets you change several elements of a page and analyze which combination leads to the most conversions. For example, you can test multiple versions of an "Add to cart" button with two versions of color and two versions of text to find which is most effective.
+
+To create your first MVT with Kameleoon, please read our article [Creating a Multivariate test (MVT).](https://help.kameleoon.com/experimentation/web-experimentation/advanced-experiment-types/setting-up-multivariate-tests/)
+
+</Accordion>
+
+<Accordion title="How to disable the Shift + F2 shortcut?">
+
+You can disable the Kameleoon editor shortcut in your app.
+
+### Disable the shortcut
+
+<Steps>
+<Step>
+Click **Admin** > **Projects**.
+</Step>
+<Step>
+Click **Configuration** on a project's card.
+</Step>
+<Step>
+Click **Experiment**.
+</Step>
+<Step>
+Toggle the switch beneath **Editor launching** to **OFF**
+</Step>
+<Step>
+Click **Save** to save your changes.
+</Step>
+</Steps>
+
+### Launch Kameleoon without the shortcut
+
+Once you've disabled the shortcut, add `?kameleoon=true`. For example, your URL will become `[https://www.website.com/?kameleoon=true](https://www.website.com/?kameleoon=true)`.
+
+</Accordion>
+
+<Accordion title="How do ad blockers affect Kameleoon?">
+
+Ad blockers can affect Kameleoon in two ways.
+
+### Impact on your usage of Kameleoon's tools
+
+Ad blockers can interfere with your use of Kameleoon tools, including the Kameleoon app, PBX, and editors. Some assets (CSS, images, or SDK scripts) may be blocked, preventing the platform from functioning correctly.
+
+To avoid these issues:
+
+- **Disable your ad blocker or allow Kameleoon in your ad blocker's settings:** You must either disable your ad blocker or add **`kameleoon.com`** and **`kameleoon.io`** as authorized domains to access all available features and ensure that Kameleoon works smoothly for you and your visitors.
+- **Check your browser's built-in ad-blocking settings:** Some browsers, such as Comet, include native blockers that can interfere with Kameleoon's functionality.
+
+### Impact on the experiments you launch
+
+Ad blockers can affect the Kameleoon's production environment (including the Kameleoon engine, client-side SDKs, and tracking requests). Visitors may not see experiments you deploy because requests to Kameleoon domains may be blocked.
+
+To avoid these issues:
+
+- **Use a custom domain (premium option):** A custom domain helps bypass detection by ad blockers and ensures that experiments display correctly for your visitors. Learn more about enabling a custom domain [here](https://developers.kameleoon.com/feature-management-and-experimentation/faq/#how-do-ad-blockers-affect-kameleoon).
+
+</Accordion>
+
+<Accordion title="How do I disable ad blockers?">
+
+To enjoy the full experience provided by Kameleoon, you must disable your ad blocker or allow Kameleoon domains in your ad-blocker settings before using the Kameleoon app (`app.kameleoon.com`) and tools such as the Kameleoon PBX editor.
+
+### Allow Kameleoon in your ad-blocker extension
+
+Most ad-blocker extensions (such as AdBlock, AdBlock Plus, uBlock Origin, or related tools) follow a similar process:
+
+<Steps>
+<Step>
+Navigate to the Kameleoon platform or the site where you're running your experiment.
+</Step>
+<Step>
+Click the ad-blocker's icon in your browser toolbar (usually located in the upper-right corner of your browser, or upper-left on Safari).
+</Step>
+<Step>
+Look for an option like **Don't run on this domain**, **Disable on this site**, or **Pause on this site**.
+</Step>
+<Step>
+Confirm your selection to allow Kameleoon to function properly.
+</Step>
+</Steps>
+
+To ensure Kameleoon's full functionality, you must also add **`kameleoon.com`** and **`kameleoon.io`** as authorized domains. Adding these domains ensures that all features work smoothly and that Kameleoon scripts and resources load correctly.
+
+The exact wording and steps may vary depending on your ad blocker, but most extensions offer a way to disable blocking for specific domains.
+
+### Check your browser's built-in ad blocker
+
+Some browsers include native ad-blocking features that can also interfere with Kameleoon. Check your browser settings:
+
+<Steps>
+<Step>
+**Chrome/Edge:** Go to **Settings** > **Privacy and security** > **Site settings** and check for content blocking options.
+</Step>
+<Step>
+**Brave:** Click the **Brave Shields** icon in the address bar and adjust blocking settings for the current site.
+</Step>
+<Step>
+**Safari:** Go to **Safari** > **Settings** > **Websites** > **Content Blockers** and manage blocking for specific sites.
+</Step>
+<Step>
+**Opera:** Check **Settings** > **Privacy & Security** for built-in ad-blocking options.
+</Step>
+</Steps>
+
+If you continue to experience issues after disabling ad blockers, contact [Kameleoon support](https://www.kameleoon.com/contact) for assistance
+
+</Accordion>
+
+<Accordion title="Does Kameleoon work with all web browsers?">
+
+### Web browsers supported by the script
+
+The Kameleoon doesn't support some older browsers. If a visitor is using an unsupported browser, your experiment will not display, and the visitor will see the original page. It will not be detectable by the visitor nor will it directly affect your experiment.
+
+Here are the browsers supported for Kameleoon script:
+
+- Chrome
+- Firefox
+- Micorsoft Edge
+- Opera
+- Safari
+
+We ensure compatibility with the last three versions of each browser.
+
+### Web browsers supported by the Graphic editor
+
+Here are the browsers supported for the edition and the creation of your A/B experiments:
+
+- Chrome
+- Firefox
+- Micorsoft Edge
+- Opera
+- Safari
+
+We ensure compatibility with the last three versions of each browser.
+
+### Compatibility with responsive design websites
+
+You can create this type of experiment with Kameleoon using advanced edition functionalities. For an A/B experiment on a website with a responsive design, the main challenges typically involve resizing and repositioning content blocks.
+
+Since pages are displayed based on screen resolution or device, you must be careful when moving elements in your experiments. Additionally, heat maps cannot be used, as there is no fixed frame on the page.
+
+Kameleoon offers some advanced functionalities to move elements and avoid issues.
+
+</Accordion>
+
+<Accordion title="What is the flicker effect?">
+
+When your webpage loads, the original page may display briefly instead of the variation. this issue is called the flicker effect or flickering.
+
+### Why does it happen?
+
+Flickering happens because the time it takes for the JavaScript engine to process the page.
+
+Elements in an A/B experiment are changed according to the order indicated in the JavaScript code created by the testing tool. Consequently, if the Kameleoon script loads after the webpage, the variation will load last, leading to flickering.
+
+### How to avoid flickering
+
+Kameleoon's engine is designed to limit flickering; therefore, you are unlikely to encounter it.
+
+However, we recommend integrating the Kameleoon JavaScript code as high as you can on the HTML page, ideally right after the `<head>` element to ensure Kameleoon loads first.
+
+For more information on preventing flickering, refer to [this](https://help.kameleoon.com/get-started/web-experimentation-installation-guide/#preventing-flickering) article.
+
+</Accordion>
+
+<Accordion title="Is Kameleoon compatible jQuery?">
+
+Kameleoon is completely JavaScript and does not use jQuery. There won't be any conflict if you are using jQuery on your website.
+
+However, Kameleoon uses the [Sizzle](http://sizzlejs.com/) library which is the CSS selector engine of jQuery. You can use it when you create your experiments.
+
+</Accordion>
+
+<Accordion title="What is the difference between 'AND' and 'OR' in segments?">
+
+When you create a segment, you can use "AND" or "OR" to define them.
+
+### Definitions
+
+'AND' corresponds to a simple addition: condition A **and** condition B must be reached to activate the personalization.
+
+'OR' means that only one of the conditions must be reached: either condition A or condition B must be reached to activate the personalization.
+
+The **Narrow this condition option** corresponds to the mathematical parentheses.
+
+### Examples
+
+Condition A **and** condition B = both conditions must be reached
+
+Condition A **and** condition B and condition C = all three conditions must be reached
+
+Condition A **or** condition B = at least one of the conditions must be reached
+
+Condition A **or** condition B **or** condition C = at least one of the conditions must be reached
+
+Condition A **and** condition B **or** condition C = Condition A and one of the two other conditions must be reached
+
+(Condition A **and** condition B) **or** condition C = Condition A and B must be reached, or only Condition C must be reached.
+
+</Accordion>
+
+<Accordion title="How do I add or narrow a condition to a segment?">
+
+For more information on setting up conditions in segments, refer to the [Create a segment](https://help.kameleoon.com/assets/segments/create-a-segment#select-and-set-a-condition) article.
+
+</Accordion>
+
+<Accordion title="How accurate is the 'geolocation' targeting condition?">
+
+Kameleoon allows you to target visitors based on geolocation data.
+
+On average, the accuracy of this geolocation is as follows:
+
+- **Country:** 99.8% accurate ;
+- **Region:** 80% accurate;
+- **Town:** 68% accurate within a 50 kilometer radius.
+
+<Note>
+Please note that:
+
+- Accuracy will vary depending on the country and type of device used by your website's visitors.
+- IP geolocation will always be more accurate for broadband IP addresses than on cellular networks (mobile devices).
+- Fewer countries are available for IPv6 IPs, so the IP geolocation won't provide accurate results when that's the case.
+</Note>
+</Accordion>
+
+<Accordion title="How do I define a condition's weight?">
+
+For more information on setting a condition's weight, refer to the [Create a segment](https://help.kameleoon.com/assets/segments/create-a-segment#determine-a-conditions-weight) article.
+
+</Accordion>
+
+<Accordion title="Does Kameleoon collect third-party cookies and data ?">
+
+Kameleoon experiments and personalizations are powered by data collected via a [first-party cookie.](https://help.kameleoon.com/account-and-team-management/how-kameleoon-tracks-and-counts-unique-users/)
+
+They're not affected if cookies are disabled, as they don't rely on third-party data sources.
+
+By safeguarding our unique visitor ID in a first-party cookie, we guarantee that each visitor consistently experiences the same variant in a given experiment, which ensures accurate results and delivers a seamless and personalized user experience.
+
+Here is the [complete list](https://developers.kameleoon.com/privacy-and-compliance/data-collection-client-side) of data collected by Kameleoon.
+
+</Accordion>
+
+<Accordion title="What is the cache expiration time (TTL) of the Kameleoon script?">
+
+When landing on your website, a visitor's browser must download your site's code, including the Kameleoon script. Page loading time is impacted by the code's length and the number of external resources to download (for example, images, CSS, and scripts). Caching reduces the loading time during subsequent visits: the website's code and all static resources are downloaded and put in the browser cache to improve performance.
+
+Caching therefore improves the user experience. But there is a downside: if Kameleoon's script changes (for example, if you have launched a new experiment), old visitors who have already started their visit on your website (and already downloaded the previous version of the Kameleoon script) won't see the new experiment yet.
+
+To avoid this problem, there is a flag in the Kameleoon script, Cache Expiration (TTL: Time-to-live), that asks a browser to take a new version of the script every 1.5 hours: the script embeds its own expiry date.
+
+<Note>
+**Note:**
+
+Sometimes, even though there is a TTL in place, a browser can decide to ignore it (this is often the case on mobile browsers as they want to optimize performance). It depends on each browser's policy.
+</Note>
+
+</Accordion>
+
+<Accordion title="How does Kameleoon filter bot traffic from my results?">
+
+Bots are software applications that run repetitive, automated tasks over the internet. This behavior may impact your experiment and personalization results, as bots don't behave like real visitors and inflate your site's volume of traffic, effectively biasing your conversion metrics. Therefore, removing bot traffic from your campaign results is essential to make your data more accurate.
+
+Kameleoon has two methods for excluding bot traffic from your campaign results:
+
+- Kameleoon detects known bots and spiders with the [IAB/ABC International Spiders and Bots List](https://www.iab.com/guidelines/iab-abc-international-spiders-bots-list/) and do not count them in our analytics.
+- Kameleoon uses proprietary internal algorithms to detect bot traffic on websites, and automatically filter these bots out of your campaign results. When building a visit from visitor events, Kameleoon rejects a visit if it is an outlier (for example, bot, troll, tracker bug). Kameleoon considers a visit an outlier if at least one of the following conditions is met during a visit:
+	- Number of events > 10,000
+	- Duration > two hours
+
+Server-side experiments are more vulnerable to bot traffic. You must pass the user agent to be filtered by Kameleoon when running server-side experiments. Please refer to the SDK documentation for the correct implementation. No additional code is required to enable bot filtering for client-side SDKs, as the Kameleoon SDK automatically includes the user's [user agent](https://developers.kameleoon.com/nodejs-sdk.html#useragent) in the outbound request.
+
+To activate bot filtering:
+
+<Steps>
+<Step>
+Click **Admin** > **Projects**.
+</Step>
+<Step>
+Navigate to your project's **Configuration** page.
+</Step>
+<Step>
+In **Advanced settings**, toggle **Enable bot filtering** to **ON**
+</Step>
+</Steps>
+
+</Accordion>
+
+<Accordion title="How do I install and use the Kameleoon Chrome Extension?">
+
+To install the Kameleoon Debug Assistant Chrome extension, click [here](https://chromewebstore.google.com/detail/kameleoon-debug-assistant/nimncjjomfcjmfnghgaopccmdggjfoam). For more detailed installation instructions, refer to [this](https://developers.kameleoon.com/developer-tools/kameleoon-chrome-extension/) article.
+
+</Accordion>
+
+<Accordion title="Why do I have unequal traffic distribution between each variation of a split URL experiment?">
+
+You may notice data discrepancies between Kameleoon's results and a third-party reporting tool regarding your [split URL experiment's](https://help.kameleoon.com/experimentation/web-experimentation/advanced-experiment-types/url-redirection-split-test/) traffic distribution.
+
+There are a few reasons for this discrepancy:
+
+- **The Kameleoon tag is not installed on variation B of your experiment.** This problem is common. The Kameleoon snipped must be installed on the new page (URL B) of your website so Kameleoon can track visits and conversions. Note that you may notice some visits to variation B even though Kameleoon is not installed on page B. These visits occur because Kameleoon tries to send the tracking call before redirecting to page B, so all visits counted on variant B are actually tracking calls from page A.
+- **The bounce rate metric could also cause traffic distribution discrepancies**. In a split experiment, when a visitor has been bucketed into variation B, Kameleoon either sends the tracking data from the original page before redirecting the visitor to page B or when the visitor lands on page B. So, if your bounce rate is high, you could see significant discrepancies between Kameleoon and your reporting tool's results.
+- **If your consent policy is set to "Required"**, you must follow these [guidelines](https://help.kameleoon.com/experimentation/web-experimentation/advanced-experiment-types/url-redirection-split-test/#url-redirection-and-consent-policy) to have accurate metrics for your experiment. You can compare the number of visits you have in your third-party reporting tool for variation B with the number of visits you have for URL B, independently of your experiment. You should get approximately the same numbers, assuming visitors cannot access URL B without going through the experiment first.
+
+</Accordion>
+
+<Accordion title="Issue: 'Refused to display in a frame because it set 'X-Frame-Options' to 'SAMEORIGIN' '">
+
+You may encounter this issue if you installed the Kameleoon snippet with the **Cross-Domain tracking** option, which requires your main domain to host a static resource (an iFrame).
+
+### How does the Kameleoon iframe work?
+
+The Kameleoon iFrame ensures data continuity and consistency when moving between different subdomains. This consistency is accomplished by delegating reading and writing information in `localStorage` (in the domain where the iFrame is deployed) to the iFrame.
+
+As the local storage is specific to a single domain, the iFrame allows Kameleoon to read the Kameleoon data stored in your main domain's local storage, which helps keep track of the same visitor without making extra server calls and impacting your website's performance.
+
+[More detailed documentation on this subject](https://developers.kameleoon.com/tag-installation.html#additional-setup-for-cross-domain-tracking)
+
+To secure our iFrame, we have implemented the following three measures:
+
+- **Restriction of access to identified domains:** Only the domains specified in the `allowedDomains` variable (in the iFrame code) are authorized to request the iFrame. The Kameleoon iFrame can only load and execute code on the list of domains you allow in the iFrame file.
+- **Restricting access to identified sitecodes:** Only a Kameleoon engine with the specified sitecode (in the iFrame code) can request the iFrame.
+- **Prefixed local storage:** The iFrame (and Kameleoon at large) can only read and write entries prefixed with "kameleoon". No other data can be read or written.
+
+The data collected by Kameleoon is of a non-personal nature in accordance with current regulations. Please read the [exhaustive list of this data](https://developers.kameleoon.com/local-storage.html#details-about-the-kameleoondata-localstorage-key)
+
+Kameleoon offers consent management that can be adapted to all needs and ecosystems via a dedicated API and adjustable behavior in case of unknown consent. [More documentation on this subject](https://developers.kameleoon.com/legal-consent.html)
+
+### How to resolve the "Refused to display..." issue
+
+The X-Frame-Options HTTP response header can be used to indicate whether a browser should be allowed to render a page in a frame, iFrame, embed, or object. Sites can use this capability to avoid click-jacking attacks by ensuring their content is not embedded in other sites.
+
+For more details, please follow [the Mozilla developer documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options).
+
+To enable cross-domain tracking, the Kameleoon iFrame must load on all your domains, so you cannot set an X-Frame-Options response header.
+<Note>
+Also note that you can secure the iFrame by providing a restricted list of domains (for example, your domains and subdomains) that can call the iFrame. This list must be provided inside the static iFrame file that will be hosted on your site.
+</Note>
+</Accordion>
+
+<Accordion title="Issue: 'Refused to load the script'">
+
+You may encounter the "Refused to load the script `[https://xxxxxx.kameleoon.eu/kameleoon.js](https://xxxxxx.kameleoon.eu/kameleoon.js)` because it violates the following Content Security Policy directive" issue.
+
+This may be because of your website's [Content Security Policy](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP).
+
+### Fixing this issue
+
+If your website restricts the loading of resources (scripts, images, media, CSS) via the standard Content-Security-Policy (CSP) HTTP header, you must update your site's CSP to allow Kameleoon resources to load. You can find the full list in our [developer documentation](https://developers.kameleoon.com/web-experimentation/faq#what-are-the-kameleoon-domains-that-i-need-to-whitelist).
+
+</Accordion>
+
+<Accordion title="How do I activate cross device history reconciliation?">
+
+To activate cross-device history reconciliation:
+
+<Steps>
+<Step>
+Click **Settings** > **Custom data** > **New custom data**.
+</Step>
+<Step>
+Follow the [usual steps](https://help.kameleoon.com/assets/advanced-targeting-tools/manage-advanced-targeting-tools), and click **Next**.
+</Step>
+<Step>
+Toggle **Use this custom data as a unique identifier for cross-device matching** to **ON**.
+</Step>
+<Step>
+Click **Create**.
+</Step>
+</Steps>
+
+</Accordion>
+
+<Accordion title="Which languages is Kameleoon available in?">
+
+Kameleoon is available in English, French, and German. By default, Kameleoon uses the same language as your browser; however, you can change the application's language at any time.
+
+For more information, refer to the [How do I change the app's language?](https://help.kameleoon.com/faq/#how-do-i-change-the-apps-language) FAQ.
+
+</Accordion>
+
+<Accordion title="Can Kameleoon conflict with other scripts on my site?">
+
+It is highly unlikely that the Kameleoon script with conflict with any other script on your website.
+
+Kameleoon is completely JavaScript and does not use jQuery, so there won't be a conflict if you use jQuery on your site.
+
+Additionally, Kameleoon operates independently of server-side development languages and doesn't use global JavaScript variables, minimizing the risk of incompatibilities.
+
+</Accordion>
+
+<Accordion title="I launched an experiment but I do not see any changes on my website">
+
+If you launched an experiment but cannot see the changes, follow these recommendations to ensure your experiment is set up correctly.
+
+<Note>
+**Note:**
+
+There is a delay between the launch of an experiment in Kameleoon and its visibility on your site. It can take up to ten minutes for the experiment to go online.
+</Note>
+
+### Check if Kameleoon script is updated on your computer
+
+When you launch an experiment, Kameleoon updates its script to ensure it contains the new data. The script loaded in your cache might not be updated. To check if it is, open a web console in your browser (with `F12` on PC or `CMD+ALT+I` on Mac) and enter `Kameleoon.API.experiments.getAll()`. This command will list every experiment running on your website.
+
+If your experiment is not on this list, empty your cache to force your browser to load the latest version of the script. [Find out more in our developer documentation](https://developers.kameleoon.com/apis/activation-api-js/api-reference#getall).
+
+### Ensure you are not on the reference variation
+
+You can force a variation to display on your machine.
+
+### Check your experiment's targeting criteria
+
+You may not be targeted by your experiment's targeting criteria. To check if you fulfill all criteria, open a web console in your browser (with `F12` on PC or `CMD+ALT+I` on Mac) and enter `Kameleoon.API.experiments.getAll()`. This command will list every experiment running on your website. If your experiment is not on the list, there is a problem with targeting. [Find out more in our developer documentation](https://developers.kameleoon.com/apis/activation-api-js/api-reference/#getactive).
+
+<Note>
+**Note:**
+
+You should launch a simulation to check if your experiment is set up correctly. Read [this article about the simulation panel's Targeting tab](https://help.kameleoon.com/web-personalization/simulate-a-campaign/) for more information.
+</Note>
+
+</Accordion>
+
+<Accordion title="How do I disable the Kameleoon script?">
+
+### Why disable the script?
+
+- If you attach significant importance to your website's performance and wish to limit loading times as much as possible.
+- If you don't use Kameleoon continuously.
+
+### Disabling the script
+
+<Steps>
+<Step>
+Navigate to your project's **Configuration** page (**Admin** > **Projects** > **Configuration**).
+</Step>
+<Step>
+Click **Actions** in the top-right corner of the page > **Disable**.
+</Step>
+<Step>
+Click **Confirm** to confirm your choice.
+</Step>
+</Steps>
+
+You can follow the same process and click **Enable** to re-enable the script on your project.
+
+### Disalbing the script on a specific URL
+
+To disable the Kameleoon script on a website, you can use a specific URL parameter. Add `?kameleoonDisabled=true` to the end of the website's URL. This parameter prevents Kameleoon from loading on that page.
+
+</Accordion>
+
+<Accordion title="Why can't I log in to Kameleoon tools?">
+
+If you cannot log in to the Kameleoon platform, the Graphic editor, or prompt-based experimentation (PBX), your browser is likely blocking third-party cookies. Kameleoon requires a session cookie hosted on its domain to authenticate your account.
+
+You must allow third-party cookies to use these tools.
+
+**To allow third-party cookies:**
+
+<Steps>
+<Step>
+Open your browser **Settings**.
+</Step>
+<Step>
+Navigate to **Privacy & securty** > **Third-party cookies**.
+</Step>
+<Step>
+Select **Allow third-party cookies**
+</Step>
+</Steps>
+
+<Note>
+**Note:**
+
+Browsers usually block third-party cookies automatically in Private or Incognito mode.
+</Note>
+
+To successfully log in, ensure your browser allows the following specific cookies:
+
+- `refresh-token`
+- `kameleoonSessionId`
+- `access-token`
+- `expiration-access`
+
+</Accordion>
+
+<Accordion title="Does Kameleoon have an impact on SEO? Why has my webpage been de-indexed?">
+
+You might be wondering whether Kameleoon affects your SEO or why your webpages were suddenly de-indexed after launching an experiment. This issue depends on your experiment setup.
+
+### How to identify and address SEO impact
+
+- Ensure Kameleoon is correctly installed to avoid any negative impact on performance.
+- Assign an equal percentage of traffic to each variation.
+- Confirm that no experiments have been running for more than two months, since bots may interpret prolonged experiments as inconsistent page displays for different visitors.
+- Evaluate Kameleoon's performance on your site using the Kameleoon Chrome Extension and Lighthouse. Check if the performance issues coincided with SEO impact.
+- Ensure that online experiments don't significantly alter the page elements affected by SEO (JS and CSS should not change most of the page).
+- **Redirection**
+- Do not redirect 100% of traffic to new URLs. If establishing a control version, it must redirect to the original URL.
+	- Define a canonical URL in the HTML for both the original page and the redirect page. The canonical URL should be the same for both and refer to the page Google should index.
+- **Original page:** `[https://homepage.com/](https://homepage.com/)`
+- `<link rel="canonical" href="[https://homepage.com/](https://homepage.com/)">`
+		- **Redirect page:** `[https://homepage.com/new-version](https://homepage.com/new-version)`
+- `<link rel="canonical" href="[https://homepage.com/](https://homepage.com/)">`
+	- Ensure the page's HTML does not use a `noindex` `meta` tag.
+- `<meta name="robots" content="noindex" />`
+	- Use the variation native redirection option or `Kameleoon.API.Core.processRedirect("newURL")`, note `document.location.href = "newURL"`.
+
+<Note>
+**Note:**
+
+Kameleoon redirections are Javascript by default and temporary redirects (not 301 or 302).
+</Note>
+
+- **Avoid "Black Hat" SEO practices:**
+- **Cloaking:** Showing visitors and search engine bots different content to manipulate result rankings, which can occur if experiments are set up to exclude bots.
+	- **Duplicating content:** If the redirect page is identical to the original, Google may regard it as duplicate content, negatively affecting the page ranking. Redirecting to the original page can help prevent SRM but might impact SEO.
+	- **Sneaky redirects:** Don't send a visitor to a different URL than the one they clicked without their knowledge.
+	- **Hidden links and text:** Avoid using hidden links and text visible to search engines but hidden from visitors. Techniques include matching text color to the background, using CSS to position the link off-screen, or setting the link size to zero.
+
+<Note>
+**Note:**
+
+Kameleoon automatically filters bot traffic from your results. For more information, refer to [this](https://help.kameleoon.com/faq/#how-does-kameleoon-filter-bot-traffic-from-my-results) article.
+</Note>
+
+</Accordion>
+
+<Accordion title="Why do my experiment variations have fewer visits than the original when using capping?">
+
+When you use display limits (capping) in an experiment or personalization, it is normal and expected for the total visit count of the capped variation to be lower than the original.
+
+This discrepancy happens because the capping mechanism prevents a unique visitor from being targeted by the variation after they hit the limit (for example, after the first visit), but the original version continues to target that user on every subsequent visit.
+
+### Is this a Sample Ratio Mismatch?
+
+No. This difference in visits does not mean that the initial experiment split is faulty or that you have a Sample Ratio Mismatch (SRM). The split of **unique visitors** remains correct.
+
+For a full explanation of this analytic behavior and how to correctly interpret your results, see [this article](https://help.kameleoon.com/experiment-analytics/troubleshooting/visit-count-mismatch/).
+
+</Accordion>
+</AccordionGroup>

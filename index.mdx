@@ -1,0 +1,163 @@
+---
+mode: "custom"
+title: "Kameleoon Docs"
+---
+
+{/* Hero Section */}
+
+<div className="relative w-full flex items-center justify-center min-h-[28rem] overflow-hidden">
+  <div className="absolute inset-0 bg-[#b3bdff] dark:bg-[#1d352f]" />
+  <div className="absolute inset-0 opacity-30 bg-[radial-gradient(circle_at_30%_20%,rgba(120,80,180,0.5),transparent_50%),radial-gradient(circle_at_70%_80%,rgba(80,50,140,0.4),transparent_50%)] dark:bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.8),transparent_50%),radial-gradient(circle_at_70%_80%,rgba(180,190,255,0.6),transparent_50%)]" />
+
+  <div className="relative z-10 text-center px-6 max-w-4xl mx-auto py-16">
+    <h1 className="text-5xl md:text-6xl font-bold text-[#1D352F] dark:text-white leading-tight tracking-tight mb-6">
+      Kameleoon Documentation
+    </h1>
+    <p className="text-lg md:text-xl text-[#1D352F]/80 dark:text-white/90 font-normal max-w-2xl mx-auto leading-relaxed mb-8">
+      Everything you need to run experiments, manage feature rollouts, and
+      personalize experiences—whether you're integrating Kameleoon or using the
+      platform.
+    </p>
+
+    <div className="flex justify-center gap-4 flex-wrap">
+      <a 
+        href="/get-started/web-experimentation-installation-guide" 
+        className="inline-flex items-center px-6 py-3 rounded-xl text-sm font-semibold tracking-wide bg-[#d4e4a2] hover:bg-[#c9db8f] dark:bg-[#d4e4a2] dark:hover:bg-[#c9db8f] text-[#1D352F] dark:text-[#1D352F] transition-colors duration-200"
+      >
+        Quick start guide
+      </a>
+      <a 
+        href="/feature-management-and-experimentation/overview" 
+        className="inline-flex items-center px-6 py-3 rounded-xl text-sm font-semibold tracking-wide border border-[#1D352F] dark:border-white text-[#1D352F] dark:text-white hover:bg-[#1D352F]/10 dark:hover:bg-white/10 transition-colors duration-200"
+      >
+        Explore SDKs
+      </a>
+    </div>
+  </div>
+</div>
+
+{/* Main Content */}
+
+<div className="max-w-6xl mx-auto px-5 py-16">
+
+{/* Getting Started Section */}
+
+<div>
+  <h2 className="text-2xl font-bold text-[#1D352F] dark:text-white mb-4">
+    Getting Started
+  </h2>
+</div>
+
+  <Columns cols={2}>
+    <div>
+      <div className="flex items-start flex-col">
+        <h3 className="text-xl font-semibold text-[#1D352F] dark:text-white mb-1 mt-1">
+          Developers
+        </h3>
+        <p className="text-sm text-[#1D352F]/60 dark:text-gray-400 mb-5">
+          SDKs, APIs, and technical guides
+        </p>
+      </div>
+      <CardGroup cols={1}>
+        <Card
+          title="Web Experimentation"
+          icon="globe"
+          href="/web-experimentation/overview"
+        >
+          Implement A/B tests with the Kameleoon JS file.
+        </Card>
+        <Card
+          title="Feature Experimentation & SDKs"
+          icon="cube"
+          href="/feature-management-and-experimentation/overview"
+        >
+          SDKs for web, mobile, and edge environments.
+        </Card>
+        <Card title="APIs" icon="code-simple" href="/apis/overview">
+          Activation, Automation, Data, and more.
+        </Card>
+        <Card title="Developer tools" icon="code" href="/developer-tools/vs-code">
+          VS Code extension and Chrome debugging.
+        </Card>
+      </CardGroup>
+    </div>
+
+    <div>
+      <div className="flex items-start flex-col">
+        <h3 className="text-xl font-semibold text-[#1D352F] dark:text-white mb-1 mt-1">
+          Help Center
+        </h3>
+        <p className="text-sm text-[#1D352F]/60 dark:text-gray-400 mb-5">
+          Guides for marketers and product teams
+        </p>
+      </div>
+      <CardGroup cols={1}>
+        <Card
+          title="Experimentation"
+          icon="flask"
+          href="/experimentation/web-experimentation/prompt-based-experiments/get-started"
+        >
+          Create experiments with AI or the visual editor.
+        </Card>
+        <Card
+          title="Personalization"
+          icon="user"
+          href="/web-personalization/set-up-and-launch-a-personalization"
+        >
+          Deliver tailored experiences by segment.
+        </Card>
+        <Card
+          title="Feature management"
+          icon="flag"
+          href="/experimentation/feature-experimentation/create-and-manage-flags/create-a-feature-flag"
+        >
+          Control rollouts with feature flags.
+        </Card>
+        <Card
+          title="Analytics"
+          icon="chart-bar"
+          href="/experiment-analytics/analyze-results/access-the-results-page"
+        >
+          Analyze results with advanced filtering.
+        </Card>
+      </CardGroup>
+    </div>
+
+  </Columns>
+
+{/* Quick Links Section */}
+
+<div className="mt-20">
+  <h2 className="text-2xl font-bold text-[#1D352F] dark:text-white mb-4">
+    Quick Links
+  </h2>
+</div>
+
+<CardGroup cols={4}>
+  <Card
+    title="Installation"
+    icon="rocket"
+    href="/get-started/web-experimentation-installation-guide"
+  >
+    Get Kameleoon running on your site in minutes.
+  </Card>
+  <Card
+    title="Core concepts"
+    icon="lightbulb"
+    href="/core-concepts/hybrid-experimentation"
+  >
+    Understand hybrid experimentation fundamentals.
+  </Card>
+  <Card
+    title="Integrations"
+    icon="puzzle-piece"
+    href="/integrations/integrations-overview"
+  >
+    Connect with your existing tool stack.
+  </Card>
+  <Card title="FAQ" icon="circle-question" href="/faq">
+    Find answers to common questions.
+  </Card>
+</CardGroup>
+
+</div>

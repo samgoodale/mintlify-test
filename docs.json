@@ -1,0 +1,224 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "theme": "mint",
+  "name": "Kameleoon",
+  "colors": {
+    "primary": "#1d342f",
+    "light": "#b4beff",
+    "dark": "#b4beff"
+  },
+  "favicon": "/favicon.svg",
+  "appearance": {
+    "default": "light"
+  },
+  "background": {
+    "decoration": "gradient",
+    "color": {
+      "dark": "#262e2c"
+    }
+  },
+  "fonts": {
+    "heading": {
+      "family": "Plus Jakarta Sans"
+    },
+    "body": {
+      "family": "Inter"
+    }
+  },
+  "navigation": {
+    "products": [
+      {
+        "product": "Developers",
+        "tabs": [
+          {
+            "tab": "Home",
+            "icon": "house",
+            "pages": ["index"]
+          },
+          {
+            "tab": "Documentation",
+            "icon": "book-open",
+            "groups": [
+              {
+                "group": "Web Experimentation",
+                "pages": [
+                  "web-experimentation/overview",
+                  "web-experimentation/simple-implementation",
+                  "web-experimentation/implementation-with-nextjs",
+                  "web-experimentation/implementation-with-nuxt",
+                  "web-experimentation/implementation-with-sveltekit",
+                  "web-experimentation/advanced-implementation"
+                ]
+              },
+              {
+                "group": "Feature Management and Experimentation",
+                "pages": [
+                  "feature-management-and-experimentation/overview",
+                  "feature-management-and-experimentation/how-to-get-data-collected"
+                ]
+              },
+              {
+                "group": "Core Concepts",
+                "pages": [
+                  "core-concepts/hybrid-experimentation",
+                  "core-concepts/flicker-management"
+                ]
+              },
+              {
+                "group": "Developer Tools",
+                "pages": ["developer-tools/vs-code"]
+              }
+            ]
+          },
+          {
+            "tab": "APIs",
+            "icon": "code-simple",
+            "groups": [
+              {
+                "group": "APIs",
+                "openapi": "openapi.yaml"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "product": "Help Center",
+        "tabs": [
+          {
+            "tab": "Documentation",
+            "icon": "book-open",
+            "groups": [
+              {
+                "group": "Get Started",
+                "pages": [
+                  "get-started/web-experimentation-installation-guide",
+                  "get-started/feature-experimentation-installation-guide",
+                  "get-started/using-the-homepage"
+                ]
+              },
+              {
+                "group": "Experimentation",
+                "pages": [
+                  {
+                    "group": "Web Experimentation (incl. PBX)",
+                    "pages": [
+                      {
+                        "group": "Prompt-based experiments",
+                        "pages": [
+                          "experimentation/web-experimentation/prompt-based-experiments/get-started",
+                          "experimentation/web-experimentation/prompt-based-experiments/prompt-based-experimentation-plans"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "group": "Feature Experimentation",
+                    "pages": [
+                      {
+                        "group": "Create and manage flags",
+                        "pages": [
+                          "experimentation/feature-experimentation/create-and-manage-flags/feature-experimentation-dashboard",
+                          "experimentation/feature-experimentation/create-and-manage-flags/create-a-feature-flag"
+                        ]
+                      },
+                      {
+                        "group": "Configure your feature flags",
+                        "pages": [
+                          "experimentation/feature-experimentation/configure-your-feature-flags/define-feature-variables"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "group": "Product targeting and social proofing",
+                "pages": [
+                  "product-targeting-and-social-proofing/get-started",
+                  "product-targeting-and-social-proofing/product-targeting"
+                ]
+              },
+              {
+                "group": "Web Personalization",
+                "pages": [
+                  "web-personalization/set-up-and-launch-a-personalization"
+                ]
+              },
+              {
+                "group": "Experiment Analytics",
+                "pages": [
+                  "experiment-analytics/analyze-results/access-the-results-page"
+                ]
+              },
+              {
+                "group": "Integrations",
+                "pages": ["integrations/integrations-overview"]
+              }
+            ]
+          },
+          {
+            "tab": "FAQ",
+            "icon": "circle-question",
+            "pages": ["faq"]
+          }
+        ]
+      }
+    ],
+    "global": {
+      "anchors": [
+        {
+          "anchor": "Documentation",
+          "href": "https://www.kameleoon.com/support",
+          "icon": "headset"
+        },
+        {
+          "anchor": "Contact Us",
+          "href": "https://www.kameleoon.com/contact",
+          "icon": "envelope"
+        }
+      ]
+    }
+  },
+  "logo": {
+    "light": "/logo/light.svg",
+    "dark": "/logo/dark.svg",
+    "href": "/"
+  },
+  "navbar": {
+    "links": [
+      {
+        "label": "Login",
+        "href": "https://login.kameleoon.com/app?previous_url_pp="
+      }
+    ],
+    "primary": {
+      "type": "button",
+      "label": "Book a demo",
+      "href": "https://www.kameleoon.com/demo"
+    }
+  },
+  "contextual": {
+    "options": [
+      "copy",
+      "view",
+      "chatgpt",
+      "claude",
+      "perplexity",
+      "mcp",
+      "cursor",
+      "vscode"
+    ]
+  },
+  "footer": {
+    "socials": {
+      "instagram": "https://www.instagram.com/kameleoon",
+      "x": "https://x.com/kameleoonrocks",
+      "youtube": "https://www.youtube.com/@kameleoon17/videos",
+      "linkedin": "https://www.linkedin.com/company/kameleoon",
+      "facebook": "https://www.facebook.com/kameleoonrocks",
+      "slack": "https://kameleooncommunity.slack.com/join/shared_invite/zt-1s6m8s09e-~yA1EUgn5pLWW_mrgf8TrQ#/shared-invite/email",
+      "github": "https://github.com/Kameleoon?tab=repositories"
+    }
+  }
+}
