@@ -1,6 +1,6 @@
 ---
 title: "Hybrid experimentation"
-description: "Kameleoon can be operated in [hybrid](https://kameleoon.com/en/hybrid-experimentation) mode, using both [Web SDKs](https://developers.kameleoon.com/feature-management-and-experimentation/overview#server-side-sdks) and the Kameleoon [JavaScript application file](https://developers.kameleoon.com/web-experimentation/simple-implementation#asynchronous-tag-with-anti-flicker). This allows you to use the optimal approach for individual tasks. For example, you can:"
+description: "Kameleoon can be operated in [hybrid](https://kameleoon.com/en/hybrid-experimentation) mode, using both [Web SDKs](https://developers.kameleoon.com/feature-management-and-experimentation/overview#server-side-sdks) and the Kameleoon [JavaScript application file](https://developers.kameleoon.com/web-experimentation/simple-implementation#asynchronous-tag-with-anti-flicker). Hybrid mode enables the optimal approach for individual tasks. For example:"
 ---
 
 - Implement and deploy variations more easily on the server side, while tracking to third-party analytics tools can be performed more effectively using the Kameleoon engine via the application file `engine.js`(previously named `kameleoon.js`), as many third-party web analytics solutions only operate on the front end.
@@ -10,7 +10,7 @@ description: "Kameleoon can be operated in [hybrid](https://kameleoon.com/en/hyb
 
 This article describes how to implement the optimal integration between the Kameleoon [web SDK](https://developers.kameleoon.com/feature-management-and-experimentation/overview#server-side-sdks) and the Kameleoon [front-end application file](https://developers.kameleoon.com/web-experimentation/simple-implementation#asynchronous-tag-without-anti-flicker) so that both sides communicate with each other.
 
-We recommend using the [Kameleoon Asynchronous tag without anti-flicker](https://developers.kameleoon.com/web-experimentation/simple-implementation#asynchronous-tag-without-anti-flicker).
+Use the [Kameleoon Asynchronous tag without anti-flicker](https://developers.kameleoon.com/web-experimentation/simple-implementation#asynchronous-tag-without-anti-flicker).
 
 <Tip>
 **Tip:**
@@ -18,15 +18,15 @@ We recommend using the [Kameleoon Asynchronous tag without anti-flicker](https:/
 For web experimentation, you normally need to add the JavaScript installation tag either in the `<head>` tag or at the beginning of the `<body>` tag to prevent flickering. If you're using hybrid mode where flickering is not a concern, you can install the script anywhere before the closing `</body>` tag since the tag is only used for tracking purposes.
 </Tip>
 
-Hybrid experimentation is currently only compatible with the Web SDKs. While the Mobile SDKs do not yet support hybrid mode with third-party web analytics tools, you can still leverage the data points collected on your website if you offer both a website and a mobile app. This means that data gathered from an identified user on your website can also be used in your mobile application, provided the visitor is identified consistently across both platforms.
+Hybrid experimentation is currently only compatible with the Web SDKs. While the Mobile SDKs do not yet support hybrid mode with third-party web analytics tools, data points collected on a website can still be leveraged if both a website and a mobile app are offered. Data gathered from an identified user on a website can also be used in a mobile application, provided the visitor is identified consistently across both platforms.
 
 ## Synchronize user IDs between the back-end and front-end
 
-One of the challenges of hybrid mode is making sure that Kameleoon can properly identify each visitor as the same individual on both sides. In Kameleoon, this means that the `visitorCode`, which is a unique ID for every visitor, has to be identical on both sides. For example, a visitor registered with the `visitorCode` of `10ctbql0zpf4rwjy` for an experiment variation in the back-end must be associated with the visitor code `10ctbql0zpf4rwjy` when a conversion is triggered in the front-end. Using the same ID ensures correct tracking of the visitor's actions, which results in correct data and statistics.
+One of the challenges of hybrid mode is ensuring that Kameleoon can properly identify each visitor as the same individual on both sides. In Kameleoon, the `visitorCode`, which is a unique ID for every visitor, must be identical on both sides. For example, a visitor registered with the `visitorCode` of `10ctbql0zpf4rwjy` for an experiment variation in the back-end must be associated with the visitor code `10ctbql0zpf4rwjy` when a conversion is triggered in the front-end. Using the same ID ensures correct tracking of the visitor's actions, which results in correct data and statistics.
 
-To synchronize the user IDs, your hybrid app needs to call the `getVisitorCode()` method prior to calling other SDK methods. Since naming conventions vary between languages, the method names vary slightly depending on the SDK, but each language has a similarly named equivalent method. Kameleoon uses the following approach:
+To synchronize the user IDs, the hybrid app must call the `getVisitorCode()` method prior to calling other SDK methods. Since naming conventions vary between languages, the method names vary slightly depending on the SDK, but each language has a similarly named equivalent method. Kameleoon uses the following approach:
 
-1. On the front-end, the Kameleoon JavaScript engine randomly generates a `visitorCode` for each new visitor. The engine considers a visitor to be new if the engine can't find a previous visitor code on the user's browser (for example, in a cookie or local storage). This normally happens when the Kameleoon engine runs for the first time on the visitor's browser. The Kameleoon engine can also obtain the identifier from a cookie that the back-end passes to it. This option allows you to set the identifier on the server, rather than in the front-end. For example, you might do this if you want to specify your own unique visitor code for each visitor.
+1. On the front-end, the Kameleoon JavaScript engine randomly generates a `visitorCode` for each new visitor. The engine considers a visitor to be new if the engine can't find a previous visitor code on the user's browser (for example, in a cookie or local storage). The generation normally happens when the Kameleoon engine runs for the first time on the visitor's browser. The Kameleoon engine can also obtain the identifier from a cookie that the back-end passes to the engine. The cookie option allows setting the identifier on the server, rather than in the front-end. For example, use the cookie option to specify a custom unique visitor code for each visitor.
 
 <Note>
 **Note:**
@@ -34,27 +34,27 @@ To synchronize the user IDs, your hybrid app needs to call the `getVisitorCode()
 If you [Unify session data accross subdomains](https://developers.kameleoon.com/core-concepts/unify-session-data-across-subdomains), Kameleoon looks for a **kameleoonVisitorCode** key in local storage. If the key is present, its value is used as the identifier for the visitor code. The local storage version of this key always takes precedence, even if a **kameleoonVisitorCode** cookie with a different value exists. Note that Kameleoon does not reset the JavaScript cookie if the local storage and cookie values match. For ITP purposes, it is important to leave cookies that may have been set on the server side intact.
 </Note>
 
-2. On the back-end, you need to call the `getVisitorCode()` method or equivalent in your SDK. Make sure to call this method before you provide a visitor identifier to any other SDK methods. The `getVisitorCode()` takes an optional string argument that you can use to pass your own identifier rather than rely on a randomly generated Kameleoon ID. When the method is called, Kameleoon first looks for a **kameleoonVisitorCode** cookie or query parameter associated with the current HTTP request. If found, the SDK uses this as the visitor identifier.
+2. On the back-end, call the `getVisitorCode()` method or equivalent in the SDK. Call the `getVisitorCode()` method before providing a visitor identifier to any other SDK methods. The `getVisitorCode()` method takes an optional string argument to pass a custom identifier rather than rely on a randomly generated Kameleoon ID. When the method is called, Kameleoon first looks for a **kameleoonVisitorCode** cookie or query parameter associated with the current HTTP request. If found, the SDK uses the cookie or query parameter as the visitor identifier.
 
-If no cookie or parameter is found, Kameleoon uses the `getVisitorCode()` method argument, if you provided one, as the identifier. If you don't provide an argument, Kameleoon randomly generates the ID. In either of these cases, Kameleoon also sets the server-side **kameleoonVisitorCode** cookie with the value (via HTTP header).
+If no cookie or parameter is found, Kameleoon uses the `getVisitorCode()` method argument, if provided, as the identifier. If no argument is provided, Kameleoon randomly generates the ID. In either case, Kameleoon also sets the server-side **kameleoonVisitorCode** cookie with the value (via HTTP header).
 
-By following this approach, the **visitorCode** is saved and shared between front-end and back-end. If an experiment is implemented on the first page of a visitor's journey on your website, the SDK will generate the identifier and pass it to the JavaScript engine. If the journey starts on a page where `getVisitorCode()` is not called (or the synchronization snippet is not run) on the back-end, then the JavaScript engine will generate the identifier first and pass it to the SDK. The SDK will read it and then rewrite it as a server-side cookie to bypass ITP restrictions.
+By following the synchronization approach, the **visitorCode** is saved and shared between front-end and back-end. If an experiment is implemented on the first page of a visitor's journey on the website, the SDK generates the identifier and passes the identifier to the JavaScript engine. If the journey starts on a page where `getVisitorCode()` is not called (or the synchronization snippet is not run) on the back-end, then the JavaScript engine generates the identifier first and passes the identifier to the SDK. The SDK reads the identifier and then rewrites the identifier as a server-side cookie to bypass ITP restrictions.
 
 ## Linking feature experiments with front-end tracking code
 
-It is often useful to set up experiment variations using an SDK, but implement tracking on the front-end using the JavaScript engine. This is a common scenario for the following reasons:
+Setting up experiment variations using an SDK while implementing tracking on the front-end using the JavaScript engine is often useful. The approach is common for the following reasons:
 
 - Web analytics platforms (such as Mixpanel or Google Analytics 4) tend to be implemented on the front-end.
-- You may already use a standard client-side tagging plan for Kameleoon using [web experimentation](https://www.kameleoon.com/en/platform/ab-testing-client-side)
-- It is more convenient for your team to track events and [data points](https://help.kameleoon.com/experiments-results-charts/#Breakdownnbsp) on the front-end side for analytics purposes with our reporting.
-- There are [data points](https://developers.kameleoon.com/feature-management-and-experimentation/web-sdks/js-sdk#targeting-conditions) you would like to use in feature experiments that are easier to collect on front-end side.
+- A standard client-side tagging plan for Kameleoon using [web experimentation](https://www.kameleoon.com/en/platform/ab-testing-client-side) may already be in use.
+- Tracking events and [data points](https://help.kameleoon.com/experiments-results-charts/#Breakdownnbsp) on the front-end side for analytics purposes with Kameleoon reporting may be more convenient.
+- Some [data points](https://developers.kameleoon.com/feature-management-and-experimentation/web-sdks/js-sdk#targeting-conditions) for feature experiments are easier to collect on the front-end side.
 
 ### Sending exposure events to third-party analytics
 
 
-Kameleoon provides native [integrations](https://help.kameleoon.com/category/user-manual/manage-your-integrations/) with analytics and CDP platforms. In hybrid mode, you can use any of these integrations in combination with feature experiments, without needing to write additional code.
+Kameleoon provides native [integrations](https://help.kameleoon.com/category/user-manual/manage-your-integrations/) with analytics and CDP platforms. In hybrid mode, any of these integrations can be used in combination with feature experiments, without needing to write additional code.
 
-Our front-end engine needs to know whenever an experiment has taken place in the back-end. That is, when a visitor has been bucketed into an experiment. This is important in order to count only visitors that have actually triggered and seen the experiment. To achieve this, you need to use the `getEngineTrackingCode()` method (the name varies slighly depending on the SDK), which is available in all of our server-side SDKs. This method returns the JavaScript code to be inserted in your page to automatically send the exposure events from the front-end to the analytics solution you are using. It can be embedded in the returned HTML page.
+The Kameleoon front-end engine must know whenever an experiment has taken place in the back-end. That is, when a visitor has been bucketed into an experiment. Knowing when an experiment has taken place is important to count only visitors that have actually triggered and seen the experiment. To achieve the notification, use the `getEngineTrackingCode()` method (the name varies slightly depending on the SDK), which is available in all Kameleoon server-side SDKs. The `getEngineTrackingCode()` method returns the JavaScript code to be inserted in the page to automatically send the exposure events from the front-end to the analytics solution in use. The JavaScript code can be embedded in the returned HTML page.
 
 For example:
 
@@ -79,19 +79,19 @@ For example:
 <Note>
 **Note:**
 
-You also need to [activate](https://help.kameleoon.com/manage-third-party-analytics-integrations/) your chosen integration (for example, Google Analytics 4, Mixpanel, etc) when configuring your feature experiment. The relevant data (such as experiment ID, experiment name, variation ID, variation name) will be automatically sent to the third party platform by the Kameleoon JavaScript engine.
+[Activate](https://help.kameleoon.com/manage-third-party-analytics-integrations/) the chosen integration (for example, Google Analytics 4, Mixpanel, etc) when configuring the feature experiment. The relevant data (such as experiment ID, experiment name, variation ID, variation name) will be automatically sent to the third party platform by the Kameleoon JavaScript engine.
 </Note>
 
 ### Using front-end data points and events in feature experiments
 
-If you have implemented Kameleoon in hybrid mode, goals and [data points](https://help.kameleoon.com/experiments-results-charts/#Breakdownnbsp) will be automatically tracked on the front end and will appear in Kameleoon reports as filtering and breakdown criteria. In addition, several [targeting conditions](https://developers.kameleoon.com/feature-management-and-experimentation/using-visit-history-in-feature-flags-and-experiments) will be available in the Kameleoon SDK, ready to be used for targeting purposes.
+If Kameleoon is implemented in hybrid mode, goals and [data points](https://help.kameleoon.com/experiments-results-charts/#Breakdownnbsp) are automatically tracked on the front end and appear in Kameleoon reports as filtering and breakdown criteria. In addition, several [targeting conditions](https://developers.kameleoon.com/feature-management-and-experimentation/using-visit-history-in-feature-flags-and-experiments) are available in the Kameleoon SDK, ready to be used for targeting purposes.
 
 ### Managing consent in hybrid mode
 
-When using Kameleoon in Hybrid mode and [consent is set to "Required"](https://help.kameleoon.com/consent-management-policy/), you must ensure that both the JavaScript Activation API and SDK methods are called upon collecting consent to ensure that Kameleoon can collect user events from both the Kameleoon Application File and the SDK. Additionally, as Kameleoon is restricted from storing the visitorCode key in a cookie, it is crucial to ensure that the visitorCode key generated by the SDK for all first requests is shared with the Kameleoon engine running client-side. We recommend reading the [technical considerations](https://help.kameleoon.com/consent-management-policy/#technical_considerations).
+When using Kameleoon in Hybrid mode and [consent is set to "Required"](https://help.kameleoon.com/consent-management-policy/), ensure that both the JavaScript Activation API and SDK methods are called upon collecting consent so that Kameleoon can collect user events from both the Kameleoon Application File and the SDK. Additionally, as Kameleoon is restricted from storing the visitorCode key in a cookie, ensure that the visitorCode key generated by the SDK for all first requests is shared with the Kameleoon engine running client-side. Read the [technical considerations](https://help.kameleoon.com/consent-management-policy/#technical_considerations) for more information.
 
 <Note>
 **Note:**
 
-Consent information is in sync between the Kameleoon Engine (application file `engine.js`) and the JS SDK. This synchronization means that once consent is set on either the Engine or the SDK, it's automatically set for both. This feature eliminates the need for manual consent handling and ensures that SDKs operate in compliance with user preferences.
+Consent information is in sync between the Kameleoon Engine (application file `engine.js`) and the JS SDK. The synchronization means that once consent is set on either the Engine or the SDK, consent is automatically set for both. The synchronization feature eliminates the need for manual consent handling and ensures that SDKs operate in compliance with user preferences.
 </Note>

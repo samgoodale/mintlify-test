@@ -1,31 +1,31 @@
 ---
 title: "Flicker management and performance"
-description: "**Flicker** is a common issue associated with JavaScript-based A/B testing solutions. When your webpage loads, there may be a brief moment when the original page displays instead of the variation. This momentary display is known as the **flicker effect** or **flickering**. It can confuse visitors and significantly distort the results of any experiment. Our platform includes advanced techniques designed to completely eliminate flickering."
+description: "**Flicker** is a common issue associated with JavaScript-based A/B testing solutions. When a webpage loads, the original page may briefly display instead of the variation. The **flicker effect** or **flickering** refers to this momentary display. Flickering can confuse visitors and significantly distort experiment results. Kameleoon includes advanced techniques designed to completely eliminate flickering."
 ---
 
 Flickering typically has two main causes:
 
-- The script is loaded and executed after the browser has already displayed the page or parts of it. This timing issue is directly related to how Kameleoon has been implemented on your website. If Kameleoon loads too late or is integrated within a Tag Management System, flickering cannot be avoided.
+- The script loads and executes after the browser has already displayed the page or parts of the page. The timing issue relates directly to how Kameleoon has been implemented on the website. If Kameleoon loads too late or is integrated within a Tag Management System, flickering cannot be avoided.
 - The engine processing the experiment’s variations is too slow and does not execute the modifications quickly enough.
 
 Kameleoon’s script includes a unique [anti-flickering engine](https://developers.kameleoon.com/core-concepts/flicker-management/#how-to-prevent-flicker-in-your-experiments) that ensures A/B tests run smoothly, allowing test variations to display without delays which leads to an improved user experience and more reliable test results.
 
-## What makes our technology feature stand out:
+## Anti-flicker technology features
 
-Here are some reasons why Kameleoon's anti-flicker technology is unique and powerful:
+Kameleoon's anti-flicker technology is unique and powerful for the following reasons:
 
-- **Asynchronous Snippet**: Kameleoon loads its script asynchronously from a reliable CDN (Cloudflare) to ensure a non-blocking first page load and utilizes browser caching for faster subsequent page loads. We uphold a Service Level Agreement (SLA) of over 99.99%.
-- **Low Script Size**: Our application file, created using TypeScript, has a size of just 29 kB (compressed with Brotli), which minimizes loading time on the first page.
+- **Asynchronous Snippet**: Kameleoon loads the script asynchronously from a reliable CDN (Cloudflare) to ensure a non-blocking first page load and utilizes browser caching for faster subsequent page loads. Kameleoon upholds a Service Level Agreement (SLA) of over 99.99%.
+- **Low Script Size**: The Kameleoon application file, created using TypeScript, has a size of just 29 kB (compressed with Brotli), which minimizes loading time on the first page.
 - **Preprocessing Approach**: The Kameleoon script is generated only from the components necessary for your specific setup, based on the features and options you are using.
-- **Unique Anti-Flickering Engine**: Our engine captures DOM events in real-time and alters the display of components involved in an experiment variation before they are fully rendered.
-- **Reduced Network Calls**: We group multiple tracking events into a single beacon call, significantly decreasing the total number of network calls required.
+- **Unique Anti-Flickering Engine**: The Kameleoon engine captures DOM events in real-time and alters the display of components involved in an experiment variation before the components are fully rendered.
+- **Reduced Network Calls**: Kameleoon groups multiple tracking events into a single beacon call, significantly decreasing the total number of network calls required.
 - **Single Script Load**: Unlike other platforms that require multiple files, Kameleoon loads a single consolidated script. This reduces the number of HTTP requests.
 - **Deferred Experiment Loading**: Kameleeon allows you to select which experiments to include in our application file, `engine.js` (previously named `kameleoon.js`) at the time of the initial page load, on a case-by-case basis, and [defer non-essential experiments](https://developers.kameleoon.com/web-experimentation/faq/#can-i-delay-non-essential-experiments-until-after-the-first-page-load) for after the first load.
 - **Real time update**: To provide more frequent updates without being hindered by browser caching, our Live Update Experiments feature refreshes any experiment labeled “LIVE-UPDATE” within a minute.
 
-## How to prevent flicker in your experiments
+## How to prevent flicker in experiments
 
-To eliminate flickering that occurs when loading our application file, we recommend using our [asynchronous tag with anti-flicker prevention](https://developers.kameleoon.com/web-experimentation/simple-implementation#asynchronous-tag-with-anti-flicker).
+To eliminate flickering that occurs when loading the Kameleoon application file, use the [asynchronous tag with anti-flicker prevention](https://developers.kameleoon.com/web-experimentation/simple-implementation#asynchronous-tag-with-anti-flicker).
 
 Our snippet includes a “blocking CSS rule” that initially hides all the content on the page while our script is being downloaded by the browser. This rule is removed as soon as Kameleoon’s application code has loaded, which typically takes less than 50 milliseconds. If the application code does not load within the specified timeout period (default set to 1000 milliseconds), the rule will also be removed to prevent displaying a blank page indefinitely. This approach ensures that Kameleoon cannot disrupt your website in any situation.
 
