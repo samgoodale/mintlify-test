@@ -42,12 +42,12 @@ By following the synchronization approach, the **visitorCode** is saved and shar
 
 ## Linking feature experiments with front-end tracking code
 
-It is often useful to set up experiment variations using an SDK, but implement tracking on the front-end using the JavaScript engine. This is a common scenario for the following reasons:
+Setting up experiment variations using an SDK while implementing tracking on the front-end using the JavaScript engine is often useful. The approach is common for the following reasons:
 
 - Web analytics platforms (such as Mixpanel or Google Analytics 4) tend to be implemented on the front-end.
-- You may already use a standard client-side tagging plan for Kameleoon using [web experimentation](https://www.kameleoon.com/en/platform/ab-testing-client-side)
-- It is more convenient for your team to track events and [data points](https://help.kameleoon.com/experiments-results-charts/#Breakdownnbsp) on the front-end side for analytics purposes with our reporting.
-- There are [data points](https://developers.kameleoon.com/feature-management-and-experimentation/web-sdks/js-sdk#targeting-conditions) you would like to use in feature experiments that are easier to collect on front-end side.
+- A standard client-side tagging plan for Kameleoon using [web experimentation](https://www.kameleoon.com/en/platform/ab-testing-client-side) may already be in use.
+- Tracking events and [data points](https://help.kameleoon.com/experiments-results-charts/#Breakdownnbsp) on the front-end side for analytics purposes with Kameleoon reporting may be more convenient.
+- Some [data points](https://developers.kameleoon.com/feature-management-and-experimentation/web-sdks/js-sdk#targeting-conditions) for feature experiments are easier to collect on the front-end side.
 
 ### Sending exposure events to third-party analytics
 
