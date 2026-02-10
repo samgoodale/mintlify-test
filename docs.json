@@ -67,6 +67,10 @@
               {
                 "group": "Developer Tools",
                 "pages": ["developer-tools/vs-code"]
+              },
+              {
+                "group": "Tutorials",
+                "pages": ["tutorials/create-and-delete-experiment-via-api"]
               }
             ]
           },
