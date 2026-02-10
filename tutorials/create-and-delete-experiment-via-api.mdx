@@ -1,0 +1,625 @@
+---
+title: 'Create and delete an experiment via API'
+description: 'Learn how to programmatically create and delete experiments using the Kameleoon API'
+---
+
+<Info>
+  **Prerequisites**:
+  - A Kameleoon account with API access
+  - API credentials (client ID and client secret)
+  - A valid site code (10 characters)
+  - Basic knowledge of REST APIs and HTTP requests
+</Info>
+
+This tutorial demonstrates how to create and delete experiments programmatically using the Kameleoon API. Automating experiment management through the API enables integration with CI/CD pipelines, bulk operations, and custom workflows.
+
+## Authentication
+
+Before making API requests, obtain an access token using your API credentials.
+
+### Get an access token
+
+<CodeGroup>
+```bash cURL
+curl -X POST https://api.kameleoon.com/oauth/token \
+  -H "Content-Type: application/json" \
+  -d '{
+    "client_id": "your_client_id",
+    "client_secret": "your_client_secret",
+    "grant_type": "client_credentials"
+  }'
+```
+
+```javascript JavaScript
+const response = await fetch('https://api.kameleoon.com/oauth/token', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    client_id: 'your_client_id',
+    client_secret: 'your_client_secret',
+    grant_type: 'client_credentials'
+  })
+});
+
+const { access_token } = await response.json();
+```
+
+```python Python
+import requests
+
+response = requests.post(
+    'https://api.kameleoon.com/oauth/token',
+    json={
+        'client_id': 'your_client_id',
+        'client_secret': 'your_client_secret',
+        'grant_type': 'client_credentials'
+    }
+)
+
+access_token = response.json()['access_token']
+```
+</CodeGroup>
+
+### Response
+
+```json
+{
+  "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "token_type": "Bearer",
+  "expires_in": 3600
+}
+```
+
+Store the `access_token` value to use in subsequent API requests.
+
+## Create an experiment
+
+Create a new experiment by sending a POST request to the experiments endpoint.
+
+### Request structure
+
+<CodeGroup>
+```bash cURL
+curl -X POST https://api.kameleoon.com/experiments \
+  -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Homepage Hero Test",
+    "siteCode": "abc1234567",
+    "description": "Test different hero images on the homepage",
+    "type": "AB",
+    "status": "DRAFT",
+    "variations": [
+      {
+        "name": "Original",
+        "isControl": true
+      },
+      {
+        "name": "Variation A",
+        "isControl": false
+      }
+    ],
+    "targeting": {
+      "url": {
+        "operator": "CONTAINS",
+        "value": "/homepage"
+      }
+    },
+    "goals": [
+      {
+        "name": "Click CTA",
+        "type": "CLICK",
+        "selector": "#cta-button"
+      }
+    ]
+  }'
+```
+
+```javascript JavaScript
+const createExperiment = async (accessToken) => {
+  const response = await fetch('https://api.kameleoon.com/experiments', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      name: 'Homepage Hero Test',
+      siteCode: 'abc1234567',
+      description: 'Test different hero images on the homepage',
+      type: 'AB',
+      status: 'DRAFT',
+      variations: [
+        {
+          name: 'Original',
+          isControl: true
+        },
+        {
+          name: 'Variation A',
+          isControl: false
+        }
+      ],
+      targeting: {
+        url: {
+          operator: 'CONTAINS',
+          value: '/homepage'
+        }
+      },
+      goals: [
+        {
+          name: 'Click CTA',
+          type: 'CLICK',
+          selector: '#cta-button'
+        }
+      ]
+    })
+  });
+
+  return await response.json();
+};
+```
+
+```python Python
+import requests
+
+def create_experiment(access_token):
+    response = requests.post(
+        'https://api.kameleoon.com/experiments',
+        headers={
+            'Authorization': f'Bearer {access_token}',
+            'Content-Type': 'application/json'
+        },
+        json={
+            'name': 'Homepage Hero Test',
+            'siteCode': 'abc1234567',
+            'description': 'Test different hero images on the homepage',
+            'type': 'AB',
+            'status': 'DRAFT',
+            'variations': [
+                {
+                    'name': 'Original',
+                    'isControl': True
+                },
+                {
+                    'name': 'Variation A',
+                    'isControl': False
+                }
+            ],
+            'targeting': {
+                'url': {
+                    'operator': 'CONTAINS',
+                    'value': '/homepage'
+                }
+            },
+            'goals': [
+                {
+                    'name': 'Click CTA',
+                    'type': 'CLICK',
+                    'selector': '#cta-button'
+                }
+            ]
+        }
+    )
+    
+    return response.json()
+```
+</CodeGroup>
+
+### Request parameters
+
+<ParamField body="name" type="string" required>
+  The name of the experiment
+</ParamField>
+
+<ParamField body="siteCode" type="string" required>
+  Site code (10 characters) where the experiment will run
+</ParamField>
+
+<ParamField body="description" type="string">
+  Description of the experiment's purpose
+</ParamField>
+
+<ParamField body="type" type="string" required>
+  Experiment type: `AB`, `MVT`, or `SPLIT`
+</ParamField>
+
+<ParamField body="status" type="string">
+  Initial status: `DRAFT`, `ACTIVE`, or `PAUSED` (default: `DRAFT`)
+</ParamField>
+
+<ParamField body="variations" type="array" required>
+  Array of variation objects. Each variation must include:
+  - `name` (string): Variation name
+  - `isControl` (boolean): Whether the variation is the control
+</ParamField>
+
+<ParamField body="targeting" type="object">
+  Targeting conditions for the experiment
+</ParamField>
+
+<ParamField body="goals" type="array">
+  Array of goal objects to track conversions
+</ParamField>
+
+### Response
+
+```json
+{
+  "id": 12345,
+  "name": "Homepage Hero Test",
+  "siteCode": "abc1234567",
+  "description": "Test different hero images on the homepage",
+  "type": "AB",
+  "status": "DRAFT",
+  "variations": [
+    {
+      "id": 1,
+      "name": "Original",
+      "isControl": true
+    },
+    {
+      "id": 2,
+      "name": "Variation A",
+      "isControl": false
+    }
+  ],
+  "targeting": {
+    "url": {
+      "operator": "CONTAINS",
+      "value": "/homepage"
+    }
+  },
+  "goals": [
+    {
+      "id": 101,
+      "name": "Click CTA",
+      "type": "CLICK",
+      "selector": "#cta-button"
+    }
+  ],
+  "createdAt": "2024-01-15T10:30:00Z",
+  "updatedAt": "2024-01-15T10:30:00Z"
+}
+```
+
+<Tip>
+  Save the experiment `id` from the response. You'll need the experiment ID to update, retrieve, or delete the experiment.
+</Tip>
+
+## Verify the experiment
+
+After creating an experiment, verify that the experiment was created successfully by retrieving the experiment details.
+
+<CodeGroup>
+```bash cURL
+curl -X GET https://api.kameleoon.com/experiments/12345 \
+  -H "Authorization: Bearer YOUR_ACCESS_TOKEN"
+```
+
+```javascript JavaScript
+const getExperiment = async (accessToken, experimentId) => {
+  const response = await fetch(
+    `https://api.kameleoon.com/experiments/${experimentId}`,
+    {
+      headers: {
+        'Authorization': `Bearer ${accessToken}`
+      }
+    }
+  );
+
+  return await response.json();
+};
+```
+
+```python Python
+def get_experiment(access_token, experiment_id):
+    response = requests.get(
+        f'https://api.kameleoon.com/experiments/{experiment_id}',
+        headers={
+            'Authorization': f'Bearer {access_token}'
+        }
+    )
+    
+    return response.json()
+```
+</CodeGroup>
+
+## Delete an experiment
+
+Delete an experiment by sending a DELETE request with the experiment ID.
+
+<Warning>
+  Deleting an experiment is permanent and cannot be undone. Ensure you have backed up any necessary data before proceeding.
+</Warning>
+
+### Request structure
+
+<CodeGroup>
+```bash cURL
+curl -X DELETE https://api.kameleoon.com/experiments/12345 \
+  -H "Authorization: Bearer YOUR_ACCESS_TOKEN"
+```
+
+```javascript JavaScript
+const deleteExperiment = async (accessToken, experimentId) => {
+  const response = await fetch(
+    `https://api.kameleoon.com/experiments/${experimentId}`,
+    {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`
+      }
+    }
+  );
+
+  if (response.ok) {
+    console.log('Experiment deleted successfully');
+  }
+  
+  return response.status;
+};
+```
+
+```python Python
+def delete_experiment(access_token, experiment_id):
+    response = requests.delete(
+        f'https://api.kameleoon.com/experiments/{experiment_id}',
+        headers={
+            'Authorization': f'Bearer {access_token}'
+        }
+    )
+    
+    if response.status_code == 200:
+        print('Experiment deleted successfully')
+    
+    return response.status_code
+```
+</CodeGroup>
+
+### Response
+
+A successful deletion returns a `200 OK` status code with an empty response body or a confirmation message:
+
+```json
+{
+  "message": "Experiment deleted successfully"
+}
+```
+
+## Complete workflow example
+
+The following example demonstrates the complete workflow: authenticate, create an experiment, verify the experiment, and delete the experiment.
+
+<CodeGroup>
+```javascript JavaScript
+const manageExperiment = async () => {
+  // Step 1: Authenticate
+  const authResponse = await fetch('https://api.kameleoon.com/oauth/token', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      client_id: 'your_client_id',
+      client_secret: 'your_client_secret',
+      grant_type: 'client_credentials'
+    })
+  });
+  
+  const { access_token } = await authResponse.json();
+  console.log('✓ Authenticated');
+
+  // Step 2: Create experiment
+  const createResponse = await fetch('https://api.kameleoon.com/experiments', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${access_token}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      name: 'Homepage Hero Test',
+      siteCode: 'abc1234567',
+      type: 'AB',
+      status: 'DRAFT',
+      variations: [
+        { name: 'Original', isControl: true },
+        { name: 'Variation A', isControl: false }
+      ]
+    })
+  });
+  
+  const experiment = await createResponse.json();
+  console.log(`✓ Created experiment with ID: ${experiment.id}`);
+
+  // Step 3: Verify experiment
+  const getResponse = await fetch(
+    `https://api.kameleoon.com/experiments/${experiment.id}`,
+    {
+      headers: { 'Authorization': `Bearer ${access_token}` }
+    }
+  );
+  
+  const verifiedExperiment = await getResponse.json();
+  console.log(`✓ Verified experiment: ${verifiedExperiment.name}`);
+
+  // Step 4: Delete experiment
+  const deleteResponse = await fetch(
+    `https://api.kameleoon.com/experiments/${experiment.id}`,
+    {
+      method: 'DELETE',
+      headers: { 'Authorization': `Bearer ${access_token}` }
+    }
+  );
+  
+  if (deleteResponse.ok) {
+    console.log('✓ Experiment deleted successfully');
+  }
+};
+
+manageExperiment();
+```
+
+```python Python
+import requests
+
+def manage_experiment():
+    # Step 1: Authenticate
+    auth_response = requests.post(
+        'https://api.kameleoon.com/oauth/token',
+        json={
+            'client_id': 'your_client_id',
+            'client_secret': 'your_client_secret',
+            'grant_type': 'client_credentials'
+        }
+    )
+    access_token = auth_response.json()['access_token']
+    print('✓ Authenticated')
+
+    # Step 2: Create experiment
+    create_response = requests.post(
+        'https://api.kameleoon.com/experiments',
+        headers={
+            'Authorization': f'Bearer {access_token}',
+            'Content-Type': 'application/json'
+        },
+        json={
+            'name': 'Homepage Hero Test',
+            'siteCode': 'abc1234567',
+            'type': 'AB',
+            'status': 'DRAFT',
+            'variations': [
+                {'name': 'Original', 'isControl': True},
+                {'name': 'Variation A', 'isControl': False}
+            ]
+        }
+    )
+    experiment = create_response.json()
+    print(f"✓ Created experiment with ID: {experiment['id']}")
+
+    # Step 3: Verify experiment
+    get_response = requests.get(
+        f"https://api.kameleoon.com/experiments/{experiment['id']}",
+        headers={'Authorization': f'Bearer {access_token}'}
+    )
+    verified_experiment = get_response.json()
+    print(f"✓ Verified experiment: {verified_experiment['name']}")
+
+    # Step 4: Delete experiment
+    delete_response = requests.delete(
+        f"https://api.kameleoon.com/experiments/{experiment['id']}",
+        headers={'Authorization': f'Bearer {access_token}'}
+    )
+    
+    if delete_response.status_code == 200:
+        print('✓ Experiment deleted successfully')
+
+if __name__ == '__main__':
+    manage_experiment()
+```
+</CodeGroup>
+
+## Error handling
+
+Handle common errors when working with the API:
+
+### Common error responses
+
+<ResponseExample>
+```json 401 - Unauthorized
+{
+  "error": "Unauthorized",
+  "message": "Invalid or expired access token"
+}
+```
+
+```json 400 - Bad Request
+{
+  "error": "Bad Request",
+  "message": "Invalid request body: 'siteCode' is required"
+}
+```
+
+```json 404 - Not Found
+{
+  "error": "Not Found",
+  "message": "Experiment not found"
+}
+```
+
+```json 403 - Forbidden
+{
+  "error": "Forbidden",
+  "message": "You do not have permission to delete this experiment"
+}
+```
+</ResponseExample>
+
+### Error handling example
+
+<CodeGroup>
+```javascript JavaScript
+const createExperimentWithErrorHandling = async (accessToken, experimentData) => {
+  try {
+    const response = await fetch('https://api.kameleoon.com/experiments', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(experimentData)
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(`API Error (${response.status}): ${error.message}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Failed to create experiment:', error.message);
+    throw error;
+  }
+};
+```
+
+```python Python
+def create_experiment_with_error_handling(access_token, experiment_data):
+    try:
+        response = requests.post(
+            'https://api.kameleoon.com/experiments',
+            headers={
+                'Authorization': f'Bearer {access_token}',
+                'Content-Type': 'application/json'
+            },
+            json=experiment_data
+        )
+        
+        response.raise_for_status()
+        return response.json()
+        
+    except requests.exceptions.HTTPError as e:
+        error_data = e.response.json()
+        print(f"API Error ({e.response.status_code}): {error_data['message']}")
+        raise
+    except Exception as e:
+        print(f"Failed to create experiment: {str(e)}")
+        raise
+```
+</CodeGroup>
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Update experiments" icon="pen-to-square" href="/api-reference/experiments/update">
+    Learn how to update experiment configurations
+  </Card>
+  <Card title="Manage variations" icon="flask" href="/api-reference/experiments/variations">
+    Add and modify experiment variations
+  </Card>
+  <Card title="Set targeting rules" icon="bullseye" href="/api-reference/experiments/targeting">
+    Configure audience targeting
+  </Card>
+  <Card title="Track goals" icon="chart-line" href="/api-reference/experiments/goals">
+    Define and manage conversion goals
+  </Card>
+</CardGroup>
