@@ -1,7 +1,10 @@
 ---
-title: "Prompt-based experimentation plans"
-description: "Kameleoon's prompt-based experimentation (PBX) offers flexible subscription options to help teams experiment at scale. Whether you're just starting out or running advanced experimentation programs, there are plans that fit your needs."
+sidebar_position: 4
 ---
+
+# Prompt-based experimentation plans
+
+Kameleoon's prompt-based experimentation (PBX) offers flexible subscription options to help teams experiment at scale. Whether you're just starting out or running advanced experimentation programs, there are plans that fit your needs.
 
 ## Credits explained
 
@@ -9,13 +12,11 @@ In PBX:
 
 - **1 credit = 1 PBX Code version or ideation**
 - **Average experiment = 2-3 credits** (varies depending on usage)
-	- The number of credits consumed by an experiment can be affected by how well prompts are defined. Refer to [this](https://help.kameleoon.com/experimentation/web-experimentation/prompt-based-experiments/how-to-write-effective-prompts-dos-and-donts/) article for guidance on creating prompts.
+  - The number of credits consumed by an experiment can be affected by how well prompts are defined. Refer to [this](https://help.kameleoon.com/experimentation/web-experimentation/prompt-based-experiments/how-to-write-effective-prompts-dos-and-donts/) article for guidance on creating prompts.
 
-<Tip>
-**Tip:**
-
-See [how to write effective prompts](https://help.kameleoon.com/experimentation/web-experimentation/prompt-based-experiments/how-to-write-effective-prompts-dos-and-donts/) for guidance on optimizing credit use.
-</Tip>
+:::tip
+See [how to write effective prompts](https://help.kameleoon.com/experimentation/web-experimentation/prompt-based-experiments/how-to-write-effective-prompts-dos-and-donts/) for guidance on optimizing credit use. 
+:::
 
 ## Free Starter Trial
 
@@ -39,9 +40,9 @@ When the trial ends, you'll be redirected to the upgrade page to continue with a
 The Starter plan is designed for growing teams that want to scale experimentation with predictable monthly credits.
 
 - **Available options:**
-	- 30 credits/month
-	- 100 credits/month
-	- 200 credits/month
+  - 30 credits/month
+  - 100 credits/month
+  - 200 credits/month
 - **Billing:** Monthly subscription paid by credit card.
 - **Renewal:** Credits reset each month on the billing date. Unused credits do not roll over.
 - **Flexibility:** Upgrade or switch to Enterprise at any time.
@@ -58,15 +59,15 @@ Enterprise subscriptions are custom-bult based on each customer's needs. Availab
 
 - **Credit allocation:** All credits are delivered upfront at the start of the subscription year and can be consumed at any pace.
 - **Flexibility:**
-	- **Upgrade anytime** — pro-rate credits are added immediately based on the new plan and remaining time in the billing cycle.
-	- **Downgrade** — only possible at the next renewal date.
+  - **Upgrade anytime** — pro-rate credits are added immediately based on the new plan and remaining time in the billing cycle.
+  - **Downgrade** — only possible at the next renewal date.
 
 **Example:** A customer on a 1200-credit plan who upgrades mid-year to 2400 credits instantly receives pro-rated additional credits for the remainder of the subscription year.
 
 ## How far your credits go
 
 | Monthly credits | Experiments |
-|:-|:-|
+|-----------------|-------------|
 | 30 | 2-3 |
 | 100 | 6-10 |
 | 200 | 12-20 |
