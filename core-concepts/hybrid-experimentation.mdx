@@ -22,7 +22,7 @@ Hybrid experimentation is currently only compatible with the Web SDKs. While the
 
 ## Synchronize user IDs between the back-end and front-end
 
-One of the challenges of hybrid mode is ensuring that Kameleoon can properly identify each visitor as the same individual on both the server side and client side. In Kameleoon, the `visitorCode`, which is a unique ID for every visitor, must be identical on both the server side and client side. For example, a visitor registered with the `visitorCode` of `10ctbql0zpf4rwjy` for an experiment variation in the back-end must be associated with the visitor code `10ctbql0zpf4rwjy` when a conversion is triggered in the front-end. Using the same ID ensures correct tracking of the visitor's actions, which results in correct data and statistics.
+One of the challenges of hybrid mode is ensuring that Kameleoon can properly identify each visitor as the same individual on both the server side and client side. In Kameleoon, the `visitorCode`, which is a unique ID for every visitor, must be identical on both the server side and client side. For example, a visitor registered with the `visitorCode` of `10ctbql0zpf4rwjy` for an experiment variation on the server side must be associated with the visitor code `10ctbql0zpf4rwjy` when a conversion is triggered on the client side. Using the same ID ensures correct tracking of the visitor's actions, which results in correct data and statistics.
 
 To synchronize the user IDs, the hybrid app must call the `getVisitorCode()` method prior to calling other SDK methods. Since naming conventions vary between languages, the method names vary slightly depending on the SDK, but each language has a similarly named equivalent method. Kameleoon uses the following approach:
 
