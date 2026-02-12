@@ -107,6 +107,12 @@
                   {
                     "group": "Web Experimentation (incl. PBX)",
                     "pages": [
+                      "experimentation/web-experimentation/overview",
+                      "experimentation/web-experimentation/simple-implementation",
+                      "experimentation/web-experimentation/implementation-with-nextjs",
+                      "experimentation/web-experimentation/implementation-with-nuxt",
+                      "experimentation/web-experimentation/implementation-with-sveltekit",
+                      "experimentation/web-experimentation/advanced-implementation",
                       {
                         "group": "Prompt-based experiments",
                         "pages": [
