@@ -26,7 +26,7 @@ One of the challenges of hybrid mode is ensuring that Kameleoon can properly ide
 
 To synchronize the user IDs, the hybrid app must call the `getVisitorCode()` method prior to calling other SDK methods. Since naming conventions vary between languages, the method names vary slightly depending on the SDK, but each language has a similarly named equivalent method. Kameleoon uses the following approach:
 
-1. On the front-end, the Kameleoon JavaScript engine randomly generates a `visitorCode` for each new visitor. The engine considers a visitor to be new if the engine can't find a previous visitor code on the user's browser (for example, in a cookie or local storage). The generation normally happens when the Kameleoon engine runs for the first time on the visitor's browser. The Kameleoon engine can also obtain the identifier from a cookie that the back-end passes to the engine. The cookie option allows setting the identifier on the server, rather than in the front-end. For example, use the cookie option to specify a custom unique visitor code for each visitor.
+1. On the client side, the Kameleoon JavaScript engine randomly generates a `visitorCode` for each new visitor. The engine considers a visitor to be new if the engine can't find a previous visitor code on the user's browser (for example, in a cookie or local storage). The generation normally happens when the Kameleoon engine runs for the first time on the visitor's browser. The Kameleoon engine can also obtain the identifier from a cookie that the server side passes to the engine. The cookie option allows setting the identifier on the server, rather than on the client side. For example, use the cookie option to specify a custom unique visitor code for each visitor.
 
 <Note>
 **Note:**
