@@ -38,7 +38,7 @@ If you [Unify session data accross subdomains](https://developers.kameleoon.com/
 
 If no cookie or parameter is found, Kameleoon uses the `getVisitorCode()` method argument, if provided, as the identifier. If no argument is provided, Kameleoon randomly generates the ID. In either case, Kameleoon also sets the server-side **kameleoonVisitorCode** cookie with the value (via HTTP header).
 
-By following the synchronization approach, the **visitorCode** is saved and shared between front-end and back-end. If an experiment is implemented on the first page of a visitor's journey on the website, the SDK generates the identifier and passes the identifier to the JavaScript engine. If the journey starts on a page where `getVisitorCode()` is not called (or the synchronization snippet is not run) on the back-end, then the JavaScript engine generates the identifier first and passes the identifier to the SDK. The SDK reads the identifier and then rewrites the identifier as a server-side cookie to bypass ITP restrictions.
+By following the synchronization approach, the **visitorCode** is saved and shared between the client side and server side. If an experiment is implemented on the first page of a visitor's journey on the website, the SDK generates the identifier and passes the identifier to the JavaScript engine. If the journey starts on a page where `getVisitorCode()` is not called (or the synchronization snippet is not run) on the server side, then the JavaScript engine generates the identifier first and passes the identifier to the SDK. The SDK reads the identifier and then rewrites the identifier as a server-side cookie to bypass ITP restrictions.
 
 ## Linking feature experiments with front-end tracking code
 
