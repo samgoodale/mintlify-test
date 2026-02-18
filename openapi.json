@@ -16825,8 +16825,8 @@
               "format": "int32",
               "default": 1,
               "description": "Page number for pagination",
-              "exclusiveMinimum": 0,
-              "minimum": 1
+              "exclusiveMinimum": true,
+              "minimum": 0
             }
           },
           {
@@ -33915,7 +33915,6 @@
     "securitySchemes": {
       "bearerAuth": {
         "bearerFormat": "JWT",
-        "in": "cookie",
         "scheme": "bearer",
         "type": "http"
       }
