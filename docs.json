@@ -26,6 +26,20 @@
     }
   },
   "navigation": {
+    "global": {
+      "anchors": [
+        {
+          "anchor": "Documentation",
+          "icon": "headset",
+          "href": "https://www.kameleoon.com/support"
+        },
+        {
+          "anchor": "Contact Us",
+          "icon": "envelope",
+          "href": "https://www.kameleoon.com/contact"
+        }
+      ]
+    },
     "products": [
       {
         "product": "Developers",
@@ -33,7 +47,9 @@
           {
             "tab": "Home",
             "icon": "house",
-            "pages": ["index"]
+            "pages": [
+              "index"
+            ]
           },
           {
             "tab": "Documentation",
@@ -66,11 +82,15 @@
               },
               {
                 "group": "Developer Tools",
-                "pages": ["developer-tools/vs-code"]
+                "pages": [
+                  "developer-tools/vs-code"
+                ]
               },
               {
                 "group": "Tutorials",
-                "pages": ["tutorials/create-and-delete-experiment-via-api"]
+                "pages": [
+                  "tutorials/create-and-delete-experiment-via-api"
+                ]
               }
             ]
           },
@@ -80,7 +100,7 @@
             "groups": [
               {
                 "group": "APIs",
-                "openapi": "openapi.yaml"
+                "openapi": "openapi.json"
               }
             ]
           }
@@ -157,32 +177,22 @@
               },
               {
                 "group": "Integrations",
-                "pages": ["integrations/integrations-overview"]
+                "pages": [
+                  "integrations/integrations-overview"
+                ]
               }
             ]
           },
           {
             "tab": "FAQ",
             "icon": "circle-question",
-            "pages": ["faq"]
+            "pages": [
+              "faq"
+            ]
           }
         ]
       }
-    ],
-    "global": {
-      "anchors": [
-        {
-          "anchor": "Documentation",
-          "href": "https://www.kameleoon.com/support",
-          "icon": "headset"
-        },
-        {
-          "anchor": "Contact Us",
-          "href": "https://www.kameleoon.com/contact",
-          "icon": "envelope"
-        }
-      ]
-    }
+    ]
   },
   "logo": {
     "light": "/logo/light.svg",
