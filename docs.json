@@ -107,6 +107,17 @@
                 "openapi": "data-openapi.json"
               }
             ]
+          },
+          {
+            "tab": "SDKs",
+            "groups": [
+              {
+                "group": "Web SDKs",
+                "pages": [
+                  "sdks/web-sdks/js-sdk"
+                ]
+              }
+            ]
           }
         ]
       },
