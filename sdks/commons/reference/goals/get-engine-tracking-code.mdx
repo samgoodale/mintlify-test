@@ -1,0 +1,40 @@
+import { Select, Text, Bold, Italic, Code, CodeRef, Ref } from '../../utils.mdx';
+import { Shared } from '../../shared.mdx';
+
+<Select name={props.sec}>
+<div name="description">
+
+Kameleoon offers built-in integrations with several analytics solutions, including Mixpanel, Google Analytics 4, and Segment. To ensure server-side experiments are tracked and analyzed correctly, Kameleoon provides the method <Code x={props.c.GetEngineTrackingCode}/> to automatically send exposure events to the analytics solution. The SDK builds a tracking code for the active analytics solution based on the experiments the visitor has triggered in the last 5 seconds. Refer to [hybrid experimentation](https://developers.kameleoon.com/core-concepts/hybrid-experimentation/documentation) for more information on implementing this method.
+
+:::note
+Both the <Text x={props.c.Common.SDK}/> SDK and the Kameleoon JavaScript tag must be implemented to benefit from this feature. Implementation of the Kameleoon asynchronous tag is recommended, which can be installed before the closing `</body>` tag in the HTML page, as it is used only for tracking purposes.
+:::
+
+:::info
+The following string will be returned:
+```js
+window.kameleoonQueue = window.kameleoonQueue || [];
+window.kameleoonQueue.push(['Experiments.assignVariation', experiment1ID, variation1ID]);
+window.kameleoonQueue.push(['Experiments.trigger', experiment1ID, true]);
+window.kameleoonQueue.push(['Experiments.assignVariation', experiment2ID, variation2ID]);
+window.kameleoonQueue.push(['Experiments.trigger', experiment2ID, true]);
+```
+Here, `experiment1ID`, `experiment2ID` and `variation1ID`, `variation2ID` represent the specific experiments and variations that users have been assigned to.
+:::
+
+</div>
+<div name="arguments">
+
+| Name | Type | Description |
+|------|------|-------------|
+| <Text x={props.c.Params.VisitorCode}/> (_required_) | <Code x={props.c.Common.String}/> | <Text x={Shared.Params.VisitorCode}/> |
+
+</div>
+<div name="return_value">
+
+| Type | Desription |
+|------|------------|
+| <Code x={props.c.Common.String}/> | JavaScript code to be inserted in your page |
+
+</div>
+</Select>
