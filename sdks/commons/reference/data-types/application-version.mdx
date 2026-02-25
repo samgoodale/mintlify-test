@@ -1,0 +1,21 @@
+import { Select, Text, Bold, Italic, Code, CodeRef, Ref } from '../../utils.mdx';
+import { Shared } from '../../shared.mdx';
+
+<Select name={props.sec}>
+<div name="description">
+
+<Code x={props.c.ApplicationVersion}/> represents the semantic version number of your application.
+
+:::tip
+A **visitor** can have only one <Code x={props.c.ApplicationVersion}/>. Adding a second instance will overwrite the first one.
+:::
+</div>
+
+<div name="arguments">
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| version (_optional_) | <Code x={props.c.Common.String}/> | The mobile application version. This field must follow semantic versioning. Accepted formats are `major`, `major.minor`, or `major.minor.patch`. |
+
+</div>
+</Select>

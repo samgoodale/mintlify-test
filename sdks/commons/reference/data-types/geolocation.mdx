@@ -1,0 +1,27 @@
+import { Select, Text, Bold, Italic, Code, CodeRef, Ref } from '../../utils.mdx';
+import { Shared } from '../../shared.mdx';
+
+<Select name={props.sec}>
+<div name="description">
+
+`Geolocation` contains the visitor's geolocation details.
+
+</div>
+<div name="arguments">
+
+| Name | Type | Description |
+|------|------|-------------|
+| country (_required_) | <Code x={props.c.Common.String}/> | The country of the visitor. |
+| region (_optional_) | <nobr><Code x={props.c.Geolocation.Params.Region.Type}/></nobr> | The region of the visitor. |
+| city (_optional_) | <nobr><Code x={props.c.Geolocation.Params.City.Type}/></nobr> | The city of the visitor. |
+| <Text x={props.c.Geolocation.Params.PostalCode.Name}/> (_optional_) | <nobr><Code x={props.c.Geolocation.Params.PostalCode.Type}/></nobr> | The postal code of the visitor. |
+| latitude (_optional_) | <Code x={props.c.Geolocation.Params.Latitude.Type}/> | The latitude coordinate representing the location of the visitor. Coordinate number represents decimal degrees. |
+| longitude (_optional_) | <Code x={props.c.Geolocation.Params.Longitude.Type}/> | The longitude coordinate representing the location of the visitor. Coordinate number represents decimal degrees. |
+
+:::tip
+- Each visitor can have only one `Geolocation`. Adding a second `Geolocation` overwrites the first one.
+:::
+
+</div>
+</Select>
+

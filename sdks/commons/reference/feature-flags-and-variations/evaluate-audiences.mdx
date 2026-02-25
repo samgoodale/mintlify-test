@@ -1,0 +1,72 @@
+import { Select, Text, Code, CodeRef, If } from '../../utils.mdx';
+import SharedDiv, { Shared } from '../../shared.mdx';
+
+<Select name={props.sec}>
+<div name="description">
+
+* 📨 _Sends Tracking Data to Kameleoon_
+
+This method evaluates visitors against all available Audiences Explorer segments and tracks those who match.
+
+<Code x={props.c.EvaluateAudiences.Name}/> should be called **after all relevant visitor data has been set or updated**, and **just before** getting a feature variation or checking a feature flag. This approach ensures that the visitor is evaluated against the most current data available, allowing for accurate audience assignment based on all criteria.
+
+After calling this method, you can perform a detailed analysis of segment performance in Audiences Explorer.
+
+</div>
+
+<div name="arguments">
+
+<If c={!props.c.EvaluateAudiences.Params?.Timeout}>
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| <Text x={props.c.Params.VisitorCode}/> (_required_) | <Code x={props.c.Common.String}/> | <Text x={Shared.Params.VisitorCode}/> |
+
+</If>
+
+<If c={props.c.EvaluateAudiences.Params?.Timeout}>
+
+| Name | Type | Description | Default |
+| ---- | ---- | ----------- | ------- |
+| <Text x={props.c.Params.VisitorCode}/> (_required_) | <Code x={props.c.Common.String}/> | <Text x={Shared.Params.VisitorCode}/> | |
+| <Text x={props.c.EvaluateAudiences.Params?.Timeout}/> (_optional_) | <Code x={props.c.EvaluateAudiences.Params?.Timeout?.Type}/> | Timeout (in milliseconds). This parameter specifies the maximum amount of time the method can block to wait for a result. If a timeout value is not provided, the SDK uses the <CodeRef x="default_timeout" href={props.c.KameleoonClientConfig.Ref}/> specified in your configuration. | <Code x={props.c.EvaluateAudiences.Params?.Timeout?.Default}/> |
+
+</If>
+
+</div>
+
+<div name="exceptions">
+
+<If c={props.c.IsServer}>
+
+| Type | Description |
+| ---- | ----------- |
+| <Code x={props.c.Exceptions.VisitorCodeInvalid}/> | <Text x={Shared.Exceptions.VisitorCodeInvalid}/> |
+
+</If>
+
+<If c={props.c.IsClient}>
+
+| Type | Description |
+| ---- | ----------- |
+| <Code x={props.c.Exceptions.SdkNotReady}/> | <Text x={Shared.Exceptions.SdkNotReady}/> |
+
+</If>
+
+<SharedDiv sec="note_exceptions" c={props.c}/>
+
+</div>
+
+<div name="exceptions___js">
+
+| Type | Description |
+| ---- | ----------- |
+| <Code x={props.c.Exceptions.Initialization}/> | Method was executed before the `kameleoonClient` completed it's [`initialize`](#initialize) call. |
+| <Code x={props.c.Exceptions.VisitorCodeEmpty}/> | <Text x={Shared.Exceptions.VisitorCodeEmpty}/> |
+| <Code x={props.c.Exceptions.VisitorCodeMaxLength}/> | <Text x={Shared.Exceptions.VisitorCodeMaxLength}/> |
+
+<SharedDiv sec="note_exceptions" c={props.c}/>
+
+</div>
+
+</Select>
