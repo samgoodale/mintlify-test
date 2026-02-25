@@ -116,6 +116,13 @@
                 "pages": [
                   "sdks/web-sdks/js-sdk"
                 ]
+              },
+              {
+                "group": "commons",
+                "hidden": true,
+                "pages": [
+                  "sdks/commons/shared"
+                ]
               }
             ]
           }
