@@ -99,8 +99,12 @@
             "icon": "code-simple",
             "groups": [
               {
-                "group": "APIs",
-                "openapi": "openapi.json"
+                "group": "Automation API",
+                "openapi": "automation-openapi.json"
+              },
+              {
+                "group": "Data API",
+                "openapi": "data-openapi.json"
               }
             ]
           }

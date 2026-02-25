@@ -1,0 +1,1010 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Kameleoon Data API",
+    "description": "",
+    "version": "1.0"
+  },
+  "servers": [
+    {
+      "url": "https://eu-data.kameleoon.io"
+    },
+    {
+      "url": "https://na-data.kameleoon.io"
+    },
+    {
+      "url": "https://eu-data.kameleoon.eu"
+    },
+    {
+      "url": "https://na-data.kameleoon.eu"
+    }
+  ],
+  "paths": {
+    "/map/map": {
+      "get": {
+        "tags": [
+          "Map"
+        ],
+        "description": "This endpoint can be used to retrieve data for a given key.",
+        "operationId": "GET /map/map",
+        "parameters": [
+          {
+            "name": "siteCode",
+            "in": "query",
+            "description": "Id of the Kameleoon project",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "key",
+            "in": "query",
+            "description": "Unique key (usually a visitor code or an internal user ID)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "prettyPrint",
+            "in": "query",
+            "description": "Set to true if you would like a \"pretty\" printed response",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation, map is rendered, of type JSON object"
+          },
+          "401": {
+            "description": "Failed authentication (missing token when required, or bad token: malformed, expired, or invalid signature)"
+          },
+          "429": {
+            "description": "Rate limited"
+          },
+          "403": {
+            "description": "Forbidden user-agent or access denied to restricted resource"
+          },
+          "400": {
+            "description": "Malformed URL query syntax"
+          },
+          "500": {
+            "description": "Unexpected internal error"
+          }
+        }
+      }
+    },
+    "/map/maps": {
+      "get": {
+        "tags": [
+          "Map"
+        ],
+        "description": "This endpoint can be used to retrieve data for several keys.",
+        "operationId": "GET /map/maps",
+        "parameters": [
+          {
+            "name": "siteCode",
+            "in": "query",
+            "description": "Id of the Kameleoon project",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "keys",
+            "in": "query",
+            "description": "List of unique keys (usually visitor codes or internal user IDs), encoded as JSON array, e.g. [\"key1\",\"key2\"], no more than 100",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "JSON array of &lt;key = string&gt;"
+            }
+          },
+          {
+            "name": "prettyPrint",
+            "in": "query",
+            "description": "Set to true if you would like a \"pretty\" printed response",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation, maps are rendered, of type JSON object {&quot;&lt;key&gt;&quot;: &lt;map&gt;}, with &lt;map&gt; of type JSON object"
+          },
+          "401": {
+            "description": "Failed authentication (missing token when required, or bad token: malformed, expired, or invalid signature)"
+          },
+          "429": {
+            "description": "Rate limited"
+          },
+          "403": {
+            "description": "Forbidden user-agent or access denied to restricted resource"
+          },
+          "400": {
+            "description": "Malformed URL query syntax"
+          },
+          "500": {
+            "description": "Unexpected internal error"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Map"
+        ],
+        "description": "This endpoint can be used to post data for several keys.\n\nAn incoming request is rejected if the source is identified as bot or spider, according to [user-agent filtering rules from IAB/ABC](https://www.iab.com/guidelines/iab-abc-international-spiders-bots-list/).\nKameleoon is using single-pass method. This means nothing specific is to be done in the case request is sent from a web browser using a standard library (XHR); but in other cases the user should set a custom value to the User-Agent request header, to overwrite the default value set by the library.\n",
+        "operationId": "POST /map/maps",
+        "parameters": [
+          {
+            "name": "siteCode",
+            "in": "query",
+            "description": "Id of the Kameleoon project",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ttlHours",
+            "in": "query",
+            "description": "Time-to-live in hours, maximum value = 8784 (366 days)",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 2208
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Maps to save. Body size limited to 1 MB.\n#\nJSON object {&quot;&lt;key&gt;&quot;: &lt;map&gt;}, with &lt;map&gt; of type JSON object {&quot;&lt;field name&gt;&quot;: &lt;field value&gt;}.<br/>\nEvery &lt;key&gt; is limited to 100 characters.<br/>\nEvery &lt;field name&gt; is limited to 1024 characters.\n#\nBody example with a \"pretty\" representation (not recommended):\n```\n{\n\t\"keyToUpdate\": {\n\t\t\"field1\": \"newStringValue\",\n\t\t\"field2\": [\n\t\t\t\"newArrayValueElement1\",\n\t\t\t\"newArrayValueElement2\"\n\t\t]\n\t},\n\t\"keyToDelete\": {\n\t},\n\t\"someVisitorCode\": {\n\t\t\"someMapProperty\": {\n\t\t\t\"name1\": 0,\n\t\t\t\"name2\": [\n\t\t\t\t\"a\",\n\t\t\t\t\"b\",\n\t\t\t\t\"c\"\n\t\t\t]\n\t\t},\n\t\t\"someBooleanProperty\": true,\n\t\t\"someNumberProperty\": 25\n\t}\n}\n```\n#\nBody example with a \"compact\" representation (recommended):\n```\n{\"keyToUpdate\":{\"field1\":\"newStringValue\",\"field2\":[\"newArrayValueElement1\",\"newArrayValueElement2\"]},\"keyToDelete\":{},\"someVisitorCode\":{\"someMapProperty\":{\"name1\":0,\"name2\":[\"a\",\"b\",\"c\"]},\"someBooleanProperty\":true,\"someNumberProperty\":25}}\n```\n",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "string",
+                "format": "UTF-8"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "URL query was processed successfully and no content is returned<br/><b>Body will be processed asynchronously, no syntax check on body was done yet</b>"
+          },
+          "413": {
+            "description": "Body too large"
+          },
+          "401": {
+            "description": "Failed authentication (missing token when required, or bad token: malformed, expired, or invalid signature)"
+          },
+          "429": {
+            "description": "Rate limited"
+          },
+          "403": {
+            "description": "Forbidden user-agent or access denied to restricted resource"
+          },
+          "400": {
+            "description": "Malformed URL query syntax"
+          },
+          "500": {
+            "description": "Unexpected internal error"
+          }
+        }
+      }
+    },
+    "/product/productCounters": {
+      "get": {
+        "tags": [
+          "Product"
+        ],
+        "description": "This endpoint can be used to retrieve counts (number of views, add to cart quantities, transaction quantities) for several products.",
+        "operationId": "GET /product/productCounters",
+        "parameters": [
+          {
+            "name": "siteCode",
+            "in": "query",
+            "description": "Id of the Kameleoon project",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "eans",
+            "in": "query",
+            "description": "List of product Ids / EANs, encoded as JSON array, e.g. [\"ean1\",\"ean2\"], no more than 100",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "JSON array of &lt;product Id / EAN = string&gt;"
+            }
+          },
+          {
+            "name": "timeBegin",
+            "in": "query",
+            "description": "The date (UNIX millisecond timestamp format) to begin querying from. This date is inclusive",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "timeEnd",
+            "in": "query",
+            "description": "The date (UNIX millisecond timestamp format) to query to. This date is exclusive",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "prettyPrint",
+            "in": "query",
+            "description": "Set to true if you would like a \"pretty\" printed response",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation, products counters are rendered, of type JSON object {&quot;&lt;product Id / EAN&gt;&quot;: &lt;product counters&gt;}, with &lt;product counters&gt; of type JSON object {&quot;v&quot;: &lt;number of views = integer&frasl;int32&gt;, &quot;atcq&quot;: &lt;add to cart quantities = integer&frasl;int32&gt;, &quot;bq&quot;: &lt;transaction quantities = integer&frasl;int32&gt;}"
+          },
+          "401": {
+            "description": "Failed authentication (missing token when required, or bad token: malformed, expired, or invalid signature)"
+          },
+          "429": {
+            "description": "Rate limited"
+          },
+          "403": {
+            "description": "Forbidden user-agent or access denied to restricted resource"
+          },
+          "400": {
+            "description": "Malformed URL query syntax"
+          },
+          "500": {
+            "description": "Unexpected internal error"
+          }
+        }
+      }
+    },
+    "/product/productData": {
+      "get": {
+        "tags": [
+          "Product"
+        ],
+        "description": "This endpoint can be used to retrieve attributes for several products.",
+        "operationId": "GET /product/productData",
+        "parameters": [
+          {
+            "name": "siteCode",
+            "in": "query",
+            "description": "Id of the Kameleoon project",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "eans",
+            "in": "query",
+            "description": "List of product Ids / EANs, encoded as JSON array, e.g. [\"ean1\",\"ean2\"], no more than 100",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "JSON array of &lt;product Id / EAN = string&gt;"
+            }
+          },
+          {
+            "name": "all",
+            "in": "query",
+            "description": "Set to true if you would like to get all fields for the given product",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "description": "Set to true if you would like to get the &quot;name&quot; field for the given product. Note: it is ignored if the parameter \"all\" is provided with value true",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "name": "categories",
+            "in": "query",
+            "description": "Set to true if you would like to get the &quot;categories&quot; field for the given product. Note: it is ignored if the parameter \"all\" is provided with value true",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "name": "url",
+            "in": "query",
+            "description": "Set to true if you would like to get the &quot;url&quot; field for the given product. Note: it is ignored if the parameter \"all\" is provided with value true",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "name": "imageURL",
+            "in": "query",
+            "description": "Set to true if you would like to get the &quot;imageURL&quot; field for the given product. Note: it is ignored if the parameter \"all\" is provided with value true",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "name": "available",
+            "in": "query",
+            "description": "Set to true if you would like to get the &quot;available&quot; field for the given product. Note: it is ignored if the parameter \"all\" is provided with value true",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "name": "availableQuantity",
+            "in": "query",
+            "description": "Set to true if you would like to get the &quot;availableQuantity&quot; field for the given product. Note: it is ignored if the parameter \"all\" is provided with value true",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "name": "brand",
+            "in": "query",
+            "description": "Set to true if you would like to get the &quot;brand&quot; field for the given product. Note: it is ignored if the parameter \"all\" is provided with value true",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "name": "isChild",
+            "in": "query",
+            "description": "Set to true if you would like to get the &quot;isChild&quot; field for the given product. Note: it is ignored if the parameter \"all\" is provided with value true",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "name": "isFashion",
+            "in": "query",
+            "description": "Set to true if you would like to get the &quot;isFashion&quot; field for the given product. Note: it is ignored if the parameter \"all\" is provided with value true",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "name": "fashion",
+            "in": "query",
+            "description": "Set to true if you would like to get the &quot;fashion&quot; field for the given product. Note: it is ignored if the parameter \"all\" is provided with value true",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "name": "sku",
+            "in": "query",
+            "description": "Set to true if you would like to get the &quot;sku&quot; field for the given product. Note: it is ignored if the parameter \"all\" is provided with value true",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "name": "merchantID",
+            "in": "query",
+            "description": "Set to true if you would like to get the &quot;merchantID&quot; field for the given product. Note: it is ignored if the parameter \"all\" is provided with value true",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "name": "oldPrice",
+            "in": "query",
+            "description": "Set to true if you would like to get the &quot;oldPrice&quot; field for the given product. Note: it is ignored if the parameter \"all\" is provided with value true",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "name": "tags",
+            "in": "query",
+            "description": "Set to true if you would like to get the &quot;tags&quot; field for the given product. Note: it is ignored if the parameter \"all\" is provided with value true",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "name": "rating",
+            "in": "query",
+            "description": "Set to true if you would like to get the &quot;rating&quot; field for the given product. Note: it is ignored if the parameter \"all\" is provided with value true",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "name": "description",
+            "in": "query",
+            "description": "Set to true if you would like to get the &quot;description&quot; field for the given product. Note: it is ignored if the parameter \"all\" is provided with value true",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "name": "params",
+            "in": "query",
+            "description": "Set to true if you would like to get the &quot;params&quot; field for the given product. Note: it is ignored if the parameter \"all\" is provided with value true",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "name": "groupId",
+            "in": "query",
+            "description": "Set to true if you would like to get the &quot;groupId&quot; field for the given product. Note: it is ignored if the parameter \"all\" is provided with value true",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "name": "accessories",
+            "in": "query",
+            "description": "Set to true if you would like to get the &quot;accessories&quot; field for the given product. Note: it is ignored if the parameter \"all\" is provided with value true",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "name": "seasonality",
+            "in": "query",
+            "description": "Set to true if you would like to get the &quot;seasonality&quot; field for the given product. Note: it is ignored if the parameter \"all\" is provided with value true",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "name": "priceMargin",
+            "in": "query",
+            "description": "Set to true if you would like to get the &quot;priceMargin&quot; field for the given product. Note: it is ignored if the parameter \"all\" is provided with value true",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "name": "isNew",
+            "in": "query",
+            "description": "Set to true if you would like to get the &quot;isNew&quot; field for the given product. Note: it is ignored if the parameter \"all\" is provided with value true",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "name": "auto",
+            "in": "query",
+            "description": "Set to true if you would like to get the &quot;auto&quot; field for the given product. Note: it is ignored if the parameter \"all\" is provided with value true",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "name": "model",
+            "in": "query",
+            "description": "Set to true if you would like to get the &quot;model&quot; field for the given product. Note: it is ignored if the parameter \"all\" is provided with value true",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "name": "leftovers",
+            "in": "query",
+            "description": "Set to true if you would like to get the &quot;leftovers&quot; field for the given product. Note: it is ignored if the parameter \"all\" is provided with value true",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "name": "typePrefix",
+            "in": "query",
+            "description": "Set to true if you would like to get the &quot;typePrefix&quot; field for the given product. Note: it is ignored if the parameter \"all\" is provided with value true",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "name": "price",
+            "in": "query",
+            "description": "Set to true if you would like to get the &quot;price&quot; field for the given product. Note: it is ignored if the parameter \"all\" is provided with value true",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "name": "priceHistory",
+            "in": "query",
+            "description": "Set to true if you would like to get the &quot;timesAndPricesSortedAscTime&quot; field for the given product. Note: it is ignored if the parameter \"all\" is provided with value true",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "name": "timeLastView",
+            "in": "query",
+            "description": "Set to true if you would like to get the &quot;timeLastView&quot; field for the given product. Note: it is ignored if the parameter \"all\" is provided with value true",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "name": "timeLastAddToCart",
+            "in": "query",
+            "description": "Set to true if you would like to get the &quot;timeLastAddToCart&quot; field for the given product. Note: it is ignored if the parameter \"all\" is provided with value true",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "name": "timeLastBuy",
+            "in": "query",
+            "description": "Set to true if you would like to get the &quot;timeLastBuy&quot; field for the given product. Note: it is ignored if the parameter \"all\" is provided with value true",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "name": "prettyPrint",
+            "in": "query",
+            "description": "Set to true if you would like a \"pretty\" printed response",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation, products are rendered, of type JSON object {&quot;&lt;product Id / EAN&gt;&quot;: &lt;product&gt;}, with &lt;product&gt; of type JSON object"
+          },
+          "401": {
+            "description": "Failed authentication (missing token when required, or bad token: malformed, expired, or invalid signature)"
+          },
+          "429": {
+            "description": "Rate limited"
+          },
+          "403": {
+            "description": "Forbidden user-agent or access denied to restricted resource"
+          },
+          "400": {
+            "description": "Malformed URL query syntax"
+          },
+          "500": {
+            "description": "Unexpected internal error"
+          }
+        }
+      }
+    },
+    "/product/events": {
+      "post": {
+        "tags": [
+          "Product"
+        ],
+        "description": "This endpoint can be used to post attributes (name, price etc.) and events (view, add to cart, purchase) for several products.\n\nAn incoming request is rejected if the source is identified as bot or spider, according to [user-agent filtering rules from IAB/ABC](https://www.iab.com/guidelines/iab-abc-international-spiders-bots-list/).\nKameleoon is using single-pass method. This means nothing specific is to be done in the case request is sent from a web browser using a standard library (XHR); but in other cases the user should set a custom value to the User-Agent request header, to overwrite the default value set by the library.\n",
+        "operationId": "POST /product/events",
+        "parameters": [
+          {
+            "name": "siteCode",
+            "in": "query",
+            "description": "Id of the Kameleoon project",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ean",
+            "in": "query",
+            "description": "Product Id / EAN. Note: if EAN is provided here, then it is assumed as the common value for all events in the body (bulk posting of several events restricted to the same product EAN). On the contrary, if you would like to bulk post several events across several different products EAN, then you must provide the EAN with every event in the body",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "json",
+            "in": "query",
+            "description": "Set to true if you provide the body content in JSON format, else URL query format is assumed. See body schema",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Events to save. Body size limited to 1 MB.\n#\nWhen the URL query parameter is missing the \"json\" key or its value is set to false, the body consists of one or more lines, with each line representing an event in a specific format. The format is as follows: &lt;parameter 1 name&gt;=&lt;parameter 1 value&gt;&amp;&lt;parameter 2 name&gt;=&lt;parameter 2 value&gt; and so on. Make sure to escape values that may contain characters = or &amp;, for example using the function `encodeURIComponent` in JavaScript.\n#\nIf the URL contains the query parameter \"json\" with the value set to true, then the body will be a JSON array of events. Each event will be represented as a JSON object, formatted like this: {&quot;&lt;parameter 1 name&gt;&quot;: &lt;parameter 1 value&gt;, &quot;&lt;parameter 2 name&gt;&quot;: &lt;parameter 2 value&gt;, etc.}.\n#\nIn all cases, the body will contain the following parameters:\n<table>\n<tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr>\n<tr><td>ean</td><td>string</td><td>Required if not provided in URL query parameters, else ignored</td><td>Product code<br/>Limited to 100 characters</td></tr>\n<tr><td>eventType</td><td>string</td><td>Required</td><td>One of the following: PRODUCTPAGE, PRODUCTADDTOCART, PRODUCTBUY</td></tr>\n</table>\nList of parameters for the eventType PRODUCTPAGE:\n<table>\n<tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr>\n<tr><td>name</td><td>string</td><td>Optional</td><td>Product name<br/>Limited to 250 characters</td></tr>\n<tr><td>categories</td><td>JSON array</td><td>Optional</td><td>JSON array of product categories<br/>No more than 100 categories<br/>See below for the product category type description</td></tr>\n<tr><td>url</td><td>string</td><td>Optional</td><td>Product URL<br/>Limited to 2048 characters</td></tr>\n<tr><td>imageURL</td><td>string</td><td>Optional</td><td>URL of product picture<br/>Limited to 2048 characters</td></tr>\n<tr><td>available</td><td>boolean</td><td>Optional</td><td>Is product available?</td></tr>\n<tr><td>availableQuantity</td><td>int32</td><td>Optional</td><td>Available quantities of product</td></tr>\n<tr><td>brand</td><td>string</td><td>Optional</td><td>Product brand<br/>Limited to 250 characters</td></tr>\n<tr><td>isChild</td><td>boolean</td><td>Optional</td><td>Is product is made for children?</td></tr>\n<tr><td>isFashion</td><td>boolean</td><td>Optional</td><td>Does the product follow fashion?</td></tr>\n<tr><td>fashion</td><td>JSON object</td><td>Optional</td><td>See below for the product fashion type description</td></tr>\n<tr><td>sku</td><td>string</td><td>Optional</td><td>Product SKU<br/>Limited to 100 characters</td></tr>\n<tr><td>merchantID</td><td>string</td><td>Optional</td><td>Product merchant Id<br/>Limited to 100 characters</td></tr>\n<tr><td>price</td><td>float64</td><td>Optional</td><td>Product price</td></tr>\n<tr><td>oldPrice</td><td>float64</td><td>Optional</td><td>Product old (crossed-out) price</td></tr>\n<tr><td>tags</td><td>JSON array</td><td>Optional</td><td>JSON array of product tags (string)<br/>No more than 100 tags<br/>Every tag is limited to 100 characters</td></tr>\n<tr><td>rating</td><td>float64</td><td>Optional</td><td>Product rating</td></tr>\n<tr><td>description</td><td>string</td><td>Optional</td><td>Product description<br/>Limited to 4000 characters</td></tr>\n<tr><td>params</td><td>JSON array</td><td>Optional</td><td>JSON array of product params<br/>No more than 100 params<br/>See below for the product param type description</td></tr>\n<tr><td>groupId</td><td>string</td><td>Optional</td><td>Product group id<br/>Limited to 100 characters</td></tr>\n<tr><td>accessories</td><td>JSON array</td><td>Optional</td><td>JSON array of product accessories (string)<br/>No more than 100 accessories<br/>Every accessory is limited to 100 characters</td></tr>\n<tr><td>seasonality</td><td>JSON array</td><td>Optional</td><td>JSON array of monthes, from 1 to 12</td></tr>\n<tr><td>priceMargin</td><td>int32</td><td>Optional</td><td>Product price margin</td></tr>\n<tr><td>isNew</td><td>boolean</td><td>Optional</td><td>Is product is new?</td></tr>\n<tr><td>auto</td><td>JSON object</td><td>Optional</td><td>See below for the product auto type description</td></tr>\n<tr><td>model</td><td>string</td><td>Optional</td><td>Product model<br/>Limited to 100 characters</td></tr>\n<tr><td>leftovers</td><td>string</td><td>Optional</td><td>Product leftovers<br/>Limited to 100 characters</td></tr>\n<tr><td>typePrefix</td><td>string</td><td>Optional</td><td>Product type prefix<br/>Limited to 100 characters</td></tr>\n</table>\n#\nList of parameters for the eventType PRODUCTADDTOCART:\n<table>\n<tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr>\n<tr><td>quantity</td><td>int32</td><td>Required</td><td>Quantity of product added to cart</td></tr>\n</table>\n#\nList of parameters for the eventType PRODUCTBUY:\n<table>\n<tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr>\n<tr><td>quantity</td><td>int32</td><td>Required</td><td>Quantity of product bought</td></tr>\n</table>\n#\nThe product category type is JSON object, with the following fields:\n<table>\n<tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr>\n<tr><td>id</td><td>string</td><td>Required</td><td>Category Id<br/>Limited to 100 characters</td></tr>\n<tr><td>name</td><td>string</td><td>Optional</td><td>Category name<br/>Limited to 100 characters</td></tr>\n<tr><td>url</td><td>string</td><td>Optional</td><td>Category URL<br/>Limited to 2048 characters</td></tr>\n<tr><td>parent</td><td>string</td><td>Optional</td><td>Parent category id<br/>Limited to 100 characters</td></tr>\n</table>\n#\nThe product fashion type is JSON object, with the following fields:\n<table>\n<tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr>\n<tr><td>gender</td><td>string</td><td>Optional</td><td>Product gender<br/>Limited to 100 characters</td></tr>\n<tr><td>type</td><td>string</td><td>Optional</td><td>Product type<br/>Limited to 100 characters</td></tr>\n<tr><td>sizes</td><td>JSON array</td><td>Optional</td><td>JSON array of product sizes (string)<br/>No more than 100 sizes<br/>Every size is limited to 100 characters</td></tr>\n<tr><td>feature</td><td>string</td><td>Optional</td><td>Product feature<br/>Limited to 100 characters</td></tr>\n<tr><td>colors</td><td>JSON array</td><td>Optional</td><td>JSON array of product colors<br/>No more than 100 colors<br/>See below for the product color type description</td></tr>\n</table>\n#\nThe product color type is JSON object, with the following fields:\n<table>\n<tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr>\n<tr><td>color</td><td>string</td><td>Required</td><td>Color<br/>Limited to 100 characters</td></tr>\n<tr><td>picture</td><td>string</td><td>Optional</td><td>Color picture<br/>Limited to 2048 characters</td></tr>\n</table>\n#\nThe product param type is JSON object, with the following fields:\n<table>\n<tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr>\n<tr><td>name</td><td>string</td><td>Optional</td><td>Param name<br/>Limited to 100 characters</td></tr>\n<tr><td>value</td><td>JSON array</td><td>Optional</td><td>JSON array of param values (string)<br/>No more than 40 values<br/>Every value is limited to 250 characters</td></tr>\n<tr><td>unit</td><td>string</td><td>Optional</td><td>Param unit<br/>Limited to 100 characters</td></tr>\n</table>\n#\nThe product auto type is JSON object, with the following fields:\n<table>\n<tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr>\n<tr><td>compatibility</td><td>JSON array</td><td>Optional</td><td>JSON array of auto compatibilities (string)<br/>No more than 100 compatibilities<br/>See below for the auto compatibility type description</td></tr>\n<tr><td>vds</td><td>JSON array</td><td>Optional</td><td>JSON array of auto VDS (string)<br/>No more than 100 VDS<br/>Every VDS is limited to 100 characters</td></tr>\n</table>\n#\nThe auto compatibility type is JSON object, with the following fields:\n<table>\n<tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr>\n<tr><td>brand</td><td>string</td><td>Required</td><td>Brand<br/>Limited to 100 characters</td></tr>\n<tr><td>model</td><td>string</td><td>Optional</td><td>Model<br/>Limited to 100 characters</td></tr>\n</table>\n#\nNote: in the examples below, we assume the parameter \"ean\" is provided in the URL query part, so this is bulk posting of several events restricted to the same product, and then \"ean\" is not needed in body events.\n#\nBody example in the case the URL query parameter \"json\" is missing or present with value false (NB: `%5B%22S%22%2C%20%22M%22%2C%20%22L%22%5D` is the escaped value of `[\"S\", \"M\", \"L\"]`):\n```\neventType=PRODUCTPAGE&name=Marvelous%20product&available=true&availableQuantity=50&sizes=%5B%22S%22%2C%20%22M%22%2C%20%22L%22%5D\neventType=PRODUCTADDTOCART&quantity=2\n```\n#\nBody example in the case the URL query parameter \"json\" is present with value true, with a \"pretty\" representation (not recommended):\n```\n[\n\t{\n\t\t\"eventType\": \"PRODUCTPAGE\",\n\t\t\"name\": \"Marvelous product\",\n\t\t\"available\": true,\n\t\t\"availableQuantity\": 50,\n\t\t\"isFashion\": true,\n\t\t\"fashion\": {\n\t\t\t\"sizes\": [\n\t\t\t\t\"S\",\n\t\t\t\t\"M\",\n\t\t\t\t\"L\"\n\t\t\t]\n\t\t}\n\t},\n\t{\n\t\t\"eventType\": \"PRODUCTADDTOCART\",\n\t\t\"quantity\": 2\n\t}\n]\n```\n#\nBody example in the case the URL query parameter \"json\" is present with value true, with a \"compact\" representation (recommended):\n```\n[{\"eventType\":\"PRODUCTPAGE\",\"name\":\"Marvelous product\",\"available\":true,\"availableQuantity\":50,\"isFashion\":true,\"fashion\":{\"sizes\":[\"S\",\"M\",\"L\"]}},{\"eventType\":\"PRODUCTADDTOCART\",\"quantity\":2}]\n```\n",
+          "content": {
+            "*/*": {
+              "schema": {
+                "type": "string",
+                "format": "UTF-8"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "URL query was processed successfully and no content is returned<br/><b>Body will be processed asynchronously, no syntax check on body was done yet</b>"
+          },
+          "413": {
+            "description": "Body too large"
+          },
+          "401": {
+            "description": "Failed authentication (missing token when required, or bad token: malformed, expired, or invalid signature)"
+          },
+          "429": {
+            "description": "Rate limited"
+          },
+          "403": {
+            "description": "Forbidden user-agent or access denied to restricted resource"
+          },
+          "400": {
+            "description": "Malformed URL query syntax"
+          },
+          "500": {
+            "description": "Unexpected internal error"
+          }
+        }
+      }
+    },
+    "/visit/events": {
+      "post": {
+        "tags": [
+          "Visit"
+        ],
+        "description": "This endpoint can be used to post data for a given visitor, such as conversion events, page view events etc.\n\nAn incoming request is rejected if the source is identified as bot or spider, according to [user-agent filtering rules from IAB/ABC](https://www.iab.com/guidelines/iab-abc-international-spiders-bots-list/).\nKameleoon is using single-pass method. This means nothing specific is to be done in the case request is sent from a web browser using a standard library (XHR); but in other cases the user should set a custom value to the User-Agent request header, to overwrite the default value set by the library.\n",
+        "operationId": "POST /visit/events",
+        "parameters": [
+          {
+            "name": "siteCode",
+            "in": "query",
+            "description": "Id of the Kameleoon project",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "visitorCode",
+            "in": "query",
+            "description": "Visitor code (Kameleoon unique id for a visitor). Note: if the parameter \"visitorCode\" is provided here, then it is assumed as the common value for all events in the body (bulk posting of several events restricted to the same visitor). On the contrary, if you would like to bulk post several events across several different visitors, then you must provide the parameter \"visitorCode\" with every event in the body",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "json",
+            "in": "query",
+            "description": "Set to true if you provide the body content in JSON format, else URL query format is assumed. See body schema",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Events to save. Body size limited to 3 MB.\n#\nWhen the URL query parameter is missing the \"json\" key or its value is set to false, the body consists of one or more lines, with each line representing an event in a specific format. The format is as follows: &lt;parameter 1 name&gt;=&lt;parameter 1 value&gt;&amp;&lt;parameter 2 name&gt;=&lt;parameter 2 value&gt; and so on. Make sure to escape values that may contain characters = or &amp;, for example using the function `encodeURIComponent` in JavaScript.\n#\nIf the URL contains the query parameter \"json\" with the value set to true, then the body will be a JSON array of events. Each event will be represented as a JSON object, formatted like this: {&quot;&lt;parameter 1 name&gt;&quot;: &lt;parameter 1 value&gt;, &quot;&lt;parameter 2 name&gt;&quot;: &lt;parameter 2 value&gt;, etc.}.\n#\nIn all cases, the body will contain the following parameters:\n<table>\n<tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr>\n<tr><td>visitorCode</td><td>string</td><td>Required if not provided in URL query parameters, else ignored</td><td>Kameleoon unique id for a visitor<br/>Limited to 100 characters</td></tr>\n<tr><td>nonce</td><td>string</td><td>Required</td><td>A random string of 16 hexadecimal characters, <b>unique to each event</b></td></tr>\n<tr><td>eventType</td><td>string</td><td>Required</td><td>One of the following: STATICDATA, PAGE, CONVERSION, TARGETINGSEGMENT, EXPERIMENT, PERSONALIZATION, WEATHER, CUSTOMDATA, PRODUCT, GEOLOCATION</td></tr>\n</table>\n#\nList of parameters for the eventType STATICDATA:\n<table>\n<tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr>\n<tr><td>visitNumber</td><td>int32</td><td>Optional</td><td>Number of visits</td></tr>\n<tr><td>timeSincePreviousVisit</td><td>int64</td><td>Optional</td><td>Time since last visit in milliseconds</td></tr>\n<tr><td>browser</td><td>string</td><td>Optional</td><td>Browser's name (e.g. \"Safari\")<br/>Limited to 100 characters</td></tr>\n<tr><td>browserIndex</td><td>int32</td><td>Optional</td><td>Configured browser index</td></tr>\n<tr><td>browserVersion</td><td>float64</td><td>Optional</td><td>Browser version</td></tr>\n<tr><td>os</td><td>string</td><td>Optional</td><td>OS name (e.g. \"Windows\")<br/>Limited to 100 characters</td></tr>\n<tr><td>osIndex</td><td>int32</td><td>Optional</td><td>Configured OS index</td></tr>\n<tr><td>windowWidth</td><td>int32</td><td>Optional</td><td>Window width</td></tr>\n<tr><td>windowHeight</td><td>int32</td><td>Optional</td><td>Window height</td></tr>\n<tr><td>screenWidth</td><td>int32</td><td>Optional</td><td>Screen width</td></tr>\n<tr><td>screenHeight</td><td>int32</td><td>Optional</td><td>Screen height</td></tr>\n<tr><td>timeZoneId</td><td>string</td><td>Optional</td><td>Time zone id (e.g. \"Europe/Paris\")</td></tr>\n<tr><td>localeLanguageTag</td><td>string</td><td>Optional</td><td>Local language tag (e.g. \"fr\")</td></tr>\n<tr><td>deviceType</td><td>string</td><td>Optional</td><td>One of the following: DESKTOP, TABLET, PHONE</td></tr>\n</table>\n#\nList of parameters for the eventType PAGE:\n<table>\n<tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr>\n<tr><td>herf</td><td>string</td><td>Required</td><td>Complete URL<br/>Limited to 2048 characters</td></tr>\n<tr><td>canonicalHref</td><td>string</td><td>Optional</td><td>Canonical URL<br/>Limited to 2048 characters</td></tr>\n<tr><td>title</td><td>string</td><td>Optional</td><td>Page title<br/>Limited to 256 characters</td></tr>\n<tr><td>keyPageIndices</td><td>JSON array</td><td>Optional</td><td>JSON array of configured key page indices (int32)<br/>No more than 256 indices</td></tr>\n<tr><td>referrerHref</td><td>string</td><td>Optional</td><td>Complete URL of the referrer<br/>Limited to 2048 characters</td></tr>\n<tr><td>referrerIndices</td><td>JSON array</td><td>Optional</td><td>JSON array of configured referrer indices (int32)<br/>No more than 256 indices</td></tr>\n</table>\n#\nList of parameters for the eventType CONVERSION:\n<table>\n<tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr>\n<tr><td>goalId</td><td>int64</td><td>Required</td><td>Id of the goal</td></tr>\n<tr><td>revenue</td><td>float64</td><td>Optional</td><td>Revenue generated in the goal</td></tr>\n<tr><td>negative</td><td>Boolean</td><td>Optional,<br/>default `false`</td><td>Should conversion be removed?</td></tr>\n<tr><td>metadata</td><td>JSON object</td><td>Optional</td><td>JSON object with the following structure: key = metadata id (int32), value = metadata values (JSON array of string)<br/>No more than 256 ids<br/>No more than 256 values for each id<br/>Every value is limited to 2048 characters</td></tr>\n</table>\n#\nList of parameters for the eventType TARGETINGSEGMENT:\n<table>\n<tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr>\n<tr><td>id</td><td>int64</td><td>Required</td><td>Segment id</td></tr>\n</table>\n#\nList of parameters for the eventType EXPERIMENT:\n<table>\n<tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr>\n<tr><td>id</td><td>int64</td><td>Required</td><td>Experiment id</td></tr>\n<tr><td>variationId</td><td>int64</td><td>Required</td><td>Variation id. 0 if reference</td></tr>\n</table>\n#\nList of parameters for the eventType PERSONALIZATION:\n<table>\n<tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr>\n<tr><td>id</td><td>int64</td><td>Required</td><td>Personalization id</td></tr>\n<tr><td>variationId</td><td>int64</td><td>Required</td><td>Variation id. 0 if reference</td></tr>\n<tr><td>unexpositionCause</td><td>string</td><td>Optional</td><td>Only valid if variationId is 0. One of the following: GLOBAL_EXCLUSION, PERSONALIZATION_CAPPING, SCHEDULE, PERSONALIZATION_EXCLUSION, VISITOR_CAPPING, SCENARIO, PRIORITY</td></tr>\n</table>\n#\nList of parameters for the eventType WEATHER:\n<table>\n<tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr>\n<tr><td>temperature</td><td>float64</td><td>Required</td><td>Temperature in Kelvin</td></tr>\n<tr><td>humidity</td><td>float64</td><td>Required</td><td>Humidity percentage</td></tr>\n<tr><td>pressure</td><td>float64</td><td>Required</td><td>Atmospheric pressure in hPa</td></tr>\n<tr><td>windSpeed</td><td>float64</td><td>Required</td><td>Wind speed in meters/second</td></tr>\n<tr><td>cloudiness</td><td>float64</td><td>Required</td><td>Cloudiness in percentage</td></tr>\n<tr><td>sunriseTime</td><td>int64</td><td>Required</td><td>Sunrise time as a UNIX millisecond timestamp</td></tr>\n<tr><td>sunsetTime</td><td>int64</td><td>Required</td><td>Sunset time as a UNIX millisecond timestamp</td></tr>\n<tr><td>weatherCode</td><td>string</td><td>Optional</td><td>Weather description (e.g. \"Sky is Clear\")<br/>Limited to 100 characters</td></tr>\n</table>\n#\nList of parameters for the eventType CUSTOMDATA:\n<table>\n<tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr>\n<tr><td>index</td><td>int32</td><td>Required</td><td>Configured custom data index</td></tr>\n<tr><td>mappingIdentifier</td><td>Boolean</td><td>Optional,<br/>default `false`</td><td>Is this custom data used as a mapping identifier?</td></tr>\n<tr><td>valuesCountMap</td><td>JSON object</td><td>Required</td><td>JSON object with the following structure: key = value (string), value = count (int32)<br/>No more than 256 values<br/>Every value is limited to 2048 characters if \"mappingIdentifier\" is `false`, 100 else</td></tr>\n<tr><td>overwrite</td><td>Boolean</td><td>Optional,<br/>default `true`</td><td>Overwrite previous values counts (or merge)?</td></tr>\n</table>\n#\nList of parameters for the eventType PRODUCT:\n<table>\n<tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr>\n<tr><td>ean</td><td>string</td><td>Required</td><td>Product code<br/>Limited to 100 characters</td></tr>\n</table>\n#\nList of parameters for the eventType GEOLOCATION:\n<table>\n<tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr>\n<tr><td>country</td><td>string</td><td>Optional</td><td>Country<br/>Limited to 100 characters</td></tr>\n<tr><td>region</td><td>string</td><td>Optional</td><td>Region<br/>Limited to 100 characters</td></tr>\n<tr><td>city</td><td>string</td><td>Optional</td><td>City<br/>Limited to 100 characters</td></tr>\n<tr><td>postalCode</td><td>string</td><td>Optional</td><td>Postal code<br/>Limited to 100 characters</td></tr>\n<tr><td>latitude</td><td>float64</td><td>Optional</td><td>Latitude</td></tr>\n<tr><td>longitude</td><td>float64</td><td>Optional</td><td>Longitude</td></tr>\n</table>\n#\nNote: in the examples below, we assume that the parameter \"visitorCode\" is provided in the URL query part, so this is bulk posting of several events restricted to the same visitor, and then \"visitorCode\" is not needed in body events.\n#\nBody example in the case the URL query parameter \"json\" is missing or present with value false (NB: `https%3A%2F%2Fwww.supersite.com%2Fsuperpage%3Fsuperparam%3Dtrue` is the escaped value of `https://www.supersite.com/superpage?superparam=true`, while `%7B%22val1%22%3A1%2C%22val2%22%3A5%7D` is the escaped value of `{\"val1\":1,\"val2\":5}`):\n```\nnonce=d2ce4d22083348fb&eventType=STATICDATA&browser=Safari&browserVersion=16.3&deviceType=DESKTOP&os=Windows\nnonce=b0a4253d8acd01c7&eventType=PAGE&href=https%3A%2F%2Fwww.supersite.com%2Fsuperpage%3Fsuperparam%3Dtrue\nnonce=4ca34741a6cc8a48&eventType=CONVERSION&goalId=2&revenue=24.99\nnonce=69e2d11c519868cc&eventType=EXPERIMENT&id=5&variationId=0\nnonce=9de54e5675f4e18d&eventType=CUSTOMDATA&index=3&valuesCountMap=%7B%22val1%22%3A1%2C%22val2%22%3A5%7D\n```\n#\nBody example in the case the URL query parameter \"json\" is present with value true, with a \"pretty\" representation (not recommended):\n```\n[\n\t{\n\t\t\"nonce\": \"d2ce4d22083348fb\",\n\t\t\"eventType\": \"STATICDATA\",\n\t\t\"browser\": \"Safari\",\n\t\t\"browserVersion\": 16.3,\n\t\t\"deviceType\": \"DESKTOP\",\n\t\t\"os\": \"Windows\"\n\t},\n\t{\n\t\t\"nonce\": \"b0a4253d8acd01c7\",\n\t\t\"eventType\": \"PAGE\",\n\t\t\"href\": \"https://www.supersite.com/superpage?superparam=true\"\n\t},\n\t{\n\t\t\"nonce\": \"4ca34741a6cc8a48\",\n\t\t\"eventType\": \"CONVERSION\",\n\t\t\"goalId\": 2,\n\t\t\"revenue\": 24.99\n\t},\n\t{\n\t\t\"nonce\": \"69e2d11c519868cc\",\n\t\t\"eventType\": \"EXPERIMENT\",\n\t\t\"id\": 5,\n\t\t\"variationId\": 0\n\t},\n\t{\n\t\t\"nonce\": \"9de54e5675f4e18d\",\n\t\t\"eventType\": \"CUSTOMDATA\",\n\t\t\"index\": 3,\n\t\t\"valuesCountMap\": {\n\t\t\t\"val1\": 1,\n\t\t\t\"val2\": 5\n\t\t}\n\t}\n]\n```\n#\nBody example in the case the URL query parameter \"json\" is present with value true, with a \"compact\" representation (recommended):\n```\n[{\"nonce\":\"d2ce4d22083348fb\",\"eventType\":\"STATICDATA\",\"browser\":\"Safari\",\"browserVersion\":16.3,\"deviceType\":\"DESKTOP\",\"os\":\"Windows\"},{\"nonce\":\"b0a4253d8acd01c7\",\"eventType\":\"PAGE\",\"href\":\"https://www.supersite.com/superpage?superparam=true\"},{\"nonce\":\"4ca34741a6cc8a48\",\"eventType\":\"CONVERSION\",\"goalId\":2,\"revenue\":24.99},{\"nonce\":\"69e2d11c519868cc\",\"eventType\":\"EXPERIMENT\",\"id\":5,\"variationId\":0},{\"nonce\":\"9de54e5675f4e18d\",\"eventType\":\"CUSTOMDATA\",\"index\":3,\"valuesCountMap\":{\"val1\":1,\"val2\":5}}]\n```\n",
+          "content": {
+            "*/*": {
+              "schema": {
+                "type": "string",
+                "format": "UTF-8"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "URL query was processed successfully and no content is returned<br/><b>Body will be processed asynchronously, no syntax check on body was done yet</b>"
+          },
+          "413": {
+            "description": "Body too large"
+          },
+          "401": {
+            "description": "Failed authentication (missing token when required, or bad token: malformed, expired, or invalid signature)"
+          },
+          "429": {
+            "description": "Rate limited"
+          },
+          "403": {
+            "description": "Forbidden user-agent or access denied to restricted resource"
+          },
+          "400": {
+            "description": "Malformed URL query syntax"
+          },
+          "500": {
+            "description": "Unexpected internal error"
+          }
+        }
+      }
+    },
+    "/visit/visitor": {
+      "get": {
+        "tags": [
+          "Visit"
+        ],
+        "description": "This endpoint returns the activity feed for a given user. It can be used to retrieve visits data collected by Kameleoon such as experiments and personalizations being triggered for the user or targeted segments.",
+        "operationId": "GET /visit/visitor",
+        "parameters": [
+          {
+            "name": "siteCode",
+            "in": "query",
+            "description": "Id of the Kameleoon project",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "currentVisit",
+            "in": "query",
+            "description": "Set to true if you would like to get data for the current visit. Note: it is strongly recommended to provide the parameter \"visitorCode\" in that case. In the contrary, the last known visitor code associated to the provided mapping value is used to retrieve the current visit of the visitor. See descriptions of the parameters \"visitorCode\" and \"mappingValue\"",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "name": "maxNumberPreviousVisits",
+            "in": "query",
+            "description": "The maximum number of previous visits to return. Note: cross-device visitor history reconciliation of previous visits is performed if the parameter \"mappingValue\" is provided. In the contrary, the provided visitor code is used to retrieve the previous visits of the visitor",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "visitorCode",
+            "in": "query",
+            "description": "Visitor code (Kameleoon unique id for a visitor). Note: it is required if the parameter \"mappingValue\" is not provided. See descriptions of the parameters \"currentVisit\" and \"maxNumberPreviousVisits\"",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "mappingValue",
+            "in": "query",
+            "description": "Value of the custom data configured as a mapping identifier (acting as a visitor cross-device id) if applicable. Note: it is required if the parameter \"visitorCode\" is not provided. See descriptions of the parameters \"currentVisit\" and \"maxNumberPreviousVisits\"",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "all",
+            "in": "query",
+            "description": "Set to true if you would like to get all events (conversion, page, experiment, custom data..) for the given user",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "name": "staticData",
+            "in": "query",
+            "description": "Set to true if you would like to get static data events (browser, browser version, device type, OS) for the given user. Note: it is ignored if the parameter \"all\" is provided with value true",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Set to true if you would like to get page data events (URLs viewed) for the given user. Note: it is ignored if the parameter \"all\" is provided with value true",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "name": "conversion",
+            "in": "query",
+            "description": "Set to true if you would like to get conversion events for the given user and for goals you have set up in your Kameleoon account. Note: it is ignored if the parameter \"all\" is provided with value true",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "name": "targetingSegment",
+            "in": "query",
+            "description": "Set to true if you would like to get the targeted segments id for a given user. Note: it requires Kameleoon Audiences Explorer add-on or Kameleoon AI-Driven Personalization package. It is ignored if the parameter \"all\" is provided with value true",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "name": "experiment",
+            "in": "query",
+            "description": "Set to true if you would like to get the targeted experiments id and variations id for a given user. Note: it is ignored if the parameter \"all\" is provided with value true",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "name": "weather",
+            "in": "query",
+            "description": "Set to true if you would like to get weather conditions data (temperature, humidity, pressure...) collected by Kameleoon. Note: it is ignored if the parameter \"all\" is provided with value true",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "name": "customData",
+            "in": "query",
+            "description": "Set to true if you would like to get custom data events for a given user. Note: only custom data that are not set as \"local\" can be retrieved. It is ignored if the parameter \"all\" is provided with value true",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "name": "product",
+            "in": "query",
+            "description": "Set to true if you would like to get product events (product eans viewed) for a given user. Note: it is ignored if the parameter \"all\" is provided with value true",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "name": "personalization",
+            "in": "query",
+            "description": "Set to true if you would like to get the targeted personalizations id and variations id for a given user. Note: it is ignored if the parameter \"all\" is provided with value true",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "name": "geolocation",
+            "in": "query",
+            "description": "Set to true if you would like to get the geolocation data (country, region, city, postalcode, lattitude..) for a given user. Note: it is ignored if the parameter \"all\" is provided with value true",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "name": "prettyPrint",
+            "in": "query",
+            "description": "Set to true if you would like a \"pretty\" printed response",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation, youngest visits are rendered, of type JSON object {&quot;currentVisit&quot;: &lt;current visit&gt;, &quot;previousVisits&quot;: &lt;previous visits&gt;}, with &lt;current visit&gt; of type &lt;visit&gt;, &lt;previous visits&gt; of type JSON array of &lt;visit&gt; and with &lt;visit&gt; = JSON object (&quot;currentVisit&quot; optional key)"
+          },
+          "401": {
+            "description": "Failed authentication (missing token when required, or bad token: malformed, expired, or invalid signature)"
+          },
+          "429": {
+            "description": "Rate limited"
+          },
+          "403": {
+            "description": "Forbidden user-agent or access denied to restricted resource"
+          },
+          "400": {
+            "description": "Malformed URL query syntax"
+          },
+          "500": {
+            "description": "Unexpected internal error"
+          }
+        }
+      }
+    },
+    "/visit/forget": {
+      "post": {
+        "tags": [
+          "Visit"
+        ],
+        "description": "This endpoint can be used to remove data for several visitors.\n\nAn incoming request is rejected if the source is identified as bot or spider, according to [user-agent filtering rules from IAB/ABC](https://www.iab.com/guidelines/iab-abc-international-spiders-bots-list/).\nKameleoon is using single-pass method. This means nothing specific is to be done in the case request is sent from a web browser using a standard library (XHR); but in other cases the user should set a custom value to the User-Agent request header, to overwrite the default value set by the library.\n",
+        "operationId": "POST /visit/forget",
+        "parameters": [
+          {
+            "name": "siteCode",
+            "in": "query",
+            "description": "Id of the Kameleoon project",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "List of visitor codes (Kameleoon unique id for a visitor) to remove/forget from our remote servers. Body size limited to 1 MB.\n#\n1 visitor code per line.<br/>\nEvery visitor code is limited to 100 characters.\n#\nBody example:\n```\nvisitorCode1\nvisitorCode2\nvisitorCode3\n```\n",
+          "content": {
+            "text/plain": {
+              "schema": {
+                "type": "string",
+                "format": "UTF-8"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "URL query was processed successfully and no content is returned<br/><b>Body will be processed asynchronously, no syntax check on body was done yet</b>"
+          },
+          "413": {
+            "description": "Body too large"
+          },
+          "401": {
+            "description": "Failed authentication (missing token when required, or bad token: malformed, expired, or invalid signature)"
+          },
+          "429": {
+            "description": "Rate limited"
+          },
+          "403": {
+            "description": "Forbidden user-agent or access denied to restricted resource"
+          },
+          "400": {
+            "description": "Malformed URL query syntax"
+          },
+          "500": {
+            "description": "Unexpected internal error"
+          }
+        }
+      }
+    }
+  }
+}
