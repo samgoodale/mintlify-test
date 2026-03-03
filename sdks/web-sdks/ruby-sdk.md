@@ -1,247 +1,6 @@
 ---
-sidebar_position: 10
-toc_max_heading_level: 4
+title: "Ruby SDK"
 ---
-
-import { Select, Text, Bold, Italic, Code, CodeRef, Ref, If } from '../commons/utils.mdx';
-import SharedDiv, { Shared } from '../commons/shared.mdx';
-import ActivatingAFeatureFlag from '../commons/developer-guide/getting-started/activating-a-feature-flag.mdx';
-import CrossDeviceReconciliation from '../commons/developer-guide/cross-device-reconciliation.mdx';
-import GetDataFile from '../commons/reference/feature-flags-and-variations/get-data-file.mdx';
-import TargetingConditions from '../commons/developer-guide/targeting-conditions.mdx';
-import Logging from '../commons/developer-guide/logging.mdx';
-import GetVariations from '../commons/reference/feature-flags-and-variations/get-variations.mdx';
-import GetVariation from '../commons/reference/feature-flags-and-variations/get-variation.mdx';
-import Geolocation from '../commons/reference/data-types/geolocation.mdx';
-import Browser from '../commons/reference/data-types/browser.mdx';
-import Conversion from '../commons/reference/data-types/conversion.mdx';
-import TrackConversion from '../commons/reference/goals/track-conversion.mdx';
-import UpdateConfigurationHandler from '../commons/reference/events/update-configuration-handler.mdx';
-import AddData from '../commons/reference/visitor-data/add-data.mdx';
-import SetForcedVariation from '../commons/reference/feature-flags-and-variations/set-forced-variation.mdx';
-import EvaluateAudiences from '../commons/reference/feature-flags-and-variations/evaluate-audiences.mdx';
-import GetFeatureList from '../commons/reference/feature-flags-and-variations/get-feature-list.mdx';
-import GetEngineTrackingCode from '../commons/reference/goals/get-engine-tracking-code.mdx';
-import CustomBucketingKey from '../commons/developer-guide/custom-bucketing-key.mdx';
-import DataFile from '../commons/reference/returned-types/data-file.mdx';
-import FeatureFlag from '../commons/reference/returned-types/feature-flag.mdx';
-import Rule from '../commons/reference/returned-types/rule.mdx';
-
-# Ruby SDK
-
-export const Context = {
-  IsServer: true,
-  IsSnakeCase: false,
-  Common: {
-    Null: "nil",
-    True: "true",
-    False: "false",
-    String: "String",
-    Bool: "Bool",
-    Float: "Float",
-    Int: "Integer",
-    SDK: "Ruby",
-  },
-  Params: {
-    VisitorCode: "visitor_code",
-    FeatureKey: "feature_key"
-  },
-  Exceptions: {
-    Language: "StandardError",
-    Kameleoon: "KameleoonError",
-    VisitorCodeInvalid: "VisitorCodeInvalid",
-    FeatureNotFound: "FeatureNotFound",
-    FeatureEnvironmentDisabled: "FeatureEnvironmentDisabled",
-    FeatureExperimentNotFound: "FeatureExperimentNotFound",
-    FeatureVariationNotFound: "FeatureVariationNotFound",
-  },
-  Hook: {
-    UseData: "useData",
-  },
-  KameleoonClientConfig: {
-    Ref: "#configure-the-client",
-    TrackingInterval: { FileName: "tracking_interval_millisecond" },
-    IsUniqueIdentifier: { Name: "<>" }
-  },
-  // kameleoon.data
-  Conversion: {
-    Name: "Conversion",
-    FullName: "Conversion",
-    Ref: "#conversion",
-    Params: {
-      GoalId: { Name: "goal_id" },
-      Revenue: { Name: "revenue", Type: "Float" },
-      Negative: { Name: "negative" },
-      Metadata: { Name: "metadata", Type: "Array<CustomData>", DefaultValue: "nil" },
-    },
-  },
-  CustomData: {
-    Name: "CustomData",
-    FullName: "CustomData",
-    Ref: "#customdata"
-  },
-  UniqueIdentifier: {
-    Name: "UniqueIdentifier",
-    Ref: "#uniqueidentifier"
-  },
-  UserAgent: {
-    Name: "UserAgent",
-    Ref: "#useragent"
-  },
-  Geolocation: {
-    Name: "Geolocation",
-    Ref: "#geolocation",
-    Params: {
-      Region: { Type: "String" },
-      City: { Type: "String" },
-      PostalCode: { Name: "postal_code", Type: "String" },
-      Latitude: { Type: "Float" },
-      Longitude: { Type: "Float" },
-    }
-  },
-  Browser: {
-    Name: "Browser",
-    Ref: "#browser",
-    Params: {
-      BrowserType: {
-        Name: "browser_type",
-        Type: "BrowserType",
-        Chrome: "CHROME",
-        IE: "INTERNET_EXPLORER",
-        Firefox: "FIREFOX",
-        Safari: "SAFARI",
-        Opera: "OPERA",
-        Other: "OTHER"
-      },
-      Version: { Type: "Float" },
-    },
-  },
-  // kameleoon.types
-  Variation: {
-    Name: "Variation",
-    FullName: "Types::Variation",
-    Ref: "#variation"
-  },
-  DataFile: {
-    Name: "DataFile",
-    FullName: "Types::DataFile",
-    Ref: "#datafile",
-    Params: {
-      FeatureFlags: { Name: "feature_flags", Type: "Hash<String, FeatureFlag>" },
-    }
-  },
-  FeatureFlag: {
-    Name: "FeatureFlag",
-    FullName: "Types::FeatureFlag",
-    Ref: "#featureflag",
-    Params: {
-      EnvironmentEnabled: { Name: "environment_enabled" },
-      Variations: { Name: "variations", Type: "Hash<String, Variation>" },
-      Rules: { Name: "rules", Type: "Array<Rule>" },
-      DefaultVariationKey: { Name: "default_variation_key", Type: "String" },
-    }
-  },
-  Rule: {
-    Name: "Rule",
-    FullName: "Types::Rule",
-    Ref: "#rule",
-    Params: {
-      Variations: { Name: "variations", Type: "Hash<String, Variation>" },
-    }
-  },
-  // methods
-  Flush: {
-    Name: "flush()",
-    Ref: "#flush",
-    Params: {
-      Instant: { Name: "instant" }
-    }
-  },
-  GetRemoteVisitorData: {
-    Name: "get_remote_visitor_data()",
-    Ref: "#get_remote_visitor_data",
-  },
-  GetVisitorCode: {
-    Name: "get_visitor_code()",
-    Ref: "#get_visitor_code",
-    Params: {
-      DefaultVisitorCode: { Name: "default_visitor_code" }
-    }
-  },
-  TrackConversion: {
-    Name: "track_conversion()",
-    Ref: "#track_conversion",
-    Params: {
-      GoalId: { Name: "goal_id" },
-      Revenue: { Name: "revenue", Type: "Float" },
-      IsUniqueIdentifier: { Name: "isUniqueIdentifier" },
-      Negative: { Name: "negative" },
-      Metadata: { Name: "metadata", Type: "Array<CustomData>", DefaultValue: "nil" }
-    }
-  },
-  GetEngineTrackingCode: {
-    Name: "get_engine_tracking_code()",
-    Ref: "#get_engine_tracking_code"
-  },
-  IsFeatureActive: {
-    Name: "feature_active?()",
-    Ref: "#feature_active"
-  },
-  GetVariation: {
-    Name: "get_variation()",
-    Ref: "#get_variation",
-    Return: "Variation",
-    Params: {
-      Track: { Name: "track" }
-    }
-  },
-  GetVariations: {
-    Name: "get_variations()",
-    Ref: "#get_variations",
-    Return: "Hash<String, Variation>",
-    Params: {
-      OnlyActive: { Name: "only_active" },
-      Track: { Name: "track" }
-    }
-  },
-  SetForcedVariation: {
-    Name: "set_forced_variation()",
-    Ref: "#set_forced_variation",
-    Params: {
-      ExperimentId: { Name: "experiment_id" },
-      VariationKey: { Name: "variation_key", Type: "String | NilClass", RemVal: "nil" },
-      ForceTargeting: { Name: "force_targeting" },
-    }
-  },
-  EvaluateAudiences: {
-    Name: "evaluate_audiences()",
-    Ref: "#evaluate_audiences"
-  },
-  UpdateConfigurationHandler: {
-    Name: "on_update_configuration()",
-    Ref: "#on_update_configuration",
-    Params: {
-      Handler: { Name: "handler", Type: "Callable" }
-    }
-  },
-  AddData: {
-    Name: "add_data()",
-    Ref: "#add_data",
-    Params: {
-      Track: { Name: "track" },
-      Data: { Name: "data", Type: "*Data" }
-    }
-  },
-  GetFeatureList: {
-    Name: "get_feature_list()",
-    Ref: "#get_feature_list",
-    Return: "Array",
-  },
-  GetDataFile: {
-    Name: "get_data_file()",
-    Ref: "#get_data_file",
-  },
-};
 
 With the Ruby SDK, you can run experiments and activate feature flags on your back-end Ruby server. Integrating our SDK into your web-application is easy, and its footprint (memory and network usage) is low.
 
@@ -278,11 +37,11 @@ You provide credentials for the Ruby SDK using a configuration file, which you c
 - **top_level_domain**: your website's current top-level domain. Use the format `example.com`. Don't use `https://`, `www`, or other subdomains. Kameleoon uses this information to set the corresponding cookie on the top-level domain. This field is mandatory.
 - **environment**: an option specifying which feature flag configuration will be used. By default, each feature flag is split into **production**, **staging**, and **development**. If not specified, environment will be set to the **default value** of **production**. [More information](https://www.kameleoon.com/en/blog/configure-your-feature-flags-and-launch-your-releases-using-next-level-multi-environment)
 - **verbose_mode**: boolean value (`true` or `false`) that turns on additional logging, including network requests and debug information. This field is deprecated and will be removed in SDK version `4.0.0`. Use [`KameleoonLogger.setLogLevel`](#log-levels) instead.
-- **network_domain**: <Text x={Shared.ExternalConfigFile.NetworkDomain}/>
+- **network_domain**: Custom domain used by SDKs for outgoing requests, often for proxying. Must be a valid domain (e.g., `example.com` or `sub.example.com`). Invalid formats default to Kameleoon's value.
 
-:::note
+<Note>
 The Kameleoon Ruby SDK uses the Automation API and follows the OAuth 2.0 client credentials flow.
-:::
+</Note>
 
 #### Initialize the client
 
@@ -290,9 +49,9 @@ After you've installed the SDK into your application and configured the correct 
 
 The next step is creating the Kameleoon client in your application code. The following code provides an example of creating the Kameleoon client. A `Kameleoon::KameleoonClient` is a singleton object that acts as a bridge between your application and Kameleoon. It includes all the methods and properties you need to run an experiment.
 
-:::note
+<Note>
 Developers are responsible for ensuring the correct logic of their application code when implementing A/B testing with Kameleoon. A best practice is to always assume that a visitor may be excluded from the experiment if it has not yet been launched. This practice is simple to implement, as it aligns with the default or reference variation logic, which should always be in place. The code samples in the next section demonstrate this approach.
-:::
+</Note>
 
 ```ruby
 # external settings file
@@ -361,34 +120,19 @@ end
 
 ##### Assigning a unique ID to a user
 
-<ActivatingAFeatureFlag sec="assigning_a_unique_id_to_a_user" c={Context}/>
-
 ##### Retrieving a flag configuration
-
-<ActivatingAFeatureFlag sec="retrieving_a_feature_flag_configuration___default" c={Context}/>
 
 ##### Adding data points to target a user or filter / breakdown visits in reports
 
-<ActivatingAFeatureFlag sec="adding_data_points_to_target_a_user_or_filter_breakdown_visits_in_reports___server" c={Context}/>
-
 ##### Tracking goal conversions
-
-<ActivatingAFeatureFlag sec="tracking_goal_conversions___param" c={Context}/>
 
 ##### Sending events to analytics solutions
 
-<ActivatingAFeatureFlag sec="sending_events_to_analytics_solutions" c={Context}/>
-
-
 ### Cross-device experimentation
-
-<CrossDeviceReconciliation sec="cross_device_experimentation" c={Context}/>
 
 #### Synchronizing custom data across devices
 
-<CrossDeviceReconciliation sec="synchronizing_custom_data" c={Context}/>
-
-```ruby title="Device A"
+```ruby
 # In this example, Custom data with index `90` was set to "Visitor" scope in Kameleoon.
 VISITOR_SCOPE_CUSTOM_DATA_INDEX = 90
 
@@ -396,7 +140,7 @@ kameleoon_client.add_data(visitor_code, CustomData.new(VISITOR_SCOPE_CUSTOM_DATA
 kameleoon_client.flush(visitor_code)
 ```
 
-```ruby title="Device B"
+```ruby
 # Before working with the data, call `get_remote_visitor_data`.
 kameleoon_client.get_remote_visitor_data(visitor_code)
 
@@ -405,8 +149,6 @@ kameleoon_client.get_remote_visitor_data(visitor_code)
 ```
 
 #### Using custom data for session merging
-
-<CrossDeviceReconciliation sec="using_custom_data_session_merging" c={Context}/>
 
 ```ruby
 # In this example, `91` represents the Custom Data's index configured as a unique identifier in Kameleoon.
@@ -441,19 +183,11 @@ kameleoon_client.track_conversion(user_id, 123, 10.0)
 kameleoon_client.get_remote_visitor_data(user_id)
 ```
 
-<CrossDeviceReconciliation sec="cross_device_visitor_code" c={Context}/>
-
 ### Using a custom bucketing key
-
-<CustomBucketingKey sec="description" c={Context}/>
 
 #### Use cases
 
-<CustomBucketingKey sec="use_cases" c={Context}/>
-
 #### Technical details
-
-<CustomBucketingKey sec="technical_details_1" c={Context}/>
 
 ```ruby
 bucketing_key = Kameleoon::CustomData.new(index, 'new_visitor_code')
@@ -461,23 +195,13 @@ bucketing_key = Kameleoon::CustomData.new(index, 'new_visitor_code')
 kameleoon_client.add_data(visitor_code, bucketing_key)
 ```
 
-<CustomBucketingKey sec="technical_details_2" c={Context}/>
-
 #### Technical requirementes
-
-<CustomBucketingKey sec="technical_requirements" c={Context}/>
 
 ### Targeting conditions
 
-<TargetingConditions sec="targeting_conditons_description" c={Context}/>
-
 ### Logging
 
-<Logging sec="logging" c={Context}/>
-
 #### Log levels
-
-<Logging sec="log_levels" c={Context}/>
 
 ```ruby
 require 'kameleoon/logging/kameleoon_logger'
@@ -506,8 +230,6 @@ Kameleoon::Logging::KameleoonLogger.log_level = Kameleoon::Logging::LogLevel::DE
 
 #### Custom handling of logs
 
-<Logging sec="custom_handling_of_logs" c={Context}/>
-
 ```ruby
 require 'logger'
 require 'kameleoon/logging/logger'
@@ -533,7 +255,6 @@ module Kameleoon
   end
 end
 
-
 # Log level filtering is applied separately from log handling logic.
 # The custom logger will only accept logs that meet or exceed the specified log level.
 # Ensure the log level is set correctly.
@@ -558,19 +279,19 @@ kameleoon_client = Kameleoon::KameleoonClientFactory.create('a8st4f59bj', config
 kameleoon_client = Kameleoon::KameleoonClientFactory.create('a8st4f59bj', config_path: '/etc/kameleoon/client-ruby.yaml')
 ```
 
-#####  Arguments
+##### Arguments
 
-Name | Type | Description
---------- | ------- | -----------
-site_code | String | This is a [unique key](https://help.kameleoon.com/question/how-do-i-find-my-site-id/) of the Kameleoon project you are using with the SDK. This field is mandatory.|
-configuration_file_path | String | Path to the SDK configuration file. This field is optional, and set to `/etc/kameleoon/client-ruby.yaml` by default.
-config | Kameleoon::KameleoonClientConfig | Configuration SDK object that you can pass instead of using a configuration file. This field is optional.
+| Name                    | Type                             | Description                                                                                                                                                         |
+| ----------------------- | -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| site_code               | String                           | This is a [unique key](https://help.kameleoon.com/question/how-do-i-find-my-site-id/) of the Kameleoon project you are using with the SDK. This field is mandatory. |
+| configuration_file_path | String                           | Path to the SDK configuration file. This field is optional, and set to `/etc/kameleoon/client-ruby.yaml` by default.                                                |
+| config                  | Kameleoon::KameleoonClientConfig | Configuration SDK object that you can pass instead of using a configuration file. This field is optional.                                                           |
 
-#####  Exceptions thrown
+##### Exceptions thrown
 
-Type | Description
---------- | -------
-Kameleoon::Exception::SiteCodeIsEmpty | Exception indicating that the specified site code is empty string, which is invalid.
+| Type                                  | Description                                                                          |
+| ------------------------------------- | ------------------------------------------------------------------------------------ |
+| Kameleoon::Exception::SiteCodeIsEmpty | Exception indicating that the specified site code is empty string, which is invalid. |
 
 #### wait_init()
 
@@ -586,9 +307,9 @@ end
 
 ##### Return value
 
-Type | Description
----- | ------------
-Bool | `true` if the Kameleoon client instance was successfully initialized, otherwise `false`.
+| Type | Description                                                                              |
+| ---- | ---------------------------------------------------------------------------------------- |
+| Bool | `true` if the Kameleoon client instance was successfully initialized, otherwise `false`. |
 
 ### Feature flags and variations
 
@@ -596,9 +317,9 @@ Bool | `true` if the Kameleoon client instance was successfully initialized, oth
 
 - 📨 _Sends Tracking Data to Kameleoon (depending on the `track` parameter)_
 
-:::note
+<Note>
 Previously called `activate_feature` - removed since SDK version `3.0.0`.
-:::
+</Note>
 
 This method takes a **visitor_code** and **feature_key** as mandatory arguments to check if the specified feature will be active for a user.
 
@@ -608,11 +329,11 @@ You must ensure that proper error handling is set up in your code as shown in th
 
 If you specify a `visitor_code`, the `feature_active?` method uses the `visitor_code` as the unique visitor identifier, which is useful for [cross-device experimentation](https://developers.kameleoon.com/core-concepts/cross-device-experimentation). When you specify a `visitor_code` and set the `is_unique_identifier` parameter to `true`, the SDK links the flushed data to the visitor associated with the specified identifier.
 
-:::note
+<Note>
 The parameter `is_unique_identifier` is deprecated. Please use [`UniqueIdentifier`](#uniqueidentifier) instead.
 
 The `is_unique_identifier` can also be useful in other edge-case scenarios, such as when you can't access the anonymous `visitorCode` that was originally assigned to the visitor, but you have access to an internal ID that is connected to the anonymous visitor using session merging capabilities.
-:::
+</Note>
 
 ```ruby
 visitor_code = kameleoon_client.get_visitor_code(cookies)
@@ -636,29 +357,27 @@ end
 
 ##### Arguments
 
-Name | Type    | Description
---------- |---------| -----------
-visitor_code | String  | Unique identifier of the user. This field is mandatory.
-feature_key | String  | Key of the feature you want to expose to a user. This field is mandatory.
-is_unique_identifier (Deprecated) | Boolean | When set to `true`, the SDK links the flushed data to the visitor associated with the specified identifier.
-track | Boolean | An optional parameter to enable or disable tracking of the feature evaluation (`true` by default).
+| Name                              | Type    | Description                                                                                                 |
+| --------------------------------- | ------- | ----------------------------------------------------------------------------------------------------------- |
+| visitor_code                      | String  | Unique identifier of the user. This field is mandatory.                                                     |
+| feature_key                       | String  | Key of the feature you want to expose to a user. This field is mandatory.                                   |
+| is_unique_identifier (Deprecated) | Boolean | When set to `true`, the SDK links the flushed data to the visitor associated with the specified identifier. |
+| track                             | Boolean | An optional parameter to enable or disable tracking of the feature evaluation (`true` by default).          |
 
 ##### Return value
 
-Type | Description
---------- | -------
-Boolean | Value of the feature that is registered for a given **visitor_code**.
+| Type    | Description                                                           |
+| ------- | --------------------------------------------------------------------- |
+| Boolean | Value of the feature that is registered for a given **visitor_code**. |
 
 ##### Exceptions thrown
 
-Type | Description
---------- | -------
-Kameleoon::Exception::FeatureNotFound  | Exception indicating that the requested feature ID has not been found in the SDK's internal configuration. This exception is usually normal and means that the feature flag has not yet been activated on Kameleoon's side (but code implementing the feature is already deployed on the web-application's side).
-Kameleoon::Exception::VisitorCodeInvalid | Exception indicating that the provided visitor code is invalid (empty, or longer than 255 characters).
+| Type                                     | Description                                                                                                                                                                                                                                                                                                       |
+| ---------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Kameleoon::Exception::FeatureNotFound    | Exception indicating that the requested feature ID has not been found in the SDK's internal configuration. This exception is usually normal and means that the feature flag has not yet been activated on Kameleoon's side (but code implementing the feature is already deployed on the web-application's side). |
+| Kameleoon::Exception::VisitorCodeInvalid | Exception indicating that the provided visitor code is invalid (empty, or longer than 255 characters).                                                                                                                                                                                                            |
 
 #### get_variation()
-
-<GetVariation sec="description" c={Context}/>
 
 ```ruby
 feature_key = "new_checkout"
@@ -690,19 +409,11 @@ end
 
 ##### Arguments
 
-<GetVariation sec="arguments" c={Context}/>
-
 ##### Return value
-
-<GetVariation sec="return_value" c={Context}/>
 
 ##### Exceptions thrown
 
-<GetVariation sec="exceptions" c={Context}/>
-
 #### get_variations()
-
-<GetVariations sec="description" c={Context}/>
 
 ```ruby
 begin
@@ -718,19 +429,11 @@ end
 
 ##### Arguments
 
-<GetVariations sec="arguments" c={Context}/>
-
 ##### Return value
-
-<GetVariations sec="return_value" c={Context}/>
 
 ##### Exceptions thrown
 
-<GetVariations sec="exceptions" c={Context}/>
-
 #### get_feature_list()
-
-<GetFeatureList sec="description" c={Context}/>
 
 ```ruby
 feature_list = kameleoon_client.get_feature_list
@@ -738,11 +441,7 @@ feature_list = kameleoon_client.get_feature_list
 
 ##### Return value
 
-<GetFeatureList sec="return_value" c={Context}/>
-
 #### set_forced_variation()
-
-<SetForcedVariation sec="description" c={Context}/>
 
 ```ruby
 experiment_id = 9516
@@ -762,15 +461,9 @@ end
 
 ##### Arguments
 
-<SetForcedVariation sec="arguments" c={Context}/>
-
 ##### Exceptions thrown
 
-<SetForcedVariation sec="exceptions" c={Context}/>
-
 #### evaluate_audiences()
-
-<EvaluateAudiences sec="description" c={Context}/>
 
 ```ruby
 begin
@@ -782,17 +475,9 @@ end
 
 ##### Arguments
 
-<EvaluateAudiences sec="arguments" c={Context}/>
-
 ##### Exceptions thrown
 
-<EvaluateAudiences sec="exceptions" c={Context}/>
-
 #### get_data_file()
-
-<GetDataFile sec="tip_qa" c={Context}/>
-
-<GetDataFile sec="description" c={Context}/>
 
 ```ruby
 begin
@@ -804,16 +489,13 @@ end
 
 ##### Return value
 
-<GetDataFile sec="return_value" c={Context}/>
-
-
 ### Visitor data
 
 #### get_visitor_code()
 
-:::note
+<Note>
 Previously called `obtain_visitor_code` - removed since SDK version `3.0.0`.
-:::
+</Note>
 
 Call the `get_visitor_code` helper method to obtain the Kameleoon **visitor_code** for the current visitor. This method is important when using Kameleoon in a mixed front-end and back-end environment, where user identification accuracy must be guaranteed. The implementation logic is as follows:
 
@@ -823,14 +505,11 @@ Call the `get_visitor_code` helper method to obtain the Kameleoon **visitor_code
 
 In all cases, the server-side (via HTTP header) **kameleoonVisitorCode** cookie is set with the value. In later visits, the identifier that you set is the the value returned by the method.
 
-<!-- TODO: link -->
 For more information, refer to [this article](/core-concepts/hybrid-experimentation/).
 
-:::note
+<Note>
 If you provide your own `visitor_code`, you must guarantee its uniqueness-the SDK cannot check it. Also, note that the length of the `visitor_code` is limited to **255** characters. Any excess characters will throw an exception.
-:::
-
-<SharedDiv sec="get_visitor_code_simulated" c={Context}/>
+</Note>
 
 ```ruby
 visitor_code = kameleoon_client.get_visitor_code(cookies)
@@ -840,20 +519,18 @@ visitor_code = kameleoon_client.get_visitor_code(cookies, default_visitor_code)
 
 ##### Arguments
 
-Name | Type | Description
---------- | ------- | -----------
-cookies | Hash | Cookies on the current HTTP request should be passed as a Hash object (`{:cookie_name => cookie_value}`). If you use Rails, you can pass the **cookies** variable. This field is mandatory.
-default_visitor_code | String | This parameter will be used as the **visitor_code** if no existing **kameleoonVisitorCode** cookie is found in the request. This field is optional, and by default, a random **visitor_code** will be generated.
+| Name                 | Type   | Description                                                                                                                                                                                                      |
+| -------------------- | ------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| cookies              | Hash   | Cookies on the current HTTP request should be passed as a Hash object (`{:cookie_name => cookie_value}`). If you use Rails, you can pass the **cookies** variable. This field is mandatory.                      |
+| default_visitor_code | String | This parameter will be used as the **visitor_code** if no existing **kameleoonVisitorCode** cookie is found in the request. This field is optional, and by default, a random **visitor_code** will be generated. |
 
 ##### Return value
 
-Type | Description
---------- | -------
-String | A **visitor_code** that will be associated with this particular user and should be used with most of the SDK methods.
+| Type   | Description                                                                                                           |
+| ------ | --------------------------------------------------------------------------------------------------------------------- |
+| String | A **visitor_code** that will be associated with this particular user and should be used with most of the SDK methods. |
 
 #### add_data()
-
-<AddData sec="description" c={Context}/>
 
 ```ruby
 require "kameleoon"
@@ -871,10 +548,8 @@ kameleoon_client.add_data(visitor_code, Kameleoon::Conversion.new(32, 10, false)
 ```
 
 ##### Arguments
-<AddData sec="arguments" c={Context}/>
 
 ##### Exceptions
-<AddData sec="exceptions" c={Context}/>
 
 #### flush()
 
@@ -886,11 +561,11 @@ kameleoon_client.add_data(visitor_code, Kameleoon::Conversion.new(32, 10, false)
 
 If you specify a `visitor_code`, the `flush()` method uses it as the unique visitor identifier, which is useful for [cross-device experimentation](/core-concepts/cross-device-experimentation). When you specify a `visitor_code` and set the `is_unique_identifier` parameter to `true`, the SDK links the flushed data to the visitor associated with the specified identifier.
 
-:::note
+<Note>
 The parameter `is_unique_identifier` is deprecated. Please use [`UniqueIdentifier`](#uniqueidentifier) instead.
 
 The `is_unique_identifier` can also be useful in other edge-case scenarios, such as when you can't access the anonymous `visitorCode` that was originally assigned to the visitor, but you have access to an internal ID that is connected to the anonymous visitor using session merging capabilities.
-:::
+</Note>
 
 ```ruby
 require "kameleoon"
@@ -915,19 +590,19 @@ kameleoon_client.add_data(Kameleoon::UniqueIdentifier.new(true))
 kameleoon_client.flush(visitor_code)
 ```
 
-#####  Arguments
+##### Arguments
 
-Name | Type | Description
---------- | ------- | -----------
-visitor_code | String | Unique identifier of the user. This field is mandatory.
-is_unique_identifier | Boolean | When `true`, the SDK links the flushed data to the visitor associated with the specified identifier.
-instant | Boolean | Boolean flag indicating whether the data should be sent instantly (`true`) or according to the scheduled tracking interval (`false`). This field is optional.
+| Name                 | Type    | Description                                                                                                                                                   |
+| -------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| visitor_code         | String  | Unique identifier of the user. This field is mandatory.                                                                                                       |
+| is_unique_identifier | Boolean | When `true`, the SDK links the flushed data to the visitor associated with the specified identifier.                                                          |
+| instant              | Boolean | Boolean flag indicating whether the data should be sent instantly (`true`) or according to the scheduled tracking interval (`false`). This field is optional. |
 
 #### get_remote_data()
 
-:::note
+<Note>
 Previously named: `retrieve_data_from_remote_source` - removed since SDK version `3.0.0`.
-:::
+</Note>
 
 The `get_remote_data()` method lets you retrieve data (according to a **key** passed as argument) for a specified **siteCode** (specified in `Kameleoon::KameleoonClientFactory.create()`) stored on a remote Kameleoon server. Usually, data is stored on our remote servers using our Data API. This method, along with the availability of our highly scalable servers for this purpose, provides a convenient way to store massive amounts of data that can be retrieved for each of your visitors/users.
 
@@ -943,22 +618,22 @@ end
 
 ##### Arguments
 
-Name | Type | Description
---------- | ------- | -----------
-key | String | The key that the data you try to retrieve is associated with. This field is mandatory.
-timeout | Integer | Timeout (in milliseconds). This parameter specifies the maximum amount of time the method can block to wait for a result. This field is optional; if not provided, it will use the `default_timeout` value from configuration file or 2000 milliseconds if it's not specified in the file.
+| Name    | Type    | Description                                                                                                                                                                                                                                                                                |
+| ------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| key     | String  | The key that the data you try to retrieve is associated with. This field is mandatory.                                                                                                                                                                                                     |
+| timeout | Integer | Timeout (in milliseconds). This parameter specifies the maximum amount of time the method can block to wait for a result. This field is optional; if not provided, it will use the `default_timeout` value from configuration file or 2000 milliseconds if it's not specified in the file. |
 
 ##### Return value
 
-| Type | Description
------- | -------
-Hash | Hash object associated with retrieving data for specific **key**.
+| Type | Description                                                       |
+| ---- | ----------------------------------------------------------------- |
+| Hash | Hash object associated with retrieving data for specific **key**. |
 
 ##### Exceptions thrown
 
-Type | Description
---------- | -------
-Error  | Error indicating that the request timed out or the retrieved data can't be parsed with the `JSON.parse()` method.
+| Type  | Description                                                                                                       |
+| ----- | ----------------------------------------------------------------------------------------------------------------- |
+| Error | Error indicating that the request timed out or the retrieved data can't be parsed with the `JSON.parse()` method. |
 
 #### get_remote_visitor_data()
 
@@ -966,21 +641,21 @@ Error  | Error indicating that the request timed out or the retrieved data can't
 
 Data obtained using this method plays an important role when you want to:
 
-* use data collected from other devices.
-* access a user's history, such as previously visited pages during past visits.
-* use data that is only accessible on the client-side, like datalayer variables and goals that only convert on the front-end.
+- use data collected from other devices.
+- access a user's history, such as previously visited pages during past visits.
+- use data that is only accessible on the client-side, like datalayer variables and goals that only convert on the front-end.
 
-Read [this article]( https://developers.kameleoon.com/feature-management-and-experimentation/using-visit-history-in-feature-flags-and-experiments/) for a better understanding of possible use cases.
+Read [this article](https://developers.kameleoon.com/feature-management-and-experimentation/using-visit-history-in-feature-flags-and-experiments/) for a better understanding of possible use cases.
 
-:::caution
+<Warning>
 By default, `get_remote_visitor_data()` automatically retrieves the latest stored custom data with `scope=Visitor` and attaches them to the visitor without having to call the `add_data()` method. It is particularly useful for [synchronizing custom data between multiple devices](https://developers.kameleoon.com/feature-management-and-experimentation/web-sdks/nodejs-sdk/#synchronizing-custom-data-across-devices).
-:::
+</Warning>
 
-:::note
+<Note>
 The parameter `is_unique_identifier` is deprecated. Please use [`UniqueIdentifier`](#uniqueidentifier) instead.
 
 The `is_unique_identifier` can also be useful in other edge-case scenarios, such as when you can't access the anonymous `visitorCode` that was originally assigned to the visitor, but you have access to an internal ID that is connected to the anonymous visitor using session merging capabilities.
-:::
+</Note>
 
 ```ruby
 visitor_code = 'visitorCode'
@@ -1004,19 +679,19 @@ data_array = kameleoon_client.get_remote_visitor_data(visitor_code)
 
 ##### Arguments
 
-Name | Type | Description
---------- | ------- | -----------
-visitor_code | String | The visitor code for which you want to retrieve the assigned data. This field is mandatory.
-timeout | Integer | Timeout (in milliseconds). This parameter specifies the maximum amount of time the method can block to wait for a result. This field is optional; if not provided, it uses the `default_timeout` value from the configuration file or 2000 milliseconds if it's not specified in the file.
-add_data | Boolean | A boolean indicating whether the method should automatically add retrieved data for a visitor. If not specified, the default value is **true**. This field is optional.
-filter | `Kameleoon::Types::RemoteVisitorDataFilter` | Filter that specifies which data should be retrieved from visits. By default, only `CustomData` is retrieved from the current and latest previous visit (`RemoteVisitorDataFilter.new(previousVisitAmount: 1, currentVisit: true, customData: true)` or `RemoteVisitorDataFilter.new`). Other filters parameters are set to `false`. This field is optional.
-is_unique_identifier (Deprecated) | Boolean | An optional parameter for specifying if the visitorCode is a unique identifier. If not provided, the default value is `false`. The field is optional.
+| Name                              | Type                                        | Description                                                                                                                                                                                                                                                                                                                                                  |
+| --------------------------------- | ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| visitor_code                      | String                                      | The visitor code for which you want to retrieve the assigned data. This field is mandatory.                                                                                                                                                                                                                                                                  |
+| timeout                           | Integer                                     | Timeout (in milliseconds). This parameter specifies the maximum amount of time the method can block to wait for a result. This field is optional; if not provided, it uses the `default_timeout` value from the configuration file or 2000 milliseconds if it's not specified in the file.                                                                   |
+| add_data                          | Boolean                                     | A boolean indicating whether the method should automatically add retrieved data for a visitor. If not specified, the default value is **true**. This field is optional.                                                                                                                                                                                      |
+| filter                            | `Kameleoon::Types::RemoteVisitorDataFilter` | Filter that specifies which data should be retrieved from visits. By default, only `CustomData` is retrieved from the current and latest previous visit (`RemoteVisitorDataFilter.new(previousVisitAmount: 1, currentVisit: true, customData: true)` or `RemoteVisitorDataFilter.new`). Other filters parameters are set to `false`. This field is optional. |
+| is_unique_identifier (Deprecated) | Boolean                                     | An optional parameter for specifying if the visitorCode is a unique identifier. If not provided, the default value is `false`. The field is optional.                                                                                                                                                                                                        |
 
 ##### Return value
 
-| Type | Description
------- | -------
-Array | An array of data assigned to the given visitor.
+| Type  | Description                                     |
+| ----- | ----------------------------------------------- |
+| Array | An array of data assigned to the given visitor. |
 
 ##### Using parameters in get_remote_visitor_data()
 
@@ -1026,26 +701,27 @@ For example, suppose you want to retrieve data on visitors who completed a goal 
 
 The flexibility shown in this example is not limited to goal data. You can use parameters within the `get_remote_visitor_data()` method to retrieve data on a variety of visitor behaviors.
 
-:::note
+<Note>
 Here is the list of available `Kameleoon::Types::RemoteVisitorDataFilter` options:
 
-| Name                               | Type      | Description                                                                  | Default |
-|------------------------------------| --------- | ---------------------------------------------------------------------------- | ------- |
-| previous_visit_amount _(optional)_ | `Integer` | Number of previous visits to retrieve data from. Number between `1` and `25` | `1`     |
-| current_visit _(optional)_         | `Boolean` | If true, current visit data will be retrieved                                | `true`  |
-| custom_data _(optional)_           | `Boolean` | If true, custom data will be retrieved.                                      | `true`  |
-| page_views _(optional)_            | `Boolean` | If true, page data will be retrieved.                                        | `false` |
-| geolocation _(optional)_           | `Boolean` | If true, geolocation data will be retrieved.                                 | `false` |
-| device _(optional)_                | `Boolean` | If true, device data will be retrieved.                                      | `false` |
-| browser _(optional)_               | `Boolean` | If true, browser data will be retrieved.                                     | `false` |
-| operating_system _(optional)_      | `Boolean` | If true, operating system data will be retrieved.                            | `false` |
-| conversions _(optional)_           | `Boolean` | If true, conversion data will be retrieved.                                  | `false` |
-| experiments _(optional)_           | `Boolean` | If true, experiment data will be retrieved.                                  | `false` |
-| kcs _(optional)_                   | `Boolean` | If true, Kameleoon Conversion Score (KCS) will be retrieved. Requires the [AI Predictive Targeting add-on](https://help.kameleoon.com/target-users-by-ai-propensity-score-kameleoon-conversion-score/)                                   | `false` |
-| visitor_code _(optional)_         | `Boolean` | If true, Kameleoon will retrieve the `visitorCode` from the most recent visit and use it for the current visit. This is necessary if you want to ensure that the visitor, identified by their `visitorCode`, always receives the same variation across visits for [Cross-device experimentation](/core-concepts/cross-device-experimentation). | `true` |
-| personalization (_optional_)     | `Boolean` | If true, personalization data will be retrieved. This is required for the personalization condition. | `false` |
-| cbs _(optional)_                 | `Boolean` | <Text x={Shared.RemoteVisitorDataFilter.CBS}/> | `false` |
-:::
+| Name                                | Type      | Description                                                                                                                                                                                                                                                                                                                                    | Default |
+| ----------------------------------- | --------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| previous*visit_amount *(optional)\_ | `Integer` | Number of previous visits to retrieve data from. Number between `1` and `25`                                                                                                                                                                                                                                                                   | `1`     |
+| current*visit *(optional)\_         | `Boolean` | If true, current visit data will be retrieved                                                                                                                                                                                                                                                                                                  | `true`  |
+| custom*data *(optional)\_           | `Boolean` | If true, custom data will be retrieved.                                                                                                                                                                                                                                                                                                        | `true`  |
+| page*views *(optional)\_            | `Boolean` | If true, page data will be retrieved.                                                                                                                                                                                                                                                                                                          | `false` |
+| geolocation _(optional)_            | `Boolean` | If true, geolocation data will be retrieved.                                                                                                                                                                                                                                                                                                   | `false` |
+| device _(optional)_                 | `Boolean` | If true, device data will be retrieved.                                                                                                                                                                                                                                                                                                        | `false` |
+| browser _(optional)_                | `Boolean` | If true, browser data will be retrieved.                                                                                                                                                                                                                                                                                                       | `false` |
+| operating*system *(optional)\_      | `Boolean` | If true, operating system data will be retrieved.                                                                                                                                                                                                                                                                                              | `false` |
+| conversions _(optional)_            | `Boolean` | If true, conversion data will be retrieved.                                                                                                                                                                                                                                                                                                    | `false` |
+| experiments _(optional)_            | `Boolean` | If true, experiment data will be retrieved.                                                                                                                                                                                                                                                                                                    | `false` |
+| kcs _(optional)_                    | `Boolean` | If true, Kameleoon Conversion Score (KCS) will be retrieved. Requires the [AI Predictive Targeting add-on](https://help.kameleoon.com/target-users-by-ai-propensity-score-kameleoon-conversion-score/)                                                                                                                                         | `false` |
+| visitor*code *(optional)\_          | `Boolean` | If true, Kameleoon will retrieve the `visitorCode` from the most recent visit and use it for the current visit. This is necessary if you want to ensure that the visitor, identified by their `visitorCode`, always receives the same variation across visits for [Cross-device experimentation](/core-concepts/cross-device-experimentation). | `true`  |
+| personalization (_optional_)        | `Boolean` | If true, personalization data will be retrieved. This is required for the personalization condition.                                                                                                                                                                                                                                           | `false` |
+| cbs _(optional)_                    | `Boolean` | If true, Contextual Bandit score data will be retrieved.                                                                                                                                                                                                                                                                                       | `false` |
+
+</Note>
 
 #### get_visitor_warehouse_audience()
 
@@ -1067,25 +743,25 @@ end
 
 ##### Arguments
 
-Name | Type | Description
---------- | ------- | -----------
-visitor_code | String | A unique visitor identification string, can't exceed 255 characters length.
-custom_data_index | Integer | An integer representing the index of the custom data you want to use to target your BigQuery Audiences.
-warehouse_key | String | A unique key to identify the warehouse data (usually your internal user ID). This field is optional.
-timeout | Integer | Timeout (in milliseconds). This parameter specifies the maximum amount of time to wait for a result. This field is optional. If not provided, the default value is 10000 milliseconds.
+| Name              | Type    | Description                                                                                                                                                                            |
+| ----------------- | ------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| visitor_code      | String  | A unique visitor identification string, can't exceed 255 characters length.                                                                                                            |
+| custom_data_index | Integer | An integer representing the index of the custom data you want to use to target your BigQuery Audiences.                                                                                |
+| warehouse_key     | String  | A unique key to identify the warehouse data (usually your internal user ID). This field is optional.                                                                                   |
+| timeout           | Integer | Timeout (in milliseconds). This parameter specifies the maximum amount of time to wait for a result. This field is optional. If not provided, the default value is 10000 milliseconds. |
 
 ##### Return value
 
-| Type | Description
------- | -------
-`Kameleoon::CustomData` | A `CustomData` instance confirming that the data has been added to the visitor.
+| Type                    | Description                                                                     |
+| ----------------------- | ------------------------------------------------------------------------------- |
+| `Kameleoon::CustomData` | A `CustomData` instance confirming that the data has been added to the visitor. |
 
-#####  Exceptions thrown
+##### Exceptions thrown
 
-Type | Description
---------- | -------
-Kameleoon::Exception::VisitorCodeInvalid | Exception indicating that the provided visitor code is invalid (it is either empty or longer than 255 characters).
-StandardError | Exception indicating that the request timed out or any other reason of failure.
+| Type                                     | Description                                                                                                        |
+| ---------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| Kameleoon::Exception::VisitorCodeInvalid | Exception indicating that the provided visitor code is invalid (it is either empty or longer than 255 characters). |
+| StandardError                            | Exception indicating that the request timed out or any other reason of failure.                                    |
 
 #### set_legal_consent()
 
@@ -1098,22 +774,21 @@ kameleoon_client.set_legal_consent(visitor_code, true, cookies)
 
 ##### Arguments
 
-Name | Type | Description
----- | ---- | -----------
-visitor_code | String | The user's unique identifier. This field is required.
-consent | Bool | A boolean value representing the legal consent status. `true` indicates the visitor has given legal consent; `false` indicates the visitor never provided, or has withdrawn, legal consent. This field is required.
-cookies | Hash | The HTTP response where values in the cookies will be adjusted based on the legal consent status. This field is optional.
+| Name         | Type   | Description                                                                                                                                                                                                         |
+| ------------ | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| visitor_code | String | The user's unique identifier. This field is required.                                                                                                                                                               |
+| consent      | Bool   | A boolean value representing the legal consent status. `true` indicates the visitor has given legal consent; `false` indicates the visitor never provided, or has withdrawn, legal consent. This field is required. |
+| cookies      | Hash   | The HTTP response where values in the cookies will be adjusted based on the legal consent status. This field is optional.                                                                                           |
 
 ##### Exceptions thrown
 
-Type | Description
---------- | -------
-Kameleoon::Exception::VisitorCodeInvalid | Exception indicating that the provided visitor code is invalid. It is either empty or longer than 255 characters.
+| Type                                     | Description                                                                                                       |
+| ---------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| Kameleoon::Exception::VisitorCodeInvalid | Exception indicating that the provided visitor code is invalid. It is either empty or longer than 255 characters. |
 
 ### Goals and third-party analytics
 
 #### track_conversion()
-<TrackConversion sec="description" c={Context}/>
 
 ```ruby
 require "kameleoon"
@@ -1133,23 +808,17 @@ kameleoon_client.track_conversion(visitorCode, goalId, metadata: [cd])
 ```
 
 ##### Arguments
-<TrackConversion sec="arguments" c={Context}/>
 
-:::note
-<TrackConversion sec="note_metadata" c={Context}/>
-
+<Note>
 ```ruby
 kameleoon_client.add_data(visitor_code, Kameleoon::CustomData.new(5, "Credit Card"), Kameleoon::CustomData.new(9, "Express Delivery"))
 kameleoon_client.track_conversion(visitor_code, 10, metadata: [Kameleoon::CustomData.new(5, "Amex Credit Card")])
 ```
-:::
+</Note>
 
 ##### Exceptions
-<TrackConversion sec="exceptions" c={Context}/>
 
 #### get_engine_tracking_code()
-
-<GetEngineTrackingCode sec="description" c={Context}/>
 
 ```ruby
 engine_tracking_code = kameleoon_client.get_engine_tracking_code(visitor_code)
@@ -1157,17 +826,11 @@ engine_tracking_code = kameleoon_client.get_engine_tracking_code(visitor_code)
 
 ##### Arguments
 
-<GetEngineTrackingCode sec="arguments" c={Context}/>
-
 ##### Return value
-
-<GetEngineTrackingCode sec="return_value" c={Context}/>
 
 ### Events
 
 #### on_update_configuration()
-
-<UpdateConfigurationHandler sec="description" c={Context}/>
 
 ```ruby
 
@@ -1178,15 +841,9 @@ kameleoon_client.on_update_configuration(
 
 ##### Arguments
 
-<UpdateConfigurationHandler sec="arguments" c={Context}/>
-
 ### Data types
 
 #### Browser
-
-<Browser sec="description" c={Context}/>
-
-<Browser sec="arguments" c={Context}/>
 
 ```ruby
 kameleoon_client.add_data(visitor_code, Kameleoon::Browser.new(Kameleoon::BrowserType::CHROME))
@@ -1197,24 +854,20 @@ kameleoon_client.add_data(visitor_code, Kameleoon::Browser.new(Kameleoon::Browse
 #### PageView
 
 | Name      | Type   | Description                                        |
-|-----------|--------|----------------------------------------------------|
+| --------- | ------ | -------------------------------------------------- |
 | url       | String | URL of the page viewed. This field is mandatory.   |
 | title     | String | Title of the page viewed. This field is mandatory. |
 | referrers | Array  | Referrers of viewed pages. This field is optional. |
 
-:::note
+<Note>
 The referrer's index (ID) is available in the Acquisition channel configuration page of our Back-Office. Be careful: this index starts at 0, so the first [acquisition channel](https://help.kameleoon.com/create-acquisition-channel) you create for a site would have the ID 0, not 1.
-:::
+</Note>
 
 ```ruby
 kameleoon_client.add_data(visitor_code, Kameleoon::PageView.new("https://url.com", "title", [3]))
 ```
 
 #### Conversion
-
-<Conversion sec="description" c={Context}/>
-
-<Conversion sec="arguments" c={Context}/>
 
 ```ruby
 kameleoon_client.add_data(visitor_code, Kameleoon::Conversion.new(32, 10))
@@ -1236,20 +889,18 @@ kameleoon_client.add_data(
 
 To learn more about custom data, please refer to this [article](/core-concepts/custom-data).
 
-| Name | Type | Description | Default |
-| ---- | ---- | ----------- | ------- |
-| index/name _(required)_ | `Integer`/`String` | Index or Name of the custom data. **Either `index` or `name` must be provided** to identify the data. | |
-| values _(required)_ | `Array` | Values of the custom data to be stored. | |
-| overwrite _(optional)_ | `Boolean` | Flag to explicitly control how the values are stored and how they appear in reports. [See more](https://developers.kameleoon.com/core-concepts/custom-data/#default-logic-when-overwrite-parameter-is-false-or-omitted) | `true` |
+| Name                    | Type               | Description                                                                                                                                                                                                             | Default |
+| ----------------------- | ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| index/name _(required)_ | `Integer`/`String` | Index or Name of the custom data. **Either `index` or `name` must be provided** to identify the data.                                                                                                                   |         |
+| values _(required)_     | `Array`            | Values of the custom data to be stored.                                                                                                                                                                                 |         |
+| overwrite _(optional)_  | `Boolean`          | Flag to explicitly control how the values are stored and how they appear in reports. [See more](https://developers.kameleoon.com/core-concepts/custom-data/#default-logic-when-overwrite-parameter-is-false-or-omitted) | `true`  |
 
-:::note
-
+<Note>
 - Each visitor can only have one `CustomData` for each unique `index`. Adding another `CustomData` with the same `index` will replace the existing `CustomData`.
 - The custom data `index` can be found in the [Custom Data dashboard](https://help.kameleoon.com/manage-your-custom-data/) under the “INDEX” column.
 - To prevent the SDK from sending data with the selected index to Kameleoon servers for privacy reasons, enable the option **Use this data only locally for targeting purposes** when creating custom data.
 - Adding a `CustomData` instance created with a name when the SDK instance configuration is not up to date or the name is not registered, will result in the data being ignored.
-
-:::
+</Note>
 
 ```ruby
 custom_data = Kameleoon::CustomData.new(1, 'value')
@@ -1277,8 +928,8 @@ kameleoon_client.add_data(visitor_code, custom_data)
 
 #### Device
 
-| Name    | Type   | Description                                                                                          |
-| ------- | ------ | ---------------------------------------------------------------------------------------------------- |
+| Name   | Type       | Description                                                                   |
+| ------ | ---------- | ----------------------------------------------------------------------------- |
 | device | DeviceType | List of devices: **PHONE**, **TABLET**, **DESKTOP**. This field is mandatory. |
 
 ```ruby
@@ -1291,8 +942,8 @@ Store information on the visitor's user-agent. Server-side experiments are more 
 
 If you use internal bots, we suggest passing the value **curl/8.0** of the userAgent to exclude them from our analytics.
 
-| Name    | Type   | Description                                                                                          |
-| ------- | ------ | ---------------------------------------------------------------------------------------------------- |
+| Name  | Type   | Description                                                                             |
+| ----- | ------ | --------------------------------------------------------------------------------------- |
 | value | String | The User-Agent value that will be sent with tracking requests. This field is mandatory. |
 
 ```ruby
@@ -1305,8 +956,8 @@ If you don't add `UniqueIdentifier` for a visitor, `visitor_code` is used as the
 
 The `UniqueIdentifier` can also be useful in other edge-case scenarios, such as when you can't access the anonymous `visitorCode` that was originally assigned to the visitor, but you have access to an internal ID that is connected to the anonymous visitor using session merging capabilities.
 
-| Name    | Type   | Description  |
-| ------- | ------ | ------------ |
+| Name  | Type    | Description                                                                                  |
+| ----- | ------- | -------------------------------------------------------------------------------------------- |
 | value | Boolean | Parameter for specifying if the visitor_code is a unique identifier. This field is required. |
 
 ```ruby
@@ -1317,12 +968,12 @@ kameleoon_client.add_data(visitorCode, Kameleoon::UniqueIdentifier.new(true))
 
 `OperatingSystem` contains information about the visitor's operating system.
 
-:::note
+<Note>
 Each visitor can only have one `OperatingSystem`. Adding a second `OperatingSystem` overwrites the first.
-:::
+</Note>
 
-| Name | Type                | Description                                                                 |
-| ---- |---------------------|-----------------------------------------------------------------------------|
+| Name | Type                | Description                                                                                                       |
+| ---- | ------------------- | ----------------------------------------------------------------------------------------------------------------- |
 | type | OperatingSystemType | List of types: **WINDOWS**, **MAC**, **IOS**, **LINUX**, **ANDROID**, **WINDOWS_PHONE**. This field is mandatory. |
 
 ```ruby
@@ -1333,12 +984,12 @@ kameleoon_client.add_data(visitor_code, Kameleoon::OperatingSystem.new(Kameleoon
 
 `Cookie` contains information about the cookie stored on the visitor's device.
 
-:::note
+<Note>
 Each visitor can only have one `Cookie`. Adding a second `Cookie` overwrites the first.
-:::
+</Note>
 
-| Name | Type | Description  |
-| ---- |------| -----------  |
+| Name    | Type | Description                                                                                                   |
+| ------- | ---- | ------------------------------------------------------------------------------------------------------------- |
 | cookies | Hash | Hash object (`{:cookie_name => cookie_value}`) consisting of cookie keys and values. This field is mandatory. |
 
 ```ruby
@@ -1348,10 +999,6 @@ kameleoon_client.add_data(visitor_code, cookie)
 
 #### Geolocation
 
-<Geolocation sec="description" c={Context}/>
-
-<Geolocation sec="arguments" c={Context}/>
-
 ```ruby
 kameleoon_client.add_data(visitor_code, Kameleoon::Geolocation.new("France", "Île-de-France", "Paris"))
 ```
@@ -1360,19 +1007,11 @@ kameleoon_client.add_data(visitor_code, Kameleoon::Geolocation.new("France", "Î
 
 #### DataFile
 
-<DataFile sec="description" c={Context}/>
-
-<DataFile sec="arguments" c={Context}/>
-
 ```ruby
 feature_flags = datafile.feature_flags
 ```
 
 #### FeatureFlag
-
-<FeatureFlag sec="description_rules" c={Context}/>
-
-<FeatureFlag sec="arguments_rules" c={Context}/>
 
 ```ruby
 # Check whether the feature flag is enabled in the current environment
@@ -1393,10 +1032,6 @@ rules = feature_flag.rules
 
 #### Rule
 
-<Rule sec="description" c={Context}/>
-
-<Rule sec="arguments" c={Context}/>
-
 ```ruby
 # Retrieve all variations of the rule as a map (key = variation key, value = Variation object)
 variations = rule.variations
@@ -1407,18 +1042,18 @@ variations = rule.variations
 `Variation` contains information about the assigned variation to the visitor (or the default variation, if no specific assignment exists).
 
 | Name          | Type                     | Description                                                                                                                             |
-|---------------|--------------------------|-----------------------------------------------------------------------------------------------------------------------------------------|
-| name          | `String`                 | The name of the variation.                                                                                                                  |
-| key           | `String`                 | The unique key identifying the variation.                                                                                                                   |
+| ------------- | ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------- |
+| name          | `String`                 | The name of the variation.                                                                                                              |
+| key           | `String`                 | The unique key identifying the variation.                                                                                               |
 | id            | `Integer` or `NilClass`  | The ID of the assigned variation (or `nil` if it's the default variation).                                                              |
 | experiment_id | `Integer` or `NilClass`  | The ID of the experiment associated with the variation (or `nil` if default).                                                           |
 | variables     | `Hash<String, Variable>` | A hash containing the variables of the assigned variation, keyed by variable names. This could be empty if no variables are associated. |
 
-:::note
+<Note>
 - The `Variation` object provides details about the assigned variation and its associated experiment, while the [`Variable`](#variable) object contains specific details about each variable within a variation.
 - Ensure that your code handles the case where `id` or `experiment_id` may be `nil`, indicating a default variation.
 - The `variables` hash might be empty if no variables are associated with the variation.
-:::
+</Note>
 
 ```ruby
 # Retrieving the variation name
@@ -1441,11 +1076,11 @@ variables = variation.variables
 
 `Variable` contains information about a variable associated with the assigned variation.
 
-| Name    | Type      | Description                                                                                                      |
-| ------- | --------- | ---------------------------------------------------------------------------------------------------------------- |
-| key   | `String`  | The unique key identifying the variable.                                                                         |
-| type  | `String`  | The type of the variable. Possible values: **BOOLEAN**, **NUMBER**, **STRING**, **JSON**, **JS**, **CSS**        |
-| value | `Object`  | The value of the variable, which can be of the following types: **Boolean**, **Integer**, **Float**, **String**, **Hash**, **Array**. |
+| Name  | Type     | Description                                                                                                                           |
+| ----- | -------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| key   | `String` | The unique key identifying the variable.                                                                                              |
+| type  | `String` | The type of the variable. Possible values: **BOOLEAN**, **NUMBER**, **STRING**, **JSON**, **JS**, **CSS**                             |
+| value | `Object` | The value of the variable, which can be of the following types: **Boolean**, **Integer**, **Float**, **String**, **Hash**, **Array**. |
 
 ```ruby
 # Retrieving the variables map
@@ -1463,17 +1098,17 @@ title = variables["title"].value
 
 ### Deprecated methods
 
-:::caution
+<Warning>
 These methods are deprecated and will be removed in SDK version `4.0.0`.
-:::
+</Warning>
 
 #### get_feature_variation_key()
 
 - 📨 _Sends Tracking Data to Kameleoon_
 
-:::note
+<Note>
 Use [`get_variation()`](#get_variation) instead.
-:::
+</Note>
 
 To get a feature variation key, call the `get_feature_variation_key` method.
 
@@ -1485,11 +1120,11 @@ You must ensure that proper error handling is set up in your code as shown in th
 
 If you specify a `visitor_code`, the `get_feature_variation_key` method uses the `visitor_code` as the unique visitor identifier, which is useful for [cross-device experimentation](https://developers.kameleoon.com/core-concepts/cross-device-experimentation). When you specify a `visitor_code` and set the `is_unique_identifier` parameter to `true`, the SDK links the flushed data to the visitor associated with the specified identifier.
 
-:::note
+<Note>
 The parameter `is_unique_identifier` is deprecated. Please use [`UniqueIdentifier`](#uniqueidentifier) instead.
 
 The `is_unique_identifier` can also be useful in other edge-case scenarios, such as when you can't access the anonymous `visitorCode` that was originally assigned to the visitor, but you have access to an internal ID that is connected to the anonymous visitor using session merging capabilities.
-:::
+</Note>
 
 ```ruby
 visitor_code = kameleoon_client.get_visitor_code(cookies)
@@ -1518,31 +1153,31 @@ end
 
 ##### Arguments
 
-| Name                 | Type             | Description                                                                                                                                                                                                                                                                   |
-|----------------------| ---------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| visitor_code         | string | Unique identifier of the user. This field is mandatory.   |
-| feature_key          | string | Key of the feature you want to expose to a user. This field is mandatory. |
-| is_unique_identifier (Deprecated) | Boolean | When `true`, the SDK links the flushed data to the visitor associated with the specified identifier.|
+| Name                              | Type    | Description                                                                                          |
+| --------------------------------- | ------- | ---------------------------------------------------------------------------------------------------- |
+| visitor_code                      | string  | Unique identifier of the user. This field is mandatory.                                              |
+| feature_key                       | string  | Key of the feature you want to expose to a user. This field is mandatory.                            |
+| is_unique_identifier (Deprecated) | Boolean | When `true`, the SDK links the flushed data to the visitor associated with the specified identifier. |
 
 ##### Return value
 
-| Type    | Description                                                          |
-| ------- | -------------------------------------------------------------------- |
+| Type   | Description                                                                        |
+| ------ | ---------------------------------------------------------------------------------- |
 | string | Variation key of the feature flag that is registered for a given **visitor_code**. |
 
 ##### Exceptions thrown
 
-| Type                                            | Description                                                                                                                                                                                                                                                                                                  |
-| ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-Kameleoon::Exception::FeatureNotFound  | Exception indicating that the requested feature ID has not been found in the SDK''s internal configuration. This exception is usually normal and means that the feature flag has not yet been activated on Kameleoon's side (but code implementing the feature is already deployed on the web-application's side).
-Kameleoon::Exception::FeatureEnvironmentDisabled | Exception indicating that feature flag is disabled for the visitor's current environment (for example, production, staging, or development).
-Kameleoon::Exception::VisitorCodeInvalid | Exception indicating that the provided visitor code is invalid (empty, or longer than 255 characters).
+| Type                                             | Description                                                                                                                                                                                                                                                                                                        |
+| ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Kameleoon::Exception::FeatureNotFound            | Exception indicating that the requested feature ID has not been found in the SDK''s internal configuration. This exception is usually normal and means that the feature flag has not yet been activated on Kameleoon's side (but code implementing the feature is already deployed on the web-application's side). |
+| Kameleoon::Exception::FeatureEnvironmentDisabled | Exception indicating that feature flag is disabled for the visitor's current environment (for example, production, staging, or development).                                                                                                                                                                       |
+| Kameleoon::Exception::VisitorCodeInvalid         | Exception indicating that the provided visitor code is invalid (empty, or longer than 255 characters).                                                                                                                                                                                                             |
 
 #### get_active_feature_list_for_visitor()
 
-:::note
+<Note>
 Use [`get_active_features()`](#get_active_features) instead.
-:::
+</Note>
 
 This method only takes `visitorCode` as an input parameter. The result only contains active feature flags for a given visitor.
 
@@ -1550,65 +1185,65 @@ This method only takes `visitorCode` as an input parameter. The result only cont
 active_feature_flag_list = kameleoon_client.get_active_feature_list_for_visitor(visitor_code)
 ```
 
-#####  Arguments
+##### Arguments
 
-Name | Type | Description
---------- | ------- | -----------
-visitor_code | String | Unique identifier of the user. This field is mandatory.
+| Name         | Type   | Description                                             |
+| ------------ | ------ | ------------------------------------------------------- |
+| visitor_code | String | Unique identifier of the user. This field is mandatory. |
 
 ##### Return value
 
-| Type | Description
------- | -------
-| Array | List of feature flag keys which are active for a given **visitor_code**
+| Type  | Description                                                             |
+| ----- | ----------------------------------------------------------------------- |
+| Array | List of feature flag keys which are active for a given **visitor_code** |
 
-#####  Exceptions thrown
+##### Exceptions thrown
 
-Type | Description
---------- | -------
-Kameleoon::Exception::VisitorCodeInvalid | Exception indicating that the provided visitor code is invalid (empty, or longer than 255 characters).
+| Type                                     | Description                                                                                            |
+| ---------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| Kameleoon::Exception::VisitorCodeInvalid | Exception indicating that the provided visitor code is invalid (empty, or longer than 255 characters). |
 
 #### get_active_features()
 
 `get_active_features` method retrieves information about the active feature flags that are available for the specified visitor code.
 
-:::note
+<Note>
 This method is deprecated and will be removed in SDK version `4.0.0`. Use [`get_variations()`](#get_variations) instead.
-:::
+</Note>
 
 ```ruby
 active_features = kameleoon_client.get_active_features(visitor_code)
 ```
 
-#####  Arguments
+##### Arguments
 
-| Name         | Type   | Description                                             |
-|--------------|--------|---------------------------------------------------------|
+| Name         | Type     | Description                                             |
+| ------------ | -------- | ------------------------------------------------------- |
 | visitor_code | `String` | Unique identifier of the user. This field is mandatory. |
 
 ##### Return value
 
-| Type                    | Description                                                                                               |
-|-------------------------|-----------------------------------------------------------------------------------------------------------|
+| Type                      | Description                                                                                               |
+| ------------------------- | --------------------------------------------------------------------------------------------------------- |
 | `Hash<String, Variation>` | A hash that contains the assigned variations of the active features using the active feature IDs as keys. |
 
-#####  Exceptions thrown
+##### Exceptions thrown
 
-| Type                                      | Description                                                                                              |
-|-------------------------------------------|----------------------------------------------------------------------------------------------------------|
+| Type                                     | Description                                                                                            |
+| ---------------------------------------- | ------------------------------------------------------------------------------------------------------ |
 | Kameleoon::Exception::VisitorCodeInvalid | Exception indicating that the provided visitor code is invalid (empty, or longer than 255 characters). |
 
 #### get_feature_variable()
 
 - 📨 _Sends Tracking Data to Kameleoon_
 
-:::note
+<Note>
 Use [`get_variation()`](#get_variation) instead.
-:::
+</Note>
 
-:::note
+<Note>
 Previously called `obtain_feature_variable` - deprecated since SDK version `2.1.0` and will be removed in a future releases.
-:::
+</Note>
 
 To get a variable of the variation key associated with a user, call the `get_feature_variable` method.
 
@@ -1620,11 +1255,11 @@ You must ensure that proper error handling is set up in your code as shown in th
 
 If you specify a `visitor_code`, the `get_feature_variable` method uses the `visitor_code` as the unique visitor identifier, which is useful for [cross-device experimentation](https://developers.kameleoon.com/core-concepts/cross-device-experimentation). When you specify a `visitor_code` and set the `is_unique_identifier` parameter to `true`, the SDK links the flushed data to the visitor associated with the specified identifier.
 
-:::note
+<Note>
 The parameter `is_unique_identifier` is deprecated. Please use [`UniqueIdentifier`](#uniqueidentifier) instead.
 
 The `is_unique_identifier` can also be useful in other edge-case scenarios, such as when you can't access the anonymous `visitorCode` that was originally assigned to the visitor, but you have access to an internal ID that is connected to the anonymous visitor using session merging capabilities.
-:::
+</Note>
 
 ```ruby
 visitor_code = kameleoon_client.get_visitor_code(cookies)
@@ -1655,33 +1290,33 @@ end
 
 ##### Arguments
 
-| Name                    | Type    | Description                                                                                                                                                                                                                                                                    |
-| ----------------------- |---------| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| visitor_code  | string  | Unique identifier of the user. This field is mandatory.   |
-| feature_key   | string  | Key of the feature you want to expose to a user. This field is mandatory. |
-| variable_name | string  | Name of the variable for which you want to get the value. This field is mandatory. |
+| Name                              | Type    | Description                                                                                           |
+| --------------------------------- | ------- | ----------------------------------------------------------------------------------------------------- |
+| visitor_code                      | string  | Unique identifier of the user. This field is mandatory.                                               |
+| feature_key                       | string  | Key of the feature you want to expose to a user. This field is mandatory.                             |
+| variable_name                     | string  | Name of the variable for which you want to get the value. This field is mandatory.                    |
 | is_unique_identifier (Deprecated) | Boolean | When `true`, the SDK links the flushed data with to visitor associated with the specified identifier. |
 
 ##### Return value
 
-| Type    | Description                                                          |
-| ------- | -------------------------------------------------------------------- |
-| any | Value of a variation's variable that is registered for a given **visitor_code** for this feature flag. Possible types: boolean, number, string, hash |
+| Type | Description                                                                                                                                          |
+| ---- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| any  | Value of a variation's variable that is registered for a given **visitor_code** for this feature flag. Possible types: boolean, number, string, hash |
 
 ##### Exceptions thrown
 
-| Type | Description |
-| ---- | ----------- |
-Kameleoon::Exception::FeatureNotFound  | Exception indicating that the requested feature ID has not been found in the SDK's internal configuration. This exception is usually normal and means that the feature flag has not yet been activated on Kameleoon's side (but code implementing the feature is already deployed on the web-application's side).
-Kameleoon::Exception::FeatureEnvironmentDisabled | Exception indicating that feature flag is disabled in the visitor's current environment (for example, production, staging, or development).
-Kameleoon::Exception::VisitorCodeInvalid | Exception indicating that the provided visitor code is invalid (empty, or longer than 255 characters).
-Kameleoon::Exception::FeatureVariableNotFound | Exception indicating that the requested variable has not been found. Check that the variable's key matches the key in your code.
+| Type                                             | Description                                                                                                                                                                                                                                                                                                       |
+| ------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Kameleoon::Exception::FeatureNotFound            | Exception indicating that the requested feature ID has not been found in the SDK's internal configuration. This exception is usually normal and means that the feature flag has not yet been activated on Kameleoon's side (but code implementing the feature is already deployed on the web-application's side). |
+| Kameleoon::Exception::FeatureEnvironmentDisabled | Exception indicating that feature flag is disabled in the visitor's current environment (for example, production, staging, or development).                                                                                                                                                                       |
+| Kameleoon::Exception::VisitorCodeInvalid         | Exception indicating that the provided visitor code is invalid (empty, or longer than 255 characters).                                                                                                                                                                                                            |
+| Kameleoon::Exception::FeatureVariableNotFound    | Exception indicating that the requested variable has not been found. Check that the variable's key matches the key in your code.                                                                                                                                                                                  |
 
 #### get_feature_variation_variables()
 
-:::note
+<Note>
 Use [`get_variation()`](#get_variation) instead.
-:::
+</Note>
 
 To retrieve the all feature variables, call the `get_feature_variation_variables` method. A feature variable can be changed using our web application.
 
@@ -1704,21 +1339,21 @@ end
 
 ##### Arguments
 
-| Name                    | Type             | Description                                                                     |
-| ----------------------- | ---------------- | ------------------------------------------------------------------------------- |
-| feature_key | string | Key of the feature flag you want to obtain. This field is mandatory. |
-| variation_key | string | Key of the variation you want to obtain. This field is mandatory. |
+| Name          | Type   | Description                                                          |
+| ------------- | ------ | -------------------------------------------------------------------- |
+| feature_key   | string | Key of the feature flag you want to obtain. This field is mandatory. |
+| variation_key | string | Key of the variation you want to obtain. This field is mandatory.    |
 
 ##### Return value
 
-| Type                                  | Description                                                                                                                                                     |
-| ------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Type | Description                                                                                                                                                     |
+| ---- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Hash | Data associated with this feature flag and variation. The values can be a String, Boolean, Number or Hash (depending on the type defined in the web interface). |
 
 ##### Exceptions thrown
 
-| Type | Description |
---------- | ------------
-Kameleoon::Exception::FeatureNotFound  | Exception indicating that the requested feature ID has not been found in the SDK's internal configuration. This exception is usually normal and means that the feature flag has not yet been activated on Kameleoon's side (but code implementing the feature is already deployed on the web-application's side).
-Kameleoon::Exception::FeatureEnvironmentDisabled | Exception indicating that feature flag is disabled for the visitor's current environment (for example, production, staging, or development).
-Kameleoon::Exception::FeatureVariationNotFound | Exception indicating that the requested variation ID has not been found in the SDK's internal configuration. This exception is usually normal and means that the variation's corresponding experiment has not yet been activated on Kameleoon's side.
+| Type                                             | Description                                                                                                                                                                                                                                                                                                       |
+| ------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Kameleoon::Exception::FeatureNotFound            | Exception indicating that the requested feature ID has not been found in the SDK's internal configuration. This exception is usually normal and means that the feature flag has not yet been activated on Kameleoon's side (but code implementing the feature is already deployed on the web-application's side). |
+| Kameleoon::Exception::FeatureEnvironmentDisabled | Exception indicating that feature flag is disabled for the visitor's current environment (for example, production, staging, or development).                                                                                                                                                                      |
+| Kameleoon::Exception::FeatureVariationNotFound   | Exception indicating that the requested variation ID has not been found in the SDK's internal configuration. This exception is usually normal and means that the variation's corresponding experiment has not yet been activated on Kameleoon's side.                                                             |

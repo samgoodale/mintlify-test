@@ -1,213 +1,6 @@
 ---
-sidebar_position: 9
-toc_max_heading_level: 4
+title: 'Python SDK'
 ---
-
-import { Select, Text, Bold, Italic, Code, CodeRef, Ref, If } from '../commons/utils.mdx';
-import SharedDiv, { Shared } from '../commons/shared.mdx';
-import ActivatingAFeatureFlag from '../commons/developer-guide/getting-started/activating-a-feature-flag.mdx';
-import CrossDeviceReconciliation from '../commons/developer-guide/cross-device-reconciliation.mdx';
-import TargetingConditions from '../commons/developer-guide/targeting-conditions.mdx';
-import Logging from '../commons/developer-guide/logging.mdx';
-import GetVariations from '../commons/reference/feature-flags-and-variations/get-variations.mdx';
-import GetVariation from '../commons/reference/feature-flags-and-variations/get-variation.mdx';
-import Geolocation from '../commons/reference/data-types/geolocation.mdx';
-import Browser from '../commons/reference/data-types/browser.mdx';
-import Conversion from '../commons/reference/data-types/conversion.mdx';
-import TrackConversion from '../commons/reference/goals/track-conversion.mdx';
-import UpdateConfigurationHandler from '../commons/reference/events/update-configuration-handler.mdx';
-import AddData from '../commons/reference/visitor-data/add-data.mdx';
-import SetForcedVariation from '../commons/reference/feature-flags-and-variations/set-forced-variation.mdx';
-import EvaluateAudiences from '../commons/reference/feature-flags-and-variations/evaluate-audiences.mdx';
-import GetFeatureList from '../commons/reference/feature-flags-and-variations/get-feature-list.mdx';
-import GetEngineTrackingCode from '../commons/reference/goals/get-engine-tracking-code.mdx';
-import CustomBucketingKey from '../commons/developer-guide/custom-bucketing-key.mdx';
-
-
-# Python SDK
-
-export const Context = {
-    IsServer: true,
-    IsSnakeCase: true,
-    Common: {
-        Null: "None",
-        True: "True",
-        False: "False",
-        String: "str",
-        Bool: "bool",
-        Float: "float",
-        Int: "int",
-        SDK: "Python",
-    },
-    Params: {
-        VisitorCode: "visitor_code",
-        FeatureKey: "feature_key"
-    },
-    Exceptions: {
-        Language: "Exception",
-        Kameleoon: "KameleoonError",
-        VisitorCodeInvalid: "VisitorCodeInvalid",
-        FeatureNotFound: "FeatureNotFound",
-        FeatureEnvironmentDisabled: "FeatureEnvironmentDisabled",
-        FeatureExperimentNotFound: "FeatureExperimentNotFound",
-        FeatureVariationNotFound: "FeatureVariationNotFound",
-    },
-    Hook: {
-        UseData: "useData",
-    },
-    KameleoonClientConfig: {
-        Ref: "#additional-configuration",
-        TrackingInterval: { FileName: "tracking_interval_millisecond" },
-        IsUniqueIdentifier: { Name: "<undefined>" },
-    },
-    // kameleoon.data
-    Conversion: {
-        Name: "Conversion",
-        FullName: "data.Conversion",
-        Ref: "#conversion",
-        Params: {
-            GoalId: { Name: "goal_id" },
-            Revenue: { Name: "revenue", Type: "float" },
-            Negative: { Name: "negative" },
-            Metadata: { Name: "metadata", Type: "Optional[Iterable[CustomData]]", DefaultValue: "None" },
-        },
-    },
-    CustomData: {
-        Name: "CustomData",
-        FullName: "data.CustomData",
-        Ref: "#customdata"
-    },
-    UniqueIdentifier: {
-        Name: "UniqueIdentifier",
-        Ref: "#uniqueidentifier"
-    },
-    UserAgent: {
-        Name: "UserAgent",
-        Ref: "#useragent"
-    },
-    Geolocation: {
-        Name: "Geolocation",
-        Ref: "#geolocation",
-        Params: {
-            Region: { Type: "Optional[str]" },
-            City: { Type: "Optional[str]" },
-            PostalCode: { Name: "postal_code", Type: "Optional[str]" },
-            Latitude: { Type: "Optional[float]" },
-            Longitude: { Type: "Optional[float]" },
-        }
-    },
-    Browser: {
-        Name: "Browser",
-        Ref: "#browser",
-        Params: {
-        BrowserType: {
-            Name: "browser_type",
-            Type: "BrowserType",
-            Chrome: "CHROME",
-            IE: "INTERNET_EXPLORER",
-            Firefox: "FIREFOX",
-            Safari: "SAFARI",
-            Opera: "OPERA",
-            Other: "OTHER"
-        },
-        Version: { Type: "Optional[float]" },
-        },
-    },
-    // kameleoon.types
-    Variation: {
-        Name: "Variation",
-        FullName: "types.Variation",
-        Ref: "#variation"
-    },
-    // methods
-    Flush: {
-        Name: "flush()",
-        Ref: "#flush",
-        Params: {
-            Instant: { Name: "instant" }
-        }
-    },
-    GetRemoteVisitorData: {
-        Name: "get_remote_visitor_data()",
-        Ref: "#get_remote_visitor_data",
-    },
-    GetVisitorCode: {
-        Name: "get_visitor_code()",
-        Ref: "#get_visitor_code",
-        Params: {
-            DefaultVisitorCode: { Name: "default_visitor_code" }
-        }
-    },
-    TrackConversion: {
-        Name: "track_conversion()",
-        Ref: "#track_conversion",
-        Params: {
-            GoalId: { Name: "goal_id" },
-            Revenue: { Name: "revenue", Type: "float" },
-            IsUniqueIdentifier: { Name: "is_unique_identifier" },
-            Negative: { Name: "negative" },
-            Metadata: { Name: "metadata", Type: "Optional[Iterable[CustomData]]", DefaultValue: "None" }
-        }
-    },
-    GetEngineTrackingCode: {
-        Name: "get_engine_tracking_code()",
-        Ref: "#get_engine_tracking_code"
-    },
-    SetForcedVariation: {
-        Name: "set_forced_variation()",
-        Ref: "#set_forced_variation",
-        Params: {
-            ExperimentId: { Name: "experiment_id" },
-            VariationKey: { Name: "variation_key", Type: "Optional[str]", RemVal: "None" },
-            ForceTargeting: { Name: "force_targeting" },
-        }
-    },
-    EvaluateAudiences: {
-        Name: "evaluate_audiences()",
-        Ref: "#evaluate_audiences"
-    },
-    IsFeatureActive: {
-        Name: "is_feature_active()",
-        Ref: "#is_feature_active"
-    },
-    GetVariation: {
-        Name: "get_variation()",
-        Ref: "#get_variation",
-        Return: "Variation",
-        Params: {
-            Track: { Name: "track" }
-        }
-    },
-    GetVariations: {
-        Name: "get_variations()",
-        Ref: "#get_variations",
-        Return: "Dict[str, Variation]",
-        Params: {
-            OnlyActive: { Name: "only_active" },
-            Track: { Name: "track" }
-        }
-    },
-    UpdateConfigurationHandler: {
-        Name: "on_update_configuration()",
-        Ref: "#on_update_configuration",
-        Params: {
-            Handler: { Name: "handler", Type: "Callable[[], None]" }
-        },
-    },
-    AddData: {
-        Name: "add_data()",
-        Ref: "#add_data",
-        Params: {
-            Track: { Name: "track" },
-            Data: { Name: "data", Type: "*Data" }
-        }
-    },
-    GetFeatureList: {
-        Name: "get_feature_list()",
-        Ref: "#get_feature_list",
-        Return: "List[str]",
-    }
-};
 
 With the Python SDK, you can  run experiments and activate feature flags on your back-end Python server. Integrating our SDK into your web-application is easy, and its footprint (memory and network usage) is low.
 
@@ -244,7 +37,7 @@ You should provide credentials for the Python SDK via a configuration file, whic
 - **top_level_domain**: the current top-level domain for your website. Use the format:`example.com`. Don't include `https://`, `www`, or other subdomains. Kameleoon uses this information to set the corresponding cookie on the top-level domain. This field is mandatory.
 - **environment**: an option specifying which feature flag configuration will be used. By default, each feature flag is split into **production**, **staging**, and **development**. If not specified, the flag is set to the **default value** of **production**. [More information](https://www.kameleoon.com/en/blog/configure-your-feature-flags-and-launch-your-releases-using-next-level-multi-environment)
 - **multi_threading** (Deprecated): an option of type **bool** indicating whether threads can be used for network requests. By default, the option is **False** and everything is executed in one thread to avoid performance issues with GIL if (C)Python interpreter is being used. Possible values: **True**, **False**.
-- **network_domain**: <Text x={Shared.ExternalConfigFile.NetworkDomain}/>
+- **network_domain**: Custom domain used by SDKs for outgoing requests, often for proxying. Must be a valid domain (e.g., `example.com` or `sub.example.com`). Invalid formats default to Kameleoon's value.
 
 Alternatively, you can use `configuration_object` of type `KameleoonClientConfig` as a parameter during initialization. It has the same list of arguments as a config file. `configuration_object` takes precedence over the configuration file and overwrites its settings.
 
@@ -254,9 +47,9 @@ After installing the SDK into your application, configuring the correct credenti
 
 The code on the right gives a clear example. A `KameleoonClient` is a singleton object that acts as a bridge between your application and the Kameleoon platform. It includes all the methods and properties you will need to run an experiment.
 
-:::note
+<Note>
 Developers are responsible for ensuring the correct logic of their application code when implementing A/B testing with Kameleoon. A best practice is to always assume that a visitor may be excluded from the experiment if it has not yet been launched. This practice is simple to implement, as it aligns with the default or reference variation logic, which should always be in place. The code samples in the next section demonstrate this approach.
-:::
+</Note>
 
 ```python
 from kameleoon import KameleoonClient, KameleoonClientConfig, KameleoonClientFactory
@@ -292,23 +85,13 @@ kameleoon_client = KameleoonClientFactory.create(SITE_CODE, configuration_object
 
 ##### Assigning a unique ID to a user
 
-<ActivatingAFeatureFlag sec="assigning_a_unique_id_to_a_user" c={Context}/>
-
 ##### Retrieving a flag configuration
-
-<ActivatingAFeatureFlag sec="retrieving_a_feature_flag_configuration___default" c={Context}/>
 
 ##### Adding data points to target a user or filter / breakdown visits in reports
 
-<ActivatingAFeatureFlag sec="adding_data_points_to_target_a_user_or_filter_breakdown_visits_in_reports___server" c={Context}/>
-
 ##### Tracking goal conversions
 
-<ActivatingAFeatureFlag sec="tracking_goal_conversions___param" c={Context}/>
-
 ##### Sending events to analytics solutions
-
-<ActivatingAFeatureFlag sec="sending_events_to_analytics_solutions" c={Context}/>
 
 ### Using the Kameleoon Python SDK in a Django environment
 
@@ -340,20 +123,15 @@ client = my_application.kameleoon_client
 
 You can then access the Kameleoon client in your application.
 
-:::note
+<Note>
 Another advantage of using Django is that the SDK will automaticallyo read and write the **visitor_code** on the HTTP request/response via a cookie. If you're using another framework in a web environment where you would like to use a cookie mechanism to persist the **visitor_code**, you must provide implementations of the `read_cookies()` and `write_cookies()` methods.
-:::
-
+</Note>
 
 ### Cross-device experimentation
 
-<CrossDeviceReconciliation sec="cross_device_experimentation" c={Context}/>
-
 #### Synchronizing custom data across devices
 
-<CrossDeviceReconciliation sec="synchronizing_custom_data" c={Context}/>
-
-```python title="Device A"
+```python
 # In this example, Custom data with index `90` was set to "Visitor" scope in Kameleoon.
 VISITOR_SCOPE_CUSTOM_DATA_INDEX = 90
 
@@ -361,7 +139,7 @@ kameleoon_client.add_data(visitor_code, CustomData(VISITOR_SCOPE_CUSTOM_DATA_IND
 kameleoon_client.flush(visitor_code)
 ```
 
-```python title="Device B"
+```python
 # Before working with the data, call `get_remote_visitor_data`.
 kameleoon_client.get_remote_visitor_data(visitor_code)
 
@@ -370,8 +148,6 @@ kameleoon_client.get_remote_visitor_data(visitor_code)
 ```
 
 #### Using custom data for session merging
-
-<CrossDeviceReconciliation sec="using_custom_data_session_merging" c={Context}/>
 
 ```python
 # In this example, `91` represents the Custom Data's index configured as a unique identifier in Kameleoon.
@@ -406,19 +182,11 @@ kameleoon_client.track_conversion(user_id, 123, 10.0)
 kameleoon_client.get_remote_visitor_data(user_id)
 ```
 
-<CrossDeviceReconciliation sec="cross_device_visitor_code" c={Context}/>
-
 ### Using a custom bucketing key
-
-<CustomBucketingKey sec="description" c={Context}/>
 
 #### Use cases
 
-<CustomBucketingKey sec="use_cases" c={Context}/>
-
 #### Technical details
-
-<CustomBucketingKey sec="technical_details_1" c={Context}/>
 
 ```python
 from kameleoon.data import CustomData
@@ -426,24 +194,13 @@ from kameleoon.data import CustomData
 kameleoon_client.add_data(visitor_code, CustomData(index, "new_visitor_code"))
 ```
 
-<CustomBucketingKey sec="technical_details_2" c={Context}/>
-
 #### Technical requirementes
-
-<CustomBucketingKey sec="technical_requirements" c={Context}/>
-
 
 ### Targeting conditions
 
-<TargetingConditions sec="targeting_conditons_description" c={Context}/>
-
 ### Logging
 
-<Logging sec="logging" c={Context}/>
-
 #### Log levels
-
-<Logging sec="log_levels" c={Context}/>
 
 ```python
 from kameleoon.logging.log_level import LogLevel
@@ -473,13 +230,10 @@ KameleoonLogger.set_log_level(LogLevel.DEBUG)
 
 #### Custom handling of logs
 
-<Logging sec="custom_handling_of_logs" c={Context}/>
-
 ```python
 from loguru import logger
 from kameleoon.logging.log_level import LogLevel
 from kameleoon.logging.logger import Logger
-
 
 class CustomLogger(Logger):
     """Custom logger implementation using loguru."""
@@ -494,7 +248,6 @@ class CustomLogger(Logger):
             logger.info(message)
         elif level == LogLevel.DEBUG:
             logger.debug(message)
-
 
 from kameleoon.logging.kameleoon_logger import KameleoonLogger
 
@@ -575,9 +328,9 @@ if kameleoon_client.wait_init():
 
 - 📨 _Sends Tracking Data to Kameleoon (depending on the `track` parameter)_
 
-:::note
+<Note>
 Previously called `activate_feature`—deprecated since SDK version `2.1.0` and will be removed in a future releases.
-:::
+</Note>
 
 To check if feature flag is active for a visitor, call the `is_feature_active()` method.
 
@@ -589,11 +342,11 @@ You must ensure that proper error handling is set up in your code as shown in th
 
 If you specify a `visitor_code`, the `is_feature_active()` method uses the `visitor_code` as the unique visitor identifier, which is useful for [cross-device experimentation](/core-concepts/cross-device-experimentation). When you specify a `visitor_code` and set the `is_unique_identifier` parameter to `true`, the SDK links the flushed data to the visitor associated with the specified identifier.
 
-:::note
+<Note>
 The parameter `is_unique_identifier` is deprecated. Please use [`UniqueIdentifier`](#uniqueidentifier) instead.
 
 The `is_unique_identifier` can also be useful in other edge-case scenarios, such as when you can't access the anonymous `visitor_code` that was originally assigned to the visitor, but you have access to an internal ID that is connected to the anonymous visitor using session merging capabilities.
-:::
+</Note>
 
 ```python
 visitor_code = kameleoon_client.get_visitor_code(request.COOKIES)
@@ -640,8 +393,6 @@ if has_new_checkout
 
 #### get_variation()
 
-<GetVariation sec="description" c={Context}/>
-
 ```python
 feature_key = "new_checkout"
 
@@ -669,19 +420,11 @@ else:
 
 ##### Arguments
 
-<GetVariation sec="arguments" c={Context}/>
-
 ##### Return value
-
-<GetVariation sec="return_value" c={Context}/>
 
 ##### Exceptions thrown
 
-<GetVariation sec="exceptions" c={Context}/>
-
 #### get_variations()
-
-<GetVariations sec="description" c={Context}/>
 
 ```python
 try:
@@ -696,23 +439,15 @@ except VisitorCodeInvalid as ex:
 
 ##### Arguments
 
-<GetVariations sec="arguments" c={Context}/>
-
 ##### Return value
-
-<GetVariations sec="return_value" c={Context}/>
 
 ##### Exceptions thrown
 
-<GetVariations sec="exceptions" c={Context}/>
-
 #### get_feature_list()
 
-:::note
+<Note>
 Previously called `obtain_feature_list`, which was removed in SDK version `3.0.0`.
-:::
-
-<GetFeatureList sec="description" c={Context}/>
+</Note>
 
 ```python
 all_feature_list = kameleoon_client.get_feature_list()
@@ -720,11 +455,7 @@ all_feature_list = kameleoon_client.get_feature_list()
 
 ##### Return value
 
-<GetFeatureList sec="return_value" c={Context}/>
-
 #### set_forced_variation()
-
-<SetForcedVariation sec="description" c={Context}/>
 
 ```python
 experiment_id = 9516
@@ -743,15 +474,9 @@ except KameleoonError as e:
 
 ##### Arguments
 
-<SetForcedVariation sec="arguments" c={Context}/>
-
 ##### Exceptions thrown
 
-<SetForcedVariation sec="exceptions" c={Context}/>
-
 #### evaluate_audiences()
-
-<EvaluateAudiences sec="description" c={Context}/>
 
 ```python
 try:
@@ -762,20 +487,15 @@ except KameleoonError as e:
 
 ##### Arguments
 
-<EvaluateAudiences sec="arguments" c={Context}/>
-
 ##### Exceptions thrown
-
-<EvaluateAudiences sec="exceptions" c={Context}/>
-
 
 ### Visitor data
 
 #### get_visitor_code()
 
-:::note
+<Note>
 This method was previously called `obtain_visitor_code`, which was removed in SDK version `3.0.0`.
-:::
+</Note>
 
 The `get_visitor_code()` helper method should be called to obtain the current visitor's Kameleoon **visitor_code**. This method is especially important when using Kameleoon in a mixed front-end and back-end environment, where user identification consistency must be guaranteed. The implementation logic is described here:
 
@@ -783,11 +503,9 @@ The `get_visitor_code()` helper method should be called to obtain the current vi
 2. If no cookie/parameter is found in the current request, we either randomly generate a new identifier, or use the **default_visitor_code** argument as an identifier if it is passed. This allows our customers to use their own identifiers as visitor codes, should they wish to, which has the added benefit of matching Kameleoon visitors with their own users without any additional look-ups in a matching table.
 3. In any case, the server-side (via HTTP header) **kameleoonVisitorCode** cookie is set with the value. Then, this identifier value is finally returned by the method.
 
-:::note
+<Note>
 If you provide your own `visitor_code`, you must guarantee its uniqueness. The SDK doesn't validate the value passed as an argument. Also note that the length of `visitor_code` is limited to **255** characters. A `VisitorCodeInvalid` exception is raised if this limit is exceeded.
-:::
-
-<SharedDiv sec="get_visitor_code_simulated" c={Context}/>
+</Note>
 
 ```python
 ### if you use KameleoonWSGIMiddleware service
@@ -825,8 +543,6 @@ cookie_header = simple_cookies.output()
 
 #### add_data()
 
-<AddData sec="description" c={Context}/>
-
 ```python
 require "kameleoon"
 require "kameleoon/data"
@@ -843,10 +559,8 @@ kameleoon_client.add_data(visitor_code, Conversion(32, 10, false))
 ```
 
 ##### Arguments
-<AddData sec="arguments" c={Context}/>
 
 ##### Exceptions
-<AddData sec="exceptions" c={Context}/>
 
 #### flush()
 
@@ -858,11 +572,11 @@ kameleoon_client.add_data(visitor_code, Conversion(32, 10, false))
 
 If you specify a `visitor_code`, the `flush()` method uses it as the unique visitor identifier, which is useful for [cross-device experimentation](/core-concepts/cross-device-experimentation). When you specify a `visitor_code` and set the `is_unique_identifier` parameter to `true`, the SDK links the flushed data to the visitor associated with the specified identifier.
 
-:::note
+<Note>
 The parameter `is_unique_identifier` is deprecated. Please use [`UniqueIdentifier`](#uniqueidentifier) instead.
 
 The `is_unique_identifier` can also be useful in other edge-case scenarios, such as when you can't access the anonymous `visitor_code` that was originally assigned to the visitor, but you have access to an internal ID that is connected to the anonymous visitor using session merging capabilities.
-:::
+</Note>
 
 ```python
 kameleoon_client.add_data(visitor_code, Browser(BrowserType.CHROME))
@@ -892,10 +606,10 @@ kameleoon_client.flush(visitor_code)
 
 #### get_remote_data()
 
-:::note
+<Note>
 - Previously called `retrieve_data_from_remote_source`, which was removed in SDK version `3.0.0`.
 - If you want to retrieve data asynchronously, use the `get_remote_data_async` method instead (available since version 2.3.0).
-:::
+</Note>
 
 The `get_remote_data` method retrieves data synchronously (according to a **key** passed as argument) for a specified **site_code** (specified with `KameleoonClient.__init__`) stored on a remote Kameleoon server. Data is usually stored in our remote servers via our Data API. This method, along with the availability of our highly scalable servers for this purpose, provides a convenient method for storing massive amounts of data that can be retrieved for each of your visitors/users.
 
@@ -921,7 +635,6 @@ The `get_remote_data` method retrieves data synchronously (according to a **key*
 #### get_remote_data_async()
 
 The `get_remote_data_async` method lets you retrieve data asynchronously (according to a **key** passed as argument) for specified **site_code** (specified with `KameleoonClient.__init__`) stored in a remote Kameleoon server. Data is usually stored on our remote servers via our Data API. This method, along with the availability of our highly scalable servers for this purpose, provides a convenient method for storing massive amounts of data that can be retrieved for each of your visitors/users.
-
 
 ```python
     await kameleoon_client.get_remote_data_async('key1') # default timeout
@@ -954,15 +667,15 @@ Data obtained using this method plays an important role when you want to:
 
 Read [this article]( https://developers.kameleoon.com/feature-management-and-experimentation/using-visit-history-in-feature-flags-and-experiments/) for a better understanding of possible use cases.
 
-:::caution
+<Warning>
 By default, `get_remote_visitor_data()` automatically retrieves the latest stored custom data with `scope=visitor` and attaches them to the visitor without the need to call the `add_data()` method. It is particularly useful for [synchronizing custom data between multiple devices](https://developers.kameleoon.com/feature-management-and-experimentation/web-sdks/nodejs-sdk/#synchronizing-custom-data-across-devices).
-:::
+</Warning>
 
-:::note
+<Note>
 The parameter `is_unique_identifier` is deprecated. Please use [`UniqueIdentifier`](#uniqueidentifier) instead.
 
 The `is_unique_identifier` can also be useful in other edge-case scenarios, such as when you can't access the anonymous `visitor_code` that was originally assigned to the visitor, but you have access to an internal ID that is connected to the anonymous visitor using session merging capabilities.
-:::
+</Note>
 
 ```python
     visitor_code = 'visitorCode'
@@ -1008,7 +721,7 @@ The flexibility shown in this example is not limited to goal data. You can use p
 |----- | ----------- |
 | List[Data] | A list of data assigned to the given visitor. |
 
-:::note
+<Note>
 Here is the list of available `Kameleoon::Configuration::RemoteVisitorDataFilter` options:
 
 | Name                               | Type   | Description                                                                  | Default |
@@ -1025,9 +738,9 @@ Here is the list of available `Kameleoon::Configuration::RemoteVisitorDataFilter
 | experiments _(optional)_           | `bool` | If True, experiment data will be retrieved.                                  | `False` |
 | kcs _(optional)_                   | `bool` | If true, Kameleoon Conversion Score (KCS) will be retrieved. Requires the [AI Predictive Targeting add-on](https://help.kameleoon.com/target-users-by-ai-propensity-score-kameleoon-conversion-score/)                                    | `False` |
 | visitor_code _(optional)_         | `bool` | If true, Kameleoon will retrieve the `visitorCode` from the most recent visit and use it for the current visit. This is necessary if you want to ensure that the visitor, identified by their `visitorCode`, always receives the same variation across visits for [cross-device experimentation](/core-concepts/cross-device-experimentation). | `True` |
-| cbs _(optional)_                 | `bool` | <Text x={Shared.RemoteVisitorDataFilter.CBS}/> | `False` |
+| cbs _(optional)_                 | `bool` | If true, Contextual Bandit score data will be retrieved. | `False` |
 | personalization (_optional_)     | `bool` | If True, personalization data will be retrieved. This is required for the personalization condition. | `False` |
-:::
+</Note>
 
 #### get_remote_visitor_data_async()
 
@@ -1044,11 +757,11 @@ Using the `get_remote_visitor_data` method along with the availability of our hi
 
 If you specify a `visitor_code`, the `get_remote_visitor_data_async` method uses the `visitor_code` as the unique visitor identifier, which is useful for [cross-device experimentation](https://developers.kameleoon.com/core-concepts/cross-device-experimentation). When you specify a `visitor_code` and set the `is_unique_identifier` parameter to `true`, the SDK links the flushed data to the visitor associated with the specified identifier.
 
-:::note
+<Note>
 The parameter `is_unique_identifier` is deprecated. Please use [`UniqueIdentifier`](#uniqueidentifier) instead.
 
 The `is_unique_identifier` can also be useful in other edge-case scenarios, such as when you can't access the anonymous `visitor_code` that was originally assigned to the visitor, but you have access to an internal ID that is connected to the anonymous visitor using session merging capabilities.
-:::
+</Note>
 
 ```python
     visitor_code = 'visitorCode'
@@ -1093,7 +806,7 @@ For example, suppose you want to retrieve data on visitors who completed the goa
 
 The flexibility shown in this example is not limited to goal data. You can use parameters within the `get_remote_visitor_data_async()` method to retrieve data on a variety of visitor behaviors.
 
-:::note
+<Note>
 Here is the list of available `Kameleoon::Configuration::RemoteVisitorDataFilter` options:
 
 | Name                               | Type   | Description                                                                  | Default |
@@ -1110,16 +823,16 @@ Here is the list of available `Kameleoon::Configuration::RemoteVisitorDataFilter
 | experiments _(optional)_           | `bool` | If True, experiment data will be retrieved.                                  | `False` |
 | kcs _(optional)_                   | `bool` | If true, Kameleoon Conversion Score (KCS) will be retrieved. Requires the [AI Predictive Targeting add-on](https://help.kameleoon.com/target-users-by-ai-propensity-score-kameleoon-conversion-score/)                                    | `False` |
 | visitor_code _(optional)_         | `bool` | If true, Kameleoon will retrieve the `visitorCode` from the most recent visit and use it for the current visit. This is necessary if you want to ensure that the visitor, identified by their `visitorCode`, always receives the same variation across visits for [Cross-device experimentation](/core-concepts/cross-device-experimentation). | `True` |
-| cbs _(optional)_                 | `bool` | <Text x={Shared.RemoteVisitorDataFilter.CBS}/> | `False` |
-:::
+| cbs _(optional)_                 | `bool` | If true, Contextual Bandit score data will be retrieved. | `False` |
+</Note>
 
 #### get_visitor_warehouse_audience()
 
 Synchronously retrieves all audience data associated with the visitor in your data warehouse using the specified **visitor_code** and **warehouse_key**. The **warehouse_key** is typically your internal user ID. The **custom_data_index** parameter corresponds to the Kameleoon custom data that Kameleoon uses to target your visitors. You can refer to the [warehouse targeting documentation](https://help.kameleoon.com/warehouse-audience-targeting/) for additional details. The method returns a `CustomData` object, confirming that the data has been added to the visitor and is available for targeting purposes.
 
-:::note
+<Note>
 If you want to retrieve the data asynchronously, use the `get_visitor_warehouse_audience_async` method instead.
-:::
+</Note>
 
 ```python
 try:
@@ -1240,9 +953,9 @@ The `forget` method removes a `KameleoonClient` instance from the `KameleoonClie
 
 If you specify a `visitor_code`, the `track_conversion` method uses the `visitor_code` as the unique visitor identifier, which is useful for [cross-device experimentation](https://developers.kameleoon.com/core-concepts/cross-device-experimentation). When you specify a `visitor_code` and set the `is_unique_identifier` parameter to `true`, the SDK links the flushed data to the visitor associated with the specified identifier.
 
-:::note
+<Note>
 The `is_unique_identifier` can also be useful in other edge-case scenarios, such as when you can't access the anonymous `visitor_code` that was originally assigned to the visitor, but you have access to an internal ID that is connected to the anonymous visitor using session merging capabilities.
-:::
+</Note>
 
 ```python
 require "kameleoon"
@@ -1274,23 +987,15 @@ kameleoon_client.track_conversion(visitor_code, goal_id)
 
 #### get_engine_tracking_code()
 
-<GetEngineTrackingCode sec="description" c={Context}/>
-
 ```python
 engine_tracking_code = kameleoon_client.get_engine_tracking_code(visitor_code)
 ```
 
 ##### Arguments
 
-<GetEngineTrackingCode sec="arguments" c={Context}/>
-
 ##### Return value
 
-<GetEngineTrackingCode sec="return_value" c={Context}/>
-
 #### track_conversion()
-
-<TrackConversion sec="description" c={Context}/>
 
 ```python
 visitor_code = "visitorCode"
@@ -1310,24 +1015,19 @@ kameleoon_client.track_conversion(visitorCode, goalId, metadata=[cd])
 ```
 
 ##### Arguments
-<TrackConversion sec="arguments" c={Context}/>
 
-:::note
-<TrackConversion sec="note_metadata" c={Context}/>
+<Note>
 ```python
 kameleoon_client.add_data(visitor_code, CustomData(5, "Credit Card"), CustomData(9, "Express Delivery"))
 kameleoon_client.track_conversion(visitor_code, 10, metadata=[CustomData(5, "Amex Credit Card")])
 ```
-:::
+</Note>
 
 ##### Exceptions
-<TrackConversion sec="exceptions" c={Context}/>
 
 ### Events
 
 #### on_update_configuration()
-
-<UpdateConfigurationHandler sec="description" c={Context}/>
 
 ```python
 kameleoon_client.on_update_configuration(
@@ -1337,15 +1037,9 @@ kameleoon_client.on_update_configuration(
 
 ##### Arguments
 
-<UpdateConfigurationHandler sec="arguments" c={Context}/>
-
 ### Data types
 
 #### Browser
-
-<Browser sec="description" c={Context}/>
-
-<Browser sec="arguments" c={Context}/>
 
 ```python
 kameleoon_client.add_data(visitor_code, Browser(BrowserType.CHROME))
@@ -1361,18 +1055,15 @@ kameleoon_client.add_data(visitor_code, Browser(BrowserType.SAFARI, 10))
 | title     | Optional[str]       | Title of the page viewed. This field is optional.  |
 | referrers | Optional[List[int]] | Referrers of viewed pages. This field is optional. |
 
-:::note
+<Note>
 The index (ID) of the referrer is available in the Acquisition channel configuration page of our Back-Office. Be careful: this index starts at 0, so the first [acquisition channel](https://help.kameleoon.com/create-acquisition-channel) you create for a given site will have the ID 0, not 1.
-:::
+</Note>
 
 ```python
 kameleoon_client.add_data(visitor_code, PageView("https://url.com", "title", [3]))
 ```
 
 #### Conversion
-
-<Conversion sec="description" c={Context}/>
-<Conversion sec="arguments" c={Context}/>
 
 ```python
 kameleoon_client.add_data(visitor_code, Conversion(32, 10))
@@ -1400,13 +1091,12 @@ To learn more about custom data, please refer to this [article](/core-concepts/c
 | args _(required)_ | `*str` | Values of the custom data to be stored. | |
 | overwrite _(optional)_ | `bool` | Flag to explicitly control how the values are stored and how they appear in reports. [See more](https://developers.kameleoon.com/core-concepts/custom-data/#default-logic-when-overwrite-parameter-is-false-or-omitted) | `True` |
 
-:::note
-
+<Note>
 - Each visitor can only have one `CustomData` for each unique `index`. Adding another `CustomData` with the same `index` will replace the existing `CustomData`.
 - The custom data `index` can be found in the [Custom Data dashboard](https://help.kameleoon.com/manage-your-custom-data/) under the “INDEX” column.
 - To prevent the SDK from sending data with the selected index to Kameleoon servers for privacy reasons, enable the **Use this data only locally for targeting purposes** option when creating custom data.
 - Adding a `CustomData` instance created with a name when the SDK instance configuration is not up to date or the name is not registered, will result in the data being ignored.
-:::
+</Note>
 
 ```python
 from kameleoon.data import CustomData
@@ -1475,9 +1165,9 @@ kameleoon_client.add_data(visitor_code, UniqueIdentifier(True))
 |---------|---------------------|-----------------------------------------------------------------------------|
 | os_type | OperatingSystemType | List of types: **WINDOWS**, **MAC**, **IOS**, **LINUX**, **ANDROID**, **WINDOWS_PHONE**. This field is mandatory. |
 
-:::tip
+<Tip>
 Each visitor can only have one `OperatingSystem`. Adding a second `OperatingSystem` overwrites the first one.
-:::
+</Tip>
 
 ```python
 from kameleoon.data import OperatingSystem, OperatingSystemType
@@ -1493,9 +1183,9 @@ kameleoon_client.add_data(visitor_code, OperatingSystem(OperatingSystemType.ANDR
 | ---- |------|-----------------------------------------------------------------------------------------------------|
 | cookies | Dict[str, str] | Dict (`{cookie_name: cookie_value}`) consisting of cookie keys and values. This field is mandatory. |
 
-:::tip
+<Tip>
 Each visitor can only have one `Cookie`. Adding a second `Cookie` overwrites the first one.
-:::
+</Tip>
 
 ```python
 from kameleoon.data import Cookie
@@ -1505,10 +1195,6 @@ kameleoon_client.add_data(visitor_code, cookie)
 ```
 
 #### Geolocation
-
-<Geolocation sec="description" c={Context}/>
-
-<Geolocation sec="arguments" c={Context}/>
 
 ```python
 from kameleoon.data import Geolocation
@@ -1529,11 +1215,11 @@ kameleoon_client.add_data(visitor_code, Geolocation("France", "Île-de-France", 
 | experiment_id | `Optional[int]`                 | The ID of the experiment associated with the variation (or `None` if default). |
 | variables | `Dict[str, Variable]`      | A dict containing the variables of the assigned variation, keyed by variable names. This value could be empty if no variables are associated. |
 
-:::note
+<Note>
 - The `Variation` object provides details about the assigned variation and its associated experiment, while the [`Variable`](#variable) object contains specific details about each variable within a variation.
 - Ensure that your code handles the case where `id_` or `experiment_id` may be `None`, indicating a default variation.
 - The `variables` hash might be empty if no variables are associated with the variation.
-:::
+</Note>
 
 ```python
 # Retrieving the variation key
@@ -1575,17 +1261,17 @@ title: Optional[str] = variables["title"].value
 
 ### Deprecated methods
 
-:::caution
+<Warning>
 These methods are deprecated and will be removed in SDK version `4.0.0`.
-:::
+</Warning>
 
 #### get_feature_variation_key()
 
 - 📨 _Sends Tracking Data to Kameleoon_
 
-:::note
+<Note>
 Use [`get_variation()`](#get_variation) instead.
-:::
+</Note>
 
 To get a feature variation key, call the `get_feature_variation_key` method.
 
@@ -1597,11 +1283,11 @@ You must ensure that proper error handling is set up in your code as shown in th
 
 If you specify a `visitor_code`, the `get_feature_variation_key` method uses the `visitor_code` as the unique visitor identifier, which is useful for [cross-device experimentation](/core-concepts/cross-device-experimentation). When you specify a `visitor_code` and set the `is_unique_identifier` parameter to `true`, the SDK links the flushed data to the visitor associated with the specified identifier.
 
-:::note
+<Note>
 The parameter `is_unique_identifier` is deprecated. Please use [`UniqueIdentifier`](#uniqueidentifier) instead.
 
 The `is_unique_identifier` can also be useful in other edge-case scenarios, such as when you can't access the anonymous `visitor_code` that was originally assigned to the visitor, but you have access to an internal ID that is connected to the anonymous visitor using session merging capabilities.
-:::
+</Note>
 
 ```python
 visitor_code = kameleoon_client.get_visitor_code(request.COOKIES)
@@ -1649,9 +1335,9 @@ except FeatureEnvironmentDisabled as ex:
 
 #### get_active_features()
 
-:::note
+<Note>
 Use [`get_variations()`](#get_variations) instead.
-:::
+</Note>
 
 This method only takes the input parameter **visitorCode**. The result only contains active features for a given visitor.
 
@@ -1682,9 +1368,9 @@ except VisitorCodeInvalid as e:
 
 #### get_active_feature_list_for_visitor()
 
-:::note
+<Note>
 Use [`get_variation()`](#get_variation) instead.
-:::
+</Note>
 
 This method only takes the input parameter **visitorCode**. The result only contains the active feature flags for a given visitor.
 
@@ -1708,13 +1394,13 @@ active_feature_flag_for_visitor = kameleoonClient.get_active_feature_list_for_vi
 
 - 📨 _Sends Tracking Data to Kameleoon_
 
-:::note
+<Note>
 Use [`get_variation()`](#get_variation) instead.
-:::
+</Note>
 
-:::note
+<Note>
 Previously called `obtain_feature_variable`, which was removed in SDK version `3.0.0`.
-:::
+</Note>
 
 To get a variable of the variation key associated with a user, call the `get_feature_variable` method.
 
@@ -1726,11 +1412,11 @@ You must ensure that proper error handling is set up in your code as shown in th
 
 If you specify a `visitor_code`, the `get_feature_variable` method uses the `visitor_code` as the unique visitor identifier, which is useful for [cross-device experimentation](/core-concepts/cross-device-experimentation). When you specify a `visitor_code` and set the `is_unique_identifier` parameter to `true`, the SDK links the flushed data to the visitor associated with the specified identifier.
 
-:::note
+<Note>
 The parameter `is_unique_identifier` is deprecated. Please use [`UniqueIdentifier`](#uniqueidentifier) instead.
 
 The `is_unique_identifier` can also be useful in other edge-case scenarios, such as when you can't access the anonymous `visitor_code` that was originally assigned to the visitor, but you have access to an internal ID that is connected to the anonymous visitor using session merging capabilities.
-:::
+</Note>
 
 ```python
 visitor_code = kameleoon_client.get_visitor_code(request.COOKIES)
@@ -1785,13 +1471,13 @@ else:
 
 #### get_feature_variation_variables()
 
-:::note
+<Note>
 Use [`get_variation()`](#get_variation) instead.
-:::
+</Note>
 
-:::note
+<Note>
 Previously called `get_feature_all_variables`, which was removed in SDK version `3.0.0`.
-:::
+</Note>
 
 To retrieve the all feature variables, call the `get_feature_variation_variables` method. A feature variable can be changed easily via our web application.
 

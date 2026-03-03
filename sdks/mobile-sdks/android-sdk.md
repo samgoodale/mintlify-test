@@ -1,231 +1,6 @@
 ---
-sidebar_position: 2
-toc_max_heading_level: 4
+title: 'Android SDK'
 ---
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-
-import { Select, Text, Bold, Italic, Code, CodeRef, Ref, If } from '../commons/utils.mdx';
-import SharedDiv, { Shared } from '../commons/shared.mdx';
-import ActivatingAFeatureFlag from '../commons/developer-guide/getting-started/activating-a-feature-flag.mdx';
-import TargetingConditions from '../commons/developer-guide/targeting-conditions.mdx';
-import CrossDeviceReconciliation from '../commons/developer-guide/cross-device-reconciliation.mdx';
-import Logging from '../commons/developer-guide/logging.mdx';
-import GetVariations from '../commons/reference/feature-flags-and-variations/get-variations.mdx';
-import GetVariation from '../commons/reference/feature-flags-and-variations/get-variation.mdx';
-import Geolocation from '../commons/reference/data-types/geolocation.mdx';
-import Conversion from '../commons/reference/data-types/conversion.mdx';
-import TrackConversion from '../commons/reference/goals/track-conversion.mdx';
-import UpdateConfigurationHandler from '../commons/reference/events/update-configuration-handler.mdx';
-import AddData from '../commons/reference/visitor-data/add-data.mdx';
-import SetForcedVariation from '../commons/reference/feature-flags-and-variations/set-forced-variation.mdx';
-import EvaluateAudiences from '../commons/reference/feature-flags-and-variations/evaluate-audiences.mdx';
-import GetFeatureList from '../commons/reference/feature-flags-and-variations/get-feature-list.mdx';
-import GetDataFile from '../commons/reference/feature-flags-and-variations/get-data-file.mdx';
-import GetVisitorCode from '../commons/reference/visitor-data/get-visitor-code.mdx';
-import CustomBucketingKey from '../commons/developer-guide/custom-bucketing-key.mdx';
-import DataFile from '../commons/reference/returned-types/data-file.mdx';
-import FeatureFlag from '../commons/reference/returned-types/feature-flag.mdx';
-import Rule from '../commons/reference/returned-types/rule.mdx';
-import ActivityTrackingInterval from '../commons/developer-guide/getting-started/activity-tracking-interval.mdx';
-
-
-# Android SDK
-
-export const Context = {
-    IsClient: true,
-    IsSnakeCase: false,
-    Common: {
-        Null: "null",
-        True: "true",
-        False: "false",
-        String: "String",
-        Bool: "boolean",
-        Float: "float",
-        Int: "int",
-    },
-    Params: {
-        VisitorCode: "visitorCode",
-        FeatureKey: "featureKey"
-    },
-    Exceptions: {
-        Language: "Exception",
-        Kameleoon: "KameleoonException",
-        SdkNotReady: "SDKNotReady",
-        VisitorCodeInvalid: "VisitorCodeInvalid",
-        FeatureNotFound: "FeatureNotFound",
-        FeatureEnvironmentDisabled: "FeatureEnvironmentDisabled",
-        FeatureExperimentNotFound: "FeatureExperimentNotFound",
-        FeatureVariationNotFound: "FeatureVariationNotFound",
-    },
-    Hook: {
-        UseData: "useData",
-    },
-    KameleoonClientConfig: {
-        Name: "KameleoonClientConfig",
-        Ref: "#additional-configuration",
-        TrackingInterval: { FileName: "tracking_interval_millisecond"},
-        IsUniqueIdentifier: { Name: "isUniqueIdentifier" }
-    },
-    // kameleoon.data
-    Conversion: {
-        Name: "Conversion",
-        FullName: "data.Conversion",
-        Ref: "#conversion",
-            Params: {
-                GoalId: { Name: "goalId" },
-                Revenue: { Name: "revenue", Type: "float" },
-                Negative: { Name: "negative" },
-                Metadata: { Name: "metadata", Type: "CustomData...", DefaultValue: "new CustomData[0]" }
-            },
-    },
-    CustomData: {
-        Name: "CustomData",
-        FullName: "data.CustomData",
-        Ref: "#customdata"
-    },
-    Geolocation: {
-        Name: "Geolocation",
-        Ref: "#geolocation",
-        Params: {
-            Region: { Type: "String" },
-            City: { Type: "String" },
-            PostalCode: { Name: "postalCode", Type: "String" },
-            Latitude: { Type: "float" },
-            Longitude: { Type: "float" },
-        }
-    },
-    UniqueIdentifier: {
-        Name: "<>",
-        Ref: "<>"
-    },
-    // kameleoon.types
-    Variation: {
-        Name: "Variation",
-        FullName: "types.Variation",
-        Ref: "#variation"
-    },
-    DataFile: {
-        Name: "DataFile",
-        FullName: "types.DataFile",
-        Ref: "#datafile",
-        Params: {
-            FeatureFlags: { Name: "featureFlags", Type: "Map<String, FeatureFlag>" },
-        }
-    },
-    FeatureFlag: {
-        Name: "FeatureFlag",
-        FullName: "types.FeatureFlag",
-        Ref: "#featureflag",
-        Params: {
-            Variations: { Name: "variations", Type: "Map<String, Variation>" },
-            EnvironmentEnabled: { Name: "environmentEnabled" },
-            Rules: { Name: "rules", Type: "List<Rule>" },
-            DefaultVariationKey: { Name: "defaultVariationKey", Type: "String" },
-        }
-    },
-    Rule: {
-        Name: "Rule",
-        FullName: "types.Rule",
-        Ref: "#rule",
-        Params: {
-            Variations: { Name: "variations", Type: "Map<String, Variation>" },
-        }
-    },
-    // methods
-    Flush: {
-        Name: "flush()",
-        Ref: "#flush",
-        Params: {
-            Instant: { Name: "instant" }
-        }
-    },
-    GetRemoteVisitorData: {
-        Name: "getRemoteVisitorData()",
-        Ref: "#getremotevisitordata",
-    },
-    GetVisitorCode: {
-        Name: "getVisitorCode()",
-        Ref: "#getvisitorcode",
-        Return: "String",
-        Params: {
-            DefaultVisitorCode: { Name: "defaultVisitorCode" }
-        }
-    },
-    TrackConversion: {
-        Name: "trackConversion()",
-        Ref: "#trackconversion",
-        Params: {
-            GoalId: { Name: "goalId" },
-            Revenue: { Name: "revenue", Type: "float" },
-            IsUniqueIdentifier: { Name: "isUniqueIdentifier" },
-            Negative: { Name: "negative" },
-            Metadata: { Name: "metadata", Type: "CustomData...", DefaultValue: "new CustomData[0]" }
-        }
-    },
-    IsFeatureActive: {
-        Name: "isFeatureActive()",
-        Ref: "#isfeatureactive"
-    },
-    AddData: {
-        Name: "addData()",
-        Ref: "#adddata",
-        Params: {
-            Track: { Name: "track" },
-            Data: { Name: "data", Type: "Data..." }
-        }
-    },
-    GetEngineTrackingCode: {
-        Name: "getEngineTrackingCode()",
-        Ref: "#getenginetrackingcode"
-    },
-    SetForcedVariation: {
-        Name: "setForcedVariation()",
-        Ref: "#setforcedvariation",
-        Params: {
-            ExperimentId: { Name: "experimentId" },
-            VariationKey: { Name: "variationKey", Type: "String", RemVal: "null" },
-            ForceTargeting: { Name: "forceTargeting" },
-        }
-    },
-    EvaluateAudiences: {
-        Name: "evaluateAudiences()",
-        Ref: "#evaluateaudiences"
-    },
-    GetVariation: {
-        Name: "getVariation()",
-        Ref: "#getvariation",
-        Return: "Variation",
-        Params: {
-            Track: { Name: "track" }
-        }
-    },
-    GetVariations: {
-        Name: "getVariations()",
-        Ref: "#getvariations",
-        Return: "Map<String, Variation>",
-        Params: {
-            OnlyActive: { Name: "onlyActive" },
-            Track: { Name: "track" }
-        }
-    },
-    UpdateConfigurationHandler: {
-        Name: "onUpdateConfiguration()",
-        Ref: "#onupdateconfiguration",
-        Params: {
-            Handler: { Name: "completion", Type: "ResultCompletion<Long, Exception>" }
-        }
-    },
-    GetFeatureList: {
-        Name: "getFeatureList()",
-        Ref: "#getfeaturelist",
-        Return: "List<String>",
-    },
-    GetDataFile: {
-        Name: "getDataFile()",
-        Ref: "#getdatafile",
-    },
-};
 
 With the Kameleoon Android SDK, you can run feature flags on native mobile Android applications.  The Android SDK is compatible with both Kotlin and Java. The SDK is easy to integrate into your applications, and its memory and network usage are low.
 
@@ -272,32 +47,26 @@ These are the available properties you can set:
 `trackingIntervalMillisecond` / `tracking_interval_millisecond` _(optional)_ | Specifies the interval for tracking requests, in milliseconds. All visitors who were evaluated for any feature flag or had data flushed will be included in this tracking request, which is performed once per interval. The minimum value is `100` ms and the maximum value is `1000` ms. | `1000` ms |
 `environment` / `environment` _(optional)_ | For customers using multi-environment experimentation and feature flagging, this option specifies which feature flag configuration to use. By default, each feature flag has the options `production`, `staging`, and `development`. If not specified, the default value is `production`. [More information](https://help.kameleoon.com/manage-environments/). | `nil` |
 `isUniqueIdentifier` / `is_unique_identifier` _(optional)_ |  Indicates that the specified `visitorCode` is a unique identifier. | `false` |
-`networkDomain` / `network_domain` _(optional)_ |  <Text x={Shared.ExternalConfigFile.NetworkDomain}/> | `nil` |
+`networkDomain` / `network_domain` _(optional)_ |  Custom domain used by SDKs for outgoing requests, often for proxying. Must be a valid domain (e.g., `example.com` or `sub.example.com`). Invalid formats default to Kameleoon's value. | `nil` |
 `defaultDataFile` / `default_datafile` _(optional)_ |  The `default_datafile` feature ensures the Kameleoon SDK is always **READY** by providing a fallback configuration when no cached data file exists. Developers can preload a valid configuration by fetching it from `https://sdk-config.kameleoon.eu/v3/<sitecode>` and passing it as `default_datafile` during initialization. When a `dateModified` timestamp (in milliseconds) is provided and is newer than the cached version, the SDK will use the default datafile instead of the cached version. **If `dateModified` is omitted, the default datafile is only applied when no cached version exists**. This ensures the SDK always has a valid configuration, whether default, cached, or updated. | `nil` |
 `activityTrackingIntervalMillisecond` / `activity_tracking_interval_millisecond` _(optional)_ |  Defines the interval at which activity events are sent. Modifying this parameter can have side effects. Check [this section](#using-activitytrackingintervalmillisecond) before using it. The minimum and default value is `15 000` ms. Setting this value to `0` disables periodic activity tracking; in this case, only a single activity event is sent at application startup.| `15 000` ms |
 
-:::note
+<Note>
 If you specify a `visitorCode` and set the `isUniqueIdentifier` parameter to `true`, the SDK methods use the `visitorCode` value as the unique visitor identifier, which is useful for [cross-device experimentation](https://developers.kameleoon.com/core-concepts/cross-device-experimentation). The SDK links the flushed data to the visitor that is associated with the specified identifier.
 
 The `isUniqueIdentifier` can be useful in other edge-case scenarios, such as when you can't access the anonymous `visitorCode` that was originally assigned to the visitor, but you have access to an internal ID that is connected to the anonymous visitor through session merging.
-:::
+</Note>
 
 ##### Using `activityTrackingIntervalMillisecond`
-
-<ActivityTrackingInterval sec="description" c={Context}/>
 
 #### Initialize the Kameleoon Client
 
 After installing the SDK in your application and setting up the app properties, you must create the Kameleoon Client. A Client is a singleton object that acts as a bridge between your application and the Kameleoon platform. It includes all of the methods and properties you need to run a feature flag.
 
 <Tabs>
-<TabItem value="java" label="Java" default>
+<Tab title="Java">
 
 ```java
-import com.kameleoon.KameleoonClient;
-import com.kameleoon.KameleoonClientConfig;
-import com.kameleoon.KameleoonClientFactory;
-import com.kameleoon.KameleoonException;
 
 public class MyApplication extends Application
 {
@@ -333,8 +102,8 @@ public class MyApplication extends Application
     }
 }
 ```
-</TabItem>
-<TabItem value="kotlin" label="Kotlin">
+</Tab>
+<Tab title="Kotlin">
 
 ```kotlin
 import com.kameleoon.KameleoonClientConfig
@@ -373,7 +142,7 @@ class MyApplication : Application() {
     }
 }
 ```
-</TabItem>
+</Tab>
 </Tabs>
 
 While executing, the `KameleoonClientFactory.create()` method initializes the client, but it is not immediately ready for use. This delay is because the Kameleoon Client must retrieve the current configuration of feature flags (along with their traffic repartition) from a Kameleoon remote server. This retrieval requires network access, which is not always available. Until the Kameleoon Client is fully ready, you should not attempt to run other methods in the Kameleoon Android SDK. Note that once the first configuration of the feature flags is fetched, it is then periodically refreshed, but even if the refresh fails for any reason, the Kameleoon client will continue to function using the previous configuration.
@@ -382,9 +151,9 @@ You can use the [`isReady()`](#isready) method to check if the Kameleoon client 
 
 Alternatively, you can use a **helper callback** to encapsulate the logic of feature flag triggering and variation implementation. The best approach ([`isReady()`](#isready) or **callback**) depends on your preferences and the exact use case. We recommend using [`isReady()`](#isready) when you expect the SDK will be ready for use. For example, you should use `isReady()` when you are running a feature flag on a dialog that users likely won't access for the first few seconds or minutes of navigating in the app. We recommend using the callback when there is a high probability that the SDK is still in the process of initialization. For example, you should use a callback when you are running a feature flag that appears onscreen at the application launch. This feature flag would be better suited to a callback that makles the application wait until the SDK is ready or a specified timeout has expired.
 
-:::note
+<Note>
 It's your responsibility as the app developer to ensure the logic of your application code is correct within the context of A/B testing using Kameleoon. A good practice is to always assume that the application user can be left out of the feature flag when the Kameleoon client is not yet ready. This exclusion is easy to implement, because this corresponds to the implementation of the default or reference variation logic. The code samples in the next paragraph show examples of this approach.
-:::
+</Note>
 
 You're now ready to implement feature management and features flags. See the [Reference](#reference) section for details about additional methods.
 
@@ -395,7 +164,7 @@ You're now ready to implement feature management and features flags. See the [Re
 - ⚠️ Most key methods may throw exceptions, so proper exception handling is required. Be sure to review the documentation for each method you use to understand its potential exceptions.
 
 <Tabs>
-<TabItem value="java" label="Java" default>
+<Tab title="Java">
 
 ```java
 // Initialize `KameleoonClient` on application startup and use it as a singleton later
@@ -421,8 +190,8 @@ void applyDiscountIfApplicable() {
 }
 ```
 
-</TabItem>
-<TabItem value="kotlin" label="Kotlin" default>
+</Tab>
+<Tab title="Kotlin">
 
 ```kotlin
 // Initialize `KameleoonClient` on application startup and use it as a singleton later
@@ -448,9 +217,9 @@ fun applyDiscountIfApplicable() {
     }
 }
 ```
-</TabItem>
+</Tab>
 
-<TabItem value="kotlin_corountines" label="Kotlin (Coroutines)" default>
+<Tab title="Kotlin (Coroutines)">
 
 ```kotlin
 // Initialize `KameleoonClient` on application startup and use it as a singleton later
@@ -472,36 +241,25 @@ suspend fun applyDiscountIfApplicable() {
     }
 }
 ```
-</TabItem>
+</Tab>
 </Tabs>
 
 #### Activating a feature flag
 
 ##### Retrieving a flag configuration
 
-<ActivatingAFeatureFlag sec="retrieving_a_feature_flag_configuration___default" c={Context}/>
-
 ##### Adding data points to target a user or filter / breakdown visits in reports
-
-<ActivatingAFeatureFlag sec="adding_data_points_to_target_a_user_or_filter_breakdown_visits_in_reports___mobile" c={Context}/>
 
 ##### Tracking goal conversions
 
-<ActivatingAFeatureFlag sec="tracking_goal_conversions___param___mobile" c={Context}/>
-
-
 ### Cross-device experimentation
-
-<CrossDeviceReconciliation sec="cross_device_experimentation" c={Context}/>
 
 #### Synchronizing custom data across devices
 
-<CrossDeviceReconciliation sec="synchronizing_custom_data" c={Context}/>
-
 <Tabs>
-<TabItem value="java" label="Java" default>
+<Tab title="Java">
 
-```java title="Device A"
+```java
 // In this, example Custom data with index `90` was set to "Visitor" scope in Kameleoon.
 final int VISITOR_SCOPE_CUSTOM_DATA_INDEX = 90;
 
@@ -509,17 +267,17 @@ kameleoonClient.addData(new CustomData(VISITOR_SCOPE_CUSTOM_DATA_INDEX, "your da
 kameleoonClient.flush();
 ```
 
-```java title="Device B"
+```java
 // Before working with the data, call `getRemoteVisitorData`.
 kameleoonClient.getRemoteVisitorData(result -> {
     // After calling, the SDK on Device B will have access to CustomData of Visitor scope defined on Device A.
     // So, "your data" will be available to target and track the visitor.
 });
 ```
-</TabItem>
-<TabItem value="kotlin" label="Kotlin" default>
+</Tab>
+<Tab title="Kotlin">
 
-```kotlin title="Device A"
+```kotlin
 // In this example Custom data with index `90` was set to "Visitor" scope on Kameleoon Platform.
 val VISITOR_SCOPE_CUSTOM_DATA_INDEX = 90
 
@@ -527,17 +285,17 @@ kameleoonClient.addData(CustomData(VISITOR_SCOPE_CUSTOM_DATA_INDEX, "your data")
 kameleoonClient.flush()
 ```
 
-```kotlin title="Device B"
+```kotlin
 // Before working with the data, call the `getRemoteVisitorData` method.
 kameleoonClient.getRemoteVisitorData { result ->
     // After that the SDK on Device B will have an access to CustomData of Visitor scope defined on Device A.
     // So "your data" will be available for targeting and tracking for the visitor.
 }
 ```
-</TabItem>
-<TabItem value="kotlin_coroutines" label="Kotlin (Coroutines)" default>
+</Tab>
+<Tab title="Kotlin (Coroutines)">
 
-```kotlin title="Device A"
+```kotlin
 // In this example Custom data with index `90` was set to "Visitor" scope on Kameleoon Platform.
 val VISITOR_SCOPE_CUSTOM_DATA_INDEX = 90
 
@@ -545,21 +303,19 @@ kameleoonClient.addData(CustomData(VISITOR_SCOPE_CUSTOM_DATA_INDEX, "your data")
 kameleoonClient.flush()
 ```
 
-```kotlin title="Device B"
+```kotlin
 // Before working with the data, call the `getRemoteVisitorData` method.
 kameleoonClient.getRemoteVisitorData()
 // After that the SDK on Device B will have an access to CustomData of Visitor scope defined on Device A.
 // So "your data" will be available for targeting and tracking for the visitor.
 ```
-</TabItem>
+</Tab>
 </Tabs>
 
 #### Using custom data for session merging
 
-<CrossDeviceReconciliation sec="using_custom_data_session_merging" c={Context}/>
-
 <Tabs>
-<TabItem value="java" label="Java" default>
+<Tab title="Java">
 
 ```java
 // In this example, `91` represents the Custom Data's index,
@@ -611,8 +367,8 @@ kameleoonClient.getRemoteVisitorData(result -> {
     // ...
 });
 ```
-</TabItem>
-<TabItem value="kotlin" label="Kotlin" default>
+</Tab>
+<Tab title="Kotlin">
 
 ```kotlin
 // In this example, `91` represents the Custom Data's index
@@ -664,8 +420,8 @@ userKameleoonClient.getRemoteVisitorData { result ->
     // ...
 }
 ```
-</TabItem>
-<TabItem value="kotlin_coroutines" label="Kotlin (Coroutines)" default>
+</Tab>
+<Tab title="Kotlin (Coroutines)">
 
 ```kotlin
 // In this example, `91` represents the Custom Data's index
@@ -711,48 +467,33 @@ userKameleoonClient.trackConversion(123, 10.0f)
 // Additionally, the linked visitors will share all fetched remote visitor data.
 userKameleoonClient.getRemoteVisitorData()
 ```
-</TabItem>
+</Tab>
 </Tabs>
-
-<CrossDeviceReconciliation sec="cross_device_visitor_code" c={Context}/>
 
 ### Using a custom bucketing key
 
-<CustomBucketingKey sec="description" c={Context}/>
-
 #### Use cases
-
-<CustomBucketingKey sec="use_cases" c={Context}/>
 
 #### Technical details
 
-<CustomBucketingKey sec="technical_details_1" c={Context}/>
-
 <Tabs>
-<TabItem value="java" label="Java" default>
+<Tab title="Java">
 
 ```java
 kameleoonClient.addData(new CustomData(index, "newVisitorCode"));
 ```
-</TabItem>
-<TabItem value="kotlin" label="Kotlin" default>
+</Tab>
+<Tab title="Kotlin">
 
 ```kotlin
 kameleoonClient.addData(CustomData(index, "newVisitorCode"))
 ```
-</TabItem>
+</Tab>
 </Tabs>
-
-<CustomBucketingKey sec="technical_details_2" c={Context}/>
 
 #### Technical requirementes
 
-<CustomBucketingKey sec="technical_requirements" c={Context}/>
-
 ### Targeting conditions
-
-<TargetingConditions sec="targeting_conditons_description" c={Context}/>
-
 
 ### Error Handling
 
@@ -764,7 +505,7 @@ Although our **unit and integration tests** confirm that the SDK **never throws*
 For example:
 
 <Tabs>
-<TabItem value="java" label="Java" default>
+<Tab title="Java">
 
 ```java
 try {
@@ -775,8 +516,8 @@ try {
     // Recommended (but optional) safeguard for unexpected exceptions from third-party libraries
 }
 ```
-</TabItem>
-<TabItem value="kotlin" label="Kotlin" default>
+</Tab>
+<Tab title="Kotlin">
 
 ```kotlin
 try {
@@ -787,19 +528,15 @@ try {
     // Recommended (but optional) safeguard for unexpected exceptions from third-party libraries
 }
 ```
-</TabItem>
+</Tab>
 </Tabs>
 
 ### Logging
 
-<Logging sec="logging" c={Context}/>
-
 #### Log levels
 
-<Logging sec="log_levels" c={Context}/>
-
 <Tabs>
-<TabItem value="java" label="Java" default>
+<Tab title="Java">
 
 ```java
 // The `NONE` log level does not allow logging.
@@ -823,8 +560,8 @@ com.kameleoon.logging.KameleoonLogger.setLogLevel(com.kameleoon.logging.LogLevel
 // to assist with internal troubleshooting.
 com.kameleoon.logging.KameleoonLogger.setLogLevel(com.kameleoon.logging.LogLevel.DEBUG);
 ```
-</TabItem>
-<TabItem value="kotlin" label="Kotlin" default>
+</Tab>
+<Tab title="Kotlin">
 
 ```kotlin
 // The `NONE` log level allows no logging.
@@ -846,15 +583,13 @@ com.kameleoon.logging.KameleoonLogger.setLogLevel(com.kameleoon.logging.LogLevel
 // It extends the `INFO` log level.
 com.kameleoon.logging.KameleoonLogger.setLogLevel(com.kameleoon.logging.LogLevel.DEBUG)
 ```
-</TabItem>
+</Tab>
 </Tabs>
 
 #### Custom handling of logs
 
-<Logging sec="custom_handling_of_logs" c={Context}/>
-
 <Tabs>
-<TabItem value="java" label="Java" default>
+<Tab title="Java">
 
 ```java
 public class CustomLogger implements com.kameleoon.logging.Logger {
@@ -880,15 +615,14 @@ public class CustomLogger implements com.kameleoon.logging.Logger {
     }
 }
 
-
 // Log level filtering is applied separately from log handling logic.
 // The custom logger will only accept logs that meet or exceed the specified log level.
 // Ensure the log level is set correctly.
 com.kameleoon.logging.KameleoonLogger.setLogLevel(com.kameleoon.logging.LogLevel.DEBUG); // Optional, defaults to `LogLevel.WARNING`.
 com.kameleoon.logging.KameleoonLogger.setLogger(new CustomLogger());
 ```
-</TabItem>
-<TabItem value="kotlin" label="Kotlin" default>
+</Tab>
+<Tab title="Kotlin">
 
 ```kotlin
 class CustomLogger : com.kameleoon.logging.Logger {
@@ -913,7 +647,7 @@ class CustomLogger : com.kameleoon.logging.Logger {
 com.kameleoon.logging.KameleoonLogger.setLogLevel(com.kameleoon.logging.LogLevel.DEBUG) // Optional, defaults to `LogLevel.WARNING`.
 com.kameleoon.logging.KameleoonLogger.setLogger(CustomLogger())
 ```
-</TabItem>
+</Tab>
 </Tabs>
 
 ## Reference
@@ -931,7 +665,7 @@ Call this method before any others to initialize the SDK. This method is in `com
 You can customize the SDK's behavior (for example, the environment, credentials, and so on) by providing a [configuration object](#additional-configuration). Otherwise, the SDK tries to find and use your configuration file instead.
 
 <Tabs>
-<TabItem value="java" label="Java" default>
+<Tab title="Java">
 
 ```java
 String siteCode = "a8st4f59bj";
@@ -962,8 +696,8 @@ try {
 }
 ```
 
-</TabItem>
-<TabItem value="kotlin" label="Kotlin">
+</Tab>
+<Tab title="Kotlin">
 
 ```kotlin
 val siteCode = "a8st4f59bj"
@@ -996,7 +730,7 @@ try {
     // Recommended (but optional) safeguard for unexpected exceptions from third-party libraries
 }
 ```
-</TabItem>
+</Tab>
 </Tabs>
 
 ##### Arguments
@@ -1008,7 +742,6 @@ try {
 | config _(optional)_      | `KameleoonClientConfig` | Optional SDK configuration. If provided, it is used instead of reading from an external [configuration file](#additional-configuration). If not provided, the SDK attempts to read the file, but if the file is missing, it falls back to default behavior. | `nil` |
 | applicationContext _(required)_ | `Context` | The application's [context](https://developer.android.com/reference/android/content/Context). | |
 
-
 ##### Return value
 
 | Type              | Description                                                                                                         |
@@ -1019,8 +752,8 @@ try {
 
 | Type                                        | Description                                                                                                                             |
 | ------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
-| `VisitorCodeInvalid` | <Text x={Shared.Exceptions.VisitorCodeInvalid}/> |
-| `SiteCodeIsEmpty`    | <Text x={Shared.Exceptions.SiteCodeIsEmpty}/> |
+| `VisitorCodeInvalid` | Exception indicating that the provided visitor code is not valid. It is either empty or longer than 255 characters. |
+| `SiteCodeIsEmpty`    | Exception indicating that the specified site code is empty string which is invalid value. |
 
 #### isReady()
 
@@ -1029,18 +762,18 @@ For mobile SDKs, the Kameleoon Client can't initialize immediately, as it must p
 Alternatively, you can use a callback (see the [`runWhenReady()`](#runwhenready) method for details).
 
 <Tabs>
-<TabItem value="java" label="Java" default>
+<Tab title="Java">
 
 ```java
 boolean ready = kameleoonClient.isReady();
 ```
-</TabItem>
-<TabItem value="kotlin" label="Kotlin">
+</Tab>
+<Tab title="Kotlin">
 
 ```kotlin
 val ready = kameleoonClient.isReady
 ```
-</TabItem>
+</Tab>
 </Tabs>
 
 #####  Return value
@@ -1059,15 +792,15 @@ If `result.getOrThrow()=true`, the `KameleoonClient` is initialized and ready, a
 
 The callback or the coroutine-based code should include logic to apply the reference variation, as the user will be excluded from the feature flag if a timeout occurs.
 
-:::caution
+<Warning>
 Since the initial configuration may require a server call, this mechanism is asynchronous. Therefore, you should either:
 
 - Provide a `completion` callback as an argument to the method to ensure you are notified when the `KameleoonClient` is fully initialized and ready for use.
 - Use coroutines to handle asynchronous operations.
-:::
+</Warning>
 
 <Tabs>
-<TabItem value="java" label="Java">
+<Tab title="Java">
 
 ```java
 kameleoonClient.runWhenReady(1000, result -> {
@@ -1092,8 +825,8 @@ kameleoonClient.runWhenReady(1000, result -> {
 | timeoutMilliseconds _(optional)_ | `int` | Timeout for the initialization process | [`defaultTimeoutMillisecond`](#create) or [`default_timeout_millisecond`](#additional-configuration) |
 | completion _(required)_ | `ResultCompletion<Boolean, TimeoutException>` | The callback that processes the received data. ||
 
-</TabItem>
-<TabItem value="kotlin" label="Kotlin">
+</Tab>
+<Tab title="Kotlin">
 
 ```kotlin
 kameleoonClient.runWhenReady(1000) { result ->
@@ -1117,11 +850,8 @@ kameleoonClient.runWhenReady(1000) { result ->
 | timeoutMilliseconds _(optional)_ | `Int` | Timeout for the initialization process | [`defaultTimeoutMillisecond`](#create) or [`default_timeout_millisecond`](#additional-configuration) |
 | completion _(required)_ | `ResultCompletion<Boolean, TimeoutException>` | The callback that processes the received data. ||
 
-
-</TabItem>
-<TabItem value="kotlin_coroutines" label="Kotlin (Coroutines)" default>
-
-<SharedDiv sec="coroutine_warning" c={Context}/>
+</Tab>
+<Tab title="Kotlin (Coroutines)">
 
 ```kotlin
 viewModelScope.launch {
@@ -1147,8 +877,7 @@ viewModelScope.launch {
 | ---- | ----------- |
 | `Result<Unit>` | A Kotlin `Result` that contains either the success result or the exception that occurred. |
 
-
-</TabItem>
+</Tab>
 
 </Tabs>
 
@@ -1158,9 +887,9 @@ viewModelScope.launch {
 
 - 📨 _Sends Tracking Data to Kameleoon (depending on the `track` parameter)_
 
-:::note
+<Note>
 This method was previously called `activateFeature`, which was removed in SDK version `4.0.0`.
-:::
+</Note>
 
 Call this method to activate a feature toggle. This method accepts a `featureKey` as a required argument to check if the specified feature will be active for a visitor.
 
@@ -1169,7 +898,7 @@ If the visitor has never been associated with this feature flag, the method retu
 Ensure you properly set up error handling as shown in the example code to catch potential exceptions.
 
 <Tabs>
-<TabItem value="java" label="Java" default>
+<Tab title="Java">
 
 ```java
 String featureKey = "new_checkout";
@@ -1191,8 +920,8 @@ if (hasNewCheckout)
     // Implement new checkout code here
 }
 ```
-</TabItem>
-<TabItem value="kotlin" label="Kotlin">
+</Tab>
+<Tab title="Kotlin">
 
 ```kotlin
 val featureKey = "new_checkout"
@@ -1216,7 +945,7 @@ if (hasNewCheckout) {
     // Implement new checkout code here
 }
 ```
-</TabItem>
+</Tab>
 </Tabs>
 
 ##### Arguments
@@ -1241,10 +970,8 @@ FeatureNotFound  | Exception indicating that the requested feature ID was not fo
 
 #### getVariation()
 
-<GetVariation sec="description" c={Context}/>
-
 <Tabs>
-<TabItem value="java" label="Java" default>
+<Tab title="Java">
 
 ```java
 final String featureKey = "featureKey";
@@ -1278,8 +1005,8 @@ if (variation != null) {
     }
 }
 ```
-</TabItem>
-<TabItem value="kotlin" label="Kotlin">
+</Tab>
+<Tab title="Kotlin">
 
 ```kotlin
 val featureKey = "featureKey"
@@ -1311,26 +1038,19 @@ when (variation?.key) {
     }
 }
 ```
-</TabItem>
+</Tab>
 </Tabs>
 
-
 ##### Arguments
-<GetVariation sec="arguments" c={Context}/>
 
 ##### Return value
-<GetVariation sec="return_value" c={Context}/>
 
 ##### Exceptions thrown
-<GetVariation sec="exceptions" c={Context}/>
-
-
 
 #### getVariations()
-<GetVariations sec="description" c={Context}/>
 
 <Tabs>
-<TabItem value="java" label="Java" default>
+<Tab title="Java">
 
 ```java
 try {
@@ -1343,8 +1063,8 @@ try {
     // Exception indicating that the SDK has not completed its initialization yet.
 }
 ```
-</TabItem>
-<TabItem value="kotlin" label="Kotlin">
+</Tab>
+<Tab title="Kotlin">
 
 ```kotlin
 try {
@@ -1357,24 +1077,19 @@ try {
     // Exception indicating that the SDK has not completed its initialization yet.
 }
 ```
-</TabItem>
+</Tab>
 </Tabs>
 
 ##### Arguments
-<GetVariations sec="arguments" c={Context}/>
 
 ##### Return value
-<GetVariations sec="return_value" c={Context}/>
 
 ##### Exceptions thrown
-<GetVariations sec="exceptions" c={Context}/>
 
 #### setForcedVariation()
 
-<SetForcedVariation sec="description" c={Context}/>
-
 <Tabs>
-<TabItem value="java" label="Java" default>
+<Tab title="Java">
 
 ```java
 final int experimentId = 9516;
@@ -1391,8 +1106,8 @@ try {
     // Handling the exception
 }
 ```
-</TabItem>
-<TabItem value="kotlin" label="Kotlin" default>
+</Tab>
+<Tab title="Kotlin">
 
 ```kotlin
 val experimentId = 9516
@@ -1409,23 +1124,17 @@ try {
     // Handling the exception
 }
 ```
-</TabItem>
+</Tab>
 </Tabs>
 
 ##### Arguments
 
-<SetForcedVariation sec="arguments" c={Context}/>
-
 ##### Exceptions thrown
-
-<SetForcedVariation sec="exceptions" c={Context}/>
 
 #### evaluateAudiences()
 
-<EvaluateAudiences sec="description" c={Context}/>
-
 <Tabs>
-<TabItem value="java" label="Java" default>
+<Tab title="Java">
 
 ```java
 try {
@@ -1434,8 +1143,8 @@ try {
     // Handling the exception
 }
 ```
-</TabItem>
-<TabItem value="kotlin" label="Kotlin" default>
+</Tab>
+<Tab title="Kotlin">
 
 ```kotlin
 try {
@@ -1444,45 +1153,35 @@ try {
     // Handling the exception
 }
 ```
-</TabItem>
+</Tab>
 </Tabs>
 
 ##### Exceptions thrown
 
-<EvaluateAudiences sec="exceptions" c={Context}/>
-
 #### getFeatureList()
 
-<GetFeatureList sec="tip_get_variations" c={Context}/>
-<GetFeatureList sec="description" c={Context}/>
-
 <Tabs>
-<TabItem value="java" label="Java" default>
+<Tab title="Java">
 
 ```java
 List<String> allFeatureFlagListId = kameleoonClient.getFeatureList();
 ```
 
-</TabItem>
-<TabItem value="kotlin" label="Kotlin" default>
+</Tab>
+<Tab title="Kotlin">
 
 ```kotlin
 val allFeatureFlagListId = kameleoonClient.getFeatureList()
 ```
-</TabItem>
+</Tab>
 </Tabs>
 
 ##### Return value
 
-<GetFeatureList sec="return_value" c={Context}/>
-
 #### getDataFile()
 
-<GetDataFile sec="tip_qa" c={Context}/>
-<GetDataFile sec="description" c={Context}/>
-
 <Tabs>
-<TabItem value="java" label="Java" default>
+<Tab title="Java">
 
 ```java
 try {
@@ -1494,8 +1193,8 @@ try {
 }
 ```
 
-</TabItem>
-<TabItem value="kotlin" label="Kotlin" default>
+</Tab>
+<Tab title="Kotlin">
 
 ```kotlin
 try {
@@ -1506,26 +1205,19 @@ try {
     // Recommended (but optional) safeguard for unexpected exceptions from third-party libraries
 }
 ```
-</TabItem>
+</Tab>
 </Tabs>
 
 ##### Return value
 
-<GetDataFile sec="return_value" c={Context}/>
-
 ##### Errors thrown
-
-<GetDataFile sec="exceptions" c={Context}/>
-
 
 ### Goals
 
 #### trackConversion()
 
-<TrackConversion sec="description" c={Context}/>
-
 <Tabs>
-<TabItem value="java" label="Java" default>
+<Tab title="Java">
 
 ```java
 final int goalId = 83023;
@@ -1535,8 +1227,8 @@ kameleoonClient.trackConversion(goalId, 10); // provided revenue == 10
 
 kameleoonClient.trackConversion(goalId, new CustomData(1, "metadata")); // Add metadata
 ```
-</TabItem>
-<TabItem value="kotlin" label="Kotlin" default>
+</Tab>
+<Tab title="Kotlin">
 
 ```kotlin
 val goalId = 83023
@@ -1547,49 +1239,40 @@ kameleoonClient.trackConversion(goalId, 10f) // provided revenue == 10
 kameleoonClient.trackConversion(goalId, CustomData(1, "metadata")) // Add metadata
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ##### Arguments
 
-<TrackConversion sec="arguments" c={Context}/>
-
-:::note
-<TrackConversion sec="note_metadata" c={Context}/>
+<Note>
 <Tabs>
-<TabItem value="java" label="Java">
+<Tab title="Java">
 ```java
 kameleoonClient.addData(new CustomData(5, "Credit Card"), new CustomData(9, "Express Delivery"));
 kameleoonClient.trackConversion(1000, new CustomData(5, "Amex Credit Card"));
 ```
-</TabItem>
-<TabItem value="kotlin" label="Kotlin" default>
+</Tab>
+<Tab title="Kotlin">
 ```kotlin
 kameleoonClient.addData(CustomData(5, "Credit Card"), CustomData(9, "Express Delivery"))
 kameleoonClient.trackConversion(1000, CustomData(5, "Amex Credit Card"))
 ```
-</TabItem>
+</Tab>
 </Tabs>
-:::
+</Note>
 
 ### Events
 
 #### onUpdateConfiguration()
 
-:::note
+<Note>
 This method was previously named `updateConfigurationHandler`, which was removed in SDK version `4.0.0` release.
-:::
-
-<UpdateConfigurationHandler sec="description" c={Context}/>
+</Note>
 
 ##### Arguments
 
-<UpdateConfigurationHandler sec="arguments" c={Context}/>
-
-
-
 <Tabs>
-<TabItem value="java" label="Java" default>
+<Tab title="Java">
 
 ```java
 kameleoonClient.onUpdateConfiguration(result -> {
@@ -1598,8 +1281,8 @@ kameleoonClient.onUpdateConfiguration(result -> {
     }
 });
 ```
-</TabItem>
-<TabItem value="kotlin" label="Kotlin" default>
+</Tab>
+<Tab title="Kotlin">
 
 ```kotlin
 kameleoonClient.onUpdateConfiguration { result ->
@@ -1609,58 +1292,52 @@ kameleoonClient.onUpdateConfiguration { result ->
 }
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ### Visitor data
 
 #### getVisitorCode()
-<GetVisitorCode sec="description" c={Context}/>
-
 
 <Tabs>
-<TabItem value="java" label="Java" default>
+<Tab title="Java">
 
 ```java
 String visitorCode = kameleoonClient.getVisitorCode();
 ```
-</TabItem>
-<TabItem value="kotlin" label="Kotlin" default>
+</Tab>
+<Tab title="Kotlin">
 
 ```kotlin
 val visitorCode = kameleoonClient.visitorCode
 ```
-</TabItem>
+</Tab>
 </Tabs>
 
 #####  Return value
-<GetVisitorCode sec="return_value" c={Context}/>
 
 #### addData()
-
-<AddData sec="description" c={Context}/>
 <Tabs>
 
-<TabItem value="java" label="Java" default>
+<Tab title="Java">
 
 ```java
 kameleoonClient.addData(new CustomData(1, "some custom value"), Device.tablet());
 
 kameleoonClient.addData(new Conversion(32, 10f, false));
 ```
-</TabItem>
-<TabItem value="kotlin" label="Kotlin" default>
+</Tab>
+<Tab title="Kotlin">
 
 ```kotlin
 kameleoonClient.addData(CustomData(1, "some custom value"), Device.tablet())
 
 kameleoonClient.addData(Conversion(32, 10f, false))
 ```
-</TabItem>
+</Tab>
 </Tabs>
 
 ##### Arguments
-<AddData sec="arguments" c={Context}/>
 
 #### flush()
 
@@ -1673,7 +1350,7 @@ kameleoonClient.addData(Conversion(32, 10f, false))
 The `flush()` method uses `visitorCode` as the unique visitor identifier, which is useful for [cross-device experimentation](/core-concepts/cross-device-experimentation). If you set the `isUniqueIdentifier` configuration parameter to `true`, the SDK links the flushed data to the visitor associated with the specified identifier.
 
 <Tabs>
-<TabItem value="java" label="Java" default>
+<Tab title="Java">
 
 ```java
 kameleoonClient.addData(Device.phone());
@@ -1683,8 +1360,8 @@ kameleoonClient.flush(); // Interval tracking (most performant tracking method)
 
 kameleoonClient.flush(true); // Instant tracking
 ```
-</TabItem>
-<TabItem value="kotlin" label="Kotlin" default>
+</Tab>
+<Tab title="Kotlin">
 
 ```kotlin
 kameleoonClient.addData(Device.phone())
@@ -1694,7 +1371,7 @@ kameleoonClient.flush() // Interval tracking (most performant tracking method)
 
 kameleoonClient.flush(true) // Instant tracking
 ```
-</TabItem>
+</Tab>
 </Tabs>
 
 ##### Arguments
@@ -1707,21 +1384,21 @@ instant | boolean | Boolean flag indicating whether the data should be sent inst
 
 - 🔄 _Performs an asynchronous request_
 
-:::note
+<Note>
 This method was previously called `retrieveDataFromRemoteSource`, which was removed in SDK version `4.0.0`.
-:::
+</Note>
 
 Use this method to retrieve data from a remote Kameleoon server based on your active `siteCode` and the `key` argument (or the active `visitorCode` if you omit the `key`). The `visitorCode` and `siteCode` are specified in `KameleoonClientFactory.create()`. You can quickly and conveniently store data on our highly scalable remote servers using the Kameleoon Data API. Your application can then retrieve the data using this method.
 
-:::caution
+<Warning>
 Since a server call is required, this mechanism is asynchronous. Therefore, you should either:
 
 - Provide a `completion` callback as an argument to the method to ensure you are notified when the data has been successfully fetched.
 - Use coroutines for asynchronous handling.
-:::
+</Warning>
 
 <Tabs>
-<TabItem value="java" label="Java">
+<Tab title="Java">
 
 ```java
 kameleoonClient.getRemoteData("key", result -> {
@@ -1741,9 +1418,9 @@ kameleoonClient.getRemoteData("key", result -> {
 | key _(optional)_ | `String` | The key that the data you're retrieving is associated with. | `null` |
 | completion _(required)_ | `ResultCompletion<JSONObject, Exception>` | The callback that processes the received data.
 
-</TabItem>
+</Tab>
 
-<TabItem value="kotlin" label="Kotlin">
+<Tab title="Kotlin">
 
 ```kotlin
 kameleoonClient.getRemoteData("key") { result ->
@@ -1763,11 +1440,9 @@ kameleoonClient.getRemoteData("key") { result ->
 | key _(optional)_ | `String` | The key that the data you're retrieving is associated with. | `null` |
 | completion _(required)_ | `ResultCompletion<JSONObject, Exception>` | The callback that processes the received data.
 
-</TabItem>
+</Tab>
 
-<TabItem value="kotlin_coroutines" label="Kotlin (Coroutines)" default>
-
-<SharedDiv sec="coroutine_warning" c={Context}/>
+<Tab title="Kotlin (Coroutines)">
 
 ```kotlin
 viewModelScope.launch {
@@ -1787,7 +1462,7 @@ viewModelScope.launch {
 | ---- | ----------- |
 | `Result<JSONObject>` | A Kotlin `Result` that contains either the fetched value (`JSONObject`) or the exception that occurred. |
 
-</TabItem>
+</Tab>
 </Tabs>
 
 #### getRemoteVisitorData()
@@ -1803,21 +1478,21 @@ Data obtained using this method plays an important role when you want to:
 
 Read [this article]( https://developers.kameleoon.com/feature-management-and-experimentation/using-visit-history-in-feature-flags-and-experiments/) for a better understanding of possible use cases.
 
-:::info
+<Info>
 By default, `getRemoteVisitorData()` automatically retrieves the latest stored custom data with `scope=Visitor` and attaches it to the visitor without having to call the method `addData()`. It is particularly useful for [synchronizing custom data between multiple devices](https://developers.kameleoon.com/feature-management-and-experimentation/web-sdks/nodejs-sdk/#synchronizing-custom-data-across-devices).
 
 We recommend only checking for failed results. However, if necessary, you can verify that the data has been added to the visitor and is available for targeting purposes (or for debugging, though it is better to use [logging](#logging) for debugging). Additionally, you can manage data manually if the `shouldAddData=false` parameter is passed.
-:::
+</Info>
 
-:::caution
+<Warning>
 Since a server call is required, this mechanism is asynchronous. Therefore, you should either:
 
 - Provide a `completion` callback as an argument to the method to ensure you are notified when the data has been successfully fetched and added to the visitor.
 - Use coroutines for asynchronous handling.
-:::
+</Warning>
 
 <Tabs>
-<TabItem value="java" label="Java">
+<Tab title="Java">
 
 ```java
 // Visitor data will be fetched and automatically added for `visitorCode`.
@@ -1862,9 +1537,9 @@ filter _(optional)_ | `RemoteVisitorDataFilter` | Filter that selects which data
 shouldAddData _(optional)_ | `boolean` | A boolean indicating whether the method should automatically add retrieved data for a visitor. | `true` |
 completion _(required)_ | `ResultCompletion<List<Data>, Exception>` | The callback that processes the received visitor data. ||
 
-</TabItem>
+</Tab>
 
-<TabItem value="kotlin" label="Kotlin">
+<Tab title="Kotlin">
 
 ```kotlin
 // Visitor data will be fetched and automatically added to the visitor.
@@ -1908,11 +1583,9 @@ filter _(optional)_ | `RemoteVisitorDataFilter` | Filter that selects which data
 shouldAddData _(optional)_ | `Boolean` | A boolean indicating whether the method should automatically add retrieved data for a visitor. | `true` |
 completion _(required)_ | `ResultCompletion<List<Data>, Exception>` | The callback that processes the received visitor data. ||
 
-</TabItem>
+</Tab>
 
-<TabItem value="kotlin_coroutines" label="Kotlin (Coroutines)" default>
-
-<SharedDiv sec="coroutine_warning" c={Context}/>
+<Tab title="Kotlin (Coroutines)">
 
 ```kotlin
 // Visitor data will be fetched and automatically added for `visitorCode`
@@ -1954,7 +1627,7 @@ shouldAddData _(optional)_ | `Boolean` | A boolean indicating whether the method
 | ---- | ----------- |
 | `Result<List<Data>>` | A Kotlin `Result` that contains either the fetched value (`List<Data>`) or the exception that occurred. |
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ##### Using parameters of `RemoteVisitorDataFilter`
@@ -1965,7 +1638,7 @@ For example, suppose you want to retrieve data on visitors who completed a goal 
 
 The flexibility shown in this example is not limited to goal data. You can use parameters within the `getRemoteVisitorData()` method to retrieve data on a variety of visitor behaviors.
 
-:::note
+<Note>
 Here is the list of available `RemoteVisitorDataFilter` options:
 
 | Name                             | Type      | Description                                                                  | Default |
@@ -1979,8 +1652,8 @@ Here is the list of available `RemoteVisitorDataFilter` options:
 | kcs (_optional_)                 | `boolean` | If true, Kameleoon Conversion Score (KCS) will be retrieved. Requires the [AI Predictive Targeting add-on](https://help.kameleoon.com/target-users-by-ai-propensity-score-kameleoon-conversion-score/)                                    | `false` |
 | visitorCode (_optional_)         | `boolean` | If true, Kameleoon will retrieve the `visitorCode` from the most recent visit and use it for the current visit. This is necessary if you want to ensure that the visitor, identified by their `visitorCode`, always receives the same variation across visits for [Cross-device experimentation](/core-concepts/cross-device-experimentation). | `true` |
 | personalization _(optional)_     | `boolean` | If true, personalization data will be retrieved. This is required for the personalization condition. | `false` |
-| cbs (_optional_)                 | `boolean` | <Text x={Shared.RemoteVisitorDataFilter.CBS}/> | `false` |
-:::
+| cbs (_optional_)                 | `boolean` | If true, Contextual Bandit score data will be retrieved. | `false` |
+</Note>
 
 #### getVisitorWarehouseAudience()
 
@@ -1988,18 +1661,17 @@ Here is the list of available `RemoteVisitorDataFilter` options:
 
 Retrieves all audience data associated with the visitor in your data warehouse. The optional `warehouseKey` parameter is typically your internal user ID. The `customDataIndex` parameter corresponds to the Kameleoon custom data that Kameleoon uses to target your visitors. You can refer to the [warehouse targeting documentation](https://help.kameleoon.com/warehouse-audience-targeting/) for additional details.
 
-:::caution
+<Warning>
 Since a server call is required, this mechanism is asynchronous. Therefore, you should either:
 
 - Provide a `completion` callback as an argument to the method to ensure you are notified when the data has been successfully fetched and added to the visitor.
 - Use coroutines for asynchronous handling.
 
 We recommend checking only for failed results. However, if necessary, you can verify that the data has been added to the visitor and is available for targeting purposes (or for debugging, though it is better to use [logging](#logging) for debugging).
-:::
-
+</Warning>
 
 <Tabs>
-<TabItem value="java" label="Java">
+<Tab title="Java">
 
 ```java
 // Visitor data will be fetched and automatically added for the visitor
@@ -2032,9 +1704,8 @@ kameleoonClient.getVisitorWarehouseAudience("warehouseKey", customDataIndex, res
 | customDataIndex _(required)_ | `int` | An integer representing the custom data index you want to use to target your BigQuery Audiences.| |
 | completion _(required)_ | `ResultCompletion<CustomData, Exception>` | The callback that processes the received data. | |
 
-
-</TabItem>
-<TabItem value="kotlin" label="Kotlin">
+</Tab>
+<Tab title="Kotlin">
 
 ```kotlin
 // Visitor data will be fetched and automatically added for the visitor
@@ -2067,11 +1738,9 @@ kameleoonClient.getVisitorWarehouseAudience("warehouseKey", customDataIndex) { r
 | customDataIndex _(required)_ | `Int` | An integer representing the custom data index you want to use to target your BigQuery Audiences.| |
 | completion _(required)_ | `ResultCompletion<CustomData, Exception>` | The callback that processes the received data. | |
 
-</TabItem>
+</Tab>
 
-<TabItem value="kotlin_coroutines" label="Kotlin (Coroutines)" default>
-
-<SharedDiv sec="coroutine_warning" c={Context}/>
+<Tab title="Kotlin (Coroutines)">
 
 ```kotlin
 // Visitor data will be fetched and automatically added for the visitor
@@ -2105,7 +1774,7 @@ viewModelScope.launch {
 |----- | -------     |
 | `Result<CustomData>` | A Kotlin `Result` that contains either the fetched value (`CustomData`) or the exception that occurred. |
 
-</TabItem>
+</Tab>
 
 </Tabs>
 
@@ -2114,18 +1783,18 @@ viewModelScope.launch {
 You must use this method to specify whether the visitor has given legal consent to use their personal data. Setting the `legalConsent` parameter to `false` limits the types of data that you can include in tracking requests. This method helps you adhere to legal and regulatory requirements while responsibly managing visitor data. You can find more information on personal data in the [consent management policy](https://help.kameleoon.com/consent-management-policy/).
 
 <Tabs>
-<TabItem value="java" label="Java" default>
+<Tab title="Java">
 
 ```java
 kameleoonClient.setLegalConsent(true);
 ```
-</TabItem>
-<TabItem value="kotlin" label="Kotlin" default>
+</Tab>
+<Tab title="Kotlin">
 
 ```kotlin
 kameleoonClient.setLegalConsent(true)
 ```
-</TabItem>
+</Tab>
 </Tabs>
 
 ##### Arguments
@@ -2140,11 +1809,8 @@ This section lists the `com.Kameleoon.Data` types supported by Kameleoon. We pro
 
 #### Conversion
 
-<Conversion sec="description" c={Context}/>
-<Conversion sec="arguments" c={Context}/>
-
 <Tabs>
-<TabItem value="java" label="Java" default>
+<Tab title="Java">
 
 ```java
 kameleoonClient.addData(new Conversion(32, 10f));
@@ -2155,8 +1821,8 @@ kameleoonClient.addData(
     new Conversion(34, 5f, new CustomData(3, "metadata1", "md2"), new CustomData(5, "md3"))
 );
 ```
-</TabItem>
-<TabItem value="kotlin" label="Kotlin" default>
+</Tab>
+<Tab title="Kotlin">
 
 ```kotlin
 kameleoonClient.addData(Conversion(32, 10f))
@@ -2167,14 +1833,14 @@ kameleoonClient.addData(
     Conversion(34, 5f, CustomData(3, "metadata1", "md2"), CustomData(5, "md3"))
 )
 ```
-</TabItem>
+</Tab>
 </Tabs>
 
 #### Device
 
-:::note
+<Note>
 Since Android SDK `4.13.0`, the `Device` is automatically detected based on the [`android.content.Context`](https://developer.android.com/reference/android/content/Context). However, you can still manually override it if needed.
-:::
+</Note>
 
 Store information about the user's device.
 
@@ -2183,34 +1849,30 @@ Store information about the user's device.
 | device _(required)_ | `Devices` | List of devices: **phone**, **tablet**, **desktop**. |
 
 <Tabs>
-<TabItem value="java" label="Java" default>
+<Tab title="Java">
 
 ```java
 kameleoonClient.addData(Device.tablet());
 ```
-</TabItem>
+</Tab>
 </Tabs>
 
 #### Geolocation
 
-<Geolocation sec="description" c={Context}/>
-
 <Tabs>
-<TabItem value="java" label="Java" default>
+<Tab title="Java">
 
 ```java
 kameleoonClient.addData(new Geolocation("France", "Île-de-France", "Paris"));
 ```
-</TabItem>
-<TabItem value="kotlin" label="Kotlin" default>
+</Tab>
+<Tab title="Kotlin">
 
 ```kotlin
 kameleoonClient.addData(Geolocation("France", "Île-de-France", "Paris"))
 ```
-</TabItem>
+</Tab>
 </Tabs>
-
-<Geolocation sec="arguments" c={Context}/>
 
 #### CustomData
 
@@ -2222,13 +1884,13 @@ Define your own custom data types in the Kameleoon app or the Data API and use t
 | values _(required)_ | `String...`/`Collection<String>` | Values of the custom data to be stored. | |
 | overwrite _(optional)_ | `boolean` | Flag to explicitly control how the values are stored and how they appear in reports. [See more](https://developers.kameleoon.com/core-concepts/custom-data/#default-logic-when-overwrite-parameter-is-false-or-omitted) | `true` |
 
-:::note
+<Note>
 - The index of the custom data is available in the **Custom data configuration** page of the Kameleoon app. Be careful: this index starts at 0, so the first custom data you create for a given site would have the index 0, not 1.
 - Adding a `CustomData` instance created with a name when the SDK instance configuration is not up to date or the name is not registered, will result in the data being ignored.
-:::
+</Note>
 
 <Tabs>
-<TabItem value="java" label="Java" default>
+<Tab title="Java">
 
 ```java
 kameleoonClient.addData(new CustomData(1, "value"));
@@ -2242,8 +1904,8 @@ kameleoonClient.addData(new CustomData(1, false, "value"));
 // To use a name instead of the index
 kameleoonClient.addData(new CustomData("my-custom-data", "value"));
 ```
-</TabItem>
-<TabItem value="kotlin" label="Kotlin" default>
+</Tab>
+<Tab title="Kotlin">
 
 ```kotlin
 kameleoonClient.addData(CustomData(1, "value"))
@@ -2257,40 +1919,32 @@ kameleoonClient.addData(CustomData(1, false, "value"))
 // To use a name instead of the index
 kameleoonClient.addData(CustomData("my-custom-data", "value"))
 ```
-</TabItem>
+</Tab>
 </Tabs>
 
 ### Returned Types
 
 #### DataFile
 
-<DataFile sec="description" c={Context}/>
-
-<DataFile sec="arguments" c={Context}/>
-
 <Tabs>
-<TabItem value="java" label="Java" default>
+<Tab title="Java">
 
 ```java
 Map<String, FeatureFlag> featureFlags = dataFile.getFeatureFlags();
 ```
-</TabItem>
-<TabItem value="kotlin" label="Kotlin" default>
+</Tab>
+<Tab title="Kotlin">
 
 ```kotlin
 val featureFlags = dataFile.featureFlags
 ```
-</TabItem>
+</Tab>
 </Tabs>
 
 #### FeatureFlag
 
-<FeatureFlag sec="description_rules" c={Context}/>
-
-<FeatureFlag sec="arguments_rules" c={Context}/>
-
 <Tabs>
-<TabItem value="java" label="Java" default>
+<Tab title="Java">
 
 ```java
 // Check whether the feature flag is enabled in the current environment
@@ -2308,8 +1962,8 @@ Map<String, Variation> variations = featureFlag.getVariations();
 // Retrieve all targeting rules associated with the feature flag
 List<Rule> rules = featureFlag.getRules();
 ```
-</TabItem>
-<TabItem value="kotlin" label="Kotlin" default>
+</Tab>
+<Tab title="Kotlin">
 
 ```kotlin
 // Check whether the feature flag is enabled in the current environment
@@ -2327,33 +1981,27 @@ val variations = featureFlag.variations
 // Retrieve all targeting rules associated with the feature flag
 val rules = featureFlag.rules
 ```
-</TabItem>
+</Tab>
 </Tabs>
-
 
 #### Rule
 
-<Rule sec="description" c={Context}/>
-
-<Rule sec="arguments" c={Context}/>
-
 <Tabs>
-<TabItem value="java" label="Java" default>
+<Tab title="Java">
 
 ```java
 // Retrieve all variations of the rule as a map (key = variation key, value = Variation object)
 Map<String, Variation> variations = rule.getVariations();
 ```
-</TabItem>
-<TabItem value="kotlin" label="Kotlin" default>
+</Tab>
+<Tab title="Kotlin">
 
 ```kotlin
 // Retrieve all variations of the rule as a map (key = variation key, value = Variation object)
 val variations = rule.variations
 ```
-</TabItem>
+</Tab>
 </Tabs>
-
 
 #### Variation
 
@@ -2367,14 +2015,14 @@ val variations = rule.variations
 | experimentId | `Integer`                 | The ID of the experiment associated with the variation (or `null` if default). |
 | variables | `Map<String, Variable>`      | A map containing the variables of the assigned variation, keyed by variable names. This could be an empty collection if no variables are associated. |
 
-:::note
+<Note>
 - The `Variation` object provides details about the assigned variation and its associated experiment, while the [`Variable`](#variable) object contains specific details about each variable within a variation.
 - Ensure that your code handles the case where `id` or `experimentId` may be `null`, indicating a default variation.
 - The `variables` map might be empty if no variables are associated with the variation.
-:::
+</Note>
 
 <Tabs>
-<TabItem value="java" label="Java" default>
+<Tab title="Java">
 
 ```java
 // Retrieving the variation name
@@ -2393,8 +2041,8 @@ Integer experimentId = variation.getExperimentId();
 Map<String, Variable> variables = variation.getVariables();
 ```
 
-</TabItem>
-<TabItem value="kotlin" label="Kotlin" default>
+</Tab>
+<Tab title="Kotlin">
 
 ```kotlin
 // Retrieving the variation name
@@ -2412,7 +2060,7 @@ val experimentId = variation.experimentId
 // Retrieving the variables map
 val variables = variation.variables
 ```
-</TabItem>
+</Tab>
 </Tabs>
 
 #### Variable
@@ -2426,7 +2074,7 @@ val variables = variation.variables
 | value | `Object`  | The value of the variable, which can be of the following types: **boolean**, **int**, **long**, **double**, **String**, **JSONObject**, **JSONArray**, **null**. |
 
 <Tabs>
-<TabItem value="java" label="Java" default>
+<Tab title="Java">
 
 ```java
 // Retrieving the variables map
@@ -2445,8 +2093,8 @@ Integer number = (Integer) variables.get("number").getValue();
 String title = (String) variables.get("title").getValue();
 ```
 
-</TabItem>
-<TabItem value="kotlin" label="Kotlin" default>
+</Tab>
+<Tab title="Kotlin">
 
 ```kotlin
 // Retrieving the variables map
@@ -2464,22 +2112,22 @@ val number = variables.get("number").value as? Int
 // Get the String value of "title"
 val title = variables["title"]?.value as? String
 ```
-</TabItem>
+</Tab>
 </Tabs>
 
 ### Deprecated methods
 
-:::caution
+<Warning>
 These methods are deprecated and will be removed in SDK version `5.0.0`.
-:::
+</Warning>
 
 #### getFeatureVariationKey()
 
 - 📨 _Sends Tracking Data to Kameleoon_
 
-:::note
+<Note>
 Use [`getVariation()`](#getvariation) instead.
-:::
+</Note>
 
 Use this method to get the feature variation key for a visitor. This method takes a `featureKey` as a required argument to retrieve the variation key for the specified user.
 
@@ -2488,7 +2136,7 @@ If the visitor has never been associated with this feature flag, the SDK returns
 Ensure you set up proper error handling as shown in the example code to catch potential exceptions.
 
 <Tabs>
-<TabItem value="java" label="Java" default>
+<Tab title="Java">
 
 ```java
 String featureKey = "new_checkout";
@@ -2518,8 +2166,8 @@ switch (variationKey) {
         break;
 }
 ```
-</TabItem>
-<TabItem value="kotlin" label="Kotlin">
+</Tab>
+<Tab title="Kotlin">
 
 ```kotlin
 val featureKey = "new_checkout"
@@ -2543,16 +2191,16 @@ when (variationKey) {
     else -> {}
 }
 ```
-</TabItem>
+</Tab>
 </Tabs>
 
 #### getFeatureVariationKey()
 
 - 📨 _Sends Tracking Data to Kameleoon_
 
-:::note
+<Note>
 Use [`getVariation()`](#getvariation) instead.
-:::
+</Note>
 
 Use this method to get the feature variation key for a visitor. This method takes a `featureKey` as a required argument to retrieve the variation key for the specified user.
 
@@ -2561,7 +2209,7 @@ If the visitor has never been associated with this feature flag, the SDK returns
 Ensure you set up proper error handling as shown in the example code to catch potential exceptions.
 
 <Tabs>
-<TabItem value="java" label="Java" default>
+<Tab title="Java">
 
 ```java
 String featureKey = "new_checkout";
@@ -2591,8 +2239,8 @@ switch (variationKey) {
         break;
 }
 ```
-</TabItem>
-<TabItem value="kotlin" label="Kotlin">
+</Tab>
+<Tab title="Kotlin">
 
 ```kotlin
 val featureKey = "new_checkout"
@@ -2616,31 +2264,31 @@ when (variationKey) {
     else -> {}
 }
 ```
-</TabItem>
+</Tab>
 </Tabs>
 
 #### getActiveFeatures()
 
-:::note
+<Note>
 - Use [`getVariations()`](#getvariations) instead.
 - Previously called `getFeatureListForVisitorCode`, which was removed in SDK version `4.0.0` release.
-:::
+</Note>
 
 `getActiveFeatures` method retrieves information about the active feature flags that are available for the visitor.
 
 <Tabs>
-<TabItem value="java" label="Java" default>
+<Tab title="Java">
 
 ```java
 Map<String, Variation> listActiveFeatureFlags = kameleoonClient.getActiveFeatures();
 ```
-</TabItem>
-<TabItem value="kotlin" label="Kotlin" default>
+</Tab>
+<Tab title="Kotlin">
 
 ```kotlin
 val listActiveFeatureFlags = kameleoonClient.getActiveFeatures()
 ```
-</TabItem>
+</Tab>
 </Tabs>
 
 ##### Return value
@@ -2653,9 +2301,9 @@ Type | Description
 
 - 📨 _Sends Tracking Data to Kameleoon_
 
-:::note
+<Note>
 Use [`getVariation()`](#getvariation) instead.
-:::
+</Note>
 
 This method gets a variable value of variation key for a specific user. It takes a `featureKey`, and `variableKey` as required arguments.
 
@@ -2664,7 +2312,7 @@ If the visitor has never been associated with the `featureKey`, the SDK returns 
 Ensure you set up proper error handling as shown in the example code to catch potential exceptions.
 
 <Tabs>
-<TabItem value="java" label="Java" default>
+<Tab title="Java">
 
 ```java
 String featureKey = "feature_key";
@@ -2686,8 +2334,8 @@ try {
 }
 ```
 
-</TabItem>
-<TabItem value="kotlin" label="Kotlin" default>
+</Tab>
+<Tab title="Kotlin">
 
 ```kotlin
 val featureKey = "new_checkout"
@@ -2709,7 +2357,7 @@ try {
 }
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ##### Arguments
@@ -2736,17 +2384,17 @@ try {
 
 #### getFeatureVariationVariables()
 
-:::note
+<Note>
 - Use [`getVariation()`](#getvariation) instead.
 - This method was previously called `getFeatureAllVariables`, which was removed in SDK version `4.0.0` release.
-:::
+</Note>
 
 To retrieve all of a feature's variables, call this method. You can modify your feature variables in the Kameleoon app.
 
 This method takes one input parameter: `featureKey`. It returns the data as a `Map<String, Object>` type, as defined in the Kameleoon app. It throws an exception (`FeatureNotFound`) if the requested feature was not found in the SDK's internal configuration.
 
 <Tabs>
-<TabItem value="java" label="Java" default>
+<Tab title="Java">
 
 ```java
 String featureKey = "myFeature";
@@ -2765,8 +2413,8 @@ try {
     System.out.println("Exception occurred");
 }
 ```
-</TabItem>
-<TabItem value="kotlin" label="Kotlin" default>
+</Tab>
+<Tab title="Kotlin">
 
 ```kotlin
 val featureKey = "myFeature"
@@ -2785,7 +2433,7 @@ try {
     println("Exception occurred")
 }
 ```
-</TabItem>
+</Tab>
 </Tabs>
 
 ##### Arguments

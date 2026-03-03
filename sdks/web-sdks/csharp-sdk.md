@@ -1,223 +1,6 @@
 ---
-sidebar_position: 5
-toc_max_heading_level: 4
+title: 'C# SDK'
 ---
-
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-
-import { Select, Text, Bold, Italic, Code, CodeRef, Ref, If } from '../commons/utils.mdx';
-import SharedDiv, { Shared } from '../commons/shared.mdx';
-import StarterKit from '../commons/developer-guide/getting-started/starter-kit.mdx';
-import CrossDeviceReconciliation from '../commons/developer-guide/cross-device-reconciliation.mdx';
-import ActivatingAFeatureFlag from '../commons/developer-guide/getting-started/activating-a-feature-flag.mdx';
-import TargetingConditions from '../commons/developer-guide/targeting-conditions.mdx';
-import Logging from '../commons/developer-guide/logging.mdx';
-import Geolocation from '../commons/reference/data-types/geolocation.mdx';
-import Browser from '../commons/reference/data-types/browser.mdx';
-import Conversion from '../commons/reference/data-types/conversion.mdx';
-import GetVariations from '../commons/reference/feature-flags-and-variations/get-variations.mdx';
-import GetVariation from '../commons/reference/feature-flags-and-variations/get-variation.mdx';
-import TrackConversion from '../commons/reference/goals/track-conversion.mdx';
-import AddData from '../commons/reference/visitor-data/add-data.mdx';
-import GetFeatureList from '../commons/reference/feature-flags-and-variations/get-feature-list.mdx';
-import SetForcedVariation from '../commons/reference/feature-flags-and-variations/set-forced-variation.mdx';
-import EvaluateAudiences from '../commons/reference/feature-flags-and-variations/evaluate-audiences.mdx';
-import GetEngineTrackingCode from '../commons/reference/goals/get-engine-tracking-code.mdx';
-import UpdateConfigurationHandler from '../commons/reference/events/update-configuration-handler.mdx';
-import CustomBucketingKey from '../commons/developer-guide/custom-bucketing-key.mdx';
-
-# C# SDK
-
-export const Context = {
-    IsServer: true,
-    IsSnakeCase: false,
-    Common: {
-        Null: "null",
-        True: "true",
-        False: "false",
-        String: "string",
-        Bool: "bool",
-        Float: "float",
-        Int: "int",
-        SDK: "C#",
-    },
-    Params: {
-        VisitorCode: "visitorCode",
-        FeatureKey: "featureKey",
-    },
-    Exceptions: {
-        Language: "Exception",
-        Kameleoon: "KameleoonException",
-        VisitorCodeInvalid: "VisitorCodeInvalid",
-        FeatureNotFound: "FeatureNotFound",
-        FeatureEnvironmentDisabled: "FeatureEnvironmentDisabled",
-        FeatureExperimentNotFound: "FeatureExperimentNotFound",
-        FeatureVariationNotFound: "FeatureVariationNotFound",
-    },
-    Hook: {
-        UseData: "useData",
-    },
-    KameleoonClientConfig: {
-        Ref: "#additional-configuration",
-        TrackingInterval: { FileName: "tracking_interval_millisecond" },
-        IsUniqueIdentifier: { Name: "<>" }
-    },
-    StarterKit: {
-        Name: "Starter kit for .NET",
-        Ref: "https://github.com/Kameleoon/dotnet-examples"
-    },
-    // kameleoon.data
-    Conversion: {
-        Name: "Conversion",
-        FullName: "Data.Conversion",
-        Ref: "#conversion",
-        Params: {
-            GoalId: { Name: "goalId" },
-            Revenue: { Name: "revenue", Type: "float" },
-            Negative: { Name: "negative" },
-            Metadata: { Name: "metadata", Type: "params CustomData[]", DefaultValue: "new CustomData[0]" },
-        }
-    },
-    CustomData: {
-        Name: "CustomData",
-        FullName: "Data.CustomData",
-        Ref: "#customdata"
-    },
-    UniqueIdentifier: {
-        Name: "UniqueIdentifier",
-        Ref: "#uniqueidentifier"
-    },
-    UserAgent: {
-        Name: "UserAgent",
-        Ref: "#useragent"
-    },
-    Geolocation: {
-        Name: "Geolocation",
-        Ref: "#geolocation",
-        Params: {
-            Region: { Type: "string" },
-            City: { Type: "string" },
-            PostalCode: { Name: "postalCode", Type: "string" },
-            Latitude: { Type: "float" },
-            Longitude: { Type: "float" },
-        }
-    },
-    Browser: {
-        Name: "Browser",
-        Ref: "#browser",
-        Params: {
-        BrowserType: {
-            Name: "browser",
-            Type: "Browser.Browsers",
-            Chrome: "CHROME",
-            IE: "INTERNET_EXPLORER",
-            Firefox: "FIREFOX",
-            Safari: "SAFARI",
-            Opera: "OPERA",
-            Other: "OTHER"
-        },
-        Version: { Type: "float?" },
-        },
-    },
-    // kameleoon.types
-    Variation: {
-        Name: "Variation",
-        FullName: "Types.Variation",
-        Ref: "#variation"
-    },
-    // methods
-    Flush: {
-        Name: "Flush()",
-        Ref: "#flush",
-        Params: {
-            Instant: { Name: "instant" }
-        }
-    },
-    GetRemoteVisitorData: {
-        Name: "GetRemoteVisitorData()",
-        Ref: "#getremotevisitordata",
-        Params: {
-            IsUniqueIdentifier: { Name: "isUniqueIdentifier" }
-        }
-    },
-    GetVisitorCode: {
-        Name: "GetVisitorCode()",
-        Ref: "#getvisitorcode",
-        Params: {
-            DefaultVisitorCode: { Name: "defaultVisitorCode" }
-        }
-    },
-    TrackConversion: {
-        Name: "TrackConversion()",
-        Ref: "#trackconversion",
-        Params: {
-            GoalId: { Name: "goalId" },
-            Revenue: { Name: "revenue", Type: "float?" },
-            IsUniqueIdentifier: { Name: "isUniqueIdentifier" },
-            Negative: { Name: "negative" },
-            Metadata: { Name: "metadata", Type: "params CustomData[]", DefaultValue: "new CustomData[0]" }
-        }
-    },
-    GetEngineTrackingCode: {
-        Name: "GetEngineTrackingCode()",
-        Ref: "#getenginetrackingcode"
-    },
-    IsFeatureActive: {
-        Name: "IsFeatureActive()",
-        Ref: "#isfeatureactive"
-    },
-    AddData: {
-        Name: "AddData()",
-        Ref: "#adddata",
-        Params: {
-            Track: { Name: "track" },
-            Data: { Name: "data", Type: "params IData[]" }
-        }
-    },
-    GetVariation: {
-        Name: "GetVariation()",
-        Ref: "#getvariation",
-        Return: "Variation",
-        Params: {
-            Track: { Name: "track" }
-        }
-    },
-    GetVariations: {
-        Name: "GetVariations()",
-        Ref: "#getvariations",
-        Return: "IReadOnlyDictionary<string, Variation>",
-        Params: {
-            OnlyActive: { Name: "onlyActive" },
-            Track: { Name: "track" }
-        }
-    },
-    SetForcedVariation: {
-        Name: "SetForcedVariation()",
-        Ref: "#setforcedvariation",
-        Params: {
-            ExperimentId: { Name: "experimentId" },
-            VariationKey: { Name: "variationKey", Type: "string", RemVal: "null" },
-            ForceTargeting: { Name: "forceTargeting" },
-        }
-    },
-    EvaluateAudiences: {
-        Name: "EvaluateAudiences()",
-        Ref: "#evaluateaudiences"
-    },
-    UpdateConfigurationHandler: {
-        Name: "UpdateConfigurationHandler()",
-        Ref: "#updateconfigurationhandler",
-        Params: {
-            Handler: { Name: "handler", Type: "Action" }
-        }
-    },
-    GetFeatureList: {
-        Name: "GetFeatureList()",
-        Ref: "#getfeaturelist",
-        Return: "List<string>",
-    },
-};
 
 Welcome to the developer documentation for the Kameleoon C# SDK! Use our SDK to run experiments on your back-end .NET application server. It is easy to integrate our SDK into your web-application, and its memory and network usage are low.
 
@@ -227,7 +10,6 @@ Welcome to the developer documentation for the Kameleoon C# SDK! Use our SDK to 
 
 **Changelog**: Latest version of the C# SDK: 4.18.1 [changelog](https://github.com/Kameleoon/client-csharp/blob/master/CHANGELOG.md).
 
-
 ## Developer guide
 
 ### Getting started
@@ -236,33 +18,31 @@ This guide is designed to help you integrate our SDK into your C# applications.
 
 #### Starter kit
 
-<StarterKit sec="starter_kit_description" c={Context}/>
-
 #### Install the C# client
 
 You can use the NuGet, .NET CLI, or Paket package manager to install the C# client.
 
 <Tabs>
-<TabItem value="nuget" label="NuGet Package Manager" default>
+<Tab title="NuGet Package Manager">
 
 ```sh
 Install-Package KameleoonClient -Version 4.17.0
 ```
-</TabItem>
-<TabItem value="netcli" label=".NET CLI">
+</Tab>
+<Tab title=".NET CLI">
 
 ```sh
 dotnet add package KameleoonClient --version 4.17.0
 ```
 
-</TabItem>
-<TabItem value="paket" label="Paket CLI">
+</Tab>
+<Tab title="Paket CLI">
 
 ```sh
 paket add KameleoonClient --version 4.17.0
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 #### Additional configuration
@@ -280,7 +60,7 @@ Create a ``.properties`` configuration file to provide credentials and customize
 |`environment`        | Environment from which a feature flag’s configuration is to be used. The value can be `production`, `staging`, `development`. The default environment value is `production`. See the [managing environments](https://help.kameleoon.com/manage-environments/) article for details. |
 |`top_level_domain`| The current top-level domain for your website. Use the format `example.com`. Don't include `https://`, `www`, or other subdomains. Kameleoon uses this information to set the corresponding cookie on the top-level domain. This field is mandatory. |
 |`proxy_host`         | Sets the proxy host for all outgoing server calls made by the SDK. |
-| `network_domain`                | <Text x={Shared.ExternalConfigFile.NetworkDomain}/>                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| `network_domain`                | Custom domain used by SDKs for outgoing requests, often for proxying. Must be a valid domain (e.g., `example.com` or `sub.example.com`). Invalid formats default to Kameleoon's value.                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
 
 #### Initialize the Kameleoon client
 
@@ -336,33 +116,19 @@ As a developer, you must ensure your app uses the correct logic for A/B testing 
 
 ##### Assigning a unique ID to a user
 
-<ActivatingAFeatureFlag sec="assigning_a_unique_id_to_a_user" c={Context}/>
-
 ##### Retrieving a flag configuration
-
-<ActivatingAFeatureFlag sec="retrieving_a_feature_flag_configuration___default" c={Context}/>
 
 ##### Adding data points to target a user or filter / breakdown visits in reports
 
-<ActivatingAFeatureFlag sec="adding_data_points_to_target_a_user_or_filter_breakdown_visits_in_reports___server" c={Context}/>
-
 ##### Tracking goal conversions
-
-<ActivatingAFeatureFlag sec="tracking_goal_conversions___param" c={Context}/>
 
 ##### Sending events to analytics solutions
 
-<ActivatingAFeatureFlag sec="sending_events_to_analytics_solutions" c={Context}/>
-
 ### Cross-device experimentation
-
-<CrossDeviceReconciliation sec="cross_device_experimentation" c={Context}/>
 
 #### Synchronizing custom data across devices
 
-<CrossDeviceReconciliation sec="synchronizing_custom_data" c={Context}/>
-
-```csharp title="Device A"
+```csharp
 // In this example Custom data with index `90` was set to "Visitor" scope on Kameleoon Platform.
 const int VisitorScopeCustomDataIndex = 90;
 
@@ -370,7 +136,7 @@ kameleoonClient.AddData(visitorCode, new CustomData(VisitorScopeCustomDataIndex,
 kameleoonClient.Flush(visitorCode);
 ```
 
-```csharp title="Device B"
+```csharp
 // Before working with the data, call the `GetRemoteVisitorData` method.
 await kameleoonClient.GetRemoteVisitorData(visitorCode);
 
@@ -379,8 +145,6 @@ await kameleoonClient.GetRemoteVisitorData(visitorCode);
 ```
 
 #### Using custom data for session merging
-
-<CrossDeviceReconciliation sec="using_custom_data_session_merging" c={Context}/>
 
 ```csharp
 // In this example, `91` represents the index of the Custom Data
@@ -416,41 +180,23 @@ kameleoonClient.TrackConversion(userId, 123, 10.0);
 await kameleoonClient.GetRemoteVisitorData(userId);
 ```
 
-<CrossDeviceReconciliation sec="cross_device_visitor_code" c={Context}/>
-
 ### Using a custom bucketing key
-
-<CustomBucketingKey sec="description" c={Context}/>
 
 #### Use cases
 
-<CustomBucketingKey sec="use_cases" c={Context}/>
-
 #### Technical details
-
-<CustomBucketingKey sec="technical_details_1" c={Context}/>
 
 ```csharp
 kameleoonClient.AddData(visitorCode, new CustomData(index, "newVisitorCode"));
 ```
 
-<CustomBucketingKey sec="technical_details_2" c={Context}/>
-
 #### Technical requirementes
-
-<CustomBucketingKey sec="technical_requirements" c={Context}/>
 
 ### Targeting conditions
 
-<TargetingConditions sec="targeting_conditons_description" c={Context}/>
-
 ### Logging
 
-<Logging sec="logging" c={Context}/>
-
 #### Log levels
-
-<Logging sec="log_levels" c={Context}/>
 
 ```csharp
 // The `None` log level does not allow logging.
@@ -476,8 +222,6 @@ Kameleoon.Logging.KameleoonLogger.LogLevel = Kameleoon.Logging.LogLevel.Debug;
 ```
 
 #### Custom handling of logs
-
-<Logging sec="custom_handling_of_logs" c={Context}/>
 
 ```csharp
 class CustomLogger : Kameleoon.Logging.ILogger
@@ -592,13 +336,9 @@ try {
 | `KameleoonException.ConfigCredentialsInvalid` | Exception indicating that the requested credentials were not provided in the configuration file or as arguments on the method.|
 | `KameleoonException.SiteCodeIsEmpty` | Exception indicating that the specified site code is empty string which is invalid value.|
 
-
-
 #### WaitInit()
 
 `WaitInit()` awaits the initialization of the Kameleoon client. This method allows you to verify that the client has successfully initialized before you proceed with other operations.
-
-
 
 ```csharp
 using static Kameleoon;
@@ -622,16 +362,15 @@ try {
 |-------- | -------  |
 |Exception | Exception indicating that client is not initialized properly and cannot be used yet.|
 
-
 ### Feature flags and variations
 
 #### IsFeatureActive()
 
 - 📨 _Sends Tracking Data to Kameleoon (depending on the `track` parameter)_
 
-:::note
+<Note>
 This method was previously called `ActivateFeature`, which was removed in SDK version `4.0.0`.
-:::
+</Note>
 
 To activate a feature toggle, call the `IsFeatureActive` method.
 
@@ -643,11 +382,11 @@ Make sure to include proper error handling in your code, as shown in the example
 
 If you specify a `visitorCode`, the `IsFeatureActive()` method uses it as the unique visitor identifier, which is useful for [cross-device experimentation](https://developers.kameleoon.com/core-concepts/cross-device-experimentation). When you specify a `visitorCode` and set the `isUniqueIdentifier` parameter to `true`, the SDK links the flushed data with the visitor associated with the specified identifier.
 
-:::note
+<Note>
 The parameter `isUniqueIdentifier` is deprecated. Please use [`UniqueIdentifier`](#uniqueidentifier) instead.
 
 The `isUniqueIdentifier` can be helpful in unique situations; for example, if you cannot access the anonymous `visitorCode` given to a visitor, but you can use an internal ID linked to that visitor through session merging.
-:::
+</Note>
 ```csharp
 string visitorCode = kameleoonClient.GetVisitorCode(Request, Response, "example.com");
 string featureKey = "new_checkout";
@@ -694,9 +433,7 @@ if (hasNewCheckout)
 |KameleoonException.VisitorCodeInvalid | Exception indicating that the specified visitor code is not valid. (It is either empty or longer than 255 characters).|
 |KameleoonException.FeatureNotFound | Exception indicating that the requested feature ID has not been found in the internal configuration of the SDK. This is usually normal and means that the feature flag has not yet been activated on Kameleoon's side (but code implementing the feature is already deployed on the web-application's side).|
 
-
 #### GetVariation()
-<GetVariation sec="description" c={Context}/>
 
 ```csharp
 const string featureKey = "new_checkout";
@@ -736,17 +473,12 @@ switch (variation.Key)
 ```
 
 ##### Arguments
-<GetVariation sec="arguments" c={Context}/>
 
 ##### Return value
-<GetVariation sec="return_value" c={Context}/>
 
 ##### Exceptions thrown
-<GetVariation sec="exceptions" c={Context}/>
-
 
 #### GetVariations()
-<GetVariations sec="description" c={Context}/>
 
 ```csharp
 IReadOnlyDictionary<string, Types.Variation> variations;
@@ -765,21 +497,16 @@ catch (VisitorCodeInvalid e)
 ```
 
 ##### Arguments
-<GetVariations sec="arguments" c={Context}/>
 
 ##### Return value
-<GetVariations sec="return_value" c={Context}/>
 
 ##### Exceptions thrown
-<GetVariations sec="exceptions" c={Context}/>
 
 #### GetFeatureList()
 
-:::note
+<Note>
 This method was previously named `ObtainFeatureList()`, which was removed in SDK version `4.0.0`.
-:::
-
-<GetFeatureList sec="description" c={Context}/>
+</Note>
 
 ```csharp
 const featureFlagIds = kameleoonClient.GetFeatureList()
@@ -787,11 +514,7 @@ const featureFlagIds = kameleoonClient.GetFeatureList()
 
 ##### Return value
 
-<GetFeatureList sec="return_value" c={Context}/>
-
 #### SetForcedVariation()
-
-<SetForcedVariation sec="description" c={Context}/>
 
 ```csharp
 const int experimentId = 9516;
@@ -814,15 +537,9 @@ catch (KameleoonException ex)
 
 ##### Arguments
 
-<SetForcedVariation sec="arguments" c={Context}/>
-
 ##### Exceptions thrown
 
-<SetForcedVariation sec="exceptions" c={Context}/>
-
 #### EvaluateAudiences()
-
-<EvaluateAudiences sec="description" c={Context}/>
 
 ```csharp
 try
@@ -837,20 +554,15 @@ catch (KameleoonException ex)
 
 ##### Arguments
 
-<EvaluateAudiences sec="arguments" c={Context}/>
-
 ##### Exceptions thrown
-
-<EvaluateAudiences sec="exceptions" c={Context}/>
-
 
 ### Visitor data
 
 #### GetVisitorCode()
 
-:::note
+<Note>
 This method was previously called `ObtainVisitorCode`, which was removed in SDK version `4.0.0`.
-:::
+</Note>
 
 To get the Kameleoon **visitorCode** for the current visitor, use the `GetVisitorCode()` method. This method is crucial in environments where front-end and back-end systems must consistently identify users. Here’s how it works:
 
@@ -860,11 +572,9 @@ To get the Kameleoon **visitorCode** for the current visitor, use the `GetVisito
 
 3. Set the server-side **kameleoonVisitorCode** cookie using the identifier value. The method returns this identifier value.
 
-:::caution
+<Warning>
 If you provide your own `visitorCode`, make sure it is unique! Also note that the length of `visitorCode` is limited to **255** characters. Using an identifier with too many characters will result in an exception.
-:::
-
-<SharedDiv sec="get_visitor_code_simulated" c={Context}/>
+</Warning>
 
 ```csharp
 try
@@ -899,9 +609,7 @@ catch (VisitorCodeInvalid e)
 |-------- | ------- |
 |KameleoonException.VisitorCodeInvalid | Exception indicating that the provided visitor code is not valid (it is either empty or longer than 255 characters).|
 
-
 #### AddData()
-<AddData sec="description" c={Context}/>
 
 ```csharp
 kameleoonClient.AddData(new Browser(Browser.Browsers.CHROME));
@@ -912,10 +620,8 @@ kameleoonClient.AddData(
 );
 ```
 ##### Arguments
-<AddData sec="arguments" c={Context}/>
 
 ##### Exceptions
-<AddData sec="exceptions" c={Context}/>
 
 #### Flush()
 
@@ -927,13 +633,11 @@ The `Flush()` method collects the Kameleoon data linked to the visitor. It then 
 
 If you specify a `visitorCode`, the `Flush()` method uses it as the unique visitor identifier, which is useful for [cross-device experimentation](/core-concepts/cross-device-experimentation). When you specify a `visitorCode` and set the `isUniqueIdentifier` parameter to `true`, the SDK links the flushed data with the visitor associated with the specified identifier.
 
-:::note
+<Note>
 The parameter `isUniqueIdentifier` is deprecated. Please use [`UniqueIdentifier`](#uniqueidentifier) instead.
 
 The `isUniqueIdentifier` can be helpful in unique situations; for example, if you cannot access the anonymous `visitorCode` given to a visitor, but you can use an internal ID linked to that visitor through session merging.
-:::
-
-
+</Note>
 
 ```csharp
 string visitorCode = kameleoonClient.GetVisitorCode(Request, Response, "example.com");
@@ -962,15 +666,13 @@ kameleoonClient.Flush(visitorCode);
 | visitorCode | string | Unique identifier of the user. This field is mandatory. |
 | isUniqueIdentifier (Deprecated) | bool | An optional parameter for specifying if the visitorCode is a unique identifier. The `visitorCode` should be provided and not `null` to apply `isUniqueIdentifier` for a visitor, otherwise it will be ignored. If not provided, the default value is `false`. The field is optional. |
 
-
 #### GetRemoteData()
 
-:::note
+<Note>
 This method was previously named `RetrieveDataFromRemoteSource`, which was removed in SDK version `4.0.0`.
-:::
+</Note>
 
 `GetRemoteData()` is a method that lets you fetch data for a specific **siteCode** (set in `KameleoonClientFactory.create()`) from a remote Kameleoon server using a **key** you provide. Our Data API stores this data on our servers, which are designed to efficiently handle large amounts of data. Keep in mind that because this method involves a server call, it works asynchronously.
-
 
 ```csharp
 var testValue = await kameleoonClient.GetRemoteData("test"); // default timeout
@@ -1001,7 +703,6 @@ try {
 |-------- | ------- |
 | Exception  | Exception indicating that the request timed out or retrieved data can't be parsed with `JObject.Parse` method.|
 
-
 #### GetRemoteVisitorData()
 
 `GetRemoteVisitorData()` is a method that retrieves Kameleoon visit data for a specific user using their `VisitorCode`. It works in the background and stores this data for other methods to make targeting decisions.
@@ -1014,15 +715,15 @@ This data is important for several reasons:
 
 Read [this article]( https://developers.kameleoon.com/feature-management-and-experimentation/using-visit-history-in-feature-flags-and-experiments/) for a better understanding of possible use cases.
 
-:::caution
+<Warning>
 By default, `GetRemoteVisitorData()` automatically retrieves the latest stored custom data with `Scope=Visitor` and attaches them to the visitor without the need to call the method `AddData()`. It is particularly useful for [synchronizing custom data between multiple devices](https://developers.kameleoon.com/feature-management-and-experimentation/web-sdks/nodejs-sdk/#synchronizing-custom-data-across-devices).
-:::
+</Warning>
 
-:::note
+<Note>
 The parameter `isUniqueIdentifier` is deprecated. Please use [`UniqueIdentifier`](#uniqueidentifier) instead.
 
 The `isUniqueIdentifier` can be helpful in unique situations; for example, if you cannot access the anonymous `visitorCode` given to a visitor, but you can use an internal ID linked to that visitor through session merging.
-:::
+</Note>
 
 ```csharp
 string visitorCode = "visitorCode";
@@ -1075,8 +776,7 @@ For example, let's say you want to retrieve data on visitors who completed a goa
 
 The flexibility shown in this example is not limited to goal data. You can use parameters within the `GetRemoteVisitorData()` method to retrieve data on a variety of visitor behaviors.
 
-
-:::note
+<Note>
 Here is the list of available `Kameleoon.Types.RemoteVisitorDataFilter` options:
 
 | Name                             | Type      | Description                                                                  | Default |
@@ -1093,16 +793,12 @@ Here is the list of available `Kameleoon.Types.RemoteVisitorDataFilter` options:
 | experiments _(optional)_         | `bool` | If true, experiment data will be retrieved.                                  | `false` |
 | kcs _(optional)_                 | `bool` | If true, Kameleoon Conversion Score (KCS) will be retrieved. Requires the [AI Predictive Targeting add-on](https://help.kameleoon.com/target-users-by-ai-propensity-score-kameleoon-conversion-score/). | `false` |
 | visitorCode _(optional)_         | `bool` | If true, the `visitorCode` from the most recent visit should be retrieved and applied to the current visitor. Required for [Cross-device experimentation](/core-concepts/cross-device-experimentation). | `true` |
-| cbs _(optional)_                 | `bool` | <Text x={Shared.RemoteVisitorDataFilter.CBS}/> | `false` |
-
-:::
-
+| cbs _(optional)_                 | `bool` | If true, Contextual Bandit score data will be retrieved. | `false` |
+</Note>
 
 #### GetVisitorWarehouseAudience()
 
 This method retrieves all audience data associated with the visitor in your data warehouse using the specified `visitorCode` and `warehouseKey`. The `warehouseKey` is typically your internal user ID. The `customDataIndex` parameter corresponds to the Kameleoon custom data that Kameleoon uses to target your visitors. You can refer to the [warehouse targeting documentation](https://help.kameleoon.com/warehouse-audience-targeting/) for additional details. The method returns a `CustomData` object, confirming that the data has been added to the visitor and is available for targeting purposes.
-
-
 
 ```csharp
 Task<CustomData> warehouseAudienceDataTask = kameleoonClient.
@@ -1150,12 +846,9 @@ catch (Exception e)
 |HttpRequestException | Exception indicating that the request was failed for any reason.|
 |Exception | Exception indicating that the request timed out or any other reason of failure.|
 
-
 #### SetLegalConsent()
 
 You must use this method to specify whether the visitor has given legal consent to use personal data. Setting the `legalConsent` parameter to `false` limits the types of data that you can include in tracking requests. This method helps you adhere to legal and regulatory requirements while responsibly managing visitor data. You can find more information on personal data in the [consent management policy](https://help.kameleoon.com/consent-management-policy/).
-
-
 
 ```csharp
 string visitorCode = kameleoonClient.GetVisitorCode(httpRequest, httpResponse);
@@ -1176,12 +869,9 @@ kameleoonClient.SetLegalConsent(visitorCode, true, httpResponse);
 |--------- | ------- |
 | KameleoonException.VisitorCodeInvalid | Exception indicating that the provided visitor code is not valid. It is either empty or longer than 255 characters.|
 
-
 ### Goals and third-party analytics
 
 #### TrackConversion()
-
-<TrackConversion sec="description" c={Context}/>
 
 ```csharp
 using Kameleoon;
@@ -1197,22 +887,17 @@ kameleoonClient.TrackConversion(visitorCode, goalId, metadata: cd)
 ```
 
 ##### Arguments
-<TrackConversion sec="arguments" c={Context}/>
 
-:::note
-<TrackConversion sec="note_metadata" c={Context}/>
+<Note>
 ```csharp
 kameleoonClient.AddData(visitorCode, new CustomData(5, "Credit Card"), new CustomData(9, "Express Delivery"));
 kameleoonClient.TrackConversion(visitorCode, 10, metadata: new CustomData(5, "Amex Credit Card"));
 ```
-:::
+</Note>
 
 ##### Exceptions
-<TrackConversion sec="exceptions" c={Context}/>
 
 #### GetEngineTrackingCode()
-
-<GetEngineTrackingCode sec="description" c={Context}/>
 
 ```csharp
 string engineTrackingCode = kameleoonClient.GetEngineTrackingCode(visitorCode);
@@ -1220,19 +905,11 @@ string engineTrackingCode = kameleoonClient.GetEngineTrackingCode(visitorCode);
 
 ##### Arguments
 
-<GetEngineTrackingCode sec="arguments" c={Context}/>
-
 ##### Return value
-
-<GetEngineTrackingCode sec="return_value" c={Context}/>
 
 ### Events
 
 #### UpdateConfigurationHandler()
-
-<UpdateConfigurationHandler sec="description" c={Context}/>
-
-
 
 ```csharp
 kameleoonClient.UpdateConfigurationHandler(async delegate () {
@@ -1241,26 +918,18 @@ kameleoonClient.UpdateConfigurationHandler(async delegate () {
 ```
 ##### Arguments
 
-<UpdateConfigurationHandler sec="arguments" c={Context}/>
-
-
-
 ### Data types
 
 Data available in the SDK is not available for targeting and reporting in the Kameleoon app until it is added; for example, by using the `addData()` method.
 See [use visit history to target users](../using-visit-history-in-feature-flags-and-experiments) for more information.
 
-:::note
+<Note>
 If you are in hybrid mode, you can call `GetRemoteVisitorData()` to automatically fill all data that Kameleoon collected previously.
-:::
+</Note>
 
 The following data types are available in `Kameleoon.Data.IData`.
 
 #### Browser
-
-<Browser sec="description" c={Context}/>
-
-<Browser sec="arguments" c={Context}/>
 
 ```csharp
 kameleoonClient.AddData(visitorCode, new Browser(Browser.Browsers.CHROME));
@@ -1275,9 +944,9 @@ kameleoonClient.AddData(visitorCode, new Browser(Browser.Browsers.SAFARI, 16));
 | title     | string | Title of the page viewed. This field is mandatory. |
 | referrers | int[]  | Referrers of viewed pages. This field is optional. |
 
-:::note
+<Note>
 The index (ID) of the referrer is available in our Back-Office in the Acquisition channel configuration page. Be careful: this index starts at 0, so the first [acquisition channel](https://help.kameleoon.com/create-acquisition-channel) you create for a given site would have the ID 0, not 1.
-:::
+</Note>
 
 ```csharp
 kameleoonClient.AddData(
@@ -1287,10 +956,6 @@ kameleoonClient.AddData(
 ```
 
 #### Conversion
-
-<Conversion sec="description" c={Context}/>
-
-<Conversion sec="arguments" c={Context}/>
 
 ```csharp
 kameleoonClient.AddData(visitorCode, new Conversion(32, 10f));
@@ -1314,8 +979,7 @@ To learn more about custom data, please refer to this [article](/core-concepts/c
 | values _(required)_ | `params string[]` | Values of the custom data to be stored. |  |
 | overwrite _(optional)_ | `bool` | Flag to explicitly control how the values are stored and how they appear in reports. [See more](https://developers.kameleoon.com/core-concepts/custom-data/#default-logic-when-overwrite-parameter-is-false-or-omitted) | `true` |
 
-:::note
-
+<Note>
 - Each visitor is allowed only one `CustomData` for each unique `index`. Adding another `CustomData` with the same `index` will replace the existing one.
 
 - The custom data ‘index’ can be found in the [Custom Data dashboard](https://help.kameleoon.com/manage-your-custom-data/) under the “INDEX” column.
@@ -1323,8 +987,7 @@ To learn more about custom data, please refer to this [article](/core-concepts/c
 - To prevent the SDK from sending data with the selected index to Kameleoon servers for privacy reasons, enable the option: **Use this data only locally for targeting purposes** when creating custom data.
 
 - Adding a `CustomData` instance created with a name when the SDK instance configuration is not up to date or the name is not registered, will result in the data being ignored.
-
-:::
+</Note>
 
 ```csharp
 kameleoonClient.AddData(visitorCode, new CustomData(1, "value"));
@@ -1339,7 +1002,6 @@ kameleoonClient.AddData(visitorCode, new CustomData(1, false, "value"));
 kameleoonClient.AddData(visitorCode, new CustomData("my-custom-data", "value"));
 ```
 
-
 #### Device
 
 | Name    | Type   | Description                                                                                          |
@@ -1349,7 +1011,6 @@ kameleoonClient.AddData(visitorCode, new CustomData("my-custom-data", "value"));
 ```csharp
 kameleoonClient.AddData(visitorCode, new Device(Device.Type.DESKTOP));
 ```
-
 
 #### UserAgent
 
@@ -1371,7 +1032,6 @@ If you don't add `UniqueIdentifier` for a visitor, `visitorCode` is used as the 
 
 The `isUniqueIdentifier` can be helpful in unique situations; for example, if you cannot access the anonymous `visitorCode` given to a visitor, but you can use an internal ID linked to that visitor through session merging.
 
-
 | Name    | Type   | Description  |
 | ------- | ------ | ------------ |
 | value | `bool` | Parameter for specifying if the visitorCode is a unique identifier. This field is required. |
@@ -1380,14 +1040,13 @@ The `isUniqueIdentifier` can be helpful in unique situations; for example, if yo
 kameleoonClient.AddData(visitorCode, new UniqueIdentifier(true));
 ```
 
-
 #### OperatingSystem
 
 `OperatingSystem` contains information about the operating system on the visitor's device.
 
-:::note
+<Note>
 Each visitor can only have one `OperatingSystem`. Adding a second `OperatingSystem` overwrites the first one.
-:::
+</Note>
 
 | Name | Type | Description  |
 | ---- | ---- | -----------  |
@@ -1397,7 +1056,6 @@ Each visitor can only have one `OperatingSystem`. Adding a second `OperatingSyst
 kameleoonClient.addData(visitorCode, new OperatingSystem(OperatingSystem.Type.WINDOWS));
 ```
 
-
 #### Cookie
 
 `Cookie` contains information about the cookie stored on the visitor's device.
@@ -1406,9 +1064,9 @@ kameleoonClient.addData(visitorCode, new OperatingSystem(OperatingSystem.Type.WI
 | ---- | ---- | -----------  |
 | cookies | `IReadOnlyDictionary<string, string>` | A string object map consisting of cookie keys and values. This field is required. |
 
-:::note
+<Note>
 Each visitor can only have one `Cookie`. Adding a second `Cookie` overwrites the first one.
-:::
+</Note>
 
 ```csharp
 Cookie cookie = new Cookie (new Dictionary<string, string>() {
@@ -1420,13 +1078,9 @@ kameleoonClient.addData(visitorCode, cookie);
 
 #### Geolocation
 
-<Geolocation sec="description" c={Context}/>
-<Geolocation sec="arguments" c={Context}/>
-
 ```csharp
 kameleoonClient.addData(visitorCode, new Geolocation("France", "Île-de-France", "Paris"));
 ```
-
 
 ### Returned Types
 
@@ -1441,11 +1095,11 @@ kameleoonClient.addData(visitorCode, new Geolocation("France", "Île-de-France",
 | ExperimentId | `int`                 | The ID of the experiment associated with the variation (or `Variation.UndefinedId` if default). |
 | Variables | `IReadOnlyDictionary<string, Variable>`      | A dictionary containing the variables of the assigned variation, keyed by variable names. This could be an empty collection if no variables are associated. |
 
-:::note
+<Note>
 - The `Variation` object provides details about the assigned variation and its associated experiment, while the [`Variable`](#variable) object contains specific details about each variable within a variation.
 - Ensure that your code handles the case where `Id` or `ExperimentId` may be `Variation.UndefinedId`, indicating a default variation.
 - The `Variables` dictionary might be empty if no variables are associated with the variation.
-:::
+</Note>
 
 ```csharp
 // Retrieving the variation key
@@ -1487,9 +1141,9 @@ string title = (string)variables["title"].Value;
 
 ### Deprecated methods
 
-:::caution
+<Warning>
 These methods are deprecated and will be removed in SDK version `5.0.0`.
-:::
+</Warning>
 
 #### GetFeatureVariationKey()
 
@@ -1497,9 +1151,9 @@ These methods are deprecated and will be removed in SDK version `5.0.0`.
 
 To get feature variation key, call `GetFeatureVariationKey()`.
 
-:::note
+<Note>
 Use [`GetVariation()`](#getvariation) instead.
-:::
+</Note>
 
 This method requires a **visitorCode** and a **featureKey** (or **featureID**) to check if a user can access a specific feature.
 
@@ -1509,11 +1163,11 @@ Make sure to include proper error handling in your code, as shown in the example
 
 If you specify a `visitorCode`, the `GetFeatureVariationKey()` method uses it as the unique visitor identifier, which is useful for [cross-device experimentation](https://developers.kameleoon.com/core-concepts/cross-device-experimentation). When you specify a `visitorCode` and set the `isUniqueIdentifier` parameter to `true`, the SDK links the flushed data with the visitor associated with the specified identifier.
 
-:::note
+<Note>
 The parameter `isUniqueIdentifier` is deprecated. Please use [`UniqueIdentifier`](#uniqueidentifier) instead.
 
 The `isUniqueIdentifier` can be helpful in unique situations; for example, if you cannot access the anonymous `visitorCode` given to a visitor, but you can use an internal ID linked to that visitor through session merging.
-:::
+</Note>
 ```csharp
 string visitorCode = kameleoonClient.GetVisitorCode(Request, Response, "example.com");
 string featureKey = "new_checkout";
@@ -1563,10 +1217,10 @@ switch (variationKey) {
 
 #### GetActiveFeatureListForVisitor()
 
-:::note
+<Note>
 - Use [`GetActiveFeatures`](#getactivefeatures) instead.
 - This method was previously called `ObtainFeatureListForVisitorCode()`, which was removed in SDK version `4.0.0`.
-:::
+</Note>
 
 This method takes a single `visitorCode` parameter. Return only the active feature flags for the specified visitor.
 
@@ -1589,9 +1243,9 @@ var featureListIds = kameleoonClient.GetActiveFeatureListForVisitor(visitorCode)
 
 - 📨 _Sends Tracking Data to Kameleoon_
 
-:::note
+<Note>
 Use [`GetVariation()`](#getvariation) instead.
-:::
+</Note>
 
 To get variable of variation key associated with a user, call the `GetFeatureVariable()` method of our SDK.
 
@@ -1603,11 +1257,11 @@ Make sure to include proper error handling in your code, as shown in the example
 
 If you specify a `visitorCode`, the `GetFeatureVariable()` method uses it as the unique visitor identifier, which is useful for [cross-device experimentation](https://developers.kameleoon.com/core-concepts/cross-device-experimentation). When you specify a `visitorCode` and set the `isUniqueIdentifier` parameter to `true`, the SDK links the flushed data with the visitor associated with the specified identifier.
 
-:::note
+<Note>
 The parameter `isUniqueIdentifier` is deprecated. Please use [`UniqueIdentifier`](#uniqueidentifier) instead.
 
 The `isUniqueIdentifier` can be helpful in unique situations; for example, if you cannot access the anonymous `visitorCode` given to a visitor, but you can use an internal ID linked to that visitor through session merging.
-:::
+</Note>
 
 ```csharp
 var visitorCode = kameleoonClient.GetVisitorCode(req, res, "example.com");
@@ -1652,15 +1306,15 @@ try {
 
 #### GetActiveFeatures()
 
-:::note
+<Note>
 Use [`GetVariations()`](#getvariations) instead.
-:::
+</Note>
 
 `GetActiveFeatures` method retrieves information about the active feature flags that are available for the specified visitor code.
 
-:::note
+<Note>
 The `Kameleoon.Types.Variation.Id` and `Kameleoon.Types.Variation.ExperimentId` properties of returned variations are optional. If not specified, the default value is `Kameleoon.Types.Variation.UndefinedId`.
-:::
+</Note>
 
 ```csharp
 IReadOnlyDictionary<string, Kameleoon.Types.Variation> activeFeatures = GetActiveFeatures(visitorCode);
@@ -1686,10 +1340,10 @@ IReadOnlyDictionary<string, Kameleoon.Types.Variation> activeFeatures = GetActiv
 
 #### GetFeatureVariationVariables()
 
-:::note
+<Note>
 - Use [`GetVariation()`](#getvariation) instead.
 - This method was previously called `GetFeatureAllVariables()`, which was removed in SDK version `4.0.0`.
-:::
+</Note>
 
 Call this method to retrieve all feature variables for a feature. You can modify feature variables in the Kameleoon app.
 

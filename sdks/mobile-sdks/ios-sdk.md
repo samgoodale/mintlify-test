@@ -1,235 +1,6 @@
 ---
-sidebar_position: 1
-toc_max_heading_level: 4
+title: 'iOS SDK'
 ---
-
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-
-import { Select, Text, Bold, Italic, Code, CodeRef, Ref, If } from '../commons/utils.mdx';
-import SharedDiv, { Shared } from '../commons/shared.mdx';
-import StarterKit from '../commons/developer-guide/getting-started/starter-kit.mdx';
-import CrossDeviceReconciliation from '../commons/developer-guide/cross-device-reconciliation.mdx';
-import ActivatingAFeatureFlag from '../commons/developer-guide/getting-started/activating-a-feature-flag.mdx';
-import TargetingConditions from '../commons/developer-guide/targeting-conditions.mdx';
-import GetVariations from '../commons/reference/feature-flags-and-variations/get-variations.mdx';
-import GetVariation from '../commons/reference/feature-flags-and-variations/get-variation.mdx';
-import GetDataFile from '../commons/reference/feature-flags-and-variations/get-data-file.mdx';
-import Logging from '../commons/developer-guide/logging.mdx';
-import Geolocation from '../commons/reference/data-types/geolocation.mdx';
-import Conversion from '../commons/reference/data-types/conversion.mdx';
-import TrackConversion from '../commons/reference/goals/track-conversion.mdx';
-import UpdateConfigurationHandler from '../commons/reference/events/update-configuration-handler.mdx';
-import AddData from '../commons/reference/visitor-data/add-data.mdx';
-import GetFeatureList from '../commons/reference/feature-flags-and-variations/get-feature-list.mdx';
-import GetVisitorCode from '../commons/reference/visitor-data/get-visitor-code.mdx';
-import SetForcedVariation from '../commons/reference/feature-flags-and-variations/set-forced-variation.mdx';
-import EvaluateAudiences from '../commons/reference/feature-flags-and-variations/evaluate-audiences.mdx';
-import CustomBucketingKey from '../commons/developer-guide/custom-bucketing-key.mdx';
-import DataFile from '../commons/reference/returned-types/data-file.mdx';
-import FeatureFlag from '../commons/reference/returned-types/feature-flag.mdx';
-import Rule from '../commons/reference/returned-types/rule.mdx';
-import ActivityTrackingInterval from '../commons/developer-guide/getting-started/activity-tracking-interval.mdx';
-
-# iOS SDK
-
-export const Context = {
-  IsClient: true,
-  IsSnakeCase: false,
-  Common: {
-    Null: "nil",
-    True: "true",
-    False: "false",
-    String: "String",
-    Bool: "Bool",
-    Float: "Double",
-    Int: "Int",
-  },
-  Params: {
-    VisitorCode: "visitorCode",
-    FeatureKey: "featureKey"
-  },
-  Exceptions: {
-    Language: "Error",
-    Kameleoon: "KameleoonError/KameleoonError.Feature",
-    SdkNotReady: "KameleoonError.sdkNotReady",
-    FeatureNotFound: "KameleoonError.Feature.notFound",
-    FeatureEnvironmentDisabled: "KameleoonError.Feature.environmentDisabled",
-    FeatureExperimentNotFound: "KameleoonError.Feature.experimentNotFound",
-    FeatureVariationNotFound: "KameleoonError.Feature.variationNotFound",
-  },
-  Hook: {
-    UseData: "useData",
-  },
-  KameleoonClientConfig: {
-    Name: "KameleoonClientConfig",
-    Ref: "#additional-configuration",
-    TrackingInterval: { FileName: "tracking_interval_millisecond" },
-    IsUniqueIdentifier: { Name: "isUniqueIdentifier" }
-  },
-  StarterKit: {
-    Name: "Starter kit for iOS",
-    Ref: "https://github.com/Kameleoon/ios-examples"
-  },
-  // kameleoon.data
-  Conversion: {
-    Name: "Conversion",
-    FullName: "Conversion",
-    Ref: "#conversion",
-        Params: {
-            GoalId: { Name: "goalId" },
-            Revenue: { Name: "revenue", Type: "Double" },
-            Negative: { Name: "negative" },
-            Metadata: { Name: "metadata", Type: "CustomData... / [CustomData]", DefaultValue: "[]" },
-        },
-  },
-  CustomData: {
-    Name: "CustomData",
-    FullName: "CustomData",
-    Ref: "#customdata"
-  },
-  Geolocation: {
-    Name: "Geolocation",
-    Ref: "#geolocation",
-    Params: {
-        Region: { Type: "String?" },
-        City: { Type: "String?" },
-        PostalCode: { Name: "postalCode", Type: "String?" },
-        Latitude: { Type: "Double?" },
-        Longitude: { Type: "Double?" },
-    }
-  },
-  UniqueIdentifier: {
-    Name: "<>",
-    Ref: "<>"
-  },
-  // kameleoon.Types
-  Variation: {
-    Name: "Variation",
-    FullName: "Types.Variation",
-    Ref: "#variation"
-  },
-  DataFile: {
-    Name: "DataFile",
-    FullName: "Types.DataFile",
-    Ref: "#datafile",
-    Params: {
-        FeatureFlags: { Name: "featureFlags", Type: "[String: FeatureFlag]" },
-    }
-  },
-  FeatureFlag: {
-    Name: "FeatureFlag",
-    FullName: "Types.FeatureFlag",
-    Ref: "#featureflag",
-    Params: {
-        Variations: { Name: "variations", Type: "[String: Variation]" },
-        EnvironmentEnabled: { Name: "environmentEnabled" },
-        Rules: { Name: "rules", Type: "[Rule]" },
-        DefaultVariationKey: { Name: "defaultVariationKey", Type: "String" },
-    }
-  },
-  Rule: {
-        Name: "Rule",
-        FullName: "Types.Rule",
-        Ref: "#rule",
-        Params: {
-            Variations: { Name: "variations", Type: "[String: Variation]" },
-        }
-  },
-  // methods
-  Flush: {
-    Name: "flush()",
-    Ref: "#flush",
-    Params: {
-        Instant: { Name: "instant" }
-    }
-  },
-  GetRemoteVisitorData: {
-    Name: "getRemoteVisitorData()",
-    Ref: "#getremotevisitordata",
-  },
-  GetVisitorCode: {
-    Name: "getVisitorCode()",
-    Ref: "#getvisitorcode",
-    Return: "String",
-    Params: {
-        DefaultVisitorCode: { Name: "defaultVisitorCode" }
-    }
-  },
-  TrackConversion: {
-    Name: "trackConversion()",
-    Ref: "#trackconversion",
-    Params: {
-        GoalId: { Name: "goalId" },
-        Revenue: { Name: "revenue", Type: "Double" },
-        IsUniqueIdentifier: { Name: "isUniqueIdentifier" },
-        Negative: { Name: "negative" },
-        Metadata: { Name: "metadata", Type: "CustomData... / [CustomData]", DefaultValue: "[]" }
-    }
-  },
-  IsFeatureActive: {
-    Name: "isFeatureActive()",
-    Ref: "#isfeatureactive"
-  },
-  AddData: {
-    Name: "addData()",
-    Ref: "#adddata",
-    Params: {
-        Track: { Name: "track" },
-        Data: { Name: "data", Type: "KameleoonData... / [KameleoonData]" }
-    }
-  },
-  GetEngineTrackingCode: {
-    Name: "getEngineTrackingCode()",
-    Ref: "#getenginetrackingcode"
-  },
-  GetVariation: {
-    Name: "getVariation()",
-    Ref: "#getvariation",
-    Return: "Variation",
-    Params: {
-        Track: { Name: "track" }
-    }
-  },
-  GetVariations: {
-    Name: "getVariations()",
-    Ref: "#getvariations",
-    Return: "Dict<String, Variation>",
-    Params: {
-        OnlyActive: { Name: "onlyActive" },
-        Track: { Name: "track" }
-    }
-  },
-  UpdateConfigurationHandler: {
-    Name: "updateConfigurationHandler()",
-    Ref: "#updateconfigurationhandler",
-    Params: {
-        Handler: { Name: "handler", Type: "Optional<(() -> Void)>" }
-    }
-  },
-  GetFeatureList: {
-    Name: "getFeatureList()",
-    Ref: "#getfeaturelist",
-    Return: "[String]",
-  },
-  SetForcedVariation: {
-    Name: "setForcedVariation()",
-    Ref: "#setforcedvariation",
-    Params: {
-        ExperimentId: { Name: "experimentId" },
-        VariationKey: { Name: "variationKey", Type: "String?", RemVal: "nil" },
-        ForceTargeting: { Name: "forceTargeting" },
-    }
-  },
-  EvaluateAudiences: {
-    Name: "evaluateAudiences()",
-    Ref: "#evaluateaudiences"
-  },
-  GetDataFile: {
-    Name: "getDataFile()",
-    Ref: "#getdatafile",
-  },
-};
 
 With the Kameleoon iOS (Swift) SDK, you can run experiments and activate feature flags on native mobile iOS applications. Integrating our SDK into your Swift apps is easy, and its footprint (memory and network usage) is low.
 
@@ -247,8 +18,6 @@ Follow these steps to install and configure the Kameleoon iOS SDK in your applic
 
 #### Starter kit
 
-<StarterKit sec="starter_kit_description" c={Context}/>
-
 #### Prerequisites
 
 * Use Swift version 5.0 or higher on the iOS platform. There is no planned support for earlier iOS applications (including earlier Swift versions and Objective-C apps). We provide a Universal Framework version compatible both with x86_64 (for the iOS Simulator) and ARM (for production deployment into the App Store).
@@ -258,7 +27,7 @@ Follow these steps to install and configure the Kameleoon iOS SDK in your applic
 You can install the iOS SDK using CocoaPods or Swift Package Manager:
 
 <Tabs>
-<TabItem value="cocoapods" label="CocoaPods">
+<Tab title="CocoaPods">
 
 With <a href="https://guides.cocoapods.org/using/using-cocoapods.html">CocoaPods</a>, paste the following code in your Podfile and replace `YOUR_TARGET_NAME` with the value for your app:
 
@@ -276,8 +45,8 @@ Then, in a command prompt, in the `Podfile` directory, run the install command:
 ```custom_code
 pod install
 ```
-</TabItem>
-<TabItem value="spm" label="Swift Package Manager" default>
+</Tab>
+<Tab title="Swift Package Manager">
 
 With <a href="https://github.com/apple/swift-package-manager">Swift Package Manager</a>, add a <a href="https://developer.apple.com/documentation/xcode/adding_package_dependencies_to_your_app">package dependency to your Xcode project</a>. Select **File > Swift Packages > Add Package Dependency** and enter the repository URL: `https://github.com/Kameleoon/client-swift`.
 
@@ -288,7 +57,7 @@ dependencies: [
   .package(url: "https://github.com/Kameleoon/client-swift.git", from("3.0.3"))
 ]
 ```
-</TabItem>
+</Tab>
 </Tabs>
 
 ---
@@ -307,19 +76,17 @@ To customize the SDK's behavior, create a `kameleoon-client-swift.plist` configu
 `trackingIntervalMillisecond` / `tracking_interval_millisecond` _(optional)_ | Specifies the interval for tracking requests, in milliseconds. All visitors who were evaluated for any feature flag or had data flushed will be included in this tracking request, which is performed once per interval. The minimum value is `100` ms and the maximum value is `1000` ms. | `1000` ms |
 `environment` / `environment` _(optional)_ | For customers using multi-environment experimentation and feature flagging, this option specifies which feature flag configuration to use. By default, each feature flag has the options `production`, `staging`, and `development`. If not specified, the default value is `production`. [More information](https://help.kameleoon.com/manage-environments/). | `nil` |
 `isUniqueIdentifier` / `is_unique_identifier` _(optional)_ |  Indicates that the specified `visitorCode` is a unique identifier. | `false` |
-`networkDomain` / `network_domain` _(optional)_ |  <Text x={Shared.ExternalConfigFile.NetworkDomain}/> | `nil` |
+`networkDomain` / `network_domain` _(optional)_ |  Custom domain used by SDKs for outgoing requests, often for proxying. Must be a valid domain (e.g., `example.com` or `sub.example.com`). Invalid formats default to Kameleoon's value. | `nil` |
 `defaultDataFile` / `default_datafile` _(optional)_ |  The `default_datafile` feature ensures the Kameleoon SDK is always **READY** by providing a fallback configuration when no cached data file exists. Developers can preload a valid configuration by fetching it from `https://sdk-config.kameleoon.eu/v3/<sitecode>` and passing it as `default_datafile` during initialization. When a `dateModified` timestamp (in milliseconds) is provided and is newer than the cached version, the SDK will use the default datafile instead of the cached version. **If `dateModified` is omitted, the default datafile is only applied when no cached version exists**. This ensures the SDK always has a valid configuration, whether default, cached, or updated. | `nil` |
 `activityTrackingIntervalMillisecond` / `activity_tracking_interval_millisecond` _(optional)_ |  Defines the interval at which activity events are sent. Modifying this parameter can have side effects. Check [this section](#using-activitytrackingintervalmillisecond) before using it. The minimum and default value is `15 000` ms. Setting this value to `0` disables periodic activity tracking; in this case, only a single activity event is sent at application startup. | `15 000` ms |
 
-:::note
+<Note>
 If you specify a `visitorCode` and set the `isUniqueIdentifier` parameter to `true`, the SDK methods use the `visitorCode` value as the unique visitor identifier, which is useful for [cross-device experimentation](https://developers.kameleoon.com/core-concepts/cross-device-experimentation). The SDK links the flushed data to the visitor that is associated with the specified identifier.
 
 The `isUniqueIdentifier` can be useful in other edge-case scenarios, such as when you can't access the anonymous `visitorCode` that was originally assigned to the visitor, but you have access to an internal ID that is connected to the anonymous visitor through session merging.
-:::
+</Note>
 
 ##### Using `activityTrackingIntervalMillisecond`
-
-<ActivityTrackingInterval sec="description" c={Context}/>
 
 #### Initialize the Kameleoon Client
 
@@ -375,9 +142,9 @@ You can use the `.ready` public getter to check if the Kameleoon client initiali
 
 Alternatively, you can use a **helper callback** to encapsulate the logic of experiment triggering and variation implementation. The best approach (`.ready` or **callback**) depends on your preferences and use case. We recommend using `.ready` when you expect that the SDK will already be ready for use. For example, you should use `.ready` if you are running an experiment on a dialog that would be accessible only after a few seconds or minutes of navigation within the app. We recommend using the callback when there is a high probability that the SDK will still be initializing when the experiment is accessible. For example, an experiment that is visible at the launch of the app should use a callback that makes the application wait until either the SDK is ready or a specified timeout has expired.
 
-:::note
+<Note>
 It's your responsibility as the app developer to ensure the client is ready before calling any methods. A good practice is to always assume that the app user should be left out of the experiment if the Kameleoon client is not yet ready. This exclusion is easy to do, as it corresponds to the implementation of the default reference variation logic as shown in the code sample above.
-:::
+</Note>
 
 You're now ready to implement feature management and features flags. See the [Reference](#reference) section for details about additional methods.
 
@@ -388,7 +155,7 @@ You're now ready to implement feature management and features flags. See the [Re
 - ⚠️ Most key methods may throw errors, so proper exception handling is required. Be sure to review the documentation for each method you use to understand its potential errors.
 
 <Tabs>
-<TabItem value="swift" label="Swift" default>
+<Tab title="Swift">
 
 ```swift
 // Initialize `KameleoonClient` on application startup and use it as a singleton later
@@ -408,8 +175,8 @@ func applyDiscountIfApplicable() {
 }
 ```
 
-</TabItem>
-<TabItem value="swift_async" label="Swift (Async)">
+</Tab>
+<Tab title="Swift (Async)">
 
 ```swift
 // Initialize `KameleoonClient` on application startup and use it as a singleton later
@@ -426,35 +193,25 @@ func applyDiscountIfApplicable() async throws {
     }
 }
 ```
-</TabItem>
+</Tab>
 </Tabs>
 
 #### Activating a feature flag
 
 ##### Retrieving a flag configuration
 
-<ActivatingAFeatureFlag sec="retrieving_a_feature_flag_configuration___default" c={Context}/>
-
 ##### Adding data points to target a user or filter / breakdown visits in reports
-
-<ActivatingAFeatureFlag sec="adding_data_points_to_target_a_user_or_filter_breakdown_visits_in_reports___mobile" c={Context}/>
 
 ##### Tracking goal conversions
 
-<ActivatingAFeatureFlag sec="tracking_goal_conversions___param___mobile" c={Context}/>
-
 ### Cross-device experimentation
-
-<CrossDeviceReconciliation sec="cross_device_experimentation" c={Context}/>
 
 #### Synchronizing custom data across devices
 
-<CrossDeviceReconciliation sec="synchronizing_custom_data" c={Context}/>
-
 <Tabs>
-<TabItem value="swift" label="Swift" default>
+<Tab title="Swift">
 
-```swift title="Device A"
+```swift
 // In this example, Custom data with index `90` was set to "Visitor" scope in Kameleoon.
 let visitorScopeCustomDataIndex = 90
 
@@ -462,18 +219,18 @@ kameleoonClient.addData(CustomData(id: visitorScopeCustomDataIndex, values: "you
 kameleoonClient.flush()
 ```
 
-```swift title="Device B"
+```swift
 // Before working with the data, call `getRemoteVisitorData`.
 kameleoonClient.getRemoteVisitorData { result in
     // After calling, the SDK on Device B will have access to CustomData of Visitor scope defined on Device A.
     // So, "your data" will be available to target and track the visitor.
 }
 ```
-</TabItem>
+</Tab>
 
-<TabItem value="swift_async" label="Swift (Async)">
+<Tab title="Swift (Async)">
 
-```swift title="Device A"
+```swift
 // In this example, Custom data with index `90` was set to "Visitor" scope in Kameleoon.
 let visitorScopeCustomDataIndex = 90
 
@@ -481,21 +238,19 @@ kameleoonClient.addData(CustomData(id: visitorScopeCustomDataIndex, values: "you
 kameleoonClient.flush()
 ```
 
-```swift title="Device B"
+```swift
 // Before working with the data, call `getRemoteVisitorData`.
 try await kameleoonClient.getRemoteVisitorData()
 // After calling, the SDK on Device B will have access to CustomData of Visitor scope defined on Device A.
 // So, "your data" will be available to target and track the visitor.
 ```
-</TabItem>
+</Tab>
 </Tabs>
 
 #### Using custom data for session merging
 
-<CrossDeviceReconciliation sec="using_custom_data_session_merging" c={Context}/>
-
 <Tabs>
-<TabItem value="swift" label="Swift" default>
+<Tab title="Swift">
 
 ```swift
 // In this example, `91` represents the Custom Data's index,
@@ -550,8 +305,8 @@ userKameleoonClient.getRemoteVisitorData { result in
     // ...
 }
 ```
-</TabItem>
-<TabItem value="swift_async" label="Swift (Async)">
+</Tab>
+<Tab title="Swift (Async)">
 
 ```swift
 // In this example, `91` represents the Custom Data's index,
@@ -600,44 +355,26 @@ userKameleoonClient.trackConversion(goalId: 123, revenue: 10.0);
 // Additionally, the linked visitors will share all fetched remote visitor data.
 try await userKameleoonClient.getRemoteVisitorData()
 ```
-</TabItem>
+</Tab>
 </Tabs>
-
-<CrossDeviceReconciliation sec="cross_device_visitor_code" c={Context}/>
 
 ### Using a custom bucketing key
 
-<CustomBucketingKey sec="description" c={Context}/>
-
 #### Use cases
 
-<CustomBucketingKey sec="use_cases" c={Context}/>
-
 #### Technical details
-
-<CustomBucketingKey sec="technical_details_1" c={Context}/>
 
 ```swift
 try? kameleoonClient.addData(CustomData(id: index, values: "newVisitorCode"))
 ```
 
-<CustomBucketingKey sec="technical_details_2" c={Context}/>
-
 #### Technical requirementes
-
-<CustomBucketingKey sec="technical_requirements" c={Context}/>
 
 ### Targeting conditions
 
-<TargetingConditions sec="targeting_conditons_description" c={Context}/>
-
 ### Logging
 
-<Logging sec="logging" c={Context}/>
-
 #### Log levels
-
-<Logging sec="log_levels" c={Context}/>
 
 ```swift
 // The `none` log level does not allow logging.
@@ -664,8 +401,6 @@ KameleoonLogger.logLevel = .debug
 
 #### Custom handling of logs
 
-<Logging sec="custom_handling_of_logs" c={Context}/>
-
 ```swift
 public struct CustomLogger: Logging {
     let customLogger = Logger(subsystem: "com.yourcompany.app", category: "app")
@@ -685,7 +420,6 @@ public struct CustomLogger: Logging {
         }
     }
 }
-
 
 // Log level filtering is applied separately from log handling logic.
 // The custom logger will only accept logs that meet or exceed the specified log level.
@@ -774,8 +508,8 @@ do {
 
 | Type                                        | Description                                                                                                                             |
 | ------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
-| `KameleoonError.visitorCodeInvalid` | <Text x={Shared.Exceptions.VisitorCodeInvalid}/> |
-| `KameleoonError.siteCodeIsEmpty`    | <Text x={Shared.Exceptions.SiteCodeIsEmpty}/> |
+| `KameleoonError.visitorCodeInvalid` | Exception indicating that the provided visitor code is not valid. It is either empty or longer than 255 characters. |
+| `KameleoonError.siteCodeIsEmpty`    | Exception indicating that the specified site code is empty string which is invalid value. |
 
 #### ready
 
@@ -801,14 +535,14 @@ If `ready=true`, the `KameleoonClient` is fully initialized, and feature flags w
 
 The callback or asynchronous code should handle applying the reference variation, as a timeout will exclude the user from the feature flag.
 
-:::caution
+<Warning>
 Since the initial configuration may require a server call, this mechanism is asynchronous. Therefore, you should either:
 - Provide a `completion` callback as an argument to the method to ensure you are notified when the `KameleoonClient` is fully initialized and ready for use.
 - Use asynchronous operations.
-:::
+</Warning>
 
 <Tabs>
-<TabItem value="swift" label="Swift" default>
+<Tab title="Swift">
 
 ```swift
 func applyRecommendedProductsVariation() {
@@ -833,9 +567,8 @@ func applyRecommendedProductsVariation() {
 timeoutMilliseconds _(optional)_ | `Int` | Timeout for the initialization process | [`defaultTimeoutMillisecond`](#create) or [`default_timeout_millisecond`](#additional-configuration) |
 callback _(required)_ | `(Bool) -> Void` | Callback object. It is a lambda expression that will get a `Bool` argument representing whether the `KameleoonClient` became ready before the timeout was reached.
 
-</TabItem>
-<TabItem value="swift_async" label="Swift (Async)">
-<SharedDiv sec="swift_async_warning" c={Context}/>
+</Tab>
+<Tab title="Swift (Async)">
 
 ```swift
 func applyRecommendedProductsVariation() async throws {
@@ -861,7 +594,7 @@ timeoutMilliseconds _(optional)_ | `Int` | Timeout for the initialization proces
 Type | Description
 --------- | -------
 `KameleoonError.sdkNotReady` | Exception indicating that the SDK is not fully initialized yet.
-</TabItem>
+</Tab>
 </Tabs>
 
 ### Feature flags and variations
@@ -870,9 +603,9 @@ Type | Description
 
 * _📨 Sends Tracking Data to Kameleoon (depending on the `track` parameter)_
 
-:::note
+<Note>
 This method was previously called `activateFeature`, which was removed in SDK version `4.0.0`.
-:::
+</Note>
 
 To activate a feature toggle, call this method. `isFeatureActive()` accepts `featureKey` as a required argument to check if the specified feature will be active for a visitor.
 
@@ -929,7 +662,6 @@ Type | Description
 `KameleoonError.Feature.notFound`  | Exception indicating that the requested feature ID has not been found in the SDK's internal configuration. This exception usually means that the feature flag has not yet been activated on Kameleoon's side (but code implementing the feature is already deployed in the web-application).
 
 #### getVariation()
-<GetVariation sec="description" c={Context}/>
 
 ```swift
 let featureKey = "featureKey"
@@ -964,16 +696,12 @@ switch variation?.key {
 ```
 
 ##### Arguments
-<GetVariation sec="arguments" c={Context}/>
 
 ##### Return value
-<GetVariation sec="return_value" c={Context}/>
 
 ##### Errors thrown
-<GetVariation sec="exceptions" c={Context}/>
 
 #### getVariations()
-<GetVariations sec="description" c={Context}/>
 
 ```swift
 do {
@@ -988,17 +716,12 @@ do {
 ```
 
 ##### Arguments
-<GetVariations sec="arguments" c={Context}/>
 
 ##### Return value
-<GetVariations sec="return_value" c={Context}/>
 
 ##### Errors thrown
-<GetVariations sec="exceptions" c={Context}/>
 
 #### setForcedVariation()
-
-<SetForcedVariation sec="description" c={Context}/>
 
 ```swift
 let experimentId = 9516
@@ -1018,17 +741,9 @@ do {
 
 ##### Arguments
 
-<SetForcedVariation sec="arguments" c={Context}/>
-
 ##### Errors thrown
 
-<SetForcedVariation sec="exceptions" c={Context}/>
-
-
 #### evaluateAudiences()
-
-<EvaluateAudiences sec="description" c={Context}/>
-
 
 ```swift
 do {
@@ -1040,13 +755,7 @@ do {
 
 ##### Errors thrown
 
-<EvaluateAudiences sec="exceptions" c={Context}/>
-
-
 #### getFeatureList()
-
-<GetFeatureList sec="tip_get_variations" c={Context}/>
-<GetFeatureList sec="description" c={Context}/>
 
 ```swift
 let allFeatureList = kameleoonClient.getFeatureList()
@@ -1054,12 +763,7 @@ let allFeatureList = kameleoonClient.getFeatureList()
 
 ##### Return value
 
-<GetFeatureList sec="return_value" c={Context}/>
-
 #### getDataFile()
-
-<GetDataFile sec="tip_qa" c={Context}/>
-<GetDataFile sec="description" c={Context}/>
 
 ```swift
 do {
@@ -1073,18 +777,11 @@ do {
 
 ##### Return value
 
-<GetDataFile sec="return_value" c={Context}/>
-
 ##### Errors thrown
-
-<GetDataFile sec="exceptions" c={Context}/>
-
 
 ### Goals
 
 #### trackConversion()
-
-<TrackConversion sec="description" c={Context}/>
 
 ```swift
 let goalId = 83023
@@ -1094,21 +791,17 @@ kameleoonClient.trackConversion(goalId: goalId, revenue: 10.0, metadata: CustomD
 ```
 
 ##### Arguments
-<TrackConversion sec="arguments" c={Context}/>
 
-:::note
-<TrackConversion sec="note_metadata" c={Context}/>
+<Note>
 ```swift
 kameleoonClient.addData([CustomData(id: 5, values: "Credit Card"), CustomData(id: 9, "Express Delivery")]);
 kameleoonClient.trackConversionWithOptParams(goalId: 1000, metadata: CustomData(5, "Amex Credit Card"));
 ```
-:::
+</Note>
 
 ### Events
 
 #### updateConfigurationHandler()
-
-<UpdateConfigurationHandler sec="description" c={Context}/>
 
 ```swift
 kameleoonClient.updateConfigurationHandler {
@@ -1118,23 +811,17 @@ kameleoonClient.updateConfigurationHandler {
 
 ##### Arguments
 
-<UpdateConfigurationHandler sec="arguments" c={Context}/>
-
 ### Visitor data
 
 #### visitorCode
-<GetVisitorCode sec="description" c={Context}/>
 
 ```swift
 let visitorCode = kameleoonClient.visitorCode
 ```
 
 #####  Return value
-<GetVisitorCode sec="return_value" c={Context}/>
 
 #### addData()
-
-<AddData sec="description" c={Context}/>
 
 ```swift
 kameleoonClient.addData(CustomData(id: 20, values: "true", "20"))
@@ -1147,7 +834,6 @@ kameleoonClient.addData([
 ```
 
 ##### Arguments
-<AddData sec="arguments" c={Context}/>
 
 #### flush()
 
@@ -1181,20 +867,20 @@ Type | Description
 
 - 🔄 _Performs an asynchronous request_
 
-:::note
+<Note>
 This method was previously called `retrieveDataFromRemoteSource`, which was removed in SDK version `4.0.0` release.
-:::
+</Note>
 
 Use this method to retrieve data from a remote Kameleoon server based on your active `siteCode` and the `key` argument (or the active `visitorCode` if you omit the `key`). The `visitorCode` and `siteCode` are specified in `KameleoonClientFactory.create()`. You can quickly and conveniently store data on our highly scalable remote servers using the Kameleoon Data API. Your application can then retrieve the data using this method.
 
-:::caution
+<Warning>
 Since a server call is required, this mechanism is asynchronous. Therefore, you should either:
 - Provide a `completion` callback as an argument to the method to ensure you are notified when the data has been successfully fetched.
 - Use asynchronous operations.
-:::
+</Warning>
 
 <Tabs>
-<TabItem value="swift" label="Swift" default>
+<Tab title="Swift">
 
 ```swift
 struct Test1: Decodable {
@@ -1233,10 +919,8 @@ kameleoonClient.getRemoteData(key: "test") { (data: Result<Data, Error>) in
 | key _(optional)_ | `String` | The key that the data you want to get is associated with. | `""` |
 | completion _(required)_ | `(Result<T: Decodable, Error>) -> Void` | The callback that processes the received data.
 
-</TabItem>
-<TabItem value="swift_async" label="Swift (Async)">
-
-<SharedDiv sec="swift_async_warning" c={Context}/>
+</Tab>
+<Tab title="Swift (Async)">
 
 ```swift
 struct Test1: Decodable {
@@ -1286,7 +970,7 @@ Task {
 | ---- | ----------- |
 | `Error` | Indicates that the request has failed due to an error.
 
-</TabItem>
+</Tab>
 </Tabs>
 
 #### getRemoteVisitorData()
@@ -1302,20 +986,20 @@ Data obtained using this method plays an important role when you want to:
 
 Read [this article]( https://developers.kameleoon.com/feature-management-and-experimentation/using-visit-history-in-feature-flags-and-experiments/) for a better understanding of possible use cases.
 
-:::note
+<Note>
 By default, `getRemoteVisitorData()` automatically retrieves the latest stored custom data with `scope=Visitor` and attaches them to the visitor without the need to call the method `addData()`. It is particularly useful for [synchronizing custom data between multiple devices](https://developers.kameleoon.com/feature-management-and-experimentation/web-sdks/nodejs-sdk/#synchronizing-custom-data-across-devices).
 
 We recommend checking only for failed results. However, if necessary, you can verify that the data has been added to the visitor and is available for targeting purposes (or for debugging, though it is better to use [logging](#logging) for debugging). Additionally, you can manage the data manually if the `addData=false` parameter is passed.
-:::
+</Note>
 
-:::caution
+<Warning>
 Since a server call is required, this mechanism is asynchronous. Therefore, you should either:
 - Provide a `completion` callback as an argument to the method to ensure you are notified when the data has been successfully fetched and added to the visitor.
 - Use asynchronous operations.
-:::
+</Warning>
 
 <Tabs>
-<TabItem value="swift" label="Swift" default>
+<Tab title="Swift">
 
 ```swift
 // Fetch visitor data and automatically add it
@@ -1359,9 +1043,8 @@ filter _(optional)_ | `RemoteVisitorDataFilter` | Filter that selects which data
 addData _(optional)_ | `Boolean` | A boolean indicating whether the method should automatically add retrieved data for a visitor. | `true` |
 completion _(required)_ | `(Result<[KameleoonData], Error>) -> Void` | The callback that processes the received visitor data. ||
 
-</TabItem>
-<TabItem value="swift_async" label="Swift (Async)">
-<SharedDiv sec="swift_async_warning" c={Context}/>
+</Tab>
+<Tab title="Swift (Async)">
 
 ```swift
 // Fetch visitor data and automatically add it
@@ -1417,7 +1100,7 @@ addData _(optional)_ | `Boolean` | A boolean indicating whether the method shoul
 | ---- | ----------- |
 | `Error` | Indicates that the request has failed due to an error.
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ##### Using parameters with RemoteVisitorDataFilter
@@ -1428,7 +1111,7 @@ For example, suppose you want to retrieve data on visitors who completed a goal 
 
 The flexibility shown in this example is not limited to goal data. You can use parameters within the `getRemoteVisitorData()` method to retrieve data on a variety of visitor behaviors.
 
-:::note
+<Note>
 Here is the list of available `Types.RemoteVisitorDataFilter` options:
 
 | Name                             | Type      | Description                                                                  | Default |
@@ -1442,8 +1125,8 @@ Here is the list of available `Types.RemoteVisitorDataFilter` options:
 | kcs _(optional)_                 | `Bool` | If true, Kameleoon Conversion Score (KCS) will be retrieved. Requires the [AI Predictive Targeting add-on](https://help.kameleoon.com/target-users-by-ai-propensity-score-kameleoon-conversion-score/) | `false` |
 | visitorCode _(optional)_         | `Bool` | If true, Kameleoon will retrieve the `visitorCode` from the most recent visit and use it for the current visit. `visitorCode` is necessary if you want to ensure that the visitor, identified by their `visitorCode`, always receives the same variation across visits for [Cross-device experimentation](/core-concepts/cross-device-experimentation). | `true` |
 | personalization _(optional)_         | `Bool` | If true, personalization data will be retrieved. `personalization` is required for the personalization condition | `false` |
-| cbs _(optional)_                 | `Bool` | <Text x={Shared.RemoteVisitorDataFilter.CBS}/> | `false` |
-:::
+| cbs _(optional)_                 | `Bool` | If true, Contextual Bandit score data will be retrieved. | `false` |
+</Note>
 
 #### getVisitorWarehouseAudience()
 
@@ -1451,17 +1134,17 @@ Here is the list of available `Types.RemoteVisitorDataFilter` options:
 
 Retrieves all audience data associated with the visitor in your data warehouse. The optional `warehouseKey` parameter is typically your internal user ID. The `customDataIndex` parameter corresponds to the Kameleoon custom data that Kameleoon uses to target your visitors. You can refer to the [warehouse targeting documentation](https://help.kameleoon.com/warehouse-audience-targeting/) for additional details.
 
-:::caution
+<Warning>
 Since a server call is required, this mechanism is asynchronous. Therefore, you should either:
 
 - Provide a `completion` callback as an argument to the method to ensure you are notified when the data has been successfully fetched and added to the visitor.
 - Use coroutines for asynchronous handling.
 
 We recommend checking only for failed results. However, if necessary, you can verify that the data has been added to the visitor and is available for targeting purposes (or for debugging, though it is better to use [logging](#logging) for debugging).
-:::
+</Warning>
 
 <Tabs>
-<TabItem value="swift" label="Swift" default>
+<Tab title="Swift">
 
 ```swift
 // Fetch visitor warehouse audience data
@@ -1495,9 +1178,8 @@ kameleoonClient.getVisitorWarehouseAudience(
 | customDataIndex _(required)_ | `Int` |  An integer representing the index of the custom data you want to use to target your BigQuery Audiences. ||
 | completion | `(Result<CustomData, Error>) -> Void` | The callback that processes the received data. ||
 
-</TabItem>
-<TabItem value="swift_async" label="Swift (Async)" default>
-<SharedDiv sec="swift_async_warning" c={Context}/>
+</Tab>
+<Tab title="Swift (Async)">
 
 ```swift
 // Fetch visitor warehouse audience data
@@ -1542,7 +1224,7 @@ Task {
 | ---- | ----------- |
 | `Error` | Indicates that the request has failed due to an error.
 
-</TabItem>
+</Tab>
 </Tabs>
 
 #### setLegalConsent()
@@ -1565,9 +1247,6 @@ This section lists the data types supported by Kameleoon. We provide several sta
 
 #### Conversion
 
-<Conversion sec="description" c={Context}/>
-<Conversion sec="arguments" c={Context}/>
-
 ```swift
 kameleoonClient.addData(Conversion(goalId: 32, revenue: 10.0, negative: false))
 
@@ -1586,12 +1265,12 @@ To learn more about custom data, please refer to this [article](/core-concepts/c
 | overwrite _(optional)_ | `Bool` | Flag to explicitly control how the values are stored and how they appear in reports. [See more](https://developers.kameleoon.com/core-concepts/custom-data/#default-logic-when-overwrite-parameter-is-false-or-omitted) | `true` |
 | values _(required)_ | `String...` or `[String]` | Values of the custom data to be stored. | |
 
-:::note
+<Note>
 - Each visitor is allowed only one `CustomData` for each unique `index`. Adding another `CustomData` with the same `index` will replace the existing `CustomData`.
 - The custom data `index` can be found in the [Custom Data dashboard](https://help.kameleoon.com/manage-your-custom-data/) under the “INDEX” column.
 - To prevent the SDK from sending data with the selected index to Kameleoon servers for privacy reasons, enable the **Use this data only locally for targeting purposes** option when creating custom data.
 - Adding a `CustomData` instance created with a name when the SDK instance configuration is not up to date or the name is not registered, will result in the data being ignored.
-:::
+</Note>
 
 ```swift
 kameleoonClient.addData(CustomData(index: 1, values: "value"))
@@ -1608,9 +1287,9 @@ kameleoonClient.addData(CustomData(name: "my-custom-data", values: "value"))
 
 #### Device
 
-:::note
+<Note>
 Since iOS SDK `4.14.0`, the `Device` is automatically detected based on the value of [`UIDevice.current.userInterfaceIdiom`](https://developer.apple.com/documentation/uikit/uiuserinterfaceidiom). However, you can still manually override it if needed.
-:::
+</Note>
 
 Store information about the user's device.
 
@@ -1624,10 +1303,6 @@ try? kameleoonClient.addData(Device.desktop);
 
 #### Geolocation
 
-<Geolocation sec="description" c={Context}/>
-
-<Geolocation sec="arguments" c={Context}/>
-
 ```swift
 kameleoonClient.addData(Geolocation(country: "France", region: "Île-de-France", city: "Paris"));
 ```
@@ -1636,19 +1311,11 @@ kameleoonClient.addData(Geolocation(country: "France", region: "Île-de-France",
 
 #### DataFile
 
-<DataFile sec="description" c={Context}/>
-
-<DataFile sec="arguments" c={Context}/>
-
 ```swift
 let featureFlags = dataFile.featureFlags
 ```
 
 #### FeatureFlag
-
-<FeatureFlag sec="description_rules" c={Context}/>
-
-<FeatureFlag sec="arguments_rules" c={Context}/>
 
 ```swift
 // Check whether the feature flag is enabled in the current environment
@@ -1669,10 +1336,6 @@ let rules = featureFlag.rules
 
 #### Rule
 
-<Rule sec="description" c={Context}/>
-
-<Rule sec="arguments" c={Context}/>
-
 ```swift
 // Retrieve all variations of the rule as a map (key = variation key, value = Variation object)
 let variations = rule.variations
@@ -1690,11 +1353,11 @@ let variations = rule.variations
 | experimentId | `Int`                 | The ID of the experiment associated with the variation (or `-1` if default). |
 | variables | `[String: Variable]`      | A map containing the variables of the assigned variation, keyed by variable names. `variables` could be an empty collection if no variables are associated. |
 
-:::note
+<Note>
 - The `Variation` object provides details about the assigned variation and its associated experiment, while the [`Variable`](#variable) object contains specific details about each variable within a variation.
 - Ensure that your code handles the case where `id` or `experimentId` may be `-1`, indicating a default variation.
 - The `variables` map might be empty if no variables are associated with the variation.
-:::
+</Note>
 
 ```swift
 // Retrieving the variation name
@@ -1742,17 +1405,17 @@ let title = variables["title"]?.value as? String ?? ""
 
 ### Deprecated methods
 
-:::caution
+<Warning>
 These methods are deprecated and will be removed in SDK version `5.0.0`.
-:::
+</Warning>
 
 #### getFeatureVariationKey()
 
 - 📨 _Sends Tracking Data to Kameleoon_
 
-:::note
+<Note>
 Use [`getVariation()`](#getvariation) instead.
-:::
+</Note>
 
 Use this method to get the [feature variation](https://help.kameleoon.com/define-feature-variations/) key for a specific user. This method takes a `featureKey` as a required argument to retrieve the variation key for the specified user.
 
@@ -1790,9 +1453,9 @@ do {
 
 #### getActiveFeatureList()
 
-:::note
+<Note>
 Use [`getVariations()`](#getvariations) instead.
-:::
+</Note>
 
 To get the list of feature flag keys currently available and active for the visitor.
 
@@ -1807,9 +1470,9 @@ let activeFeatureFlags = kameleoonClient.getActiveFeatureList()
 
 #### getActiveFeatures()
 
-:::note
+<Note>
 Use [`getVariations()`](#getvariations) instead.
-:::
+</Note>
 
 `getActiveFeatures` method retrieves information about the active feature flags that are available for the specified visitor code.
 
@@ -1827,10 +1490,10 @@ Type | Description
 
 - 📨 _Sends Tracking Data to Kameleoon_
 
-:::note
+<Note>
 - Use [`getVariation()`](#getvariation) instead.
 - This method was previously called `obtainFeatureVariable()`, which was removed in SDK version `4.0.0`.
-:::
+</Note>
 
 Call this method to get the [feature variable](https://help.kameleoon.com/define-feature-variables/) of a variation key associated with a user.
 
@@ -1886,10 +1549,10 @@ try {
 
 #### getFeatureVariationVariables()
 
-:::note
+<Note>
 - Use [`getVariation()`](#getvariation) instead.
 - This method was previously called `getFeatureAllVariables`, which was removed in SDK version `4.0.0`.
-:::
+</Note>
 
 To retrieve all of the variables for a feature, call this method. You can modify your feature variables in the Kameleoon app.
 
@@ -1931,8 +1594,6 @@ do {
 | KameleoonError.Feature.notFound  | Exception indicating that the requested feature ID has not been found in the SDK's internal configuration. This exception usually means that the feature flag has not been activated in the Kameleoon app (but code implementing the feature is already deployed in the web application).
 | KameleoonException.Feature.environmentDisabled | Exception indicating that the feature flag is disabled for the visitor's current environment (for example, production, staging, or development).
 | KameleoonError.Feature.variationNotFound    | Exception indicating that the requested variation key has not been found in the SDk's internal configuration. This exception means that the feature flag has not yet been retrieved by the SDK, which may happen if the SDK is in [polling](https://developers.kameleoon.com/feature-management-and-experimentation/technical-considerations#polling) mode. |
-
-
 
 ```swift
 let featureKey = "myFeature"

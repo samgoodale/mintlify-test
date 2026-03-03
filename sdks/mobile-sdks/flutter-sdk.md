@@ -1,242 +1,6 @@
 ---
-sidebar_position: 3
-toc_max_heading_level: 4
+title: 'Flutter SDK'
 ---
-
-import { Select, Text, Bold, Italic, Code, CodeRef, Ref, If } from '../commons/utils.mdx';
-import SharedDiv, { Shared } from '../commons/shared.mdx';
-import Geolocation from '../commons/reference/data-types/geolocation.mdx';
-import Browser from '../commons/reference/data-types/browser.mdx';
-import UpdateConfigurationHandler from '../commons/reference/events/update-configuration-handler.mdx';
-import AddData from '../commons/reference/visitor-data/add-data.mdx';
-import GetFeatureList from '../commons/reference/feature-flags-and-variations/get-feature-list.mdx';
-import GetVariations from '../commons/reference/feature-flags-and-variations/get-variations.mdx';
-import GetVariation from '../commons/reference/feature-flags-and-variations/get-variation.mdx';
-import GetVisitorCode from '../commons/reference/visitor-data/get-visitor-code.mdx';
-import Logging from '../commons/developer-guide/logging.mdx';
-import TargetingConditions from '../commons/developer-guide/targeting-conditions.mdx';
-import Conversion from '../commons/reference/data-types/conversion.mdx';
-import TrackConversion from '../commons/reference/goals/track-conversion.mdx';
-import SetForcedVariation from '../commons/reference/feature-flags-and-variations/set-forced-variation.mdx';
-import CustomBucketingKey from '../commons/developer-guide/custom-bucketing-key.mdx';
-import EvaluateAudiences from '../commons/reference/feature-flags-and-variations/evaluate-audiences.mdx';
-import GetDataFile from '../commons/reference/feature-flags-and-variations/get-data-file.mdx';
-import DataFile from '../commons/reference/returned-types/data-file.mdx';
-import FeatureFlag from '../commons/reference/returned-types/feature-flag.mdx';
-import Rule from '../commons/reference/returned-types/rule.mdx';
-
-
-# Flutter SDK
-
-export const Context = {
-  IsClient: true,
-  IsFlutter: true,
-  IsSnakeCase: false,
-  Common: {
-    Null: "null",
-    True: "true",
-    False: "false",
-    String: "String",
-    Bool: "bool",
-    Float: "double",
-    Int: "int",
-  },
-  Params: {
-    VisitorCode: "visitorCode",
-    FeatureKey: "featureKey"
-  },
-  Exceptions: {
-    Language: "Exception",
-    Kameleoon: "KameleoonException",
-    SdkNotReady: "SDKNotReady",
-    VisitorCodeInvalid: "VisitorCodeInvalid",
-    PlatformException: "PlatformException",
-    FeatureNotFound: "FeatureNotFound",
-    FeatureEnvironmentDisabled: "FeatureEnvironmentDisabled",
-    FeatureExperimentNotFound: "FeatureExperimentNotFound",
-    FeatureVariationNotFound: "FeatureVariationNotFound"
-  },
-  Hook: {
-    UseData: "useData",
-  },
-  KameleoonClientConfig: {
-    Ref: "#initialize-the-kameleoon-client",
-    TrackingInterval: {
-        CodeName: "trackingIntervalMillisecond"
-    }
-  },
-  // kameleoon.data
-  CustomData: {
-    Name: "CustomData",
-    FullName: "data.CustomData",
-    Ref: "#customdata"
-  },
-  Geolocation: {
-    Name: "Geolocation",
-    Ref: "#geolocation",
-    Params: {
-        Region: { Type: "String?" },
-        City: { Type: "String?" },
-        PostalCode: { Name: "postalCode", Type: "String?" },
-        Latitude: { Type: "double?" },
-        Longitude: { Type: "double?" },
-    }
-  },
-  Browser: {
-    Name: "Browser",
-    Ref: "#browser",
-    Params: {
-      BrowserType: {
-        Name: "browser",
-        Type: "Browsers",
-        Chrome: "chrome",
-        IE: "internetExplorer",
-        Firefox: "firefox",
-        Safari: "safari",
-        Opera: "opera",
-        Other: "other"
-      },
-      Version: { Type: "double?" },
-    },
-  },
-  UniqueIdentifier: {
-    Name: "<>",
-    Ref: "<>"
-  },
-  Conversion: {
-    Name: "Conversion",
-    FullName: "Conversion",
-    Ref: "#conversion",
-        Params: {
-            GoalId: { Name: "goalId" },
-            Revenue: { Name: "revenue", Type: "double" },
-            Negative: { Name: "negative" },
-            Metadata: { Name: "metadata", Type: "List<CustomData>", DefaultValue: "[]" }
-        },
-  },
-  // kameleoon.types
-  DataFile: {
-    Name: "DataFile",
-    FullName: "DataFile",
-    Ref: "#datafile",
-    Params: {
-        FeatureFlags: { Name: "featureFlags", Type: "Map<String, FeatureFlag>" },
-    }
-  },
-  FeatureFlag: {
-    Name: "FeatureFlag",
-    FullName: "FeatureFlag",
-    Ref: "#featureflag",
-    Params: {
-        Variations: { Name: "variations", Type: "Map<String, Variation>" },
-        EnvironmentEnabled: { Name: "environmentEnabled" },
-        Rules: { Name: "rules", Type: "List<Rule>" },
-        DefaultVariationKey: { Name: "defaultVariationKey" },
-    }
-  },
-  Rule: {
-        Name: "Rule",
-        FullName: "Rule",
-        Ref: "#rule",
-        Params: {
-            Variations: { Name: "variations", Type: "Map<String, Variation>" },
-        }
-  },
-  Variation: {
-    Name: "Variation",
-    FullName: "types.Variation",
-    Ref: "#variation"
-  },
-  // methods
-  Flush: {
-    Name: "flush()",
-    Ref: "#flush",
-    Params: {
-        Instant: { Name: "instant" }
-    }
-  },
-  GetRemoteVisitorData: {
-    Name: "getRemoteVisitorData()",
-    Ref: "#getremotevisitordata",
-  },
-  TrackConversion: {
-    Name: "trackConversion()",
-    Ref: "#trackconversion",
-    Params: {
-        GoalId: { Name: "goalId" },
-        Revenue: { Name: "revenue", Type: "double" },
-        IsUniqueIdentifier: { Name: "isUniqueIdentifier" },
-        Negative: { Name: "negative" },
-        Metadata: { Name: "metadata", Type: "List<CustomData>", DefaultValue: "[]" }
-    }
-  },
-  IsFeatureActive: {
-    Name: "isFeatureActive()",
-    Ref: "#isfeatureactive"
-  },
-  AddData: {
-    Name: "addData()",
-    Ref: "#adddata",
-    Params: {
-        Track: { Name: "track" },
-        Data: { Name: "data", Type: "List<Data>" }
-    }
-  },
-  GetEngineTrackingCode: {
-    Name: "getEngineTrackingCode()",
-    Ref: "#getenginetrackingcode"
-  },
-  UpdateConfigurationHandler: {
-    Name: "onUpdateConfiguration()",
-    Ref: "#onupdateconfiguration",
-    Params: {
-        Handler: { Name: "handler", Type: "Function(int)?" }
-    }
-  },
-  GetFeatureList: {
-    Name: "getFeatureList()",
-    Ref: "#getfeaturelist",
-    Return: "Future<List<String>>",
-  },
-  GetVariation: {
-    Name: "getVariation()",
-    Ref: "#getvariation",
-    Return: "Future<Variation>",
-    Params: {
-        Track: { Name: "track" }
-    }
-  },
-  GetVariations: {
-    Name: "getVariations()",
-    Ref: "#getvariations",
-    Return: "Future<Map<String, Variation>>",
-    Params: {
-        OnlyActive: { Name: "onlyActive" },
-        Track: { Name: "track" }
-    }
-  },
-  GetVisitorCode: {
-    Name: "getVisitorCode()",
-    Ref: "#getvisitorcode",
-    Return: "Future<String>",
-    Params: {
-        DefaultVisitorCode: { Name: "defaultVisitorCode" }
-    }
-  },
-  SetForcedVariation: {
-    Name: "setForcedVariation()",
-    Ref: "#setforcedvariation",
-    Params: {
-        ExperimentId: { Name: "experimentId" },
-        VariationKey: { Name: "variationKey", Type: "String?", RemVal: "null" },
-        ForceTargeting: { Name: "forceTargeting" },
-    }
-  },
-  EvaluateAudiences: {
-    Name: "evaluateAudiences()",
-    Ref: "#evaluateaudiences"
-  },
-};
 
 With the Kameleoon Flutter SDK, you can run experiments and activate feature flags on all platforms targeted by the Flutter application framework. Integrating our SDK into your applications is easy, and its footprint (in terms of memory and network usage) is low.
 
@@ -260,13 +24,13 @@ To install the Kameleoon Flutter client, declare a dependency in your `pubspec.y
 kameleoon_client_flutter: ^3.0.0
 ```
 
-:::caution[Web only]
-In **release** mode, the JS library is loaded automatically. However, in **debug** mode, there may be issues (due Dart Development Compiler) with importing the JS library. To avoid potential problems, we strongly recommend importing the JS library explicitly.
+<Warning>
+**Web only:** In **release** mode, the JS library is loaded automatically. However, in **debug** mode, there may be issues (due Dart Development Compiler) with importing the JS library. To avoid potential problems, we strongly recommend importing the JS library explicitly.
 Add the following script line to the `<head>` section of your `index.html`:
 ```html
 <script type="application/javascript" charset="utf-8" src="assets/packages/kameleoon_client_flutter/assets/kameleoonSDK.js"></script>
 ```
-:::
+</Warning>
 
 #### Initialize the Kameleoon client
 
@@ -275,7 +39,6 @@ After installing the SDK into your application and setting up a server-side expe
 A `KameleoonClient` is a singleton object (per `siteCode`) that acts as a bridge between your application and the Kameleoon platform. It includes all the methods and properties you need to run an experiment.
 
 ```dart
-import 'package:kameleoon_client_flutter/kameleoon_client_flutter.dart';
 
 class _HomePage extends State<HomePage> {
     KameleoonClient kameleoonClient
@@ -319,9 +82,9 @@ You can use the [`isReadyAsync()`](#isreadyasync) method to check if the Kameleo
 
 Alternatively, you can use a **helper callback** to encapsulate the logic of feature flag triggering and variation implementation. The best approach ([`isReadyAsync()`](#isreadyasync) or **callback**) depends on your preferences and the exact use case. We recommend using [`isReadyAsync()`](#isreadyasync) when you expect that the SDK will be ready for use. For example, you should use `isReadyAsync()` when you are running a feature flag on a dialog that users likely wouldn't access for the first few seconds or minutes of navigating the app. We recommend using the callback when there is a high probability that the SDK is still in the process of initialization. For example, if you are running a feature flag that appears onscreen at the application's launch, you should use a callback that makes the application wait until either the SDK is ready or a specified timeout has expired.
 
-:::note
+<Note>
 It's your responsibility as the app developer to ensure the logic of your application code is correct within the context of A/B testing using Kameleoon. A good practice is to always assume that the application user can be left out of the feature flag when the Kameleoon client is not yet ready. This exclusion is easy to implement, as it corresponds to the implementation of the default or reference variation logic. The code samples in the next paragraph show examples of this approach.
-:::
+</Note>
 
 You're now ready to implement feature management and features flags. See the [Reference](#reference) section for details about additional methods.
 
@@ -339,9 +102,9 @@ The `getFeatureVariationKey()` method retrieves the configuration of a feature e
 
 Feature flags can have associated variables that are used to customize their behavior. To retrieve these variables, use the [`getFeatureVariationVariables()`](#getfeaturevariationvariables) method after calling `getFeatureVariationKey()`, as you must obtain the `variationKey` for the user.
 
-:::note
+<Note>
 To check if a feature flag is active, you only need to use **one** method. Choose `isFeatureFlagActive` if you want to know if a feature flag is on or off. For more complex scenarios, like dynamically changing the feature's behavior, use `getFeatureFlagVariables`.
-:::
+</Note>
 
 ##### Adding data points to target a user or filter / breakdown visits in reports
 
@@ -367,15 +130,9 @@ When a user completes a desired action (for example, making a purchase), it coun
 
 ### Using a custom bucketing key
 
-<CustomBucketingKey sec="description" c={Context}/>
-
 #### Use cases
 
-<CustomBucketingKey sec="use_cases" c={Context}/>
-
 #### Technical details
-
-<CustomBucketingKey sec="technical_details_1" c={Context}/>
 
 ```dart
 try {
@@ -385,23 +142,13 @@ try {
 }
 ```
 
-<CustomBucketingKey sec="technical_details_2" c={Context}/>
-
 #### Technical requirementes
-
-<CustomBucketingKey sec="technical_requirements" c={Context}/>
 
 ### Targeting conditions
 
-<TargetingConditions sec="targeting_conditons_description" c={Context}/>
-
 ### Logging
 
-<Logging sec="logging" c={Context}/>
-
 #### Log levels
-
-<Logging sec="log_levels" c={Context}/>
 
 ```dart
 // The `none` log level does not allow logging.
@@ -428,10 +175,7 @@ KameleoonLogger.setLogLevel(LogLevel.debug);
 
 #### Custom handling of logs
 
-<Logging sec="custom_handling_of_logs" c={Context}/>
-
 ```dart
-import 'package:logging/logging.dart' as logging;
 
 class CustomLogger extends Logger {
   final logger = logging.Logger("CustomLogger");
@@ -497,10 +241,8 @@ Call this method before any others to initialize the SDK. This method is in `Kam
 
 You can customize the SDK's behavior (for example, the environment, the credentials, and so on) by providing a [configuration object](#additional-configuration). Otherwise, the SDK tries to find your configuration file and uses it instead.
 
-
 ```dart
 import 'package:kameleoon_client_flutter/kameleoon_client_flutter.dart'
-
 
 final siteCode = "a8st4f59bj";
 try {
@@ -554,8 +296,8 @@ try {
 
 | Type                                        | Description                                                                                                                             |
 | ------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
-| `VisitorCodeInvalid` | <Text x={Shared.Exceptions.VisitorCodeInvalid}/> |
-| `SiteCodeIsEmpty`    | <Text x={Shared.Exceptions.SiteCodeIsEmpty}/> |
+| `VisitorCodeInvalid` | Exception indicating that the provided visitor code is not valid. It is either empty or longer than 255 characters. |
+| `SiteCodeIsEmpty`    | Exception indicating that the specified site code is empty string which is invalid value. |
 
 #### isReadyAsync()
 
@@ -661,8 +403,6 @@ if (hasNewCheckout) {
 
 #### getVariation()
 
-<GetVariation sec="description" c={Context}/>
-
 ```dart
 final String featureKey = "featureKey";
 Variation? variation;
@@ -695,19 +435,11 @@ switch (variation?.key) {
 
 ##### Arguments
 
-<GetVariation sec="arguments" c={Context}/>
-
 ##### Return value
-
-<GetVariation sec="return_value" c={Context}/>
 
 ##### Exceptions thrown
 
-<GetVariation sec="exceptions" c={Context}/>
-
 #### getVariations()
-
-<GetVariations sec="description" c={Context}/>
 
 ```dart
 try {
@@ -723,19 +455,11 @@ try {
 
 ##### Arguments
 
-<GetVariations sec="arguments" c={Context}/>
-
 ##### Return value
-
-<GetVariations sec="return_value" c={Context}/>
 
 ##### Exceptions thrown
 
-<GetVariations sec="exceptions" c={Context}/>
-
 #### getFeatureList()
-
-<GetFeatureList sec="description" c={Context}/>
 
 ```dart
 try {
@@ -747,12 +471,7 @@ try {
 
 ##### Return value
 
-<GetFeatureList sec="return_value" c={Context}/>
-
 #### getDataFile()
-
-<GetDataFile sec="tip_qa" c={Context}/>
-<GetDataFile sec="description" c={Context}/>
 
 ```dart
 try {
@@ -764,15 +483,9 @@ try {
 
 ##### Return value
 
-<GetDataFile sec="return_value" c={Context}/>
-
 ##### Errors thrown
 
-<GetDataFile sec="exceptions" c={Context}/>
-
 #### setForcedVariation()
-
-<SetForcedVariation sec="description" c={Context}/>
 
 ```dart
 final experimentId = 9516;
@@ -792,16 +505,9 @@ try {
 
 ##### Arguments
 
-<SetForcedVariation sec="arguments" c={Context}/>
-
 ##### Errors thrown
 
-<SetForcedVariation sec="exceptions" c={Context}/>
-
 #### evaluateAudiences()
-
-<EvaluateAudiences sec="description" c={Context}/>
-
 
 ```dart
 try {
@@ -813,13 +519,9 @@ try {
 
 ##### Errors thrown
 
-<EvaluateAudiences sec="exceptions" c={Context}/>
-
 ### Goals
 
 #### trackConversion()
-
-<TrackConversion sec="description" c={Context}/>
 
 ```dart
 kameleoonClient.trackConversion(goalId); // default revenue
@@ -831,11 +533,8 @@ kameleoonClient.trackConversionWithOptParams(goalId, revenue: 10, metadata: [Cus
 ```
 
 ##### Arguments
-<TrackConversion sec="arguments" c={Context}/>
 
-:::note
-<TrackConversion sec="note_metadata" c={Context}/>
-
+<Note>
 ```dart
 kameleoonClient.addData([
     CustomData.withIndex(5, values: ["Credit Card"]),
@@ -843,17 +542,15 @@ kameleoonClient.addData([
 ]);
 kameleoonClient.trackConversionWithOptParams(1000, metadata: [CustomData.withIndex(5, values: ["Amex Credit Card"])]);
 ```
-:::
+</Note>
 
 ### Events
 
 #### onUpdateConfiguration()
 
-:::note
+<Note>
 This method was previously called `updateConfigurationHandler`, which was removed in SDK version `3.0.0` release.
-:::
-
-<UpdateConfigurationHandler sec="description" c={Context}/>
+</Note>
 
 ```dart
 kameleoonClient.onUpdateConfiguration((timestamp) {
@@ -863,23 +560,17 @@ kameleoonClient.onUpdateConfiguration((timestamp) {
 
 ##### Arguments
 
-<UpdateConfigurationHandler sec="arguments" c={Context}/>
-
 ### Visitor data
 
 #### getVisitorCode()
-<GetVisitorCode sec="description" c={Context}/>
 
 ```dart
 final visitorCode = await kameleoonClient.getVisitorCode();
 ```
 
 #####  Return value
-<GetVisitorCode sec="return_value" c={Context}/>
 
 #### addData()
-
-<AddData sec="description" c={Context}/>
 
 ```dart
 try {
@@ -895,11 +586,7 @@ try {
 
 ##### Arguments
 
-<AddData sec="arguments" c={Context}/>
-
 ##### Exceptions
-
-<AddData sec="exceptions" c={Context}/>
 
 #### flush()
 
@@ -923,9 +610,9 @@ kameleoonClient.flush(instant: true); // Instant tracking
 
 #### getRemoteData()
 
-:::note
+<Note>
 This method was previously called `retrieveDataFromRemoteSource`, which was removed in SDK version `3.0.0` release.
-:::
+</Note>
 
 Use this method to retrieve data from a remote Kameleoon server based on your active `siteCode` and the `key` argument (or the active `visitorCode` if you omit the `key`). The `visitorCode` and `siteCode` are specified in `KameleoonClientFactory.create()`. You can quickly and conveniently store data on our highly scalable remote servers using the Kameleoon Data API. Your application can then retrieve the data using this method.
 
@@ -969,9 +656,9 @@ Data obtained using this method plays an important role when you want to:
 
 Read [this article]( https://developers.kameleoon.com/feature-management-and-experimentation/using-visit-history-in-feature-flags-and-experiments/) for a better understanding of possible use cases.
 
-:::caution
+<Warning>
 By default, `getRemoteVisitorData()` automatically retrieves the latest stored custom data with `scope=Visitor` and attaches them to the visitor without having to call `addData()`. It is particularly useful for [synchronizing custom data between multiple devices](https://developers.kameleoon.com/feature-management-and-experimentation/web-sdks/nodejs-sdk/#synchronizing-custom-data-across-devices).
-:::
+</Warning>
 
 ```dart
 // Visitor data will be fetched and automatically added for `visitorCode`.
@@ -1035,7 +722,7 @@ For example, suppose you want to retrieve data on visitors who completed a goal 
 
 The flexibility shown in this example is not limited to goal data. You can use parameters within the `getRemoteVisitorData()` method to retrieve data on a variety of visitor behaviors.
 
-:::note
+<Note>
 Here is the list of available `RemoteVisitorDataFilter` options:
 
 | Name                             | Type      | Description                                                                  | Default |
@@ -1052,16 +739,16 @@ Here is the list of available `RemoteVisitorDataFilter` options:
 | operatingSystem (_optional_, _web only_) | `boolean` | If true, operating system data will be retrieved. | `false` |
 | kcs (_optional_)                 | `boolean` | If true, Kameleoon Conversion Score (KCS) will be retrieved. Requires the [AI Predictive Targeting add-on](https://help.kameleoon.com/target-users-by-ai-propensity-score-kameleoon-conversion-score/)                                    | `false` |
 | visitorCode (_optional_)         | `boolean` | If true, Kameleoon will retrieve the `visitorCode` from the most recent visit and use it for the current visit. This is necessary if you want to ensure that the visitor, identified by their `visitorCode`, always receives the same variation across visits for [Cross-device experimentation](/core-concepts/cross-device-experimentation). | `true` |
-| cbs (_optional_)                 | `boolean` | <Text x={Shared.RemoteVisitorDataFilter.CBS}/> | `false` |
-:::
+| cbs (_optional_)                 | `boolean` | If true, Contextual Bandit score data will be retrieved. | `false` |
+</Note>
 
 #### getVisitorWarehouseAudience()
 
 Retrieves all audience data associated with the visitor in your data warehouse. The optional `warehouseKey` parameter is typically your internal user ID. The `customDataIndex` parameter corresponds to the Kameleoon custom data that Kameleoon uses to target your visitors. You can refer to the [warehouse targeting documentation](https://help.kameleoon.com/warehouse-audience-targeting/) for additional details. The method returns the result as a `CustomData` object, confirming that the data has been added to the visitor and is available for targeting purposes.
 
-:::note
+<Note>
 Since a server call is required, this mechanism is asynchronous.
-:::
+</Note>
 
 ```dart
 try {
@@ -1135,9 +822,6 @@ This section lists the `Data` types supported by Kameleoon. We provide several s
 
 #### Conversion
 
-<Conversion sec="description" c={Context}/>
-<Conversion sec="arguments" c={Context}/>
-
 ```dart
 try {
     final conversion = Conversion(32, 10);
@@ -1152,9 +836,9 @@ try {
 
 #### CustomData
 
-:::note
+<Note>
 This data type is available for both types of SDKs: Mobile & Web.
-:::
+</Note>
 
 `CustomData` allows any type of data to be easily associated with each visitor. `CustomData` can then be used as a targeting condition in [segments](https://help.kameleoon.com/create-new-segment/) or as a filter/breakdown in experiment reports.
 
@@ -1166,12 +850,12 @@ To learn more about custom data, please refer to this [article](/core-concepts/c
 | overwrite _(optional)_ | `bool` | Flag to explicitly control how the values are stored and how they appear in reports. [See more](https://developers.kameleoon.com/core-concepts/custom-data/#default-logic-when-overwrite-parameter-is-false-or-omitted) | `true` |
 | values _(optional)_ | `List<String>` | Values of the custom data to be stored. | |
 
-:::note
+<Note>
 - Each visitor is allowed only one `CustomData` for each unique `index`. Adding another `CustomData` with the same `index` will replace the existing `CustomData`.
 - The custom data `index` can be found in the [Custom Data dashboard](https://help.kameleoon.com/manage-your-custom-data/) under the “INDEX” column.
 - To prevent the SDK from sending data with the selected index to Kameleoon servers for privacy reasons, enable the **Use this data only locally for targeting purposes** option when creating custom data.
 - Adding a `CustomData` instance created with a name when the SDK instance configuration is not up to date or the name is not registered, will result in the data being ignored.
-:::
+</Note>
 
 ```dart
 try {
@@ -1192,9 +876,9 @@ try {
 
 #### Device
 
-:::note
+<Note>
 This data type is available for both types of SDKs: Mobile & Web.
-:::
+</Note>
 
 Store information about the user's device.
 
@@ -1212,13 +896,9 @@ try {
 
 #### Geolocation
 
-:::note
+<Note>
 This data type is available for both types of SDKs: Mobile & Web.
-:::
-
-<Geolocation sec="description" c={Context}/>
-
-<Geolocation sec="arguments" c={Context}/>
+</Note>
 
 ```dart
 try {
@@ -1230,13 +910,9 @@ try {
 
 #### Browser
 
-:::note
+<Note>
 The data type is available only for Web SDK
-:::
-
-<Browser sec="description" c={Context}/>
-
-<Browser sec="arguments" c={Context}/>
+</Note>
 
 ```dart
 try {
@@ -1250,9 +926,9 @@ try {
 
 #### PageView
 
-:::note
+<Note>
 This data type is only available for Web SDKs.
-:::
+</Note>
 
 | Name      | Type          | Description                                        |
 |-----------|---------------|----------------------------------------------------|
@@ -1260,9 +936,9 @@ This data type is only available for Web SDKs.
 | title     | String        | Title of the page viewed. This field is mandatory. |
 | referrers | `List<int>`    | Referrers of viewed pages. This field is optional. |
 
-:::note
+<Note>
 The referrer's index (ID) is available in the Acquisition channel configuration page of the Kameleoon app. Be careful: this index starts at 0, so the first [acquisition channel](https://help.kameleoon.com/create-acquisition-channel) you create for a given site will have the ID 0, not 1.
-:::
+</Note>
 
 ```dart
 try {
@@ -1274,15 +950,15 @@ try {
 
 #### OperatingSystem
 
-:::note
+<Note>
 This data type is only available for Web SDKs.
-:::
+</Note>
 
 `OperatingSystem` contains information about the operating system on the visitor's device.
 
-:::tip
+<Tip>
 Each visitor can only have one `OperatingSystem`. Adding a second `OperatingSystem` overwrites the first one.
-:::
+</Tip>
 
 | Name | Type | Description  |
 | ---- | ---- | -----------  |
@@ -1298,9 +974,9 @@ try {
 
 #### Cookie
 
-:::note
+<Note>
 This data type is only available for Web SDKs.
-:::
+</Note>
 
 `Cookie` contains information about the cookie stored on the visitor's device.
 
@@ -1308,10 +984,9 @@ This data type is only available for Web SDKs.
 | ---- | ---- | -----------  |
 | cookies | `Map<String, String>` | A string object map consisting of cookie keys and values. This field is required.
 
-:::tip
+<Tip>
 Each visitor can only have one `Cookie`. Adding second `Cookie` overwrites the first one.
-:::
-
+</Tip>
 
 ```dart
 try {
@@ -1328,19 +1003,11 @@ try {
 
 #### DataFile
 
-<DataFile sec="description" c={Context}/>
-
-<DataFile sec="arguments" c={Context}/>
-
 ```dart
 final featureFlags = dataFile.featureFlags
 ```
 
 #### FeatureFlag
-
-<FeatureFlag sec="description_rules" c={Context}/>
-
-<FeatureFlag sec="arguments_rules" c={Context}/>
 
 ```dart
 // Check whether the feature flag is enabled in the current environment
@@ -1361,10 +1028,6 @@ final rules = featureFlag.rules
 
 #### Rule
 
-<Rule sec="description" c={Context}/>
-
-<Rule sec="arguments" c={Context}/>
-
 ```dart
 // Retrieve all variations of the rule as a map (key = variation key, value = Variation object)
 final variations = rule.variations
@@ -1382,11 +1045,11 @@ final variations = rule.variations
 | experimentId | `int?`                 | The ID of the experiment associated with the variation (or `-1` if default). |
 | variables | `Map<String, Variable>`      | A map containing the variables of the assigned variation, keyed by variable names. This could be an empty collection if no variables are associated. |
 
-:::note
+<Note>
 - The `Variation` object provides details about the assigned variation and its associated experiment, while the [`Variable`](#variable) object contains specific details about each variable within a variation.
 - Ensure that your code handles the case where `id` or `experimentId` may be `-1`, indicating a default variation.
 - The `variables` map might be empty if no variables are associated with the variation.
-:::
+</Note>
 
 ```dart
 // Retrieving the variation name
@@ -1431,16 +1094,15 @@ var title = variables["title"]?.value as String? ?? "";
 
 ### Deprecated methods
 
-:::caution
+<Warning>
 These methods are deprecated and will be removed in SDK version `4.0.0`.
-:::
+</Warning>
 
 #### isReady()
 
-:::caution
+<Warning>
 Use [`isReadyAsync()`](#isreadyasync) instead. On iOS and Android, [`isReady()`](#isready) may return incorrect (`false`) results even if the SDK has already been initialized with [`defaultDataFile`](#initialize-the-kameleoon-client).
-:::
-
+</Warning>
 
 For mobile SDKs, the Kameleoon Client can't initialize immediately as it must perform a server call to retrieve the current configuration for the active feature flags. Use `isReady()` to check if the SDK is ready by calling this method before triggering any feature flags.
 
@@ -1460,9 +1122,9 @@ final ready = kameleoonClient.isReady();
 
 - 📨 _Sends Tracking Data to Kameleoon_
 
-:::note
+<Note>
 Use [`getVariation()`](#getvariation) instead.
-:::
+</Note>
 
 Use this method to get the feature variation key for a visitor. This method takes `featureKey` as a required argument to retrieve the variation key for the specified user.
 
@@ -1523,10 +1185,10 @@ switch(variationKey) {
 
 #### getActiveFeatures()
 
-:::note
+<Note>
 - Use [`getVariations()`](#getvariations) instead.
 - Previously called `getFeatureListForVisitorCode`, which was removed in SDK version `4.0.0` release.
-:::
+</Note>
 
 `getActiveFeatures` method retrieves information about the active feature flags that are available for the visitor.
 
@@ -1548,10 +1210,10 @@ try {
 
 - 📨 _Sends Tracking Data to Kameleoon_
 
-:::note
+<Note>
 - Use [`getVariation()`](#getvariation) instead.
 - This method was previously called `obtainFeatureVariable`, which was removed in SDK version `3.0.0`.
-:::
+</Note>
 
 This method gets a variable value of variation key for a specific user. It takes a `featureKey` and `variableKey` as required arguments.
 
@@ -1609,10 +1271,10 @@ setState(() {
 
 #### getFeatureVariationVariables()
 
-:::note
+<Note>
 - Use [`getVariation()`](#getvariation) instead.
 - This method was previously called `getFeatureAllVariables`, which was removed in SDK version `4.0.0` release.
-:::
+</Note>
 
 To retrieve all of a feature's variables, call this method. You can modify your feature variables in the Kameleoon app.
 

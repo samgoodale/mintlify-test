@@ -1,215 +1,6 @@
 ---
-sidebar_position: "3"
-toc_max_heading_level: "4"
 title: "JavaScript/Typescript SDK"
 ---
-
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-import { Select, Text, Bold, Italic, Code, CodeRef, Ref, If } from '../commons/utils.mdx';
-import SharedDiv, { Shared } from '../commons/shared.mdx';
-import CrossDeviceReconciliation from '../commons/developer-guide/cross-device-reconciliation.mdx';
-import EvaluateAudiences from '../commons/reference/feature-flags-and-variations/evaluate-audiences.mdx';
-import GetDataFile from '../commons/reference/feature-flags-and-variations/get-data-file.mdx';
-import GetVariations from '../commons/reference/feature-flags-and-variations/get-variations.mdx';
-import GetVariation from '../commons/reference/feature-flags-and-variations/get-variation.mdx';
-import Logging from '../commons/developer-guide/logging.mdx';
-import SetForcedVariation from '../commons/reference/feature-flags-and-variations/set-forced-variation.mdx';
-import Conversion from '../commons/reference/data-types/conversion.mdx';
-import TrackConversion from '../commons/reference/goals/track-conversion.mdx';
-import CustomBucketingKey from '../commons/developer-guide/custom-bucketing-key.mdx';
-import ActivatingAFeatureFlag from '../commons/developer-guide/getting-started/activating-a-feature-flag.mdx';
-import DataFile from '../commons/reference/returned-types/data-file.mdx';
-import FeatureFlag from '../commons/reference/returned-types/feature-flag.mdx';
-import Rule from '../commons/reference/returned-types/rule.mdx';
-import ApplicationVersion from '../commons/reference/data-types/application-version.mdx';
-
-export const Context = {
-    IsJs: true,
-    IsServer: true,
-    IsSnakeCase: false,
-    Common: {
-        Null: "null",
-        True: "true",
-        False: "false",
-        String: "string",
-        Bool: "boolean",
-        Int: "number",
-        Float: "number",
-        SDK: "JavaScript",
-    },
-    Params: {
-        VisitorCode: "visitorCode",
-        FeatureKey: "featureKey"
-    },
-    Exceptions: {
-        Language: "Error",
-        Kameleoon: "KameleoonException",
-        Initialization: "KameleoonException.Initialization",
-        VisitorCodeEmpty: "KameleoonException.VisitorCodeEmpty",
-        VisitorCodeMaxLength: "KameleoonException.VisitorCodeMaxLength",
-        FeatureNotFound: "KameleoonException.FeatureFlagConfigurationNotFound",
-        FeatureEnvironmentDisabled: "KameleoonException.FeatureFlagEnvironmentDisabled",
-        FeatureExperimentNotFound: "KameleoonException.FeatureFlagExperimentNotFound",
-        FeatureVariationNotFound: "KameleoonException.FeatureFlagVariationNotFound",
-        StorageRead: "KameleoonException.StorageRead",
-        StorageWrite: "KameleoonException.StorageWrite",
-    },
-    KameleoonClientConfig: {
-        Name: "KameleoonClientConfig",
-        Ref: "#configuration-parameters",
-        TrackingInterval: { FileName: "tracking_interval_millisecond" },
-        IsUniqueIdentifier: { Name: "<>" }
-    },
-    Hook: {
-        UseData: "useData",
-    },
-    // kameleoon.data
-    Conversion: {
-        Name: "Conversion",
-        FullName: "data.Conversion",
-        Ref: "#conversion",
-        Params: {
-            GoalId: { Name: "goalId" },
-            Revenue: { Name: "revenue", Type: "float" },
-            Negative: { Name: "negative" },
-            Metadata: { Name: "metadata", Type: "CustomData[]", DefaultValue: "undefined" },
-        },
-    },
-    CustomData: {
-        Name: "CustomData",
-        FullName: "CustomData",
-        Ref: "#customdata"
-    },
-    UniqueIdentifier: {
-        Name: "UniqueIdentifier",
-        Ref: "#uniqueidentifier"
-    },
-    UserAgent: {
-        Name: "UserAgent",
-        Ref: "#useragent"
-    },
-    ApplicationVersion: {
-        Name: 'ApplicationVersion',
-        Ref: '#applicationversion',
-        Params: {
-            Version: { Type: 'string' },
-        },
-    },
-    // kameleoon.types
-    Variation: {
-        Name: "Variation",
-        FullName: "Variation",
-        Ref: "#variation"
-    },
-    DataFile: {
-        Name: "DataFile",
-        FullName: "DataFile",
-        Ref: "#datafile",
-        Params: {
-            FeatureFlags: { Name: "featureFlags", Type: "Map<string, FeatureFlag>" },
-        }
-    },
-    FeatureFlag: {
-        Name: "FeatureFlag",
-        FullName: "FeatureFlag",
-        Ref: "#featureflag",
-        Params: {
-            EnvironmentEnabled: { Name: "environmentEnabled" },
-            Variations: { Name: "variations", Type: "Map<string, Variation>" },
-            Rules: { Name: "rules", Type: "Rule[]" },
-            DefaultVariationKey: { Name: "defaultVariationKey", Type: "string" },
-        }
-    },
-    Rule: {
-        Name: "Rule",
-        FullName: "Rule",
-        Ref: "#rule",
-        Params: {
-            Variations: { Name: "variations", Type: "Map<string, Variation>" },
-        }
-    },
-    // methods
-    GetVisitorCode: {
-        Name: "getVisitorCode()",
-        Ref: "#getvisitorcode",
-        Params: {
-            DefaultVisitorCode: { Name: "defaultVisitorCode" }
-        }
-    },
-    Flush: {
-        Name: "flush()",
-        Ref: "#flush",
-        Params: {
-            Instant: { Name: "instant" }
-        }
-    },
-    GetVariation: {
-        Name: "getVariation()",
-        Ref: "#getvariation",
-        Return: "Variation",
-        Params: {
-            Track: { Name: "track" }
-        }
-    },
-    GetVariations: {
-        Name: "getVariations()",
-        Ref: "#getvariations",
-        Return: "Map<string, Variation>",
-        Params: {
-            OnlyActive: { Name: "onlyActive" },
-            Track: { Name: "track" }
-        }
-    },
-    SetForcedVariation: {
-        Name: "setForcedVariation()",
-        Ref: "#setforcedvariation",
-        Params: {
-            ExperimentId: { Name: "experimentId" },
-            VariationKey: { Name: "variationKey", Type: "string | null", RemVal: "null" },
-            ForceTargeting: { Name: "forceTargeting" },
-        }
-    },
-    EvaluateAudiences: {
-        Name: "evaluateAudiences()",
-        Ref: "#evaluateaudiences"
-    },
-    GetRemoteVisitorData: {
-        Name: "getRemoteVisitorData()",
-        Ref: "#getremotevisitordata",
-    },
-    TrackConversion: {
-        Name: "trackConversion()",
-        Ref: "#trackconversion",
-        Params: {
-            GoalId: { Name: "goalId" },
-            Revenue: { Name: "revenue", Type: "number" },
-            IsUniqueIdentifier: { Name: "isUniqueIdentifier" },
-            Negative: { Name: "negative" },
-            Metadata: { Name: "metadata", Type: "CustomData[]", DefaultValue: "undefined" }
-        }
-    },
-    IsFeatureActive: {
-        Name: "isFeatureFlagActive()",
-        Ref: "#isfeatureflagactive"
-    },
-    GetEngineTrackingCode: {
-        Name: "getEngineTrackingCode()",
-        Ref: "#getenginetrackingcode"
-    },
-    AddData: {
-        Name: 'addData()',
-        Ref: '#adddata',
-        Params: {
-            Track: { Name: "track" },
-            Data: { Name: 'data', Type: '...KameleoonDataType[]' },
-        }
-    },
-    GetDataFile: {
-        Name: "getDataFile()",
-        Ref: "#getdatafile",
-    },
-};
 
 With the Kameleoon JavaScript SDK, you can run experiments and activate feature flags. Integrating our SDK into your web application is easy, and its footprint (memory and network usage) is low.
 
@@ -242,11 +33,12 @@ Or run it directly with `npx`:
 npx @kameleoon/sdk-installer
 ```
 
-:::note You can also inject the JavaScript SDK into your app as a single file using the `<script>` tag. You can then access all SDK methods using the global object `KameleoonSDK`.
+<Note>
+You can also inject the JavaScript SDK into your app as a single file using the `<script>` tag. You can then access all SDK methods using the global object `KameleoonSDK`.
 
 Example:
 
-```html index.html
+```html
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -261,7 +53,7 @@ Example:
 </html>
 ```
 
-```js app.js
+```js
 const { KameleoonClient, CustomData } = KameleoonSDK;
 ```
 
@@ -277,14 +69,15 @@ To always stay on a specific version, specify the full version number instead. F
 https://static.kameleoon.com/kameleoonSDK-4.9.1.js
 ```
 
-Versions can be referenced on the [release page](https://github.com/Kameleoon/client-js/releases). :::
+Versions can be referenced on the [release page](https://github.com/Kameleoon/client-js/releases).
+</Note>
 
 #### Initialize the Kameleoon Client
 
 Here is a step-by-step guide for configuring the JavaScript SDK for your application.
 
 <Tabs>
-  <Tab title="Tab">
+  <Tab title="TypeScript">
     ```ts
     import {
       Environment,
@@ -315,7 +108,7 @@ Here is a step-by-step guide for configuring the JavaScript SDK for your applica
       .catch((error) => {});
     ```
   </Tab>
-  <Tab title="Tab">
+  <Tab title="JavaScript">
     ```js
     import { Environment, KameleoonClient } from '@kameleoon/javascript-sdk';
     
@@ -362,7 +155,7 @@ Use `KameleoonClient` to run feature experiments and retrieve the status of feat
 ##### Configuration Parameters
 
 <Tabs>
-  <Tab title="Tab">
+  <Tab title="TypeScript">
     | Name                                      | Type          | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              | Default Value                              |
     | ----------------------------------------- | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------ |
     | updateInterval (_optional_)               | `number`      | Specifies the refresh interval, in minutes, that the SDK fetches the configuration for the active experiments and feature flags. The value determines the maximum time it takes to propagate changes, such as activating or deactivating feature flags or launching experiments, to your production servers. If left unspecified, the default interval is set to 60 minutes. Additionally, we offer a [streaming mode](/feature-management-and-experimentation/technical-considerations/#streaming-premium-option) that uses server-sent events (SSE) to push new configurations to the SDK automatically and apply new configurations in real-time, without any delays. | `60`                                       |
@@ -374,9 +167,13 @@ Use `KameleoonClient` to run feature experiments and retrieve the status of feat
     | requestTimeout (_optional_)               | `number`      | timeout in _milliseconds_ for all SDK network requests, if timeout is exceeded request will fail.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        | `10_000` (10 seconds)                      |
     | trackingInterval (_optional_)             | `number`      | Specifies the interval for tracking requests in milliseconds. All visitors who were evaluated for any feature flag or had associated data are included in this tracking request, which is performed once per interval. The minimum value is `100` ms and the maximum value is `1_000` ms                                                                                                                                                                                                                                                                                                                                                                                 | `1_000` (1 second)                         |
 
-    :::note The `domain` parameter is deprecated and will be removed in a future release. Use `cookieDomain` instead. :::
+    <Note>
+
+The `domain` parameter is deprecated and will be removed in a future release. Use `cookieDomain` instead.
+</Note>
+
   </Tab>
-  <Tab title="Tab">
+  <Tab title="JavaScript">
     | Name                                      | Type          | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               | Default Value                              |                          |
     | ----------------------------------------- | ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------ | ------------------------ |
     | updateInterval (_optional_)               | `number`      | Specifies the refresh interval, in minutes, that the SDK fetches the configuration for the active experiments and feature flags. The value determines the maximum time it takes to propagate changes, such as activating or deactivating feature flags or launching experiments, to your production servers. If left unspecified, the default interval is set to 60 minutes. Additionally, we offer a [streaming mode](/feature-management-and-experimentation/technical-considerations/#streaming-premium-option) that uses server-sent events (SSE) to push new configurations to the SDK automatically and apply new configurations in real-time, without any delays.                                  | `60`                                       |                          |
@@ -388,57 +185,40 @@ Use `KameleoonClient` to run feature experiments and retrieve the status of feat
     | trackingInterval (_optional_)             | `number`      | Specifies the interval for tracking requests in milliseconds. All visitors who were evaluated for any feature flag or had associated data are included in this tracking request, which is performed once per interval. The minimum value is `100` ms and the maximum value is `1_000` ms                                                                                                                                                                                                                                                                                                                                                                                                                  | `1_000` (1 second)                         |                          |
     | defaultDataFile (_optional_)              | `string`      | The `defaultDataFile` feature ensures the Kameleoon SDK is always **READY** by providing a fallback configuration when no cached data file exists. Developers can preload a valid configuration by fetching it from `https://sdk-config.kameleoon.eu/v3/<sitecode>` and passing it as `defaultDataFile` during initialization. When a `dateModified` timestamp (in milliseconds) is provided and is newer than the cached version, the SDK will use the default datafile instead of the cached version. **`If dateModified is omitted, the default datafile is only applied when no cached version exists`**. This ensures the SDK always has a valid configuration, whether default, cached, or updated. | `undefined`                                |                          |
 
-    <SharedDiv sec="set_default_data_file_js" c={Context} />
   </Tab>
 </Tabs>
 
-:::note Do not use several client instances in one application, as it is not fully supported yet. Several client instances may lead to local storage configuration being overwritten and cause bugs. :::
+<Note>
+Do not use several client instances in one application, as it is not fully supported yet. Several client instances may lead to local storage configuration being overwritten and cause bugs.
+</Note>
 
 #### Activating a feature flag
 
 ##### Assigning a unique ID to a user
 
-<ActivatingAFeatureFlag sec="assigning_a_unique_id_to_a_user" c={Context} />
-
 ##### Retrieving a flag configuration
-
-<ActivatingAFeatureFlag sec="retrieving_a_feature_flag_configuration___default" c={Context} />
 
 ##### Adding data points to target a user or filter / breakdown visits in reports
 
-<ActivatingAFeatureFlag sec="adding_data_points_to_target_a_user_or_filter_breakdown_visits_in_reports___server" c={Context} />
-
 ##### Tracking goal conversions
-
-<ActivatingAFeatureFlag sec="tracking_goal_conversions___param" c={Context} />
 
 ##### Sending events to analytics solutions
 
-<ActivatingAFeatureFlag sec="sending_events_to_analytics_solutions" c={Context} />
-
 ### Using a custom bucketing key
-
-<CustomBucketingKey sec="description" c={Context} />
 
 #### Use cases
 
-<CustomBucketingKey sec="use_cases" c={Context} />
-
 #### Technical details
 
-<CustomBucketingKey sec="technical_details_1" c={Context} />
-
 ```js
-client.addData(visitorCode, new CustomData(index, 'newVisitorCode'));
+client.addData(visitorCode, new CustomData(index, "newVisitorCode"));
 ```
 
-:::tip [More information in addData()](#adddata) :::
-
-<CustomBucketingKey sec="technical_details_2" c={Context} />
+<Tip>
+[More information in addData()](#adddata)
+</Tip>
 
 #### Technical requirementes
-
-<CustomBucketingKey sec="technical_requirements" c={Context} />
 
 ### Targeting conditions
 
@@ -448,14 +228,10 @@ You can also use your own [external data to target users](/feature-management-an
 
 ### Logging
 
-<Logging sec="logging" c={Context} />
-
 #### Log levels
 
-<Logging sec="log_levels" c={Context} />
-
 <Tabs>
-  <Tab title="Tab">
+  <Tab title="TypeScript">
     ```ts
     import { KameleoonClient, KameleoonLogger, LogLevel } from '@kameleoon/javascript-sdk';
     
@@ -493,7 +269,7 @@ You can also use your own [external data to target users](/feature-management-an
     KameleoonLogger.setLogLevel(LogLevel.DEBUG);
     ```
   </Tab>
-  <Tab title="Tab">
+  <Tab title="JavaScript">
     ```js
     import { KameleoonClient, KameleoonLogger, LogLevel } from '@kameleoon/javascript-sdk';
     
@@ -536,10 +312,8 @@ You can also use your own [external data to target users](/feature-management-an
 
 #### Custom handling of logs
 
-<Logging sec="custom_handling_of_logs" c={Context} />
-
 <Tabs>
-  <Tab title="Tab">
+  <Tab title="TypeScript">
     ```ts
     import { KameleoonClient, KameleoonLogger, IExternalLogger, LogLevel } from '@kameleoon/javascript-sdk';
     
@@ -579,7 +353,7 @@ You can also use your own [external data to target users](/feature-management-an
     KameleoonLogger.setLogLevel(LogLevel.DEBUG);
     ```
   </Tab>
-  <Tab title="Tab">
+  <Tab title="JavaScript">
     ```js
     import { KameleoonClient, KameleoonLogger, LogLevel } from '@kameleoon/javascript-sdk';
     
@@ -631,19 +405,21 @@ The domain you provide indicates if the URL address can use the cookie. For exam
 
 For more fllexibility with subdomains, you can specify the domain with a period (`.`). For example, the domain `.example.com` allows the cookie to function on both `app.example.com` and `login.example.com`.
 
-:::note You can't use regular expressions, special symbols, protocol, or port numbers in the `domain`. Additionally, a [specific list of subdomains](https://publicsuffix.org/list/public_suffix_list.dat) can't be used with the prefix `.`. :::
+<Note>
+You can't use regular expressions, special symbols, protocol, or port numbers in the `domain`. Additionally, a [specific list of subdomains](https://publicsuffix.org/list/public_suffix_list.dat) can't be used with the prefix `.`.
+</Note>
 
 Here's a small domain cheat sheet:
 
-| Domain                         | Allowed URLs          | Disallowed URLs      |
-| ------------------------------ | --------------------- | -------------------- |
+| Domain                         | Allowed URLs           | Disallowed URLs       |
+| ------------------------------ | ---------------------- | --------------------- |
 | `www.example.com`              | ✅`www.example.com`    | ❌ `app.example.com`  |
 |                                | ✅ `example.com`       | ❌ `.com`             |
-|                                |                       |                      |
+|                                |                        |                       |
 | `.example.com` = `example.com` | ✅ `example.com`       | ❌ `otherexample.com` |
-|                                | ✅ `www.example.com`   |                      |
-|                                | ✅ `app.example.com`   |                      |
-|                                | ✅ `login.example.com` |                      |
+|                                | ✅ `www.example.com`   |                       |
+|                                | ✅ `app.example.com`   |                       |
+|                                | ✅ `login.example.com` |                       |
 | `https://www.example.com`      | ⛔ bad domain          | ⛔ bad domain         |
 | `www.example.com:4408`         | ⛔ bad domain          | ⛔ bad domain         |
 | `.localhost.com` = `localhost` | ⛔ bad domain          | ⛔ bad domain         |
@@ -665,7 +441,9 @@ There are two ways to avoid this issue:
 
 SDK external dependencies use the _dependency injection_ pattern to give you the ability to provide your own implementations for certain parts of an SDK.
 
-:::note In the JavaScript SDK, all external dependencies have default implementations, which use a native browser API so there's no need to provide them unless another API is required for specific use cases. :::
+<Note>
+In the JavaScript SDK, all external dependencies have default implementations, which use a native browser API so there's no need to provide them unless another API is required for specific use cases.
+</Note>
 
 Here's the list of available external dependencies:
 
@@ -682,7 +460,7 @@ The following example implements external dependencies. To import an interface f
 #### Storage
 
 <Tabs>
-  <Tab title="Tab">
+  <Tab title="TypeScript">
     ```ts
     import { IExternalStorage, KameleoonClient } from '@kameleoon/javascript-sdk';
     
@@ -719,7 +497,7 @@ The following example implements external dependencies. To import an interface f
     });
     ```
   </Tab>
-  <Tab title="Tab">
+  <Tab title="JavaScript">
     ```js
     import { KameleoonClient } from '@kameleoon/javascript-sdk';
     
@@ -761,7 +539,7 @@ The following example implements external dependencies. To import an interface f
 #### EventSource
 
 <Tabs>
-  <Tab title="Tab">
+  <Tab title="TypeScript">
     ```ts
     import {
       IExternalEventSource,
@@ -811,7 +589,7 @@ The following example implements external dependencies. To import an interface f
     });
     ```
   </Tab>
-  <Tab title="Tab">
+  <Tab title="JavaScript">
     ```js
     import { KameleoonClient } from '@kameleoon/javascript-sdk';
     
@@ -858,7 +636,7 @@ The following example implements external dependencies. To import an interface f
 #### VisitorCodeManager
 
 <Tabs>
-  <Tab title="Tab">
+  <Tab title="TypeScript">
     ```ts
     import {
       IExternalVisitorCodeManager,
@@ -909,7 +687,7 @@ The following example implements external dependencies. To import an interface f
     });
     ```
   </Tab>
-  <Tab title="Tab">
+  <Tab title="JavaScript">
     ```js
     import { KameleoonClient, KameleoonUtils } from '@kameleoon/javascript-sdk';
     
@@ -954,7 +732,7 @@ The following example implements external dependencies. To import an interface f
 #### Requester
 
 <Tabs>
-  <Tab title="Tab">
+  <Tab title="TypeScript">
     ```ts
     import {
       RequestType,
@@ -984,7 +762,7 @@ The following example implements external dependencies. To import an interface f
     });
     ```
   </Tab>
-  <Tab title="Tab">
+  <Tab title="JavaScript">
     ```js
     import { KameleoonClient } from '@kameleoon/javascript-sdk';
     
@@ -1007,12 +785,14 @@ The following example implements external dependencies. To import an interface f
   </Tab>
 </Tabs>
 
-:::tip [Return mocked result](#simulatesuccessrequest) :::
+<Tip>
+[Return mocked result](#simulatesuccessrequest)
+</Tip>
 
 #### Logger
 
 <Tabs>
-  <Tab title="Tab">
+  <Tab title="TypeScript">
     ```ts
     import { KameleoonClient, KameleoonLogger, IExternalLogger, LogLevel } from '@kameleoon/javascript-sdk';
     
@@ -1032,7 +812,7 @@ The following example implements external dependencies. To import an interface f
     });
     ```
   </Tab>
-  <Tab title="Tab">
+  <Tab title="JavaScript">
     ```js
     import { KameleoonClient } from '@kameleoon/javascript-sdk';
     
@@ -1065,7 +845,7 @@ To know exactly what type of `KameleoonException` the method may throw, check th
 Handling errors makes your application more stable and avoids technical issues.
 
 <Tabs>
-  <Tab title="Tab">
+  <Tab title="TypeScript">
     ```ts
     import {
       KameleoonError,
@@ -1105,7 +885,7 @@ Handling errors makes your application more stable and avoids technical issues.
     init();
     ```
   </Tab>
-  <Tab title="Tab">
+  <Tab title="JavaScript">
     ```js
     import { KameleoonClient, KameleoonException } from '@kameleoon/javascript-sdk';
     
@@ -1141,15 +921,11 @@ Handling errors makes your application more stable and avoids technical issues.
 
 ### Cross-device experimentation
 
-<CrossDeviceReconciliation sec="cross_device_experimentation" c={Context} />
-
 #### Synchronizing custom data across devices
 
-<CrossDeviceReconciliation sec="synchronizing_custom_data" c={Context} />
-
 <Tabs>
-  <Tab title="Tab">
-    ```ts Device One
+  <Tab title="TypeScript">
+    ```ts
     import { KameleoonClient, CustomData } from '@kameleoon/javascript-sdk';
     
     const client = new KameleoonClient({ siteCode: 'my_site_code' });
@@ -1169,27 +945,28 @@ Handling errors makes your application more stable and avoids technical issues.
     init();
     ```
 
-    ```ts Device Two
+    ```ts
     import { KameleoonClient } from '@kameleoon/javascript-sdk';
-    
+
     const client = new KameleoonClient({ siteCode: 'my_site_code' });
-    
+
     async function init(): Promise<void> {
       await client.initialize();
-    
+
       // -- Before working with data, make `getRemoteVisitorData` call
       await getRemoteVisitorData({ visitorCode: 'my_visitor_code' });
-    
+
       // -- New SDK code will have access to CustomData with `Visitor` scope
       //    defined on Device One.
       //    So, "my_data" is now available for targeting and tracking "my_visitor".
     }
-    
+
     init();
     ```
+
   </Tab>
-  <Tab title="Tab">
-    ```ts Device One
+  <Tab title="TypeScript">
+    ```ts
     import { KameleoonClient, CustomData } from '@kameleoon/javascript-sdk';
     
     const client = new KameleoonClient({ siteCode: 'my_site_code' });
@@ -1209,31 +986,32 @@ Handling errors makes your application more stable and avoids technical issues.
     init();
     ```
 
-    ```ts Device Two
+    ```ts
     import { KameleoonClient } from '@kameleoon/javascript-sdk';
-    
+
     const client = new KameleoonClient({ siteCode: 'my_site_code' });
-    
+
     async function init() {
       await client.initialize();
-    
+
       // -- Before working with data, make `getRemoteVisitorData` call.
       await getRemoteVisitorData({ visitorCode: 'my_visitor_code' });
-    
+
       // -- New SDK code will have access to CustomData with `Visitor` scope
       //    defined on Device One.
       //    So, "my_data" is now available for targeting and tracking "my_visitor"
     }
-    
+
     init();
     ```
+
   </Tab>
 </Tabs>
 
 #### Using custom data for session merging
 
 <Tabs>
-  <Tab title="Tab">
+  <Tab title="TypeScript">
     Cross-device experimentation allows you to combine a visitor's history across each of their devices (history reconciliation). History reconciliation lets you merge different visitors sessions into a single session. To reconcile visit history, use [`CustomData`](#customdata) to provide a unique identifier for the visitor.
 
     Follow the [activating cross-device history reconciliation](#cross-device-experimentation) guide to set up your custom data in Kameleoon.
@@ -1247,41 +1025,44 @@ Handling errors makes your application more stable and avoids technical issues.
     - [`getRemoteVisitorData`](#getremotevisitordata) with `isUniqueIdentifier=true` - to retrieve data for all linked visitors
     - [`trackConversion`](#trackconversion) or [`flush`](#flush) with `isUniqueIdentifier=true` - to track data for a specific visitor that is associated with another visitor.
 
-    :::tip As the custom data you use as the identifier must be set to the `Visitor` scope, you need to use [cross-device custom data synchronization](https://developers.kameleoon.com/core-concepts/cross-device-experimentation) to retrieve the identifier with the [`getRemoteVisitorData`](#getremotevisitordata) method on each device. :::
+    <Tip>
+
+As the custom data you use as the identifier must be set to the `Visitor` scope, you need to use [cross-device custom data synchronization](https://developers.kameleoon.com/core-concepts/cross-device-experimentation) to retrieve the identifier with the [`getRemoteVisitorData`](#getremotevisitordata) method on each device.
+</Tip>
 
     Here's an example of how to use custom data for session merging.
 
     In this example, we have an application with a login page. Since we don't know the user ID at the moment of login, we use an anonymous visitor identifier generated by the[`getVisitorCode`](#getvisitorcode) method. After the user logs in, we can associate the anonymous visitor with the user ID and use it as the visitor's unique identifier.
 
     <Tabs>
-      <Tab title="Tab">
-        ```ts Login Page
+      <Tab title="TypeScript">
+        ```ts
         import { KameleoonClient } from '@kameleoon/javascript-sdk';
-        
+
         const client = new KameleoonClient({
           siteCode: 'my_site_code',
         });
-        
+
         async function init(): Promise<void> {
           await client.initialize();
-        
+
           const anonymousVisitor = getVisitorCode();
           // -- Saving `visitorCode` in `window` to re-use it later
           window.anonymousVisitor = anonymousVisitor;
-        
+
           // -- Getting a variation—assume it's variation `A`
           const variation = client.getVariation({
             visitorCode: anonymousVisitor,
             featureKey: 'my_feature_key',
           });
         }
-        
+
         init();
         ```
 
-        ```ts Application Page
+        ```ts
         import { CustomData } from '@kameleoon/javascript-sdk';
-        
+
         async function init(): Promise<void> {
           // -- At this point, the anonymous visitor has logged in,
           //    and we have a user ID to use as a visitor identifier.
@@ -1291,7 +1072,7 @@ Handling errors makes your application more stable and avoids technical issues.
           const userIdentifierData = new CustomData(1, 'my_user_id');
           // -- Taking `visitorCode` from `window` object
           client.addData(window.anonymousVisitor, userIdentifierData);
-        
+
           // -- Retrieving the variation for the user ID ensures
           //    consistency with the anonymous visitor's variation.
           //    Both the anonymous visitor and the user ID will be
@@ -1300,7 +1081,7 @@ Handling errors makes your application more stable and avoids technical issues.
             visitorCode: 'my_user_id',
             featureKey: 'my_feature_key',
           });
-        
+
           // -- `my_user_id` and `anonymousVisitor` are now linked.
           //    They can be tracked as a single visitor.
           client.trackConversion({
@@ -1310,7 +1091,7 @@ Handling errors makes your application more stable and avoids technical issues.
             // -- Informing the SDK that the visitor is a unique identifier
             isUniqueIdentifier: true,
           });
-        
+
           // -- Additionally, linked visitors share previously
           //    collected remote data
           const data = await client.getRemoteVisitorData({
@@ -1319,38 +1100,38 @@ Handling errors makes your application more stable and avoids technical issues.
             isUniqueIdentifier: true,
           });
         }
-        
+
         init();
         ```
       </Tab>
-      <Tab title="Tab">
-        ```js Login Page
+      <Tab title="JavaScript">
+        ```js
         import { KameleoonClient } from '@kameleoon/javascript-sdk';
-        
+
         const client = new KameleoonClient({
           siteCode: 'my_site_code',
         });
-        
+
         async function init() {
           await client.initialize();
-        
+
           const anonymousVisitor = getVisitorCode();
           // -- Saving `visitorCode` in `window` to re-use it later.
           window.anonymousVisitor = anonymousVisitor;
-        
+
           // -- Getting a variation—assume it's variation `A`
           const variation = client.getVariation({
             visitorCode: anonymousVisitor,
             featureKey: 'my_feature_key',
           });
         }
-        
+
         init();
         ```
 
-        ```js Application Page
+        ```js
         import { CustomData } from '@kameleoon/javascript-sdk';
-        
+
         async function init() {
           // -- At this point anonymous visitor has logged in,
           //    and we have a user ID to use as a visitor identifier
@@ -1360,7 +1141,7 @@ Handling errors makes your application more stable and avoids technical issues.
           const userIdentifierData = new CustomData(1, 'my_user_id');
           // -- Taking `visitorCode` from `window` object
           client.addData(window.anonymousVisitor, userIdentifierData);
-        
+
           // -- Retrieving the variation for the user ID ensures
           //    consistency with the anonymous visitor's variation.
           //    Both the anonymous visitor and the user ID will be
@@ -1369,7 +1150,7 @@ Handling errors makes your application more stable and avoids technical issues.
             visitorCode: 'my_user_id',
             featureKey: 'my_feature_key',
           });
-        
+
           // -- `my_user_id` and `anonymousVisitor` are now linked.
           //    They can be tracked as a single visitor.
           client.trackConversion({
@@ -1379,7 +1160,7 @@ Handling errors makes your application more stable and avoids technical issues.
             // -- Informing the SDK that the visitor is a unique identifier.
             isUniqueIdentifier: true,
           });
-        
+
           // -- Additionally, linked visitors share previously
           //    collected remote data.
           const data = await client.getRemoteVisitorData({
@@ -1388,44 +1169,44 @@ Handling errors makes your application more stable and avoids technical issues.
             isUniqueIdentifier: true,
           });
         }
-        
+
         init();
         ```
       </Tab>
     </Tabs>
+
   </Tab>
-  <Tab title="Tab">
-    <CrossDeviceReconciliation sec="using_custom_data_session_merging" c={Context} />
+  <Tab title="TypeScript">
 
     <Tabs>
-      <Tab title="Tab">
-        ```ts Login Page
+      <Tab title="TypeScript">
+        ```ts
         import { KameleoonClient } from '@kameleoon/javascript-sdk';
-        
+
         const client = new KameleoonClient({
           siteCode: 'my_site_code',
         });
-        
+
         async function init(): Promise<void> {
           await client.initialize();
-        
+
           const anonymousVisitor = getVisitorCode();
           // -- Saving `visitorCode` in `window` to re-use it later.
           window.anonymousVisitor = anonymousVisitor;
-        
+
           // -- Getting a variation, assume it's variation `A`
           const variation = client.getVariation({
             visitorCode: anonymousVisitor,
             featureKey: 'my_feature_key',
           });
         }
-        
+
         init();
         ```
 
-        ```ts Application Page
+        ```ts
         import { CustomData, UniqueIdentifier } from '@kameleoon/javascript-sdk';
-        
+
         async function init(): Promise<void> {
           // -- At this point anonymous visitor has logged in,
           //    and we have a user ID to use as a visitor identifier
@@ -1437,10 +1218,10 @@ Handling errors makes your application more stable and avoids technical issues.
           client.addData(window.anonymousVisitor, userIdentifierData);
           // -- Flushing data for the anonymous `visitorCode`
           client.flush(window.anonymousVisitor);
-        
+
           // -- Informing the SDK that the visitor is a unique identifier
           client.addData('my_user_id', new UniqueIdentifier(true));
-        
+
           // -- Retrieving the variation for the user ID ensures
           //    consistency with the anonymous visitor's variation.
           //    Both the anonymous visitor and the user ID will be
@@ -1449,7 +1230,7 @@ Handling errors makes your application more stable and avoids technical issues.
             visitorCode: 'my_user_id',
             featureKey: 'my_feature_key',
           });
-        
+
           // -- `my_user_id` and `anonymousVisitor` are now linked.
           //    They can be tracked as a single visitor.
           client.trackConversion({
@@ -1457,45 +1238,45 @@ Handling errors makes your application more stable and avoids technical issues.
             goalId: 123,
             revenue: 100,
           });
-        
+
           // -- Additionally, linked visitors share previously
           //    collected remote data.
           const data = await client.getRemoteVisitorData({
             visitorCode: 'my_user_id',
           });
         }
-        
+
         init();
         ```
       </Tab>
-      <Tab title="Tab">
-        ```js Login Page
+      <Tab title="JavaScript">
+        ```js
         import { KameleoonClient } from '@kameleoon/javascript-sdk';
-        
+
         const client = new KameleoonClient({
           siteCode: 'my_site_code',
         });
-        
+
         async function init() {
           await client.initialize();
-        
+
           const anonymousVisitor = getVisitorCode();
           // -- Saving `visitorCode` in `window` to re-use it later.
           window.anonymousVisitor = anonymousVisitor;
-        
+
           // -- Getting a variation, assume it's variation `A`
           const variation = client.getVariation({
             visitorCode: anonymousVisitor,
             featureKey: 'my_feature_key',
           });
         }
-        
+
         init();
         ```
 
-        ```js Application Page
+        ```js
         import { CustomData, UniqueIdentifier } from '@kameleoon/javascript-sdk';
-        
+
         async function init() {
           // -- At this point anonymous visitor has logged in,
           //    and we have a user ID to use as a visitor identifier
@@ -1507,10 +1288,10 @@ Handling errors makes your application more stable and avoids technical issues.
           client.addData(window.anonymousVisitor, userIdentifierData);
           // -- Flushing data for the anonymous `visitorCode`
           client.flush(window.anonymousVisitor);
-        
+
           // -- Informing the SDK that the visitor is a unique identifier.
           client.addData('my_user_id', new UniqueIdentifier(true));
-        
+
           // -- Retrieving the variation for the user ID ensures
           //    consistency with the anonymous visitor's variation.
           //    Both the anonymous visitor and the user ID will be
@@ -1519,7 +1300,7 @@ Handling errors makes your application more stable and avoids technical issues.
             visitorCode: 'my_user_id',
             featureKey: 'my_feature_key',
           });
-        
+
           // -- `my_user_id` and `anonymousVisitor` are now linked.
           //    They can be tracked as a single visitor.
           client.trackConversion({
@@ -1527,18 +1308,19 @@ Handling errors makes your application more stable and avoids technical issues.
             goalId: 123,
             revenue: 100,
           });
-        
+
           // -- Additionally, linked visitors share previously
           //    collected remote data.
           const data = await client.getRemoteVisitorData({
             visitorCode: 'my_user_id',
           });
         }
-        
+
         init();
         ```
       </Tab>
     </Tabs>
+
   </Tab>
 </Tabs>
 
@@ -1551,7 +1333,7 @@ The SDK has a set of utility methods that you can use to simplify your developme
 Use the `simulateSuccessRequest` method to simulate a successful request to the Kameleoon server. It can be useful for custom [Requester](#requester) implementations, when a developer needs to simulate a successful request (for example, disabling tracking).
 
 <Tabs>
-  <Tab title="Tab">
+  <Tab title="TypeScript">
     ```ts
     import {
       KameleoonUtils,
@@ -1580,7 +1362,7 @@ Use the `simulateSuccessRequest` method to simulate a successful request to the 
     }
     ```
   </Tab>
-  <Tab title="Tab">
+  <Tab title="JavaScript">
     ```js
     import { KameleoonUtils } from '@kameleoon/javascript-sdk';
     
@@ -1620,7 +1402,7 @@ Data type `SimulateRequestDataType` is defined as follows:
 Use the `getCookieValue` method to parse a common cookie string (`key_1=value_1; key_2=value_2; ...`) and get the value of a specific cookie key. This method is useful when working with a custom implementation of [`VisitorCodeManager`](#visitorcodemanager).
 
 <Tabs>
-  <Tab title="Tab">
+  <Tab title="TypeScript">
     ```ts
     import { KameleoonUtils } from '@kameleoon/javascript-sdk';
     
@@ -1630,7 +1412,7 @@ Use the `getCookieValue` method to parse a common cookie string (`key_1=value_1;
     const value = KameleoonUtils.getCookieValue(cookies, key); // = `value_1`
     ```
   </Tab>
-  <Tab title="Tab">
+  <Tab title="JavaScript">
     ```js
     import { KameleoonUtils } from '@kameleoon/javascript-sdk';
     
@@ -1662,40 +1444,64 @@ This is the full reference documentation for the Kameleoon JavaScript SDK.
 #### initialize()
 
 <Tabs>
-  <Tab title="Tab">
+  <Tab title="TypeScript">
     `initialize()` is an asynchronous method for `KameleoonClient` initialization. The method fetches Kameleoon SDK data from our servers or retrieves data from a local source if data is up-to-date or the update interval has not been reached.
 
-    :::note
+  <Note>
 
-    - If the SDK configuration could not be retrieved but there is an older configuration available in the SDK storage, the SDK uses the older configuration as a fallback and `initialize` does not throw an error.
-    - Client initialization has an optional _offline mode_. It is activated by setting the optional `useCache` parameter to `true`.
+      - If the SDK configuration could not be retrieved but there is an older configuration available in the SDK storage, the SDK uses the older configuration as a fallback and `initialize` does not throw an error. - Client initialization has an optional _offline mode_. It is activated by setting the optional `useCache` parameter to `true`.
 
-    In _offline mode_, if tracking requests for any of the following methods fail due to internet connectivity issues, the SDK automatically resends the request when internet connection has been reestablished:
+      In _offline mode_, if tracking requests for any of the following methods fail due to internet connectivity issues, the SDK automatically resends the request when internet connection has been reestablished:
 
-    - [flush](https://developers.kameleoon.com/feature-management-and-experimentation/web-sdks/js-sdk/#flush)
-    - [trackConversion](https://developers.kameleoon.com/feature-management-and-experimentation/web-sdks/js-sdk/#trackconversion)
-    - [getFeatureFlagVariationKey](https://developers.kameleoon.com/feature-management-and-experimentation/web-sdks/js-sdk/#getfeatureflagvariationkey)
-    - [getFeatureFlagVariable](https://developers.kameleoon.com/feature-management-and-experimentation/web-sdks/js-sdk/#getfeatureflagvariable)
-    - [isFeatureFlagActive](https://developers.kameleoon.com/feature-management-and-experimentation/web-sdks/js-sdk/#isfeatureflagactive)
+      - [flush](https://developers.kameleoon.com/feature-management-and-experimentation/web-sdks/js-sdk/#flush)
+      - [trackConversion](https://developers.kameleoon.com/feature-management-and-experimentation/web-sdks/js-sdk/#trackconversion)
+      - [getFeatureFlagVariationKey](https://developers.kameleoon.com/feature-management-and-experimentation/web-sdks/js-sdk/#getfeatureflagvariationkey)
+      - [getFeatureFlagVariable](https://developers.kameleoon.com/feature-management-and-experimentation/web-sdks/js-sdk/#getfeatureflagvariable)
+      - [isFeatureFlagActive](https://developers.kameleoon.com/feature-management-and-experimentation/web-sdks/js-sdk/#isfeatureflagactive)
 
-    :::
+  </Note>
 
-    <Tabs>
-      <Tab title="Tab">
-        ```ts
-        import {
-          KameleoonClient,
-          KameleoonError,
-          KameleoonException,
-        } from '@kameleoon/javascript-sdk';
-        
-        const client = new KameleoonClient({ siteCode: 'my_site_code' });
-        
-        async function init(): Promise<void> {
-          try {
-            await client.initialize();
-          } catch (err) {
-            if (err instanceof KameleoonError) {
+      <Tabs>
+        <Tab title="TypeScript">
+          ```ts
+          import {
+            KameleoonClient,
+            KameleoonError,
+            KameleoonException,
+          } from '@kameleoon/javascript-sdk';
+
+          const client = new KameleoonClient({ siteCode: 'my_site_code' });
+
+          async function init(): Promise<void> {
+            try {
+              await client.initialize();
+            } catch (err) {
+              if (err instanceof KameleoonError) {
+                switch (err.type) {
+                  case KameleoonException.StorageWrite:
+                  // -- Handle error case
+                  case KameleoonException.ClientConfiguration:
+                  // -- Handle error case
+                  default:
+                    break;
+                }
+              }
+            }
+          }
+
+          init();
+          ```
+        </Tab>
+        <Tab title="JavaScript">
+          ```js
+          import { KameleoonClient, KameleoonException } from '@kameleoon/javascript-sdk';
+
+          const client = new KameleoonClient({ siteCode: 'my_site_code' });
+
+          async function init() {
+            try {
+              await client.initialize();
+            } catch (err) {
               switch (err.type) {
                 case KameleoonException.StorageWrite:
                 // -- Handle error case
@@ -1706,88 +1512,88 @@ This is the full reference documentation for the Kameleoon JavaScript SDK.
               }
             }
           }
-        }
-        
-        init();
-        ```
-      </Tab>
-      <Tab title="Tab">
-        ```js
-        import { KameleoonClient, KameleoonException } from '@kameleoon/javascript-sdk';
-        
-        const client = new KameleoonClient({ siteCode: 'my_site_code' });
-        
-        async function init() {
-          try {
-            await client.initialize();
-          } catch (err) {
-            switch (err.type) {
-              case KameleoonException.StorageWrite:
-              // -- Handle error case
-              case KameleoonException.ClientConfiguration:
-              // -- Handle error case
-              default:
-                break;
+
+          init();
+          ```
+        </Tab>
+      </Tabs>
+      ##### Arguments
+
+      | Name                  | Type      | Description                                                                                                                                  | Default Value |
+      | --------------------- | --------- | -------------------------------------------------------------------------------------------------------------------------------------------- | ------------- |
+      | useCache (_optional_) | `boolean` | parameter for activating SDK offline mode. If `true`, failed polls will not return error and will use cached data if such data is available. | `false`       |
+
+      ##### Return value
+
+      `Promise<boolean>` - A promise that resolves to a boolean indicating whether the SDK was successfully initialized. Usually, if an unresolvable issue occurs, the `initialize` method will throw an error instead of resolving the promise. Therefore, the `boolean` value is almost always `true` and typically does not provide much additional information.
+
+      ##### Exceptions thrown
+
+      | Type                                       | Description                                               |
+      | ------------------------------------------ | --------------------------------------------------------- |
+      | `KameleoonException.StorageWrite`          | Couldn't update storage data                              |
+      | `KameleoonException.ClientConfiguration`   | Couldn't retrieve client configuration from Kameleoon API |
+      | `KameleoonException.MaximumRetriesReached` | Maximum retries reached, request failed                   |
+
+    </Tab>
+    <Tab title="TypeScript">
+      An asynchronous method for `KameleoonClient` initialization by fetching Kameleoon SDK related data from server or by retrieving data from local source if data is up-to-date or update interval has not been reached.
+
+  <Note>
+
+      - If the SDK configuration could not be retrieved but there is an older configuration available in SDK storage, the SDK uses the older configuration as a fallback and the `initialize` does not throw an error. - SDK supports an _offline mode_.
+
+      In _offline mode_ if tracking requests from any of the following methods fail due to internet connectivity issues, the SDK automatically resends the request as soon as it detects that the internet connection has been re-established:
+
+      - [flush](https://developers.kameleoon.com/feature-management-and-experimentation/web-sdks/js-sdk/#flush)
+      - [trackConversion](https://developers.kameleoon.com/feature-management-and-experimentation/web-sdks/js-sdk/#trackconversion)
+      - [getFeatureFlagVariationKey](https://developers.kameleoon.com/feature-management-and-experimentation/web-sdks/js-sdk/#getfeatureflagvariationkey)
+      - [getFeatureFlagVariable](https://developers.kameleoon.com/feature-management-and-experimentation/web-sdks/js-sdk/#getfeatureflagvariable)
+      - [isFeatureFlagActive](https://developers.kameleoon.com/feature-management-and-experimentation/web-sdks/js-sdk/#isfeatureflagactive)
+
+  </Note>
+
+      <Tabs>
+        <Tab title="TypeScript">
+          ```ts
+          import {
+            KameleoonClient,
+            KameleoonError,
+            KameleoonException,
+          } from '@kameleoon/javascript-sdk';
+
+          const client = new KameleoonClient({ siteCode: 'my_site_code' });
+
+          async function init(): Promise<void> {
+            try {
+              await client.initialize();
+            } catch (err) {
+              if (err instanceof KameleoonError) {
+                switch (err.type) {
+                  case KameleoonException.StorageWrite:
+                  // -- Handle error case
+                  case KameleoonException.ClientConfiguration:
+                  // -- Handle error case
+                  default:
+                    break;
+                }
+              }
             }
           }
-        }
-        
-        init();
-        ```
-      </Tab>
-    </Tabs>
-    ##### Arguments
 
-    | Name                  | Type      | Description                                                                                                                                  | Default Value |
-    | --------------------- | --------- | -------------------------------------------------------------------------------------------------------------------------------------------- | ------------- |
-    | useCache (_optional_) | `boolean` | parameter for activating SDK offline mode. If `true`, failed polls will not return error and will use cached data if such data is available. | `false`       |
+          init();
+          ```
+        </Tab>
+        <Tab title="JavaScript">
+          ```js
+          import { KameleoonClient, KameleoonException } from '@kameleoon/javascript-sdk';
 
-    ##### Return value
+          const client = new KameleoonClient({ siteCode: 'my_site_code' });
 
-    `Promise<boolean>` - A promise that resolves to a boolean indicating whether the SDK was successfully initialized. Usually, if an unresolvable issue occurs, the `initialize` method will throw an error instead of resolving the promise. Therefore, the `boolean` value is almost always `true` and typically does not provide much additional information.
-
-    ##### Exceptions thrown
-
-    | Type                                       | Description                                               |
-    | ------------------------------------------ | --------------------------------------------------------- |
-    | `KameleoonException.StorageWrite`          | Couldn't update storage data                              |
-    | `KameleoonException.ClientConfiguration`   | Couldn't retrieve client configuration from Kameleoon API |
-    | `KameleoonException.MaximumRetriesReached` | Maximum retries reached, request failed                   |
-  </Tab>
-  <Tab title="Tab">
-    An asynchronous method for `KameleoonClient` initialization by fetching Kameleoon SDK related data from server or by retrieving data from local source if data is up-to-date or update interval has not been reached.
-
-    :::note
-
-    - If the SDK configuration could not be retrieved but there is an older configuration available in SDK storage, the SDK uses the older configuration as a fallback and the `initialize` does not throw an error.
-    - SDK supports an _offline mode_.
-
-    In _offline mode_ if tracking requests from any of the following methods fail due to internet connectivity issues, the SDK automatically resends the request as soon as it detects that the internet connection has been re-established:
-
-    - [flush](https://developers.kameleoon.com/feature-management-and-experimentation/web-sdks/js-sdk/#flush)
-    - [trackConversion](https://developers.kameleoon.com/feature-management-and-experimentation/web-sdks/js-sdk/#trackconversion)
-    - [getFeatureFlagVariationKey](https://developers.kameleoon.com/feature-management-and-experimentation/web-sdks/js-sdk/#getfeatureflagvariationkey)
-    - [getFeatureFlagVariable](https://developers.kameleoon.com/feature-management-and-experimentation/web-sdks/js-sdk/#getfeatureflagvariable)
-    - [isFeatureFlagActive](https://developers.kameleoon.com/feature-management-and-experimentation/web-sdks/js-sdk/#isfeatureflagactive)
-
-    :::
-
-    <Tabs>
-      <Tab title="Tab">
-        ```ts
-        import {
-          KameleoonClient,
-          KameleoonError,
-          KameleoonException,
-        } from '@kameleoon/javascript-sdk';
-        
-        const client = new KameleoonClient({ siteCode: 'my_site_code' });
-        
-        async function init(): Promise<void> {
-          try {
-            await client.initialize();
-          } catch (err) {
-            if (err instanceof KameleoonError) {
+          async function init() {
+            try {
+              await client.initialize();
+            } catch (err) {
               switch (err.type) {
                 case KameleoonException.StorageWrite:
                 // -- Handle error case
@@ -1798,58 +1604,33 @@ This is the full reference documentation for the Kameleoon JavaScript SDK.
               }
             }
           }
-        }
-        
-        init();
-        ```
-      </Tab>
-      <Tab title="Tab">
-        ```js
-        import { KameleoonClient, KameleoonException } from '@kameleoon/javascript-sdk';
-        
-        const client = new KameleoonClient({ siteCode: 'my_site_code' });
-        
-        async function init() {
-          try {
-            await client.initialize();
-          } catch (err) {
-            switch (err.type) {
-              case KameleoonException.StorageWrite:
-              // -- Handle error case
-              case KameleoonException.ClientConfiguration:
-              // -- Handle error case
-              default:
-                break;
-            }
-          }
-        }
-        
-        init();
-        ```
-      </Tab>
-    </Tabs>
-    ##### Return value
 
-    `Promise<boolean>` - A promise that resolves to a boolean indicating whether the SDK was successfully initialized. Usually, if an unresolvable issue occurs, the `initialize` method will throw an error instead of resolving the promise. Therefore, the `boolean` value is almost always `true` and typically does not provide much additional information.
+          init();
+          ```
+        </Tab>
+      </Tabs>
+      ##### Return value
 
-    ##### Exceptions thrown
+      `Promise<boolean>` - A promise that resolves to a boolean indicating whether the SDK was successfully initialized. Usually, if an unresolvable issue occurs, the `initialize` method will throw an error instead of resolving the promise. Therefore, the `boolean` value is almost always `true` and typically does not provide much additional information.
 
-    | Type                                       | Description                                               |
-    | ------------------------------------------ | --------------------------------------------------------- |
-    | `KameleoonException.StorageWrite`          | Couldn't update storage data                              |
-    | `KameleoonException.ClientConfiguration`   | Couldn't retrieve client configuration from Kameleoon API |
-    | `KameleoonException.MaximumRetriesReached` | Maximum retries reached, request failed                   |
-  </Tab>
-</Tabs>
+      ##### Exceptions thrown
+
+      | Type                                       | Description                                               |
+      | ------------------------------------------ | --------------------------------------------------------- |
+      | `KameleoonException.StorageWrite`          | Couldn't update storage data                              |
+      | `KameleoonException.ClientConfiguration`   | Couldn't retrieve client configuration from Kameleoon API |
+      | `KameleoonException.MaximumRetriesReached` | Maximum retries reached, request failed                   |
+
+    </Tab>
+
+  </Tabs>
 
 ### Feature flags and variations
 
 #### getVariation()
 
-<GetVariation sec="description___js" c={Context} />
-
 <Tabs>
-  <Tab title="Tab">
+  <Tab title="TypeScript">
     ```ts
     import { KameleoonClient } from '@kameleoon/javascript-sdk';
     
@@ -1894,7 +1675,7 @@ This is the full reference documentation for the Kameleoon JavaScript SDK.
     init();
     ```
   </Tab>
-  <Tab title="Tab">
+  <Tab title="JavaScript">
     ```js
     import { KameleoonClient } from '@kameleoon/javascript-sdk';
     
@@ -1945,22 +1726,14 @@ This is the full reference documentation for the Kameleoon JavaScript SDK.
 
 An object of type `GetVariationParamsType` with the following properties:
 
-<GetVariation sec="arguments" c={Context} />
-
 ##### Return value
 
-<GetVariation sec="return_value" c={Context} />
-
 ##### Exceptions thrown
-
-<GetVariation sec="exceptions___js" c={Context} />
 
 #### getVariations()
 
-<GetVariations sec="description___js" c={Context} />
-
 <Tabs>
-  <Tab title="Tab">
+  <Tab title="TypeScript">
     ```ts
     import { KameleoonClient } from '@kameleoon/javascript-sdk';
     
@@ -2012,7 +1785,7 @@ An object of type `GetVariationParamsType` with the following properties:
     init();
     ```
   </Tab>
-  <Tab title="Tab">
+  <Tab title="JavaScript">
     ```js
     import { KameleoonClient } from '@kameleoon/javascript-sdk';
     
@@ -2070,15 +1843,9 @@ An object of type `GetVariationParamsType` with the following properties:
 
 An object of type `GetVariationParamsType` with the following properties:
 
-<GetVariations sec="arguments" c={Context} />
-
 ##### Return value
 
-<GetVariations sec="return_value" c={Context} />
-
 ##### Exceptions thrown
-
-<GetVariations sec="exceptions___js" c={Context} />
 
 #### isFeatureFlagActive()
 
@@ -2089,10 +1856,12 @@ The method `isFeatureFlagActive()` returns a boolean value indicating whether th
 
 There is also an overload of this method that allows you to pass a `track` parameter, which you can use to disable tracking of the feature evaluation.
 
-:::note Only visitors with an active feature flag must be targetted. :::
+<Note>
+Only visitors with an active feature flag must be targetted.
+</Note>
 
 <Tabs>
-  <Tab title="Tab">
+  <Tab title="TypeScript">
     ```ts
     import { KameleoonClient, CustomData } from '@kameleoon/javascript-sdk';
     
@@ -2120,7 +1889,7 @@ There is also an overload of this method that allows you to pass a `track` param
     init();
     ```
   </Tab>
-  <Tab title="Tab">
+  <Tab title="JavaScript">
     ```js
     import { KameleoonClient, CustomData } from '@kameleoon/javascript-sdk';
     
@@ -2156,7 +1925,9 @@ There are two overloads available for this method:
 
 1. Two parameters overload:
 
-:::warning This overload is deprecated and will be removed in the next major update. Please use the new overload with an object parameter. :::
+<Warning>
+This overload is deprecated and will be removed in the next major update. Please use the new overload with an object parameter.
+</Warning>
 
 | Name                     | Type     | Description                                                                 |
 | ------------------------ | -------- | --------------------------------------------------------------------------- |
@@ -2192,7 +1963,7 @@ There are two overloads available for this method:
 The `getFeatureFlags()` method returns a list of feature flags stored in the client configuration.
 
 <Tabs>
-  <Tab title="Tab">
+  <Tab title="TypeScript">
     ```ts
     import { KameleoonClient } from '@kameleoon/javascript-sdk';
     
@@ -2208,7 +1979,7 @@ The `getFeatureFlags()` method returns a list of feature flags stored in the cli
     init();
     ```
   </Tab>
-  <Tab title="Tab">
+  <Tab title="JavaScript">
     ```js
     import { KameleoonClient } from '@kameleoon/javascript-sdk';
     
@@ -2240,10 +2011,8 @@ The `getFeatureFlags()` method returns a list of feature flags stored in the cli
 
 #### setForcedVariation()
 
-<SetForcedVariation sec="description" c={Context} />
-
 <Tabs>
-  <Tab title="Tab">
+  <Tab title="TypeScript">
     ```ts
     import { KameleoonClient } from '@kameleoon/javascript-sdk';
     
@@ -2277,7 +2046,7 @@ The `getFeatureFlags()` method returns a list of feature flags stored in the cli
     init();
     ```
   </Tab>
-  <Tab title="Tab">
+  <Tab title="JavaScript">
     ```js
     import { KameleoonClient } from '@kameleoon/javascript-sdk';
     
@@ -2315,18 +2084,12 @@ The `getFeatureFlags()` method returns a list of feature flags stored in the cli
 
 ##### Arguments
 
-<SetForcedVariation sec="arguments" c={Context} />
-
 ##### Exceptions thrown
-
-<SetForcedVariation sec="exceptions___js" c={Context} />
 
 #### evaluateAudiences()
 
-<EvaluateAudiences sec="description" c={Context} />
-
 <Tabs>
-  <Tab title="Tab">
+  <Tab title="TypeScript">
     ```ts
     import { KameleoonClient } from '@kameleoon/javascript-sdk';
     
@@ -2347,7 +2110,7 @@ The `getFeatureFlags()` method returns a list of feature flags stored in the cli
     init();
     ```
   </Tab>
-  <Tab title="Tab">
+  <Tab title="JavaScript">
     ```js
     import { KameleoonClient } from '@kameleoon/javascript-sdk';
     
@@ -2372,20 +2135,12 @@ The `getFeatureFlags()` method returns a list of feature flags stored in the cli
 
 ##### Arguments
 
-<EvaluateAudiences sec="arguments" c={Context} />
-
 ##### Exceptions thrown
-
-<EvaluateAudiences sec="exceptions___js" c={Context} />
 
 #### getDataFile()
 
-<GetDataFile sec="tip_qa" c={Context} />
-
-<GetDataFile sec="description" c={Context} />
-
 <Tabs>
-  <Tab title="Tab">
+  <Tab title="TypeScript">
     ```ts
     import { KameleoonClient } from '@kameleoon/javascript-sdk';
     
@@ -2397,7 +2152,7 @@ The `getFeatureFlags()` method returns a list of feature flags stored in the cli
     const dataFile = client.getDataFile();
     ```
   </Tab>
-  <Tab title="Tab">
+  <Tab title="JavaScript">
     ```js
     import { KameleoonClient } from '@kameleoon/javascript-sdk';
     
@@ -2413,18 +2168,14 @@ The `getFeatureFlags()` method returns a list of feature flags stored in the cli
 
 ##### Return value
 
-<GetDataFile sec="return_value" c={Context} />
-
 ### Visitor data
 
 #### getVisitorCode()
 
 The `getVisitorCode()` method obtains a visitor code from the browser cookie. If the visitor code doesn't exist, the method generates a random visitor code (or uses the `defaultVisitorCode` value if you provided one) and sets the new visitor code in a cookie.
 
-<SharedDiv sec="get_visitor_code_simulated" c={Context} />
-
 <Tabs>
-  <Tab title="Tab">
+  <Tab title="TypeScript">
     ```ts
     import { KameleoonClient } from '@kameleoon/javascript-sdk';
     
@@ -2446,7 +2197,7 @@ The `getVisitorCode()` method obtains a visitor code from the browser cookie. If
     init();
     ```
   </Tab>
-  <Tab title="Tab">
+  <Tab title="JavaScript">
     ```js
     import { KameleoonClient } from '@kameleoon/javascript-sdk';
     
@@ -2476,7 +2227,9 @@ The `getVisitorCode()` method obtains a visitor code from the browser cookie. If
 | --------------------------------- | -------- | -------------------------------------------------------- |
 | `defaultVisitorCode` (_optional_) | `string` | visitor code used if there is no visitor code in cookies |
 
-:::note If you don't provide a `defaultVisitorCode` and there is no visitor code stored in a cookie, the visitor code will be randomly generated. :::
+<Note>
+If you don't provide a `defaultVisitorCode` and there is no visitor code stored in a cookie, the visitor code will be randomly generated.
+</Note>
 
 ##### Return value
 
@@ -2495,15 +2248,17 @@ The `addData()` method adds [targeting data](#data-types) to storage so other me
 
 The `addData()` method does not return any value and does not interact with Kameleoon back-end servers on its own. Instead, all the declared data is saved for future transmission using the [flush](#flush) method. This approach reduces the number of server calls made, as the data is typically grouped into a single server call. Note that the [trackConversion](#trackconversion) method also sends out any previously associated data, just like the flush method. The same is true for the [getFeatureFlagVariationKey](https://developers.kameleoon.com/feature-management-and-experimentation/web-sdks/js-sdk/#getfeatureflagvariationkey) and [getFeatureFlagVariable](https://developers.kameleoon.com/feature-management-and-experimentation/web-sdks/js-sdk/#getfeatureflagvariable) methods, if an experimentation rule is triggered.
 
-:::tip Each visitor can only have one instance of associated data for most data types. However, `CustomData` is an exception. Visitors can have one instance of associated `CustomData` per `customDataIndex`. :::
+<Tip>
+Each visitor can only have one instance of associated data for most data types. However, `CustomData` is an exception. Visitors can have one instance of associated `CustomData` per `customDataIndex`.
+</Tip>
 
-:::note
-
+<Note>
 - `userAgent` data will not be stored in storage like other data, and it will be sent with every tracking request for bot filtration.
-- For the data types you can use for targeting, see the [supported targeting conditions](#targeting-conditions). :::
+- For the data types you can use for targeting, see the [supported targeting conditions](#targeting-conditions).
+</Note>
 
 <Tabs>
-  <Tab title="Tab">
+  <Tab title="TypeScript">
     ```ts
     import {
       KameleoonClient,
@@ -2535,7 +2290,7 @@ The `addData()` method does not return any value and does not interact with Kame
     init();
     ```
   </Tab>
-  <Tab title="Tab">
+  <Tab title="JavaScript">
     ```js
     import {
       KameleoonClient,
@@ -2575,10 +2330,10 @@ The `addData()` method does not return any value and does not interact with Kame
 | visitorCode (_required_)   | `string`              | unique visitor identification string, can't exceed 255 characters.                                          |
 | kameleoonData (_optional_) | `KameleoonDataType[]` | number of instances of any type of `KameleoonData`, can be added solely in array or as sequential arguments |
 
-:::note
-
+<Note>
 - `kameleoonData` is a variadic argument. It can be passed as one or several arguments (see the example).
-- The index or ID of the [custom data](https://help.kameleoon.com/create-push-custom-data) can be found in your Kameleoon account. Note that this index starts at `0`, which means that the first custom data you create for a given site will be assigned `0` as its ID, not `1`. :::
+- The index or ID of the [custom data](https://help.kameleoon.com/create-push-custom-data) can be found in your Kameleoon account. Note that this index starts at `0`, which means that the first custom data you create for a given site will be assigned `0` as its ID, not `1`.
+</Note>
 
 ##### Exceptions thrown
 
@@ -2589,80 +2344,85 @@ The `addData()` method does not return any value and does not interact with Kame
 | `KameleoonException.StorageWrite`         | Couldn't update storage data.                                                     |
 | `KameleoonException.Initialization`       | Method was executed before the `kameleoonClient` completed its `initialize` call. |
 
-:::note Check the [Data Types](#data-types) reference for more details on how to manage different data types. :::
+<Note>
+Check the [Data Types](#data-types) reference for more details on how to manage different data types.
+</Note>
 
 #### flush()
 
 <Tabs>
-  <Tab title="Tab">
+  <Tab title="TypeScript">
     The `flush()` method collects the Kameleoon data linked to the visitor. It then sends a tracking request, along with all data added using the `addData` method, which has not yet been sent using one of [these methods](/feature-management-and-experimentation/faq#when-does-the-sdk-send-a-tracking-request-for-analytics).
 
     If you don't specify a `visitorCode`, the SDK flushes all of its stored data to the remote Kameleoon servers. If any previously failed tracking requests were stored locally in [offline mode](#initialize), the SDK attempts to send the stored requests before executing the latest request.
 
-    :::note The `isUniqueIdentifier` can be helpful in unique situations; for example, if you cannot access the anonymous `visitorCode` given to a visitor, but you can use an internal ID linked to that visitor through session merging. :::
+    <Note>
+
+The `isUniqueIdentifier` can be helpful in unique situations; for example, if you cannot access the anonymous `visitorCode` given to a visitor, but you can use an internal ID linked to that visitor through session merging.
+</Note>
 
     <Tabs>
-      <Tab title="Tab">
+      <Tab title="TypeScript">
         ```ts
         import { KameleoonClient } from '@kameleoon/javascript-sdk';
-        
+
         const client = new KameleoonClient({
           siteCode: 'my_site_code',
           configuration: { cookieDomain: '.example.com' },
         });
-        
+
         async function init(): Promise<void> {
           await client.initialize();
-        
+
           // -- Get visitor code
           const visitorCode = client.getVisitorCode();
-        
+
           const customData = new CustomData(0, 'my_data');
           client.addData(visitorCode, customData);
-        
+
           // -- Flush added custom data for visitor
           client.flush(visitorCode);
-        
+
           // -- Flush data for all the visitors
           client.flush();
-        
+
           // -- Flush data with unique visitor identifier flag
           const internalUserId = 'my_user_id';
           client.flush(internalUserId, true);
         }
-        
+
         init();
         ```
       </Tab>
-      <Tab title="Tab">
+      <Tab title="JavaScript">
         ```js
         import { KameleoonClient } from '@kameleoon/javascript-sdk';
-        
+
         const client = new KameleoonClient({
           siteCode: 'my_site_code',
           configuration: { cookieDomain: '.example.com' },
         });
-        
+
         async function init() {
           await client.initialize();
-        
+
           // -- Get visitor code
           const visitorCode = client.getVisitorCode();
-        
+
           const customData = new CustomData(0, 'my_data');
           client.addData(visitorCode, customData);
-        
+
           // -- Flush added custom data for visitor
           client.flush(visitorCode);
-        
+
           // -- Flush data for all the visitors
           client.flush();
-        
+
           // -- Flush data with unique visitor identifier flag
           const internalUserId = 'my_user_id';
           client.flush(internalUserId, true);
         }
-        
+
         init();
         ```
       </Tab>
@@ -2681,78 +2441,79 @@ The `addData()` method does not return any value and does not interact with Kame
     | `KameleoonException.VisitorCodeMaxLength` | The visitor code exceeded the maximum length (255 characters).                    |
     | `KameleoonException.VisitorCodeEmpty`     | The visitor code is empty.                                                        |
     | `KameleoonException.Initialization`       | Method was executed before the `kameleoonClient` completed its `initialize` call. |
+
   </Tab>
-  <Tab title="Tab">
+  <Tab title="TypeScript">
     `flush()` takes the Kameleoon data associated with a visitor and schedules the data to be sent in the next tracking request. The time of the next tracking request is defined by the SDK Configuration [`trackingInterval`](#configuration-parameters) parameter. Visitor data can be added using the [addData](#adddata) and [getRemoteVisitorData](#getremotevisitordata) methods.
 
     If you don't specify a `visitorCode`, the SDK flushes all of its stored data to the remote Kameleoon servers. If any previously failed tracking requests were stored locally in [offline mode](#initialize), the SDK attempts to send the stored requests before executing the latest request.
 
     <Tabs>
-      <Tab title="Tab">
+      <Tab title="TypeScript">
         ```ts
         import { KameleoonClient } from '@kameleoon/javascript-sdk';
-        
+
         const client = new KameleoonClient({
           siteCode: 'my_site_code',
           configuration: { cookieDomain: '.example.com' },
         });
-        
+
         async function init(): Promise<void> {
           await client.initialize();
-        
+
           // -- Get visitor code
           const visitorCode = client.getVisitorCode();
-        
+
           const customData = new CustomData(0, 'my_data');
           client.addData(visitorCode, customData);
-        
+
           // -- Flush added custom data for visitor
           client.flush(visitorCode);
-        
+
           // -- Instantly flush added custom data for visitor
           client.flush({ visitorCode, instant: true });
-        
+
           // -- Flush data for all the visitors
           client.flush();
-        
+
           // -- Instantly flush data for all the visitors
           client.flush({ instant: true });
         }
-        
+
         init();
         ```
       </Tab>
-      <Tab title="Tab">
+      <Tab title="JavaScript">
         ```js
         import { KameleoonClient } from '@kameleoon/javascript-sdk';
-        
+
         const client = new KameleoonClient({
           siteCode: 'my_site_code',
           configuration: { cookieDomain: '.example.com' },
         });
-        
+
         async function init() {
           await client.initialize();
-        
+
           // -- Get visitor code
           const visitorCode = client.getVisitorCode();
-        
+
           const customData = new CustomData(0, 'my_data');
           client.addData(visitorCode, customData);
-        
+
           // -- Flush added custom data for visitor
           client.flush(visitorCode);
-        
+
           // -- Instantly flush added custom data for visitor
           client.flush({ visitorCode, instant: true });
-        
+
           // -- Flush data for all the visitors
           client.flush();
-        
+
           // -- Instantly flush data for all the visitors
           client.flush({ instant: true });
         }
-        
+
         init();
         ```
       </Tab>
@@ -2777,6 +2538,7 @@ The `addData()` method does not return any value and does not interact with Kame
     | `KameleoonException.VisitorCodeMaxLength` | The visitor code exceeded the maximum length (255 characters).                     |
     | `KameleoonException.VisitorCodeEmpty`     | The visitor code is empty.                                                         |
     | `KameleoonException.Initialization`       | Method was executed before the `kameleoonClient` completed it's `initialize` call. |
+
   </Tab>
 </Tabs>
 
@@ -2787,7 +2549,7 @@ The `getRemoteData()` method returns data that is stored for a specified site co
 You can use this method to retrieve user preferences, historical data, or any other data relevant to your application's logic. By storing this data on our highly scalable servers using our Data API, you can efficiently manage massive amounts of data and retrieve it for each of your visitors or users.
 
 <Tabs>
-  <Tab title="Tab">
+  <Tab title="TypeScript">
     ```ts
     import { KameleoonClient } from '@kameleoon/javascript-sdk';
     
@@ -2805,7 +2567,7 @@ You can use this method to retrieve user preferences, historical data, or any ot
     init();
     ```
   </Tab>
-  <Tab title="Tab">
+  <Tab title="JavaScript">
     ```js
     import { KameleoonClient } from '@kameleoon/javascript-sdk';
     
@@ -2844,7 +2606,7 @@ You can use this method to retrieve user preferences, historical data, or any ot
 #### getRemoteVisitorData()
 
 <Tabs>
-  <Tab title="Tab">
+  <Tab title="TypeScript">
     `getRemoteVisitorData()` is an asynchronous method used to retrieve Kameleoon Visits Data for the `visitorCode` from the Kameleoon Data API. This method stores data for making targeting decisions.
 
     Data obtained using this method is important when you want to:
@@ -2855,35 +2617,41 @@ You can use this method to retrieve user preferences, historical data, or any ot
 
     Read [this article](https://developers.kameleoon.com/feature-management-and-experimentation/using-visit-history-in-feature-flags-and-experiments/) for a better understanding of possible use cases.
 
-    :::caution By default, `getRemoteVisitorData()` automatically retrieves the latest stored custom data with `scope=Visitor` and attaches them to the visitor without the need to call the method `addData()`. It is particularly useful for [synchronizing custom data between multiple devices](https://developers.kameleoon.com/feature-management-and-experimentation/web-sdks/nodejs-sdk/#synchronizing-custom-data-across-devices). :::
+    <Warning>
 
-    :::note The `isUniqueIdentifier` can be helpful in unique situations; for example, if you cannot access the anonymous `visitorCode` given to a visitor, but you can use an internal ID linked to that visitor through session merging. :::
+By default, `getRemoteVisitorData()` automatically retrieves the latest stored custom data with `scope=Visitor` and attaches them to the visitor without the need to call the method `addData()`. It is particularly useful for [synchronizing custom data between multiple devices](https://developers.kameleoon.com/feature-management-and-experimentation/web-sdks/nodejs-sdk/#synchronizing-custom-data-across-devices).
+</Warning>
+
+    <Note>
+
+The `isUniqueIdentifier` can be helpful in unique situations; for example, if you cannot access the anonymous `visitorCode` given to a visitor, but you can use an internal ID linked to that visitor through session merging.
+</Note>
 
     <Tabs>
-      <Tab title="Tab">
+      <Tab title="TypeScript">
         ```ts
         import {
           KameleoonClient,
           KameleoonDataType,
           VisitorDataFiltersType,
         } from '@kameleoon/javascript-sdk';
-        
+
         const client = new KameleoonClient({ siteCode: 'my_site_code' });
-        
+
         async function init(): Promise<void> {
           await client.initialize();
-        
+
           // -- Get remote visitor data and add it to storage
           const kameleoonDataList: KameleoonDataType[] = await getRemoteVisitorData({
             visitorCode: 'my_visitor_code',
           });
-        
+
           // -- Get remote visitor data without adding it to storage
           const kameleoonDataList: KameleoonDataType[] = await getRemoteVisitorData({
             visitorCode: 'my_visitor_code',
             shouldAddData: false,
           });
-        
+
           // -- Get remote visitor data without adding it to storage,
           //    and customizing filters for retrieving visits data
           const filters: VisitorDataFiltersType = {
@@ -2893,37 +2661,37 @@ You can use this method to retrieve user preferences, historical data, or any ot
             geolocation: true,
             conversions: true,
           };
-        
+
           const kameleoonDataList: KameleoonDataType[] = await getRemoteVisitorData({
             visitorCode: 'my_visitor_code',
             shouldAddData: false,
             filters,
           });
         }
-        
+
         init();
         ```
       </Tab>
-      <Tab title="Tab">
+      <Tab title="JavaScript">
         ```js
         import { KameleoonClient } from '@kameleoon/javascript-sdk';
-        
+
         const client = new KameleoonClient({ siteCode: 'my_site_code' });
-        
+
         async function init() {
           await client.initialize();
-        
+
           // -- Get remote visitor data and add it to storage
           const kameleoonDataList = await getRemoteVisitorData({
             visitorCode: 'my_visitor_code',
           });
-        
+
           // -- Get remote visitor data without adding it to storage
           const kameleoonDataList = await getRemoteVisitorData({
             visitorCode: 'my_visitor_code',
             shouldAddData: false,
           });
-        
+
           // -- Get remote visitor data without adding it to storage,
           //    and customizing filters for retrieving visits data
           const filters = {
@@ -2933,14 +2701,14 @@ You can use this method to retrieve user preferences, historical data, or any ot
             geolocation: true,
             conversions: true,
           };
-        
+
           const kameleoonDataList = await getRemoteVisitorData({
             visitorCode: 'my_visitor_code',
             shouldAddData: false,
             filters,
           });
         }
-        
+
         init();
         ```
       </Tab>
@@ -2978,7 +2746,9 @@ You can use this method to retrieve user preferences, historical data, or any ot
 
     The flexibility shown in this example is not limited to goal data. You can use parameters within the `getRemoteVisitorData()` method to retrieve data on a variety of visitor behaviors.
 
-    :::note Here is the list of available `VisitorDataFiltersType` filters:
+  <Note>
+
+    Here is the list of available `VisitorDataFiltersType` filters:
 
     | Name                             | Type      | Description                                                                                                                                                                                            | Default |
     | -------------------------------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------- |
@@ -2993,9 +2763,11 @@ You can use this method to retrieve user preferences, historical data, or any ot
     | conversions (_optional_)         | `boolean` | If true, conversion data will be retrieved.                                                                                                                                                            | `false` |
     | experiments (_optional_)         | `boolean` | If true, experiment data will be retrieved.                                                                                                                                                            | `false` |
     | kcs (_optional_)                 | `boolean` | If true, Kameleoon Conversion Score (KCS) will be retrieved. Requires the [AI Predictive Targeting add-on](https://help.kameleoon.com/target-users-by-ai-propensity-score-kameleoon-conversion-score/) | `false` |
-    | :::                              |           |                                                                                                                                                                                                        |         |
+
+</Note>
+
   </Tab>
-  <Tab title="Tab">
+  <Tab title="TypeScript">
     `getRemoteVisitorData()` is an asynchronous method for retrieving Kameleoon Visits Data for the `visitorCode` from the Kameleoon Data API. The method adds data to storage for other methods to use when making targeting decisions.
 
     Data obtained using this is important when you want to:
@@ -3006,33 +2778,36 @@ You can use this method to retrieve user preferences, historical data, or any ot
 
     Read [this article](https://developers.kameleoon.com/feature-management-and-experimentation/using-visit-history-in-feature-flags-and-experiments/) for a better understanding of possible use cases.
 
-    :::caution By default, `getRemoteVisitorData()` automatically retrieves the latest stored custom data with `scope=Visitor` and attaches them to the visitor without the need to call the method `addData()`. It is particularly useful for [synchronizing custom data between multiple devices](https://developers.kameleoon.com/feature-management-and-experimentation/web-sdks/nodejs-sdk/#synchronizing-custom-data-across-devices). :::
+    <Warning>
+
+By default, `getRemoteVisitorData()` automatically retrieves the latest stored custom data with `scope=Visitor` and attaches them to the visitor without the need to call the method `addData()`. It is particularly useful for [synchronizing custom data between multiple devices](https://developers.kameleoon.com/feature-management-and-experimentation/web-sdks/nodejs-sdk/#synchronizing-custom-data-across-devices).
+</Warning>
 
     <Tabs>
-      <Tab title="Tab">
+      <Tab title="TypeScript">
         ```ts
         import {
           KameleoonClient,
           KameleoonDataType,
           VisitorDataFiltersType,
         } from '@kameleoon/javascript-sdk';
-        
+
         const client = new KameleoonClient({ siteCode: 'my_site_code' });
-        
+
         async function init(): Promise<void> {
           await client.initialize();
-        
+
           // -- Get remote visitor data and add it to storage
           const kameleoonDataList: KameleoonDataType[] = await getRemoteVisitorData({
             visitorCode: 'my_visitor_code',
           });
-        
+
           // -- Get remote visitor data without adding it to storage
           const kameleoonDataList: KameleoonDataType[] = await getRemoteVisitorData({
             visitorCode: 'my_visitor_code',
             shouldAddData: false,
           });
-        
+
           // -- Get remote visitor data without adding it to storage,
           //    and customizing filters for retrieving visits data
           const filters: VisitorDataFiltersType = {
@@ -3042,37 +2817,37 @@ You can use this method to retrieve user preferences, historical data, or any ot
             geolocation: true,
             conversions: true,
           };
-        
+
           const kameleoonDataList: KameleoonDataType[] = await getRemoteVisitorData({
             visitorCode: 'my_visitor_code',
             shouldAddData: false,
             filters,
           });
         }
-        
+
         init();
         ```
       </Tab>
-      <Tab title="Tab">
+      <Tab title="JavaScript">
         ```js
         import { KameleoonClient } from '@kameleoon/javascript-sdk';
-        
+
         const client = new KameleoonClient({ siteCode: 'my_site_code' });
-        
+
         async function init() {
           await client.initialize();
-        
+
           // -- Get remote visitor data and add it to storage
           const kameleoonDataList = await getRemoteVisitorData({
             visitorCode: 'my_visitor_code',
           });
-        
+
           // -- Get remote visitor data without adding it to storage
           const kameleoonDataList = await getRemoteVisitorData({
             visitorCode: 'my_visitor_code',
             shouldAddData: false,
           });
-        
+
           // -- Get remote visitor data without adding it to storage,
           //    and customizing filters for retrieving visits data
           const filters = {
@@ -3082,14 +2857,14 @@ You can use this method to retrieve user preferences, historical data, or any ot
             geolocation: true,
             conversions: true,
           };
-        
+
           const kameleoonDataList = await getRemoteVisitorData({
             visitorCode: 'my_visitor_code',
             shouldAddData: false,
             filters,
           });
         }
-        
+
         init();
         ```
       </Tab>
@@ -3126,7 +2901,9 @@ You can use this method to retrieve user preferences, historical data, or any ot
 
     The flexibility shown in this example is not limited to goal data. You can use parameters within the `getRemoteVisitorData()` method to retrieve data on a variety of visitor behaviors.
 
-    :::note Here is the list of available `VisitorDataFiltersType` filters:
+    <Note>
+
+Here is the list of available `VisitorDataFiltersType` filters:
 
     | Name                             | Type      | Description                                                                                                                                                                                                                                                                                                                                    | Default |
     | -------------------------------- | --------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
@@ -3143,8 +2920,10 @@ You can use this method to retrieve user preferences, historical data, or any ot
     | kcs (_optional_)                 | `boolean` | If true, Kameleoon Conversion Score (KCS) will be retrieved. Requires the [AI Predictive Targeting add-on](https://help.kameleoon.com/target-users-by-ai-propensity-score-kameleoon-conversion-score/)                                                                                                                                         | `false` |
     | visitorCode (_optional_)         | `boolean` | If true, Kameleoon will retrieve the `visitorCode` from the most recent visit and use it for the current visit. This is necessary if you want to ensure that the visitor, identified by their `visitorCode`, always receives the same variation across visits for [Cross-device experimentation](/core-concepts/cross-device-experimentation). | `true`  |
     | personalization (_optional_)     | `boolean` | If true, personalization data will be retrieved. This is required for the personalization condition                                                                                                                                                                                                                                            | `false` |
-    | cbs (_optional_)                 | `boolean` | <Text x={Shared.RemoteVisitorDataFilter.CBS} />                                                                                                                                                                                                                                                                                                | `false` |
-    | :::                              |           |                                                                                                                                                                                                                                                                                                                                                |         |
+    | cbs (_optional_)                 | `boolean` | If true, Conversion-Based Segmentation (CBS) data will be retrieved.                                                                                                                                                                                                                                                                          | `false` |
+
+</Note>
+
   </Tab>
 </Tabs>
 
@@ -3153,7 +2932,7 @@ You can use this method to retrieve user preferences, historical data, or any ot
 `getVisitorWarehouseAudience` is an asynchronous method that retrieves all audience data associated with the visitor in your data warehouse using the specified `visitorCode` and `warehouseKey`. The `warehouseKey` is typically your internal user ID. The `customDataIndex` parameter corresponds to the Kameleoon custom data that Kameleoon uses to target your visitors. Refer to the [warehouse targeting documentation](https://help.kameleoon.com/warehouse-audience-targeting/) for additional details.
 
 <Tabs>
-  <Tab title="Tab">
+  <Tab title="TypeScript">
     ```ts
     import {
       KameleoonClient,
@@ -3185,7 +2964,7 @@ You can use this method to retrieve user preferences, historical data, or any ot
     init();
     ```
   </Tab>
-  <Tab title="Tab">
+  <Tab title="JavaScript">
     ```js
     import { KameleoonClient } from '@kameleoon/javascript-sdk';
     
@@ -3239,16 +3018,18 @@ Parameters object consisting of:
 
 #### setLegalConsent()
 
-:::note Consent information is synchronized between the Kameleoon Engine (application file `engine.js`) and the JS SDK. This synchronization means that once consent is set on either the Engine or the SDK, it's automatically set for both. This feature eliminates the need for manual consent handling and ensures that SDKs operate in compliance with user preferences.
+<Note>
+Consent information is synchronized between the Kameleoon Engine (application file `engine.js`) and the JS SDK. This synchronization means that once consent is set on either the Engine or the SDK, it's automatically set for both. This feature eliminates the need for manual consent handling and ensures that SDKs operate in compliance with user preferences.
 
-If you use Kameleoon in Hybrid mode, we recommend reading the consent section in our [Hybrid experimentation article](/core-concepts/hybrid-experimentation/#managing-consent-in-hybrid-mode) :::
+If you use Kameleoon in Hybrid mode, we recommend reading the consent section in our [Hybrid experimentation article](/core-concepts/hybrid-experimentation/#managing-consent-in-hybrid-mode)
+</Note>
 
 When handling legal consent, it's important to use the [`getVisitorCode`](#getvisitorcode) method from `KameleoonClient`, not the deprecated method from `KameleoonUtils`. Additionally, this method does not accept `domain` as an argument. Instead, pass it to the `KameleoonClient` constructor. Refer to the above example.
 
 The `setLegalConsent` method specifies whether the visitor has given legal consent to use personal data. Setting the `legalConsent` parameter to `false` limits the types of data that you can include in tracking requests. This method helps you adhere to legal and regulatory requirements while responsibly managing visitor data. You can find more information on personal data in the [consent management policy](https://help.kameleoon.com/consent-management-policy/).
 
 <Tabs>
-  <Tab title="Tab">
+  <Tab title="TypeScript">
     ```ts
     import { KameleoonClient } from '@kameleoon/javascript-sdk';
     
@@ -3267,7 +3048,7 @@ The `setLegalConsent` method specifies whether the visitor has given legal conse
     init();
     ```
   </Tab>
-  <Tab title="Tab">
+  <Tab title="JavaScript">
     ```js
     import { KameleoonClient } from '@kameleoon/javascript-sdk';
     
@@ -3307,29 +3088,28 @@ The `setLegalConsent` method specifies whether the visitor has given legal conse
 #### trackConversion()
 
 <Tabs>
-  <Tab title="Tab">
-    <TrackConversion sec="description___js_old" c={Context} />
+  <Tab title="TypeScript">
 
     <Tabs>
-      <Tab title="Tab">
+      <Tab title="TypeScript">
         ```ts
         import { KameleoonClient } from '@kameleoon/javascript-sdk';
-        
+
         const client = new KameleoonClient({
           siteCode: 'my_site_code',
           configuration: { cookieDomain: '.example.com' },
         });
-        
+
         async function init(): Promise<void> {
           const experimentId = 123;
           await client.initialize();
-        
+
           // -- Get visitor code
           const visitorCode = client.getVisitorCode();
-        
+
           // -- Track conversion
           client.trackConversion({ visitorCode, revenue: 20000, goalId: 123 });
-        
+
           // -- Track conversion with unique visitor identifier flag
           const internalUserId = 'my_user_id';
           client.trackConversion({
@@ -3339,29 +3119,29 @@ The `setLegalConsent` method specifies whether the visitor has given legal conse
             isUniqueIdentifier: true,
           });
         }
-        
+
         init();
         ```
       </Tab>
-      <Tab title="Tab">
+      <Tab title="JavaScript">
         ```js
         import { KameleoonClient } from '@kameleoon/javascript-sdk';
-        
+
         const client = new KameleoonClient({
           siteCode: 'my_site_code',
           configuration: { cookieDomain: '.example.com' },
         });
-        
+
         async function init() {
           const experimentId = 123;
           await client.initialize();
-        
+
           // -- Get visitor code
           const visitorCode = client.getVisitorCode();
-        
+
           // -- Track conversion
           client.trackConversion({ visitorCode, revenue: 20000, goalId: 123 });
-        
+
           // -- Track conversion with unique visitor identifier flag
           const internalUserId = 'my_user_id';
           client.trackConversion({
@@ -3371,7 +3151,7 @@ The `setLegalConsent` method specifies whether the visitor has given legal conse
             isUniqueIdentifier: true,
           });
         }
-        
+
         init();
         ```
       </Tab>
@@ -3379,33 +3159,29 @@ The `setLegalConsent` method specifies whether the visitor has given legal conse
     ##### Arguments
 
     Parameters object consisting of:
-
-    <TrackConversion sec="arguments___js_old" c={Context} />
 
     ##### Exceptions thrown
 
-    <TrackConversion sec="exceptions___js" c={Context} />
   </Tab>
-  <Tab title="Tab">
-    <TrackConversion sec="description___js" c={Context} />
+  <Tab title="TypeScript">
 
     <Tabs>
-      <Tab title="Tab">
+      <Tab title="TypeScript">
         ```ts
         import { KameleoonClient, CustomData } from '@kameleoon/javascript-sdk';
-        
+
         const client = new KameleoonClient({
           siteCode: 'my_site_code',
           configuration: { cookieDomain: '.example.com' },
         });
-        
+
         async function init(): Promise<void> {
           const experimentId = 123;
           await client.initialize();
-        
+
           // -- Get visitor code
           const visitorCode = client.getVisitorCode();
-        
+
           // -- Track conversion
           client.trackConversion({
             visitorCode,
@@ -3415,26 +3191,26 @@ The `setLegalConsent` method specifies whether the visitor has given legal conse
             negative: true,
           });
         }
-        
+
         init();
         ```
       </Tab>
-      <Tab title="Tab">
+      <Tab title="JavaScript">
         ```js
         import { KameleoonClient, CustomData } from '@kameleoon/javascript-sdk';
-        
+
         const client = new KameleoonClient({
           siteCode: 'my_site_code',
           configuration: { cookieDomain: '.example.com' },
         });
-        
+
         async function init() {
           const experimentId = 123;
           await client.initialize();
-        
+
           // -- Get visitor code
           const visitorCode = client.getVisitorCode();
-        
+
           // -- Track conversion
           client.trackConversion({
             visitorCode,
@@ -3444,7 +3220,7 @@ The `setLegalConsent` method specifies whether the visitor has given legal conse
             negative: true,
           });
         }
-        
+
         init();
         ```
       </Tab>
@@ -3453,14 +3229,10 @@ The `setLegalConsent` method specifies whether the visitor has given legal conse
 
     Parameters object consisting of:
 
-    <TrackConversion sec="arguments___js" c={Context} />
+    <Note>
 
-    :::note
-
-    <TrackConversion sec="note_metadata" c={Context} />
-
-    <Tabs>
-      <Tab title="Tab">
+<Tabs>
+      <Tab title="TypeScript">
         ```ts
         kameleoonClient.addData(visitorCode, new CustomData(5, 'Credit Card'), new CustomData(9, 'Express Delivery'));
         kameleoonClient.trackConversion({
@@ -3470,7 +3242,7 @@ The `setLegalConsent` method specifies whether the visitor has given legal conse
         });
         ```
       </Tab>
-      <Tab title="Tab">
+      <Tab title="JavaScript">
         ```js
         kameleoonClient.addData(visitorCode, new CustomData(5, 'Credit Card'), new CustomData(9, 'Express Delivery'));
         kameleoonClient.trackConversion({
@@ -3481,13 +3253,12 @@ The `setLegalConsent` method specifies whether the visitor has given legal conse
         ```
       </Tab>
     </Tabs>
-    :::
+</Note>
+
   </Tab>
 </Tabs>
 
 ##### Exceptions thrown
-
-<TrackConversion sec="exceptions___js" c={Context} />
 
 ---
 
@@ -3496,7 +3267,7 @@ The `setLegalConsent` method specifies whether the visitor has given legal conse
 The `getEngineTrackingCode()` method returns the Kameleoon tracking code for the current visitor. The tracking code is based on the feature experiments that were triggered during the last five seconds.
 
 <Tabs>
-  <Tab title="Tab">
+  <Tab title="TypeScript">
     ```ts
     import { KameleoonClient } from '@kameleoon/javascript-sdk';
     
@@ -3528,7 +3299,7 @@ The `getEngineTrackingCode()` method returns the Kameleoon tracking code for the
     init();
     ```
   </Tab>
-  <Tab title="Tab">
+  <Tab title="JavaScript">
     ```js
     import { KameleoonClient } from '@kameleoon/javascript-sdk';
     
@@ -3562,7 +3333,9 @@ The `getEngineTrackingCode()` method returns the Kameleoon tracking code for the
   </Tab>
 </Tabs>
 
-:::note The result tracking code can be inserted directly into the html `<script>` tag. :::
+<Note>
+The result tracking code can be inserted directly into the html `<script>` tag.
+</Note>
 
 For example:
 
@@ -3576,7 +3349,7 @@ For example:
         window.kameleoonQueue.push(['Experiments.assignVariation', 100, 200, true]);
         window.kameleoonQueue.push(['Experiments.trigger', 100, true]);
       `;
-      const script = document.createElement('script');
+      const script = document.createElement("script");
 
       script.textContent = engineTrackingCode;
       document.body.appendChild(script);
@@ -3605,60 +3378,67 @@ For example:
 ### Events
 
 <Tabs>
-  <Tab title="Tab">
+  <Tab title="TypeScript">
     #### Sending exposure events to external tools
 
     Kameleoon offers built-in integrations with various analytics and CDP solutions, such as [Mixpanel, Google Analytics 4, Segment...](https://help.kameleoon.com/category/user-manual/manage-your-integrations/). To ensure that you can track and analyze your server-side experiments, Kameleoon provides a method, `getEngineTrackingCode()`, that returns the JavasScript code to be inserted in your page. The code automatically sends the exposure events to your analytics solution. The SDK builds a tracking code for your active analytics solution based on the experiments that the visitor has triggered in the last five seconds. For more information about hybrid experimentation, please refer to this [article](https://developers.kameleoon.com/core-concepts/hybrid-experimentation).
 
     The `getEngineTrackingCode()` method returns the Kameleoon tracking code for the current visitor. The tracking code is based on the experiments that were triggered during the last five seconds.
 
-    :::note To benefit from this feature, you will need to implement both the JavaScript SDK and our Kameleoon JavaScript tag. We recommend you implement the Kameleoon asynchronous tag, which you can install before closing the `<body>` tag in your HTML page, as it will only be used for tracking purposes. :::
+    <Note>
+
+To benefit from this feature, you will need to implement both the JavaScript SDK and our Kameleoon JavaScript tag. We recommend you implement the Kameleoon asynchronous tag, which you can install before closing the `<body>` tag in your HTML page, as it will only be used for tracking purposes.
+</Note>
+
   </Tab>
-  <Tab title="Tab">
+  <Tab title="TypeScript">
     #### onEvent()
 
     Method `onEvent()` fires a callback when a specific event is triggered. The callback function can access the data associated with the event. The SDK methods in this documentation note which event types they trigger, if any.
 
-    :::note You can only assign one callback to each `EventType`. :::
+    <Note>
+
+You can only assign one callback to each `EventType`.
+</Note>
 
     <Tabs>
-      <Tab title="Tab">
+      <Tab title="TypeScript">
         ```ts
         import {
           KameleoonClient,
           EventType,
           EvaluationEventDataType,
         } from '@kameleoon/javascript-sdk';
-        
+
         const client = new KameleoonClient({ siteCode: 'my_site_code' });
-        
+
         async function init(): Promise<void> {
           await client.initialize();
-        
+
           // -- Define logic to be executed on SDK event
           client.onEvent(EventType.Evaluation, (eventData: EvaluationEventDataType) => {
             // -- My Logic
           });
         }
-        
+
         init();
         ```
       </Tab>
-      <Tab title="Tab">
+      <Tab title="JavaScript">
         ```js
         import { KameleoonClient, EventType } from '@kameleoon/javascript-sdk';
-        
+
         const client = new KameleoonClient({ siteCode: 'my_site_code' });
-        
+
         async function init() {
           await client.initialize();
-        
+
           // -- Define logic to be executed on SDK event
           client.onEvent(EventType.Evaluation, (eventData) => {
             // -- My Logic
           });
         }
-        
+
         init();
         ```
       </Tab>
@@ -3693,7 +3473,11 @@ For example:
 
     The `getEngineTrackingCode()` method returns the Kameleoon tracking code for the current visitor. The tracking code is based on the experiments that were triggered during the last five seconds.
 
-    :::note To benefit from this feature, you will need to implement both the JavaScript SDK and our Kameleoon JavaScript tag. We recommend you implement the Kameleoon asynchronous tag, which you can install before closing the `<body>` tag in your HTML page, as it will only be used for tracking purposes. :::
+    <Note>
+
+To benefit from this feature, you will need to implement both the JavaScript SDK and our Kameleoon JavaScript tag. We recommend you implement the Kameleoon asynchronous tag, which you can install before closing the `<body>` tag in your HTML page, as it will only be used for tracking purposes.
+</Note>
+
   </Tab>
 </Tabs>
 
@@ -3707,15 +3491,21 @@ During the [flush](#flush) execution, the SDK collects all data and sends it wit
 
 Data available in the SDK is not available for targeting and reporting in the Kameleoon app until you add the data (for example, by using the `addData()` methodt). See [use visit history to target users](../using-visit-history-in-feature-flags-and-experiments) for more information.
 
-:::note If you are using hybrid mode, call `getRemoteVisitorData()` to automatically fill all data that Kameleoon has previously collected. :::
+<Note>
+If you are using hybrid mode, call `getRemoteVisitorData()` to automatically fill all data that Kameleoon has previously collected.
+</Note>
 
 #### Browser
 
-:::note Since JavaScript SDK `4.10.0`, `Browser` is automatically detected based on the `User-Agent` string. However, you can still manually override it if needed. :::
+<Note>
+Since JavaScript SDK `4.10.0`, `Browser` is automatically detected based on the `User-Agent` string. However, you can still manually override it if needed.
+</Note>
 
 `Browser` contains browser information.
 
-:::note Each visitor can only have one `Browser`. Adding second a `Browser` overwrites the first one. :::
+<Note>
+Each visitor can only have one `Browser`. Adding second a `Browser` overwrites the first one.
+</Note>
 
 | Name                 | Type          | Description                                                                                      |
 | -------------------- | ------------- | ------------------------------------------------------------------------------------------------ |
@@ -3723,7 +3513,7 @@ Data available in the SDK is not available for targeting and reporting in the Ka
 | version (_optional_) | `number`      | version of the browser, floating point number represents major and minor version of the browser. |
 
 <Tabs>
-  <Tab title="Tab">
+  <Tab title="TypeScript">
     ```ts
     import {
       KameleoonClient,
@@ -3744,7 +3534,7 @@ Data available in the SDK is not available for targeting and reporting in the Ka
     init();
     ```
   </Tab>
-  <Tab title="Tab">
+  <Tab title="JavaScript">
     ```js
     import {
       KameleoonClient,
@@ -3777,14 +3567,16 @@ If you add `UniqueIdentifier` for a visitor, `visitorCode` is used as the unique
 
 The `isUniqueIdentifier` can be helpful in unique situations; for example, if you cannot access the anonymous `visitorCode` given to a visitor, but you can use an internal ID linked to that visitor through session merging.
 
-:::note Each visitor can only have one `UniqueIdentifier`. Adding another `UniqueIdentifier` overwrites the first one. :::
+<Note>
+Each visitor can only have one `UniqueIdentifier`. Adding another `UniqueIdentifier` overwrites the first one.
+</Note>
 
 | Name               | Type      | Description                                                                                                                                        |
 | ------------------ | --------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
 | value (_required_) | `boolean` | value that specifies if the visitor is associated with another visitor, `false` implies that the visitor is not associated with any other visitor. |
 
 <Tabs>
-  <Tab title="Tab">
+  <Tab title="TypeScript">
     ```ts
     import { KameleoonClient, UniqueIdentifier } from '@kameleoon/javascript-sdk';
     
@@ -3800,7 +3592,7 @@ The `isUniqueIdentifier` can be helpful in unique situations; for example, if yo
     init();
     ```
   </Tab>
-  <Tab title="Tab">
+  <Tab title="JavaScript">
     ```js
     import { KameleoonClient, UniqueIdentifier } from '@kameleoon/javascript-sdk';
     
@@ -3822,14 +3614,10 @@ The `isUniqueIdentifier` can be helpful in unique situations; for example, if yo
 
 #### Conversion
 
-<Conversion sec="description" c={Context} />
-
 `ConversionParametersType` conversionParameters - an object with conversion parameters described below
 
-<Conversion sec="arguments" c={Context} />
-
 <Tabs>
-  <Tab title="Tab">
+  <Tab title="TypeScript">
     ```ts
     import {
       KameleoonClient,
@@ -3858,7 +3646,7 @@ The `isUniqueIdentifier` can be helpful in unique situations; for example, if yo
     init();
     ```
   </Tab>
-  <Tab title="Tab">
+  <Tab title="JavaScript">
     ```js
     import { KameleoonClient, Conversion, CustomData } from '@kameleoon/javascript-sdk';
     
@@ -3889,17 +3677,17 @@ The `isUniqueIdentifier` can be helpful in unique situations; for example, if yo
 
 `Cookie` contains information about the cookie stored on the visitor's device.
 
-:::note
-
+<Note>
 - Generally, the JavaScript SDK will attempt to use a `localStorage` cookie for the conditions. If `localStorage` is not possible, the SDK can use `Cookie` data as an alternative.
-- Each visitor can only have one `Cookie`. Adding a second `Cookie` overwrites the first one. :::
+- Each visitor can only have one `Cookie`. Adding a second `Cookie` overwrites the first one.
+</Note>
 
 | Name                | Type           | Description                                                          |
 | ------------------- | -------------- | -------------------------------------------------------------------- |
 | cookie (_required_) | `CookieType[]` | A list of `CookieType` objects consisting of cookie keys and values. |
 
 <Tabs>
-  <Tab title="Tab">
+  <Tab title="TypeScript">
     ```ts
     import { KameleoonClient, CookieType, Cookie } from '@kameleoon/javascript-sdk';
     
@@ -3920,7 +3708,7 @@ The `isUniqueIdentifier` can be helpful in unique situations; for example, if yo
     init();
     ```
   </Tab>
-  <Tab title="Tab">
+  <Tab title="JavaScript">
     ```js
     import { KameleoonClient, Cookie } from '@kameleoon/javascript-sdk';
     
@@ -3950,7 +3738,7 @@ The `isUniqueIdentifier` can be helpful in unique situations; for example, if yo
 The method accepts `string` as a parameter and returns an initialized `Cookie` instance.
 
 <Tabs>
-  <Tab title="Tab">
+  <Tab title="TypeScript">
     ```ts
     import { Cookie } from '@kameleoon/javascript-sdk';
     
@@ -3964,7 +3752,7 @@ The method accepts `string` as a parameter and returns an initialized `Cookie` i
     // ]
     ```
   </Tab>
-  <Tab title="Tab">
+  <Tab title="JavaScript">
     ```js
     import { Cookie } from '@kameleoon/javascript-sdk';
     
@@ -3984,7 +3772,9 @@ The method accepts `string` as a parameter and returns an initialized `Cookie` i
 
 `GeolocationData` contains the visitor's geolocation details.
 
-:::note Each visitor can only have one `GeolocationData`. Adding a second `GeolocationData` overwrites the first one. :::
+<Note>
+Each visitor can only have one `GeolocationData`. Adding a second `GeolocationData` overwrites the first one.
+</Note>
 
 An object parameter with the type `GeolocationInfoType` contains the following fields:
 
@@ -3997,7 +3787,7 @@ An object parameter with the type `GeolocationInfoType` contains the following f
 | coordinates (_optional_) | `[number, number]` | Coordinates array tuple of two location values (longitude and latitude). Coordinate number represents decimal degrees. |
 
 <Tabs>
-  <Tab title="Tab">
+  <Tab title="TypeScript">
     ```ts
     import {
       KameleoonClient,
@@ -4025,7 +3815,7 @@ An object parameter with the type `GeolocationInfoType` contains the following f
     init();
     ```
   </Tab>
-  <Tab title="Tab">
+  <Tab title="JavaScript">
     ```js
     import { KameleoonClient, GeolocationData } from '@kameleoon/javascript-sdk';
     
@@ -4063,17 +3853,15 @@ An object parameter with the type `GeolocationInfoType` contains the following f
 | overwrite _(optional)_  | `boolean`         | Flag to explicitly control how the values are stored and how they appear in reports. [See more](https://developers.kameleoon.com/core-concepts/custom-data/#default-logic-when-overwrite-parameter-is-false-or-omitted) | `true`  |
 | value (_required_)      | `string[]`        | The custom data value. It must be stringified to match the `string` type. _Note:_ value is variadic.                                                                                                                    |         |
 
-:::note
-
+<Note>
 - Each visitor is allowed only one `CustomData` for each unique `index`. Adding another `CustomData` with the same `index` will replace the existing one.
 - The custom data ‘index’ can be found in the [Custom Data dashboard](https://help.kameleoon.com/manage-your-custom-data/) under the “INDEX” column.
 - To prevent the SDK from sending data with the selected index to Kameleoon servers for privacy reasons, enable the option: **Use this data only locally for targeting purposes** when creating custom data.
 - Adding a `CustomData` instance created with a name when the SDK instance is not initialized or the name is not registered, will result in the data being ignored.
-
-:::
+</Note>
 
 <Tabs>
-  <Tab title="Tab">
+  <Tab title="TypeScript">
     ```ts
     import { KameleoonClient, CustomData } from '@kameleoon/javascript-sdk';
     
@@ -4117,7 +3905,7 @@ An object parameter with the type `GeolocationInfoType` contains the following f
     init();
     ```
   </Tab>
-  <Tab title="Tab">
+  <Tab title="JavaScript">
     ```js
     import { KameleoonClient, CustomData } from '@kameleoon/javascript-sdk';
     
@@ -4167,18 +3955,22 @@ An object parameter with the type `GeolocationInfoType` contains the following f
 
 #### Device
 
-:::note Since JavaScript SDK `4.10.0`, `Device` is automatically detected based on the `User-Agent` string. However, you can still manually override it if needed. :::
+<Note>
+Since JavaScript SDK `4.10.0`, `Device` is automatically detected based on the `User-Agent` string. However, you can still manually override it if needed.
+</Note>
 
 Device contains information about your device.
 
-:::note Each visitor can have only one `Device`. Adding a second `Device` overwrites the first one. :::
+<Note>
+Each visitor can have only one `Device`. Adding a second `Device` overwrites the first one.
+</Note>
 
 | Name                    | Type         | Description                                                   |
 | ----------------------- | ------------ | ------------------------------------------------------------- |
 | deviceType (_required_) | `DeviceType` | possible types for device type (`PHONE`, `TABLET`, `DESKTOP`) |
 
 <Tabs>
-  <Tab title="Tab">
+  <Tab title="TypeScript">
     ```ts
     import { KameleoonClient, DeviceType, Device } from '@kameleoon/javascript-sdk';
     
@@ -4195,7 +3987,7 @@ Device contains information about your device.
     init();
     ```
   </Tab>
-  <Tab title="Tab">
+  <Tab title="JavaScript">
     ```js
     import { KameleoonClient, DeviceType, Device } from '@kameleoon/javascript-sdk';
     
@@ -4218,18 +4010,22 @@ Device contains information about your device.
 
 #### OperatingSystem
 
-:::note Since JavaScript SDK `4.10.0`, `OperatingSystem` is automatically detected based on the `User-Agent` string. However, you can still manually override it if needed. :::
+<Note>
+Since JavaScript SDK `4.10.0`, `OperatingSystem` is automatically detected based on the `User-Agent` string. However, you can still manually override it if needed.
+</Note>
 
 `OperatingSystem` contains information about the operating system on the visitor's device.
 
-:::note Each visitor can only have one `OperatingSystem`. Adding a second `OperatingSystem` overwrites the first one. :::
+<Note>
+Each visitor can only have one `OperatingSystem`. Adding a second `OperatingSystem` overwrites the first one.
+</Note>
 
 | Name                         | Type                  | Description                                                                                      |
 | ---------------------------- | --------------------- | ------------------------------------------------------------------------------------------------ |
 | operatingSystem (_required_) | `OperatingSystemType` | possible types for device type: `WINDOWS_PHONE`, `WINDOWS`, `ANDROID`, `LINUX`, `MAC`, and `IOS` |
 
 <Tabs>
-  <Tab title="Tab">
+  <Tab title="TypeScript">
     ```ts
     import {
       KameleoonClient,
@@ -4250,7 +4046,7 @@ Device contains information about your device.
     init();
     ```
   </Tab>
-  <Tab title="Tab">
+  <Tab title="JavaScript">
     ```js
     import {
       KameleoonClient,
@@ -4275,11 +4071,15 @@ Device contains information about your device.
 
 #### PageView
 
-:::note Since JavaScript SDK `4.10.0`, `PageView` is automatically detected based on the `window.location?.href` and `document.title`. However, you can still manually override it if needed. :::
+<Note>
+Since JavaScript SDK `4.10.0`, `PageView` is automatically detected based on the `window.location?.href` and `document.title`. However, you can still manually override it if needed.
+</Note>
 
 `PageView` contains information about your web page.
 
-:::note Each visitor can have one `PageView` per unique URL. Adding a second `PageView` with the same URL notifies the SDK that the visitor re-visited the page. :::
+<Note>
+Each visitor can have one `PageView` per unique URL. Adding a second `PageView` with the same URL notifies the SDK that the visitor re-visited the page.
+</Note>
 
 `PageViewParametersType` pageViewParameters - an object with page view parameters described below
 
@@ -4289,10 +4089,12 @@ Device contains information about your device.
 | title (_required_)      | `string`   | title of the web page.                                                             |
 | referrer (_optional_)   | `number[]` | an optional parameter containing a list of referrer indices, has no default value. |
 
-:::note You can find the index or [referrer](https://help.kameleoon.com/create-acquisition-channel) ID in your Kameleoon account. Note that this index starts at 0, meaning the first acquisition channel you create for a given site will be assigned 0 as its ID, not 1. :::
+<Note>
+You can find the index or [referrer](https://help.kameleoon.com/create-acquisition-channel) ID in your Kameleoon account. Note that this index starts at 0, meaning the first acquisition channel you create for a given site will be assigned 0 as its ID, not 1.
+</Note>
 
 <Tabs>
-  <Tab title="Tab">
+  <Tab title="TypeScript">
     ```ts
     import {
       KameleoonClient,
@@ -4320,7 +4122,7 @@ Device contains information about your device.
     init();
     ```
   </Tab>
-  <Tab title="Tab">
+  <Tab title="JavaScript">
     ```js
     import { KameleoonClient, PageView } from '@kameleoon/javascript-sdk';
     
@@ -4354,18 +4156,22 @@ Device contains information about your device.
 
 If you use internal bots, we suggest that you pass the value **curl/8.0** of the userAgent to exclude them from our analytics.
 
-:::note `Visitor` can only have one `UserAgent`. Adding a second `UserAgent` overwrites the first one. :::
+<Note>
+`Visitor` can only have one `UserAgent`. Adding a second `UserAgent` overwrites the first one.
+</Note>
 
 | Name               | Type     | Description               |
 | ------------------ | -------- | ------------------------- |
 | value (_required_) | `string` | value used for comparison |
 
-:::caution If you run Kameleoon in an hybrid mode, your server-side experiments are automatically protected against bot traffic. This protection occurs because Kameleoon collects the user-agent automatically on the front-end. Therefore, you don't need to pass the user-agent or any other parameter to filter bots and spiders.
+<Warning>
+If you run Kameleoon in an hybrid mode, your server-side experiments are automatically protected against bot traffic. This protection occurs because Kameleoon collects the user-agent automatically on the front-end. Therefore, you don't need to pass the user-agent or any other parameter to filter bots and spiders.
 
-If you use internal bots, we suggest that you pass the value **curl/8.0** of the userAgent to exclude them from our analytics. :::
+If you use internal bots, we suggest that you pass the value **curl/8.0** of the userAgent to exclude them from our analytics.
+</Warning>
 
 <Tabs>
-  <Tab title="Tab">
+  <Tab title="TypeScript">
     ```ts
     import { KameleoonClient, UserAgent } from '@kameleoon/javascript-sdk';
     
@@ -4382,7 +4188,7 @@ If you use internal bots, we suggest that you pass the value **curl/8.0** of the
     init();
     ```
   </Tab>
-  <Tab title="Tab">
+  <Tab title="JavaScript">
     ```js
     import { KameleoonClient, UserAgent } from '@kameleoon/javascript-sdk';
     
@@ -4403,12 +4209,8 @@ If you use internal bots, we suggest that you pass the value **curl/8.0** of the
 
 #### ApplicationVersion
 
-<ApplicationVersion sec="description" c={Context} />
-
-<ApplicationVersion sec="arguments" c={Context} />
-
 <Tabs>
-  <Tab title="Tab">
+  <Tab title="TypeScript">
     ```ts
     import { KameleoonClient, ApplicationVersion } from '@kameleoon/javascript-sdk';
     
@@ -4425,7 +4227,7 @@ If you use internal bots, we suggest that you pass the value **curl/8.0** of the
     init();
     ```
   </Tab>
-  <Tab title="Tab">
+  <Tab title="JavaScript">
     ```js
     import { KameleoonClient, ApplicationVersion } from '@kameleoon/javascript-sdk';
     
@@ -4450,19 +4252,15 @@ If you use internal bots, we suggest that you pass the value **curl/8.0** of the
 
 #### DataFile
 
-<DataFile sec="description" c={Context} />
-
-<DataFile sec="arguments" c={Context} />
-
 <Tabs>
-  <Tab title="Tab">
+  <Tab title="TypeScript">
     ```ts
     import { FeatureFlag } from '@kameleoon/javascript-sdk';
     
     const featureFlags: Map<string, FeatureFlag> = dataFile.featureFlags;
     ```
   </Tab>
-  <Tab title="Tab">
+  <Tab title="JavaScript">
     ```js
     const featureFlags = dataFile.featureFlags;
     ```
@@ -4471,12 +4269,8 @@ If you use internal bots, we suggest that you pass the value **curl/8.0** of the
 
 #### FeatureFlag
 
-<FeatureFlag sec="description_rules" c={Context} />
-
-<FeatureFlag sec="arguments_rules" c={Context} />
-
 <Tabs>
-  <Tab title="Tab">
+  <Tab title="TypeScript">
     ```ts
     import { Variation, Rule } from '@kameleoon/javascript-sdk';
     
@@ -4493,7 +4287,7 @@ If you use internal bots, we suggest that you pass the value **curl/8.0** of the
     const rules: Rule[] = featureFlag.rules;
     ```
   </Tab>
-  <Tab title="Tab">
+  <Tab title="JavaScript">
     ```js
     // Check whether the feature flag is enabled in the current environment
     const isEnvironmentEnabled = featureFlag.environmentEnabled;
@@ -4512,12 +4306,8 @@ If you use internal bots, we suggest that you pass the value **curl/8.0** of the
 
 #### Rule
 
-<Rule sec="description" c={Context} />
-
-<Rule sec="arguments" c={Context} />
-
 <Tabs>
-  <Tab title="Tab">
+  <Tab title="TypeScript">
     ```ts
     import { Variation } from '@kameleoon/javascript-sdk';
     
@@ -4525,7 +4315,7 @@ If you use internal bots, we suggest that you pass the value **curl/8.0** of the
     const variations: Map<string, Variation>  = rule.variations;
     ```
   </Tab>
-  <Tab title="Tab">
+  <Tab title="JavaScript">
     ```js
     // Retrieve all variations of the rule as a map (key = variation key, value = Variation object)
     const variations  = rule.variations;
@@ -4545,15 +4335,13 @@ If you use internal bots, we suggest that you pass the value **curl/8.0** of the
 | experimentId | `number` or `null`      | id of the experiment or `null` if the visitor landed on the default variation.                      |
 | variables    | `Map<string, Variable>` | map of variables for the variation, where key is the variable key and value is the variable object. |
 
-:::note
-
+<Note>
 - Ensure that your code handles the case where `id` or `experimentId` is `null`, indicating a default variation.
 - The `variables` map might be empty if no variables are associated with the variation.
-
-:::
+</Note>
 
 <Tabs>
-  <Tab title="Tab">
+  <Tab title="TypeScript">
     ```ts
     // Retrieving the variation name
     const variationName = variation.name;
@@ -4571,7 +4359,7 @@ If you use internal bots, we suggest that you pass the value **curl/8.0** of the
     const variables = variation.variables;
     ```
   </Tab>
-  <Tab title="Tab">
+  <Tab title="JavaScript">
     ```js
     // Retrieving the variation name
     const variationName = variation.name;
@@ -4602,7 +4390,7 @@ If you use internal bots, we suggest that you pass the value **curl/8.0** of the
 | value | `any`    | The value of the variable, which can be of the following types: **boolean**, **number**, **String**, **Record\<string, any\>**, **any[]**. |
 
 <Tabs>
-  <Tab title="Tab">
+  <Tab title="TypeScript">
     ```ts
     // Retrieving the variables map
     const variables = variation.variables;
@@ -4617,7 +4405,7 @@ If you use internal bots, we suggest that you pass the value **curl/8.0** of the
     const title = variables.get('title')?.value || '';
     ```
   </Tab>
-  <Tab title="Tab">
+  <Tab title="JavaScript">
     ```js
     // Retrieving the variables map
     const variables = variation.variables;
@@ -4636,21 +4424,27 @@ If you use internal bots, we suggest that you pass the value **curl/8.0** of the
 
 ### Deprecated methods
 
-:::caution These methods are deprecated and will be removed in the next major update. :::
+<Warning>
+These methods are deprecated and will be removed in the next major update.
+</Warning>
 
 #### getFeatureFlagVariationKey()
 
 - 📨 _Sends Tracking Data to Kameleoon_
 - 🎯 _Events:_ [`EventType.Evaluation`](#events-1)
 
-:::note Use the [`getVariation`](#getvariation) method instead :::
+<Note>
+Use the [`getVariation`](#getvariation) method instead
+</Note>
 
 The `getFeatureFlagVariationKey()` method retrieves the variation key for a visitor identified by a `visitorCode`. This method includes a targeting check that identifies the appropriate variation exposed to the visitor, saves it to storage, and sends a tracking request.
 
-:::note When a user is not associated with a feature flag, the SDK randomly returns a variation key according to the feature flag rules. If the user has already been registered with the feature flag, the SDK will detect this association and return the user's previous variation key value. However, if the user does not meet any of the defined rules, the SDK will return the default value specified in Kameleoon's feature flag delivery rules. It's important to note that the default value can be a variation key, a boolean value, or another data type, depending on the feature flag's configuration. :::
+<Note>
+When a user is not associated with a feature flag, the SDK randomly returns a variation key according to the feature flag rules. If the user has already been registered with the feature flag, the SDK will detect this association and return the user's previous variation key value. However, if the user does not meet any of the defined rules, the SDK will return the default value specified in Kameleoon's feature flag delivery rules. It's important to note that the default value can be a variation key, a boolean value, or another data type, depending on the feature flag's configuration.
+</Note>
 
 <Tabs>
-  <Tab title="Tab">
+  <Tab title="TypeScript">
     ```ts
     import { KameleoonClient, CustomData } from '@kameleoon/javascript-sdk';
     
@@ -4678,7 +4472,7 @@ The `getFeatureFlagVariationKey()` method retrieves the variation key for a visi
     init();
     ```
   </Tab>
-  <Tab title="Tab">
+  <Tab title="JavaScript">
     ```js
     import { KameleoonClient, CustomData } from '@kameleoon/javascript-sdk';
     
@@ -4734,12 +4528,14 @@ The `getFeatureFlagVariationKey()` method retrieves the variation key for a visi
 - 🚫 _Doesn't send Tracking Data to Kameleoon_
 - 🎯 _Events:_ [`EventType.Evaluation`](#events-1) (for each feature flag)
 
-:::note Use the [`getVariations`](#getvariations) method instead. :::
+<Note>
+Use the [`getVariations`](#getvariations) method instead.
+</Note>
 
 The `getVisitorFeatureFlags()` method returns a list of feature flags that target a visitor identified by their `visitorCode` and the feature flags that are active for the specified visitor.
 
 <Tabs>
-  <Tab title="Tab">
+  <Tab title="TypeScript">
     ```ts
     import { KameleoonClient } from '@kameleoon/javascript-sdk';
     
@@ -4761,7 +4557,7 @@ The `getVisitorFeatureFlags()` method returns a list of feature flags that targe
     init();
     ```
   </Tab>
-  <Tab title="Tab">
+  <Tab title="JavaScript">
     ```js
     import { KameleoonClient } from '@kameleoon/javascript-sdk';
     
@@ -4785,8 +4581,7 @@ The `getVisitorFeatureFlags()` method returns a list of feature flags that targe
   </Tab>
 </Tabs>
 
-:::caution
-
+<Warning>
 This method only collects the visitor's _active_ feature flags, meaning the result excludes all feature flags for which the visitor is assigned the `off` (default or control) variation. When you need all of the visitor's feature flags, use `getFeatureFlags` instead.
 
 For example:
@@ -4794,11 +4589,11 @@ For example:
 ```ts
 // -- `getVisitorFeatureFlags` doesn't trigger feature experiments;
 //    it only returns feature flags where visitor didn't get the `off` variation
-client.getVisitorFeatureFlags('my_visitor').forEach(({ key }) => {
+client.getVisitorFeatureFlags("my_visitor").forEach(({ key }) => {
   // -- `getFeatureFlagVariationKey` triggers feature experiments,
   //    as `off` is already filtered out - you won't see a
   //    visitor taking part in experiment where the `off` variation was allocated.
-  client.getFeatureFlagVariationKey('my_visitor', key);
+  client.getFeatureFlagVariationKey("my_visitor", key);
 });
 ```
 
@@ -4806,12 +4601,12 @@ For cases where you need all of the visitor's feature flags, use [`getFeatureFla
 
 ```ts
 // -- Both `off` and other variations are processed as expected
-client.getFeatureFlags('my_visitor').forEach(({ key }) => {
-  client.getFeatureFlagVariationKey('my_visitor', key);
+client.getFeatureFlags("my_visitor").forEach(({ key }) => {
+  client.getFeatureFlagVariationKey("my_visitor", key);
 });
 ```
 
-:::
+</Warning>
 
 ##### Arguments
 
@@ -4839,12 +4634,14 @@ client.getFeatureFlags('my_visitor').forEach(({ key }) => {
 - 🚫 _Doesn't send Tracking Data to Kameleoon_
 - 🎯 _Events:_ [`EventType.Evaluation`](#events-1) (for each feature flag)
 
-:::note Use the [`getVariations`](#getvariations) method instead. :::
+<Note>
+Use the [`getVariations`](#getvariations) method instead.
+</Note>
 
 The `getActiveFeatureFlags()` method returns a `Map`, where key is featurekey and value is detailed information about the visitor's variation and it's variables
 
 <Tabs>
-  <Tab title="Tab">
+  <Tab title="TypeScript">
     ```ts
     import { KameleoonClient } from '@kameleoon/javascript-sdk';
     
@@ -4885,7 +4682,7 @@ The `getActiveFeatureFlags()` method returns a `Map`, where key is featurekey an
     init();
     ```
   </Tab>
-  <Tab title="Tab">
+  <Tab title="JavaScript">
     ```js
     import { KameleoonClient } from '@kameleoon/javascript-sdk';
     
@@ -4928,13 +4725,11 @@ The `getActiveFeatureFlags()` method returns a `Map`, where key is featurekey an
   </Tab>
 </Tabs>
 
-:::caution
-
+<Warning>
 This method only collects the visitor's _active_ feature flags. This means the result excludes all the feature flags for which the visitor is assigned to the `off` (default or control) variation. When you need all of the visitor's feature flags to iterate, use `getFeatureFlags` instead.
 
 See the [getVisitorFeatureFlags](#getvisitorfeatureflags) _CAUTION_ section method for more details.
-
-:::
+</Warning>
 
 ##### Arguments
 
@@ -4962,12 +4757,14 @@ See the [getVisitorFeatureFlags](#getvisitorfeatureflags) _CAUTION_ section meth
 - 📨 _Sends Tracking Data to Kameleoon_
 - 🎯 _Events:_ [`EventType.Evaluation`](#events-1)
 
-:::note Use the [`getVariation`](#getvariation) method. :::
+<Note>
+Use the [`getVariation`](#getvariation) method.
+</Note>
 
 The `getFeatureFlagVariable()` method returns a variable for a visitor identified by a `visitorCode`. This method includes a targeting check that identifies the appropriate variation exposed to the visitor, saves it to storage, and sends a tracking request.
 
 <Tabs>
-  <Tab title="Tab">
+  <Tab title="TypeScript">
     ```ts
     import {
       KameleoonClient,
@@ -5017,7 +4814,7 @@ The `getFeatureFlagVariable()` method returns a variable for a visitor identifie
     init();
     ```
   </Tab>
-  <Tab title="Tab">
+  <Tab title="JavaScript">
     ```js
     import { KameleoonClient } from '@kameleoon/javascript-sdk';
     
@@ -5079,12 +4876,14 @@ Parameters object of type `GetFeatureFlagVariableParamsType` containing the foll
 - 📨 _Sends Tracking Data to Kameleoon_
 - 🎯 _Events:_ [`EventType.Evaluation`](#events-1) (for each feature flag)
 
-:::note Use the [`getVariation`](#getvariation) method. :::
+<Note>
+Use the [`getVariation`](#getvariation) method.
+</Note>
 
 The `getFeatureFlagVariables()` method returns a variable for a visitor identified by a `visitorCode`. This method includes a targeting check that identifies the appropriate variation exposed to the visitor, saves it to storage, and sends a tracking request.
 
 <Tabs>
-  <Tab title="Tab">
+  <Tab title="TypeScript">
     ```ts
     import { KameleoonClient } from '@kameleoon/javascript-sdk';
     
@@ -5109,7 +4908,7 @@ The `getFeatureFlagVariables()` method returns a variable for a visitor identifi
     init();
     ```
   </Tab>
-  <Tab title="Tab">
+  <Tab title="JavaScript">
     ```js
     import { KameleoonClient } from '@kameleoon/javascript-sdk';
     
@@ -5162,14 +4961,18 @@ The `getFeatureFlagVariables()` method returns a variable for a visitor identifi
 
 #### onConfigurationUpdate()
 
-:::note Use the `onEvent` method with `EventType.ConfigurationUpdate` instead. :::
+<Note>
+Use the `onEvent` method with `EventType.ConfigurationUpdate` instead.
+</Note>
 
 The `onConfigurationUpdate()` method fires a callback on client configuration update.
 
-:::note This method is applicable only for server-sent events used in real-time updates. :::
+<Note>
+This method is applicable only for server-sent events used in real-time updates.
+</Note>
 
 <Tabs>
-  <Tab title="Tab">
+  <Tab title="TypeScript">
     ```ts
     import { KameleoonClient } from '@kameleoon/javascript-sdk';
     
@@ -5187,7 +4990,7 @@ The `onConfigurationUpdate()` method fires a callback on client configuration up
     init();
     ```
   </Tab>
-  <Tab title="Tab">
+  <Tab title="JavaScript">
     ```js
     import { KameleoonClient } from '@kameleoon/javascript-sdk';
     

@@ -1,216 +1,6 @@
 ---
-sidebar_position: 1
-toc_max_heading_level: 4
+title: 'NodeJS SDK'
 ---
-
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-import { Select, Text, Bold, Italic, Code, CodeRef, Ref, If } from '../commons/utils.mdx';
-import SharedDiv, { Shared } from '../commons/shared.mdx';
-import CrossDeviceReconciliation from '../commons/developer-guide/cross-device-reconciliation.mdx';
-import EvaluateAudiences from '../commons/reference/feature-flags-and-variations/evaluate-audiences.mdx';
-import GetDataFile from '../commons/reference/feature-flags-and-variations/get-data-file.mdx';
-import Logging from '../commons/developer-guide/logging.mdx';
-import GetVariation from '../commons/reference/feature-flags-and-variations/get-variation.mdx';
-import GetVariations from '../commons/reference/feature-flags-and-variations/get-variations.mdx';
-import SetForcedVariation from '../commons/reference/feature-flags-and-variations/set-forced-variation.mdx';
-import Conversion from '../commons/reference/data-types/conversion.mdx';
-import TrackConversion from '../commons/reference/goals/track-conversion.mdx';
-import CustomBucketingKey from '../commons/developer-guide/custom-bucketing-key.mdx';
-import ActivatingAFeatureFlag from '../commons/developer-guide/getting-started/activating-a-feature-flag.mdx';
-import DataFile from '../commons/reference/returned-types/data-file.mdx';
-import FeatureFlag from '../commons/reference/returned-types/feature-flag.mdx';
-import Rule from '../commons/reference/returned-types/rule.mdx';
-import ApplicationVersion from '../commons/reference/data-types/application-version.mdx';
-
-# NodeJS SDK
-
-export const Context = {
-    IsJs: true,
-    IsServer: true,
-    IsSnakeCase: false,
-    Common: {
-        Null: "null",
-        True: "true",
-        False: "false",
-        String: "string",
-        Bool: "boolean",
-        Int: "number",
-        Float: "number",
-        SDK: "NodeJS",
-    },
-    Params: {
-        VisitorCode: "visitorCode",
-        FeatureKey: "featureKey"
-    },
-    Exceptions: {
-        Language: "Error",
-        Kameleoon: "KameleoonException",
-        Initialization: "KameleoonException.Initialization",
-        VisitorCodeEmpty: "KameleoonException.VisitorCodeEmpty",
-        VisitorCodeMaxLength: "KameleoonException.VisitorCodeMaxLength",
-        FeatureNotFound: "KameleoonException.FeatureFlagConfigurationNotFound",
-        FeatureEnvironmentDisabled: "KameleoonException.FeatureFlagEnvironmentDisabled",
-        FeatureExperimentNotFound: "KameleoonException.FeatureFlagExperimentNotFound",
-        FeatureVariationNotFound: "KameleoonException.FeatureFlagVariationNotFound",
-        StorageRead: "KameleoonException.StorageRead",
-        StorageWrite: "KameleoonException.StorageWrite",
-    },
-    KameleoonClientConfig: {
-        Name: "KameleoonClientConfig",
-        Ref: "#configuration-parameters",
-        TrackingInterval: { FileName: "tracking_interval_millisecond" },
-        IsUniqueIdentifier: { Name: "<>" }
-    },
-    // kameleoon.data
-    Conversion: {
-        Name: "Conversion",
-        FullName: "data.Conversion",
-        Ref: "#conversion",
-        Params: {
-            GoalId: { Name: "goalId" },
-            Revenue: { Name: "revenue", Type: "float" },
-            Negative: { Name: "negative" },
-            Metadata: { Name: "metadata", Type: "CustomData[]", DefaultValue: "undefined" },
-        },
-    },
-    UniqueIdentifier: {
-        Name: "UniqueIdentifier",
-        Ref: "#uniqueidentifier"
-    },
-    UserAgent: {
-        Name: "UserAgent",
-        Ref: "#useragent"
-    },
-    ApplicationVersion: {
-        Name: 'ApplicationVersion',
-        Ref: '#applicationversion',
-        Params: {
-            Version: { Type: 'string' },
-        },
-    },
-    // kameleoon.types
-    CustomData: {
-        Name: "CustomData",
-        FullName: "CustomData",
-        Ref: "#customdata"
-    },
-    Variation: {
-        Name: "Variation",
-        FullName: "Variation",
-        Ref: "#variation"
-    },
-    DataFile: {
-        Name: "DataFile",
-        FullName: "DataFile",
-        Ref: "#datafile",
-        Params: {
-            FeatureFlags: { Name: "featureFlags", Type: "Map<string, FeatureFlag>" },
-        }
-    },
-    FeatureFlag: {
-        Name: "FeatureFlag",
-        FullName: "FeatureFlag",
-        Ref: "#featureflag",
-        Params: {
-            EnvironmentEnabled: { Name: "environmentEnabled" },
-            Variations: { Name: "variations", Type: "Map<string, Variation>" },
-            Rules: { Name: "rules", Type: "Rule[]" },
-            DefaultVariationKey: { Name: "defaultVariationKey", Type: "string" },
-        }
-    },
-    Rule: {
-        Name: "Rule",
-        FullName: "Rule",
-        Ref: "#rule",
-        Params: {
-            Variations: { Name: "variations", Type: "Map<string, Variation>" },
-        }
-    },
-    Hook: {
-        useData: "useData",
-    },
-    // methods
-    GetVisitorCode: {
-        Name: "getVisitorCode()",
-        Ref: "#getvisitorcode",
-        Params: {
-            DefaultVisitorCode: { Name: "defaultVisitorCode" }
-        }
-    },
-    Flush: {
-        Name: "flush()",
-        Ref: "#flush",
-        Params: {
-            Instant: { Name: "instant" }
-        }
-    },
-    GetVariation: {
-        Name: "getVariation()",
-        Ref: "#getvariation",
-        Return: "Variation",
-        Params: {
-            Track: { Name: "track" }
-        }
-    },
-    GetVariations: {
-        Name: "getVariations()",
-        Ref: "#getvariations",
-        Return: "Map<string, Variation>",
-        Params: {
-            OnlyActive: { Name: "onlyActive" },
-            Track: { Name: "track" }
-        }
-    },
-    SetForcedVariation: {
-        Name: "setForcedVariation()",
-        Ref: "#setforcedvariation",
-        Params: {
-            ExperimentId: { Name: "experimentId" },
-            VariationKey: { Name: "variationKey", Type: "string | null", RemVal: "null" },
-            ForceTargeting: { Name: "forceTargeting" },
-        }
-    },
-    EvaluateAudiences: {
-        Name: "evaluateAudiences()",
-        Ref: "#evaluateaudiences"
-    },
-    GetRemoteVisitorData: {
-        Name: "getRemoteVisitorData()",
-        Ref: "#getremotevisitordata",
-    },
-    TrackConversion: {
-        Name: "trackConversion()",
-        Ref: "#trackconversion",
-        Params: {
-            GoalId: { Name: "goalId" },
-            Revenue: { Name: "revenue", Type: "number" },
-            IsUniqueIdentifier: { Name: "isUniqueIdentifier" },
-            Negative: { Name: "negative" },
-            Metadata: { Name: "metadata", Type: "CustomData[]", DefaultValue: "undefined" }
-        }
-    },
-    IsFeatureActive: {
-        Name: "isFeatureFlagActive()",
-        Ref: "#isfeatureflagactive"
-    },
-    GetEngineTrackingCode: {
-        Name: "getEngineTrackingCode()",
-        Ref: "#getenginetrackingcode"
-    },
-    AddData: {
-        Name: 'addData()',
-        Ref: '#adddata',
-        Params: {
-            Track: { Name: "track" },
-            Data: { Name: 'data', Type: '...KameleoonDataType[]' },
-        }
-    },
-    GetDataFile: {
-        Name: "getDataFile()",
-        Ref: "#getdatafile",
-    },
-};
 
 You can run experiments and activate feature flags with the NodeJS SDK. Integrating our SDK into your server is easy, and its footprint (memory and network usage) is low. Our Node SDK supports Node version 16+ with the option to downgrade it to version 14 and 12 using [compatibility mode](#compatibility-mode).
 
@@ -220,9 +10,9 @@ You can run experiments and activate feature flags with the NodeJS SDK. Integrat
 
 **Changelog**: Latest version of the NodeJS SDK: [Changelog](https://github.com/Kameleoon/client-nodejs/blob/main/CHANGELOG.md).
 
-:::note
+<Note>
 Before you begin installing our NodeJS SDK, we recommend reading our [technical considerations article](https://developers.kameleoon.com/feature-management-and-experimentation/technical-considerations) to understand the technological concepts behind our SDKs. This article will help ensure a successful integration.
-:::
+</Note>
 
 ## Developer Guide
 
@@ -249,7 +39,7 @@ npx @kameleoon/sdk-installer
 
 When using **Deno**, provide dependencies manually in `deno.json`:
 
-```json title=deno.json
+```json
 {
   "imports": {
     "@kameleoon/nodejs-sdk": "npm:@kameleoon/nodejs-sdk@^4.0",
@@ -270,12 +60,12 @@ Use `KameleoonClient` to run feature experiments and retrieve the status of feat
 
 `KameleoonClient` initializes asynchronously to ensure that communication with the Kameleoon API is successful, using the [`initialize()`](#initialize) method. You can use `async/await`, `Promise.then()`, or any other asynchronous pattern to handle client initialization.
 
-:::note
+<Note>
 To add NodeJS SDK to an Edge environment, please refer to [this section](#integration-with-edge-providers).
-:::
+</Note>
 
 <Tabs>
-<TabItem value="ts" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```ts
 import {
@@ -284,8 +74,6 @@ import {
   SDKConfigurationType,
   CredentialsType,
 } from '@kameleoon/nodejs-sdk';
-import { KameleoonVisitorCodeManager } from '@kameleoon/nodejs-visitor-code-manager';
-import { KameleoonEventSource } from '@kameleoon/nodejs-event-source';
 
 // -- Mandatory credentials
 const credentials: CredentialsType = {
@@ -325,13 +113,10 @@ client
   .catch((error) => {});
 ```
 
-</TabItem>
-<TabItem value="js" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```js
-import { Environment, KameleoonClient } from '@kameleoon/nodejs-sdk';
-import { KameleoonVisitorCodeManager } from '@kameleoon/nodejs-visitor-code-manager';
-import { KameleoonEventSource } from '@kameleoon/nodejs-event-source';
 
 // -- Mandatory credentials
 const credentials = {
@@ -371,7 +156,7 @@ client
   .catch((error) => {});
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ##### Arguments
@@ -395,7 +180,7 @@ client
 
 <Tabs>
 
-<TabItem value="version_4" label="SDK Version 4">
+<Tab title="SDK Version 4">
 
 | Name                                      | Type          | Description                                                                                                                                                                                                                                                                                   | Default Value            |
 | ----------------------------------------- |---------------| --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
@@ -408,13 +193,13 @@ client
 | requestTimeout (_optional_)               | `number`      | timeout in _milliseconds_ for all SDK network requests, if timeout is exceeded request will fail                                                                                                                                                                                  | `10_000` (10 seconds)    |
 | trackingInterval (_optional_)             | `number`      | Specifies the interval for tracking requests in milliseconds. All visitors who were evaluated for any feature flag or had associated data will be included in this tracking request. The tracking request is performed once per interval. The minimum value is `100` ms and the maximum value is `1_000` ms | `1_000` (1 second)       |
 
-:::note
+<Note>
 The `domain` parameter is deprecated and will be removed in the future. Use `cookieDomain` instead.
-:::
+</Note>
 
-</TabItem>
+</Tab>
 
-<TabItem value="version_5" label="SDK Version 5" default>
+<Tab title="SDK Version 5">
 
 | Name                                      | Type                    | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               | Default Value            |
 |-------------------------------------------|-------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------|
@@ -427,9 +212,7 @@ The `domain` parameter is deprecated and will be removed in the future. Use `coo
 | trackingInterval (_optional_)             | `number`                | Specifies the interval for tracking requests in milliseconds. All visitors who were evaluated for any feature flag or had associated data will be included in this tracking request. The tracking request is performed once per interval. The minimum value is `100` ms and the maximum value is `1_000` ms                                                                                                                                                                                                                                                                                                                                               | `1_000` (1 second)       |
 | defaultDataFile (_optional_)              | `string`                | The `defaultDataFile` feature ensures the Kameleoon SDK is always **READY** by providing a fallback configuration when no cached data file exists. Developers can preload a valid configuration by fetching it from `https://sdk-config.kameleoon.eu/v3/<sitecode>` and passing it as `defaultDataFile` during initialization. When a `dateModified` timestamp (in milliseconds) is provided and is newer than the cached version, the SDK will use the default datafile instead of the cached version. **If `dateModified` is omitted, the default datafile is only applied when no cached version exists**. This ensures the SDK always has a valid configuration, whether default, cached, or updated.                                                       | `undefined`              |
 
-<SharedDiv sec="set_default_data_file_js" c={Context}/>
-
-</TabItem>
+</Tab>
 
 </Tabs>
 
@@ -446,23 +229,13 @@ Use the SDK parameter `compatibility` to disable some of the SDK's features to i
 
 ##### Assigning a unique ID to a user
 
-<ActivatingAFeatureFlag sec="assigning_a_unique_id_to_a_user" c={Context}/>
-
 ##### Retrieving a flag configuration
-
-<ActivatingAFeatureFlag sec="retrieving_a_feature_flag_configuration___default" c={Context}/>
 
 ##### Adding data points to target a user or filter / breakdown visits in reports
 
-<ActivatingAFeatureFlag sec="adding_data_points_to_target_a_user_or_filter_breakdown_visits_in_reports___server" c={Context}/>
-
 ##### Tracking goal conversions
 
-<ActivatingAFeatureFlag sec="tracking_goal_conversions___param" c={Context}/>
-
 ##### Sending events to analytics solutions
-
-<ActivatingAFeatureFlag sec="sending_events_to_analytics_solutions" c={Context}/>
 
 ### Error Handling
 
@@ -476,7 +249,7 @@ To know exactly what type of `KameleoonException` the method may throw, check th
 Handling errors is considered a good practice to make your application more stable and avoid technical issues.
 
 <Tabs>
-<TabItem value="ts" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```ts
 import {
@@ -484,9 +257,6 @@ import {
   KameleoonClient,
   KameleoonException,
 } from '@kameleoon/nodejs-sdk';
-import { KameleoonVisitorCodeManager } from '@kameleoon/nodejs-visitor-code-manager';
-import { KameleoonEventSource } from '@kameleoon/nodejs-event-source';
-import { KameleoonRequester } from '@kameleoon/nodejs-requester';
 
 const client = new KameleoonClient({
   siteCode: 'my_site_code',
@@ -528,14 +298,10 @@ async function init(): Promise<void> {
 init();
 ```
 
-</TabItem>
-<TabItem value="js" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```js
-import { KameleoonClient, KameleoonException } from '@kameleoon/nodejs-sdk';
-import { KameleoonVisitorCodeManager } from '@kameleoon/nodejs-visitor-code-manager';
-import { KameleoonEventSource } from '@kameleoon/nodejs-event-source';
-import { KameleoonRequester } from '@kameleoon/nodejs-requester';
 
 const client = new KameleoonClient({
   siteCode: 'my_site_code',
@@ -573,13 +339,13 @@ async function init() {
 init();
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ### Integration with Edge providers
 
 <Tabs>
-<TabItem value="version_4" label="SDK Version 4">
+<Tab title="SDK Version 4">
 
 Kameleoon provides the following starter packs to automate your integration with specific edge providers:
 
@@ -592,13 +358,9 @@ Kameleoon provides the following starter packs to automate your integration with
 For the other edge providers, you can initialize the Kameleoon Client yourself using `externalClientConfiguration`. Passing `externalClientConfiguration` causes the SDK to rely solely on the provided configuration data instead of making a call to the Kameleoon servers. `externalClientConfiguration` gives you greater control and flexibility over the configuration data used in your application. For example:
 
 <Tabs>
-<TabItem value="ts" label="TypeScript / JavaScript" default>
+<Tab title="TypeScript / JavaScript">
 
 ```ts
-import rp from 'request-promise';
-import { KameleoonClient, KameleoonUtils } from '@kameleoon/nodejs-sdk';
-import { KameleoonVisitorCodeManager } from '@kameleoon/nodejs-visitor-code-manager';
-import { KameleoonEventSource } from '@kameleoon/nodejs-event-source';
 
 async function init() {
   // -- Get Kameleoon Client Configuration URL
@@ -626,11 +388,11 @@ async function init() {
 init();
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
-</TabItem>
+</Tab>
 
-<TabItem value="version_5" label="SDK Version 5" default>
+<Tab title="SDK Version 5">
 
 Kameleoon provides the following starter packs to automate your integration with specific edge providers:
 
@@ -642,25 +404,17 @@ Kameleoon provides the following starter packs to automate your integration with
 
 For other edge providers, use [External Dependencies](#external-dependencies) for greater control over the SDK.
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ### Cross-device experimentation
 
-<CrossDeviceReconciliation sec="cross_device_experimentation" c={Context}/>
-
 #### Synchronizing custom data across devices
 
-<CrossDeviceReconciliation sec="synchronizing_custom_data" c={Context}/>
-
 <Tabs>
-<TabItem value="ts" label="TypeScript" default>
+<Tab title="TypeScript">
 
-```ts title="Device One"
-import { KameleoonClient, CustomData } from '@kameleoon/nodejs-sdk';
-import { KameleoonVisitorCodeManager } from '@kameleoon/nodejs-visitor-code-manager';
-import { KameleoonEventSource } from '@kameleoon/nodejs-event-source';
-import { KameleoonRequester } from '@kameleoon/nodejs-requester';
+```ts
 
 const client = new KameleoonClient({
   siteCode: 'my_site_code',
@@ -687,11 +441,7 @@ async function init(): Promise<void> {
 init();
 ```
 
-```ts title="Device Two"
-import { KameleoonClient } from '@kameleoon/nodejs-sdk';
-import { KameleoonVisitorCodeManager } from '@kameleoon/nodejs-visitor-code-manager';
-import { KameleoonEventSource } from '@kameleoon/nodejs-event-source';
-import { KameleoonRequester } from '@kameleoon/nodejs-requester';
+```ts
 
 const client = new KameleoonClient({
   siteCode: 'my_site_code',
@@ -717,14 +467,10 @@ async function init(): Promise<void> {
 init();
 ```
 
-</TabItem>
-<TabItem value="js" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
-```ts title="Device One"
-import { KameleoonClient, CustomData } from '@kameleoon/nodejs-sdk';
-import { KameleoonVisitorCodeManager } from '@kameleoon/nodejs-visitor-code-manager';
-import { KameleoonEventSource } from '@kameleoon/nodejs-event-source';
-import { KameleoonRequester } from '@kameleoon/nodejs-requester';
+```ts
 
 const client = new KameleoonClient({
   siteCode: 'my_site_code',
@@ -751,11 +497,7 @@ async function init() {
 init();
 ```
 
-```ts title="Device Two"
-import { KameleoonClient } from '@kameleoon/nodejs-sdk';
-import { KameleoonVisitorCodeManager } from '@kameleoon/nodejs-visitor-code-manager';
-import { KameleoonEventSource } from '@kameleoon/nodejs-event-source';
-import { KameleoonRequester } from '@kameleoon/nodejs-requester';
+```ts
 
 const client = new KameleoonClient({
   siteCode: 'my_site_code',
@@ -781,13 +523,13 @@ async function init() {
 init();
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 #### Using custom data for session merging
 
 <Tabs>
-<TabItem value="version_4" label="SDK Version 4">
+<Tab title="SDK Version 4">
 
 Cross-device experimentation lets you combine a visitor's history across each of their devices (history reconciliation). You can merge multiple visitor sessions into one with history reconciliation. Use [`CustomData`](#customdata) and provide a unique identifier for the visitor to reconcile visit history.
 
@@ -802,20 +544,16 @@ The following methods might be helpful in the context of session merging:
 - Use [`getRemoteVisitorData`](#getremotevisitordata) with `isUniqueIdentifier=true` to retrieve data for all linked visitors.
 - Use [`trackConversion`](#trackconversion) or [`flush`](#flush) with `isUniqueIdentifier=true` to track data for specific visitor that is associated with another visitor.
 
-:::tip
+<Tip>
 Since the custom data you use as the identifier must be set to the `Visitor` scope, you must use [cross-device custom data synchronization](https://developers.kameleoon.com/feature-management-and-experimentation/web-sdks/nodejs-sdk/#synchronizing-custom-data-across-devices) to retrieve the identifier with the [`getRemoteVisitorData`](#getremotevisitordata) method on each device.
-:::
+</Tip>
 
 In the following example, we have an application with a login page. Since we don't know the user ID at the time of login, we use an anonymous visitor identifier generated by the [`getVisitorCode`](#getvisitorcode) method. After the user logs in, we can associate the anonymous visitor with the user ID and use it as a unique identifier for the visitor.
 
 <Tabs>
-<TabItem value="ts" label="TypeScript" default>
+<Tab title="TypeScript">
 
-```ts title="Login Page"
-import { KameleoonClient } from '@kameleoon/nodejs-sdk';
-import { KameleoonVisitorCodeManager } from '@kameleoon/nodejs-visitor-code-manager';
-import { KameleoonEventSource } from '@kameleoon/nodejs-event-source';
-import { KameleoonRequester } from '@kameleoon/nodejs-requester';
+```ts
 
 const client = new KameleoonClient({
   siteCode: 'my_site_code',
@@ -844,8 +582,7 @@ async function init(): Promise<void> {
 init();
 ```
 
-```ts title="Application Page"
-import { CustomData } from '@kameleoon/nodejs-sdk';
+```ts
 
 async function init(): Promise<void> {
   // -- At this point anonymous visitor has logged in,
@@ -888,14 +625,10 @@ async function init(): Promise<void> {
 init();
 ```
 
-</TabItem>
-<TabItem value="js" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
-```js title="Login Page"
-import { KameleoonClient } from '@kameleoon/nodejs-sdk';
-import { KameleoonVisitorCodeManager } from '@kameleoon/nodejs-visitor-code-manager';
-import { KameleoonEventSource } from '@kameleoon/nodejs-event-source';
-import { KameleoonRequester } from '@kameleoon/nodejs-requester';
+```js
 
 const client = new KameleoonClient({
   siteCode: 'my_site_code',
@@ -924,8 +657,7 @@ async function init() {
 init();
 ```
 
-```js title="Application Page"
-import { CustomData } from '@kameleoon/nodejs-sdk';
+```js
 
 async function init() {
   // -- At this point anonymous visitor has logged in,
@@ -968,12 +700,12 @@ async function init() {
 init();
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
-</TabItem>
+</Tab>
 
-<TabItem value="version_5" label="SDK Version 5" default>
+<Tab title="SDK Version 5">
 
 Cross-device experimentation lets you combine a visitor's history across each of their devices (history reconciliation). You can merge multiple visitor sessions into one with history reconciliation. Use [`CustomData`](#customdata) and provide a unique identifier for the visitor to reconcile visit history.
 
@@ -985,20 +717,16 @@ The SDK configuration ensures that associated sessions always see the same varia
 
 Before using other methods, inform the SDK that the visitor is a unique identifier by adding [`UniqueIdentifier`](#uniqueidentifier) data to a visitor.
 
-:::tip
+<Tip>
 Since the custom data you use as the identifier must be set to the `Visitor` scope, you must use [cross-device custom data synchronization](https://developers.kameleoon.com/feature-management-and-experimentation/web-sdks/nodejs-sdk/#synchronizing-custom-data-across-devices) to retrieve the identifier with the [`getRemoteVisitorData`](#getremotevisitordata) method on each device.
-:::
+</Tip>
 
 In the following example, we have an application with a login page. Since we don't know the user ID at the time of login, we use an anonymous visitor identifier generated by the [`getVisitorCode`](#getvisitorcode) method. After the user logs in, we can associate the anonymous visitor with the user ID and use it as a unique identifier for the visitor.
 
 <Tabs>
-<TabItem value="ts" label="TypeScript" default>
+<Tab title="TypeScript">
 
-```ts title="Login Page"
-import { KameleoonClient } from '@kameleoon/nodejs-sdk';
-import { KameleoonVisitorCodeManager } from '@kameleoon/nodejs-visitor-code-manager';
-import { KameleoonEventSource } from '@kameleoon/nodejs-event-source';
-import { KameleoonRequester } from '@kameleoon/nodejs-requester';
+```ts
 
 const client = new KameleoonClient({
   siteCode: 'my_site_code',
@@ -1027,8 +755,7 @@ async function init(): Promise<void> {
 init();
 ```
 
-```ts title="Application Page"
-import { CustomData, UniqueIdentifier } from '@kameleoon/nodejs-sdk';
+```ts
 
 async function init(): Promise<void> {
   // -- At this point anonymous visitor has logged in,
@@ -1041,7 +768,6 @@ async function init(): Promise<void> {
   client.addData(global.anonymousVisitor, userIdentifierData);
   // -- Flushing data for the anonymous `visitorCode`
   client.flush(global.anonymousVisitor);
-
 
   // -- Informing the SDK that the visitor is a unique identifier.
   client.addData('my_user_id', new UniqueIdentifier(true));
@@ -1073,14 +799,10 @@ async function init(): Promise<void> {
 init();
 ```
 
-</TabItem>
-<TabItem value="js" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
-```js title="Login Page"
-import { KameleoonClient } from '@kameleoon/nodejs-sdk';
-import { KameleoonVisitorCodeManager } from '@kameleoon/nodejs-visitor-code-manager';
-import { KameleoonEventSource } from '@kameleoon/nodejs-event-source';
-import { KameleoonRequester } from '@kameleoon/nodejs-requester';
+```js
 
 const client = new KameleoonClient({
   siteCode: 'my_site_code',
@@ -1109,8 +831,7 @@ async function init() {
 init();
 ```
 
-```js title="Application Page"
-import { CustomData, UniqueIdentifier } from '@kameleoon/nodejs-sdk';
+```js
 
 async function init() {
   // -- At this point anonymous visitor has logged in,
@@ -1154,38 +875,28 @@ async function init() {
 init();
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
-</TabItem>
+</Tab>
 
 </Tabs>
 
 ### Using a custom bucketing key
 
-<CustomBucketingKey sec="description" c={Context}/>
-
 #### Use cases
 
-<CustomBucketingKey sec="use_cases" c={Context}/>
-
 #### Technical details
-
-<CustomBucketingKey sec="technical_details_1" c={Context}/>
 
 ```js
 client.addData(visitorCode, new CustomData(index, 'newVisitorCode'));
 ```
 
-:::tip
+<Tip>
 [More information in addData()](#adddata)
-:::
-
-<CustomBucketingKey sec="technical_details_2" c={Context}/>
+</Tip>
 
 #### Technical requirementes
-
-<CustomBucketingKey sec="technical_requirements" c={Context}/>
 
 ### Targeting conditions
 
@@ -1195,17 +906,12 @@ You can also use your own [external data to target users](/feature-management-an
 
 ### Logging
 
-<Logging sec="logging" c={Context}/>
-
 #### Log levels
 
-<Logging sec="log_levels" c={Context}/>
-
 <Tabs>
-<TabItem value="ts" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```ts
-import { KameleoonClient, KameleoonLogger, LogLevel } from '@kameleoon/nodejs-sdk';
 
 const client = new KameleoonClient({ siteCode: 'my_site_code', configuration });
 
@@ -1213,7 +919,6 @@ const client = new KameleoonClient({ siteCode: 'my_site_code', configuration });
 client.setLogLevel(LogLevel.NONE);
 // Or use directly KameleoonLogger
 KameleoonLogger.setLogLevel(LogLevel.NONE);
-
 
 // The `ERROR` log level only allows logging issues that may affect the SDK's main behaviour.
 client.setLogLevel(LogLevel.ERROR);
@@ -1242,11 +947,10 @@ client.setLogLevel(LogLevel.DEBUG);
 KameleoonLogger.setLogLevel(LogLevel.DEBUG);
 ```
 
-</TabItem>
-<TabItem value="js" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```js
-import { KameleoonClient, KameleoonLogger, LogLevel } from '@kameleoon/nodejs-sdk';
 
 const client = new KameleoonClient({ siteCode: 'my_site_code', configuration });
 
@@ -1254,7 +958,6 @@ const client = new KameleoonClient({ siteCode: 'my_site_code', configuration });
 client.setLogLevel(LogLevel.NONE);
 // Or use KameleoonLogger
 KameleoonLogger.setLogLevel(LogLevel.NONE);
-
 
 // The `ERROR` log level only allows logging issues that may affect the SDK's main behaviour.
 client.setLogLevel(LogLevel.ERROR);
@@ -1283,18 +986,15 @@ client.setLogLevel(LogLevel.DEBUG);
 KameleoonLogger.setLogLevel(LogLevel.DEBUG);
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 #### Custom handling of logs
 
-<Logging sec="custom_handling_of_logs" c={Context}/>
-
 <Tabs>
-<TabItem value="ts" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```ts
-import { KameleoonClient, KameleoonLogger, IExternalLogger, LogLevel } from '@kameleoon/nodejs-sdk';
 
 export class CustomLogger implements IExternalLogger {
   // `log` method accepts logs from the SDK
@@ -1332,11 +1032,10 @@ client.setLogLevel(LogLevel.DEBUG);
 KameleoonLogger.setLogLevel(LogLevel.DEBUG);
 ```
 
-</TabItem>
-<TabItem value="js" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```js
-import { KameleoonClient, KameleoonLogger, LogLevel } from '@kameleoon/nodejs-sdk';
 
 export class CustomLogger {
   // `log` method accepts logs from the SDK
@@ -1374,7 +1073,7 @@ client.setLogLevel(LogLevel.DEBUG);
 KameleoonLogger.setLogLevel(LogLevel.DEBUG);
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ### Domain information
@@ -1387,9 +1086,9 @@ The domain you provide lets the URL address use the cookie. For example, if your
 
 For more flexibility with subdomains, you can specify a domain starting with a `.`. For instance, domain `.example.com` allows the cookie to function on both `app.example.com` and `login.example.com`.
 
-:::note
+<Note>
 You can't use regular expressions, special symbols, protocol, or port numbers in the `domain`. Additionally, a [specific list of subdomains](https://publicsuffix.org/list/public_suffix_list.dat) cannot be used with the prefix `.`.
-:::
+</Note>
 
 Here's a small domain cheat sheet:
 
@@ -1425,9 +1124,9 @@ There are two ways to avoid this issue:
 
 The SDK's external dependencies use the _dependency injection_ pattern, letting you provide your own implementations for certain parts of an SDK.
 
-:::note
+<Note>
 In the NodeJS SDK, some external dependencies have default implementations, while others must be provided by the user, whether using dedicated Kameleoon implementations or custom implementations.
-:::
+</Note>
 
 Here's the list of available external dependencies:
 
@@ -1439,9 +1138,9 @@ Here's the list of available external dependencies:
 | `visitorCodeManager` | `IExternalVisitorCodeManager` | _Required_        | -                     | Used for storing and synchronizing visitor code                                                                                                                                                      |
 | `logger`             | `ILogger`                     | _Optional_        | Custom implementation | Used for custom handling of logs from the SDK. Lets users define how logs are processed and where they output.                                                                                    |
 
-:::note
+<Note>
 You can also implement `visitorCodeManager` using the `IExternalNextJSVisitorCodeManager`, `IExternalDenoVisitorCodeManager`, or `IExternalCustomVisitorCodeManager` interfaces for NextJS, Deno, or custom visitor code manager implementations, respectively.
-:::
+</Note>
 
 External dependencies provide developers flexibility to adapt and use the NodeJS SDK in any environment. There are a number of npm packages Kameleoon provides for frequently used environments. You can install the packages manually, or by using the [SDK installation tool](#installation) (recommended).
 
@@ -1460,10 +1159,9 @@ The following example implements external dependencies. To import an interface f
 #### Storage
 
 <Tabs>
-<TabItem value="ts" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```ts
-import { IExternalStorage, KameleoonClient } from '@kameleoon/nodejs-sdk';
 
 // --- External Storage implementation ---
 // - JavaScript `Map` is used as an example storage
@@ -1498,11 +1196,10 @@ const client = new KameleoonClient({
 });
 ```
 
-</TabItem>
-<TabItem value="js" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```js
-import { KameleoonClient } from '@kameleoon/nodejs-sdk';
 
 // --- External Storage implementation ---
 // - JavaScript `Map` is used as an example storage
@@ -1537,13 +1234,13 @@ const client = new KameleoonClient({
 });
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 #### EventSource
 
 <Tabs>
-<TabItem value="ts" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```ts
 import {
@@ -1594,11 +1291,10 @@ const client = new KameleoonClient({
 });
 ```
 
-</TabItem>
-<TabItem value="js" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```js
-import { KameleoonClient } from '@kameleoon/nodejs-sdk';
 
 // --- External EventSource implementation ---
 // - Example uses dummy `EventSource` class
@@ -1638,7 +1334,7 @@ const client = new KameleoonClient({
 });
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 #### VisitorCodeManager
@@ -1646,7 +1342,7 @@ const client = new KameleoonClient({
 `visitorCodeManager` implementation for `NodeJS`/`NextJS SSR`:
 
 <Tabs>
-<TabItem value="ts" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```ts
 import {
@@ -1701,11 +1397,10 @@ const client = new KameleoonClient({
 });
 ```
 
-</TabItem>
-<TabItem value="js" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```js
-import { KameleoonClient, KameleoonUtils } from '@kameleoon/nodejs-sdk';
 
 // --- External Visitor Code Manager implementation ---
 // - Example uses server `request` and `response`
@@ -1748,13 +1443,13 @@ const client = new KameleoonClient({
 });
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 `visitorCodeManager` implementation for `Deno`:
 
 <Tabs>
-<TabItem value="ts" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```ts
 import {
@@ -1809,11 +1504,10 @@ const client = new KameleoonClient({
 });
 ```
 
-</TabItem>
-<TabItem value="js" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```js
-import { KameleoonClient, KameleoonUtils } from '@kameleoon/nodejs-sdk';
 
 // --- External Visitor Code Manager implementation ---
 // - Example uses server `request` and `response`
@@ -1852,13 +1546,13 @@ const client = new KameleoonClient({
 });
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 `visitorCodeManager` implementation for `NextJS` Server Actions:
 
 <Tabs>
-<TabItem value="ts" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```ts
 import {
@@ -1909,11 +1603,10 @@ const client = new KameleoonClient({
 });
 ```
 
-</TabItem>
-<TabItem value="js" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```js
-import { KameleoonClient } from '@kameleoon/nodejs-sdk';
 
 // --- External Visitor Code Manager implementation ---
 // - Example uses server `cookies` object imported from "next/headers"
@@ -1956,13 +1649,13 @@ const client = new KameleoonClient({
 });
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 Custom `visitorCodeManager` implementation with arbitrary parameters:
 
 <Tabs>
-<TabItem value="ts" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```ts
 import {
@@ -2019,11 +1712,10 @@ const client = new KameleoonClient({
 });
 ```
 
-</TabItem>
-<TabItem value="js" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```js
-import {  KameleoonClient } from '@kameleoon/nodejs-sdk';
 
 // --- External Visitor Code Manager implementation ---
 // - Example uses custom arbitrary `input` and `output` objects.
@@ -2072,13 +1764,13 @@ const client = new KameleoonClient({
 });
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 #### Requester
 
 <Tabs>
-<TabItem value="ts" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```ts
 import {
@@ -2109,11 +1801,10 @@ const client = new KameleoonClient({
 });
 ```
 
-</TabItem>
-<TabItem value="js" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```js
-import { KameleoonClient } from '@kameleoon/nodejs-sdk';
 
 // --- External Requester Implementation
 export class MyRequester {
@@ -2132,20 +1823,19 @@ const client = new KameleoonClient({
 });
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
-:::tip
+<Tip>
 [Return mocked result](#simulatesuccessrequest)
-:::
+</Tip>
 
 #### Logger
 
 <Tabs>
-<TabItem value="ts" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```ts
-import { KameleoonClient, KameleoonLogger, IExternalLogger, LogLevel } from '@kameleoon/nodejs-sdk';
 
 // --- Custom Logger Implementation
 export class CustomLogger implements IExternalLogger {
@@ -2163,11 +1853,10 @@ const client = new KameleoonClient({
 });
 ```
 
-</TabItem>
-<TabItem value="js" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```js
-import { KameleoonClient } from '@kameleoon/nodejs-sdk';
 
 // --- Custom Logger Implementation
 export class CustomLogger {
@@ -2185,7 +1874,7 @@ const client = new KameleoonClient({
 });
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ### Utilities
@@ -2193,21 +1882,20 @@ const client = new KameleoonClient({
 The SDK has a set of utility methods that you can use to simplify development. All methods are represented as static members of the `KameleoonUtils` class.
 
 <Tabs>
-<TabItem value="version_4" label="SDK Version 4">
+<Tab title="SDK Version 4">
 
 #### getClientConfigurationUrl
 
 Use the `getClientConfigurationUrl` method to get the URL for fetching the client configuration. This method is useful for handling edge cases when working with [Edge computing integrations](#integration-with-edge-providers).
 
-:::warning
+<Warning>
 This method will soon be deprecated and replaced by custom [`Requester`](#requester) implementation.
-:::
+</Warning>
 
 <Tabs>
-<TabItem value="ts" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```ts
-import { KameleoonUtils, Environment } from '@kameleoon/nodejs-sdk';
 
 const url = KameleoonUtils.getClientConfigurationUrl(
   'my_site_code',
@@ -2216,11 +1904,10 @@ const url = KameleoonUtils.getClientConfigurationUrl(
 );
 ```
 
-</TabItem>
-<TabItem value="js" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```js
-import { KameleoonUtils, Environment } from '@kameleoon/nodejs-sdk';
 
 const url = KameleoonUtils.getClientConfigurationUrl(
   'my_site_code',
@@ -2229,7 +1916,7 @@ const url = KameleoonUtils.getClientConfigurationUrl(
 );
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ##### Arguments
@@ -2244,11 +1931,11 @@ const url = KameleoonUtils.getClientConfigurationUrl(
 
 `string` - returns the URL for fetching the client configuration
 
-</TabItem>
+</Tab>
 
-<TabItem value="version_5" label="SDK Version 5" default>
+<Tab title="SDK Version 5">
 
-</TabItem>
+</Tab>
 </Tabs>
 
 #### simulateSuccessRequest
@@ -2256,7 +1943,7 @@ const url = KameleoonUtils.getClientConfigurationUrl(
 Use the `simulateSuccessRequest` method to simulate a successful request to the Kameleoon server. This method can be useful for custom [Requester](#requester) implementations when a developer needs to simulate a successful request.
 
 <Tabs>
-<TabItem value="ts" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```ts
 import {
@@ -2286,11 +1973,10 @@ class Requester implements IExternalRequester {
 }
 ```
 
-</TabItem>
-<TabItem value="js" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```js
-import { KameleoonUtils } from '@kameleoon/nodejs-sdk';
 
 // - Example of `Requester` with disabled tracking
 class Requester {
@@ -2304,7 +1990,7 @@ class Requester {
 }
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ##### Arguments
@@ -2329,10 +2015,9 @@ The `SimulateRequestDataType` data type is defined as follows:
 Use the `getCookieValue` method to parse a common cookie string (`key_1=value_1; key_2=value_2; ...`), and get the value of a specific cookie key. This method is useful when working with a custom implementation of [`VisitorCodeManager`](#visitorcodemanager).
 
 <Tabs>
-<TabItem value="ts" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```ts
-import { KameleoonUtils } from '@kameleoon/nodejs-sdk';
 
 const cookies = 'key_1=value_1; key_2=value_2';
 const key = 'key_1';
@@ -2340,11 +2025,10 @@ const key = 'key_1';
 const value = KameleoonUtils.getCookieValue(cookies, key); // = `value_1`
 ```
 
-</TabItem>
-<TabItem value="js" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```js
-import { KameleoonUtils } from '@kameleoon/nodejs-sdk';
 
 const cookies = 'key_1=value_1; key_2=value_2';
 const key = 'key_1';
@@ -2352,7 +2036,7 @@ const key = 'key_1';
 const value = KameleoonUtils.getCookieValue(cookies, key); // = `value_1`
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ##### Arguments
@@ -2377,7 +2061,7 @@ This is the full reference documentation for the Kameleoon JavaScript SDK.
 An asynchronous method for initializing `KameleoonClient` that retrieves Kameleoon SDK data either from the server or a local source if the data is still up-to-date or the update interval has not yet elapsed.
 
 <Tabs>
-<TabItem value="ts" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```ts
 import {
@@ -2385,9 +2069,6 @@ import {
   KameleoonClient,
   KameleoonException,
 } from '@kameleoon/nodejs-sdk';
-import { KameleoonVisitorCodeManager } from '@kameleoon/nodejs-visitor-code-manager';
-import { KameleoonEventSource } from '@kameleoon/nodejs-event-source';
-import { KameleoonRequester } from '@kameleoon/nodejs-requester';
 
 const client = new KameleoonClient({
   siteCode: 'my_site_code',
@@ -2419,14 +2100,10 @@ async function init(): Promise<void> {
 init();
 ```
 
-</TabItem>
-<TabItem value="js" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```js
-import { KameleoonClient, KameleoonException } from '@kameleoon/nodejs-sdk';
-import { KameleoonVisitorCodeManager } from '@kameleoon/nodejs-visitor-code-manager';
-import { KameleoonEventSource } from '@kameleoon/nodejs-event-source';
-import { KameleoonRequester } from '@kameleoon/nodejs-requester';
 
 const client = new KameleoonClient({
   siteCode: 'my_site_code',
@@ -2456,7 +2133,7 @@ async function init() {
 init();
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ##### Return value
@@ -2477,16 +2154,10 @@ init();
 
 #### getVariation()
 
-<GetVariation sec="description___js" c={Context}/>
-
 <Tabs>
-<TabItem value="ts" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```ts
-import { KameleoonClient } from '@kameleoon/nodejs-sdk';
-import { KameleoonVisitorCodeManager } from '@kameleoon/nodejs-visitor-code-manager';
-import { KameleoonEventSource } from '@kameleoon/nodejs-event-source';
-import { KameleoonRequester } from '@kameleoon/nodejs-requester';
 
 const client = new KameleoonClient({
   siteCode: 'my_site_code',
@@ -2535,14 +2206,10 @@ async function init(): Promise<void> {
 init();
 ```
 
-</TabItem>
-<TabItem value="js" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```js
-import { KameleoonClient } from '@kameleoon/nodejs-sdk';
-import { KameleoonVisitorCodeManager } from '@kameleoon/nodejs-visitor-code-manager';
-import { KameleoonEventSource } from '@kameleoon/nodejs-event-source';
-import { KameleoonRequester } from '@kameleoon/nodejs-requester';
 
 const client = new KameleoonClient({
   siteCode: 'my_site_code',
@@ -2591,36 +2258,23 @@ async function init() {
 init();
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ##### Arguments
 
 An object of type `GetVariationParamsType` with the following properties:
 
-<GetVariation sec="arguments" c={Context}/>
-
 ##### Return value
-
-<GetVariation sec="return_value" c={Context}/>
 
 ##### Exceptions thrown
 
-<GetVariation sec="exceptions___js" c={Context}/>
-
-
 #### getVariations()
 
-<GetVariations sec="description___js" c={Context}/>
-
 <Tabs>
-<TabItem value="ts" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```ts
-import { KameleoonClient } from '@kameleoon/nodejs-sdk';
-import { KameleoonVisitorCodeManager } from '@kameleoon/nodejs-visitor-code-manager';
-import { KameleoonEventSource } from '@kameleoon/nodejs-event-source';
-import { KameleoonRequester } from '@kameleoon/nodejs-requester';
 
 const client = new KameleoonClient({
   siteCode: 'my_site_code',
@@ -2676,14 +2330,10 @@ async function init(): Promise<void> {
 init();
 ```
 
-</TabItem>
-<TabItem value="js" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```js
-import { KameleoonClient } from '@kameleoon/nodejs-sdk';
-import { KameleoonVisitorCodeManager } from '@kameleoon/nodejs-visitor-code-manager';
-import { KameleoonEventSource } from '@kameleoon/nodejs-event-source';
-import { KameleoonRequester } from '@kameleoon/nodejs-requester';
 
 const client = new KameleoonClient({
   siteCode: 'my_site_code',
@@ -2739,22 +2389,16 @@ async function init() {
 init();
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ##### Arguments
 
 An object of type `GetVariationsParamsType` with the following properties:
 
-<GetVariations sec="arguments" c={Context}/>
-
 ##### Return value
 
-<GetVariations sec="return_value" c={Context}/>
-
 ##### Exceptions thrown
-
-<GetVariations sec="exceptions___js" c={Context}/>
 
 #### isFeatureFlagActive()
 
@@ -2765,18 +2409,14 @@ The `isFeatureFlagActive()` method returns a boolean indicating whether the visi
 
 This method has an additional overload that lets you pass a `track` parameter, which disables the tracking of feature evaluation.
 
-:::note
+<Note>
 A visitor must be targeted for feature flags to activate.
-:::
+</Note>
 
 <Tabs>
-<TabItem value="ts" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```ts
-import { KameleoonClient, CustomData } from '@kameleoon/nodejs-sdk';
-import { KameleoonVisitorCodeManager } from '@kameleoon/nodejs-visitor-code-manager';
-import { KameleoonEventSource } from '@kameleoon/nodejs-event-source';
-import { KameleoonRequester } from '@kameleoon/nodejs-requester';
 
 const client = new KameleoonClient({
   siteCode: 'my_site_code',
@@ -2810,14 +2450,10 @@ async function init(): Promise<void> {
 init();
 ```
 
-</TabItem>
-<TabItem value="js" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```js
-import { KameleoonClient, CustomData } from '@kameleoon/nodejs-sdk';
-import { KameleoonVisitorCodeManager } from '@kameleoon/nodejs-visitor-code-manager';
-import { KameleoonEventSource } from '@kameleoon/nodejs-event-source';
-import { KameleoonRequester } from '@kameleoon/nodejs-requester';
 
 const client = new KameleoonClient({
   siteCode: 'my_site_code',
@@ -2851,7 +2487,7 @@ async function init() {
 init();
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ##### Arguments
@@ -2860,9 +2496,9 @@ There are two overloads available for this method:
 
 1. Two parameters overload:
 
-:::warning
+<Warning>
 This overload is deprecated and will be removed in the next major version. Please use the new overload with an object parameter.
-:::
+</Warning>
 
 | Name                     | Type     | Description                                                              |
 | ------------------------ | -------- | ------------------------------------------------------------------------ |
@@ -2900,13 +2536,9 @@ This overload is deprecated and will be removed in the next major version. Pleas
 The `getFeatureFlags()` method retrieves a list of feature flags that are stored in the client configuration.
 
 <Tabs>
-<TabItem value="ts" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```ts
-import { KameleoonClient } from '@kameleoon/nodejs-sdk';
-import { KameleoonVisitorCodeManager } from '@kameleoon/nodejs-visitor-code-manager';
-import { KameleoonEventSource } from '@kameleoon/nodejs-event-source';
-import { KameleoonRequester } from '@kameleoon/nodejs-requester';
 
 const client = new KameleoonClient({
   siteCode: 'my_site_code',
@@ -2928,14 +2560,10 @@ async function init(): Promise<void> {
 init();
 ```
 
-</TabItem>
-<TabItem value="js" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```js
-import { KameleoonClient } from '@kameleoon/nodejs-sdk';
-import { KameleoonVisitorCodeManager } from '@kameleoon/nodejs-visitor-code-manager';
-import { KameleoonEventSource } from '@kameleoon/nodejs-event-source';
-import { KameleoonRequester } from '@kameleoon/nodejs-requester';
 
 const client = new KameleoonClient({
   siteCode: 'my_site_code',
@@ -2957,7 +2585,7 @@ async function init() {
 init();
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ##### Return value
@@ -2974,16 +2602,10 @@ init();
 
 #### setForcedVariation()
 
-<SetForcedVariation sec="description" c={Context}/>
-
 <Tabs>
-<TabItem value="ts" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```ts
-import { KameleoonClient } from '@kameleoon/nodejs-sdk';
-import { KameleoonVisitorCodeManager } from '@kameleoon/nodejs-visitor-code-manager';
-import { KameleoonEventSource } from '@kameleoon/nodejs-event-source';
-import { KameleoonRequester } from '@kameleoon/nodejs-requester';
 
 const client = new KameleoonClient({
   siteCode: 'my_site_code',
@@ -3020,14 +2642,10 @@ async function init(): Promise<void> {
 init();
 ```
 
-</TabItem>
-<TabItem value="js" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```js
-import { KameleoonClient } from '@kameleoon/nodejs-sdk';
-import { KameleoonVisitorCodeManager } from '@kameleoon/nodejs-visitor-code-manager';
-import { KameleoonEventSource } from '@kameleoon/nodejs-event-source';
-import { KameleoonRequester } from '@kameleoon/nodejs-requester';
 
 const client = new KameleoonClient({
   siteCode: 'my_site_code',
@@ -3064,26 +2682,19 @@ async function init() {
 init();
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ##### Arguments
 
-<SetForcedVariation sec="arguments" c={Context}/>
-
 ##### Exceptions thrown
-
-<SetForcedVariation sec="exceptions___js" c={Context}/>
 
 #### evaluateAudiences()
 
-<EvaluateAudiences sec="description" c={Context}/>
-
 <Tabs>
-<TabItem value="ts" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```ts
-import { KameleoonClient } from '@kameleoon/nodejs-sdk';
 
 const client = new KameleoonClient({
   siteCode: 'my_site_code',
@@ -3107,11 +2718,10 @@ async function init(): Promise<void> {
 init();
 ```
 
-</TabItem>
-<TabItem value="js" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```js
-import { KameleoonClient } from '@kameleoon/nodejs-sdk';
 
 const client = new KameleoonClient({
   siteCode: 'my_site_code',
@@ -3135,28 +2745,19 @@ async function init() {
 init();
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ##### Arguments
 
-<EvaluateAudiences sec="arguments" c={Context}/>
-
 ##### Exceptions thrown
-
-<EvaluateAudiences sec="exceptions___js" c={Context}/>
 
 #### getDataFile()
 
-<GetDataFile sec="tip_qa" c={Context}/>
-
-<GetDataFile sec="description" c={Context}/>
-
 <Tabs>
-<TabItem value="ts" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```ts
-import { KameleoonClient } from '@kameleoon/nodejs-sdk';
 
 const client = new KameleoonClient({
   siteCode: 'my_site_code',
@@ -3171,11 +2772,10 @@ const client = new KameleoonClient({
 const dataFile = client.getDataFile();
 ```
 
-</TabItem>
-<TabItem value="js" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```js
-import { KameleoonClient } from '@kameleoon/nodejs-sdk';
 
 const client = new KameleoonClient({
   siteCode: 'my_site_code',
@@ -3190,12 +2790,10 @@ const client = new KameleoonClient({
 const dataFile = client.getDataFile();
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ##### Return value
-
-<GetDataFile sec="return_value" c={Context}/>
 
 ### Visitor data
 
@@ -3205,20 +2803,14 @@ The `getVisitorCode` method retrieves a visitor code from the request's cookie i
 
 This method utilizes Node.js's native types for `request` and `response`, specifically `IncomingMessage` and `ServerResponse`, imported from the `http` module. However, if you're using the Express framework, Deno, or Next.js super server-rendering methods, like `getServerProps`, the types for `request` and `response` will differ. You can resolve this issue using type casting, which will yield identical results.
 
-:::note
+<Note>
 When using `getVisitorCode()` with Deno, `Next.js SSR`, `Node`, or `Express`, ensure that you've implemented the correct external dependencies.
-:::
-
-<SharedDiv sec="get_visitor_code_simulated" c={Context}/>
+</Note>
 
 <Tabs>
-<TabItem value="ts" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```ts
-import { KameleoonClient } from '@kameleoon/nodejs-sdk';
-import { KameleoonVisitorCodeManager } from '@kameleoon/nodejs-visitor-code-manager';
-import { KameleoonEventSource } from '@kameleoon/nodejs-event-source';
-import { KameleoonRequester } from '@kameleoon/nodejs-requester';
 
 const client = new KameleoonClient({
   siteCode: 'my_site_code',
@@ -3265,14 +2857,10 @@ async function init(): Promise<void> {
 init();
 ```
 
-</TabItem>
-<TabItem value="js" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```js
-import { KameleoonClient } from '@kameleoon/nodejs-sdk';
-import { KameleoonVisitorCodeManager } from '@kameleoon/nodejs-visitor-code-manager';
-import { KameleoonEventSource } from '@kameleoon/nodejs-event-source';
-import { KameleoonRequester } from '@kameleoon/nodejs-requester';
 
 const client = new KameleoonClient({
   siteCode: 'my_site_code',
@@ -3319,7 +2907,7 @@ async function init() {
 init();
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ##### Arguments
@@ -3357,9 +2945,9 @@ The parameters object is overloaded with two types:
 | output (_required_)             | `unknown` | arbitrary output object to which you want to write the visitor code |
 | defaultVisitorCode (_optional_) | `string`  | visitor code to be used in case there is no visitor code in the cookies |
 
-:::note
+<Note>
 If you don't provide a `defaultVisitorCode` and there is no visitor code stored in a cookie, the visitor code will be randomly generated.
-:::
+</Note>
 
 ##### Return value
 
@@ -3383,16 +2971,16 @@ The `addData()` method does not return any value, and does not directly interact
 
 Additionally, the [`trackConversion()`](#trackconversion) method transmits any previously associated data. The [`getFeatureFlagVariationKey()`](#getfeatureflagvariationkey) and [`getFeatureFlagVariable()`](#getfeatureflagvariable) methods transmit data when an experimentation rule is triggered.
 
-:::tip
+<Tip>
 Each visitor can only have one instance of associated data for most data types; however, `CustomData` is an exception, as visitors can have one instance of associated `CustomData` for each `customDataIndex`.
-:::
+</Tip>
 
-:::note
+<Note>
 Check the [list of supported conditions](#targeting-conditions) to see the data types you can use for targeting.
-:::
+</Note>
 
 <Tabs>
-<TabItem value="ts" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```ts
 import {
@@ -3401,9 +2989,6 @@ import {
   CustomData,
   Browser,
 } from '@kameleoon/nodejs-sdk';
-import { KameleoonVisitorCodeManager } from '@kameleoon/nodejs-visitor-code-manager';
-import { KameleoonEventSource } from '@kameleoon/nodejs-event-source';
-import { KameleoonRequester } from '@kameleoon/nodejs-requester';
 
 const client = new KameleoonClient({
   siteCode: 'my_site_code',
@@ -3414,7 +2999,6 @@ const client = new KameleoonClient({
     requester: new KameleoonRequester(),
   },
 });
-
 
 async function init(): Promise<void> {
   await client.initialize();
@@ -3437,8 +3021,8 @@ async function init(): Promise<void> {
 init();
 ```
 
-</TabItem>
-<TabItem value="js" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```js
 import {
@@ -3447,9 +3031,6 @@ import {
   CustomData,
   Browser,
 } from '@kameleoon/nodejs-sdk';
-import { KameleoonVisitorCodeManager } from '@kameleoon/nodejs-visitor-code-manager';
-import { KameleoonEventSource } from '@kameleoon/nodejs-event-source';
-import { KameleoonRequester } from '@kameleoon/nodejs-requester';
 
 const client = new KameleoonClient({
   siteCode: 'my_site_code',
@@ -3460,7 +3041,6 @@ const client = new KameleoonClient({
     requester: new KameleoonRequester(),
   },
 });
-
 
 async function init() {
   await client.initialize();
@@ -3483,7 +3063,7 @@ async function init() {
 init();
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ##### Arguments
@@ -3493,11 +3073,11 @@ init();
 | visitorCode (_required_)   | `string`              | unique visitor identification string, can't exceed 255 characters in length                                    |
 | kameleoonData (_optional_) | `KameleoonDataType[]` | number of instances of any type of `KameleoonData`, can be added solely in array or as sequential arguments |
 
-:::note
+<Note>
 - `kameleoonData` is a variadic argument: it can be passed as one or several arguments (see the example).
 
 - The [custom data's](https://help.kameleoon.com/create-push-custom-data) index or ID can be found in your Kameleoon account. Note that this index starts at `0`, meaning the first custom data you create for a given site will be assigned `0` as its ID, rather than `1`.
-:::
+</Note>
 
 ##### Exceptions thrown
 
@@ -3508,33 +3088,29 @@ init();
 | `KameleoonException.StorageWrite`         | Couldn't update storage data                                                      |
 | `KameleoonException.Initialization`       | Method was executed before the `kameleoonClient` completed its `initialize` call |
 
-:::note
+<Note>
 Check the [data types](#data-types) reference for more details on how to manage different data types.
-:::
+</Note>
 
 ---
 
 #### flush()
 
 <Tabs>
-<TabItem value="version_4" label="SDK Version 4">
+<Tab title="SDK Version 4">
 
 The `flush()` method takes the Kameleoon data associated with a visitor and sends a data tracking request along with all previously added data using the [`addData()`](#adddata) method.
 
 The SDK will send all of its stored data to the remote Kameleoon servers if you don't specify a `visitorCode`. Additionally, if there were any tracking requests that previously failed and were stored locally in [offline mode](#initialize), the SDK will attempt to send those stored requests before processing the latest request.
 
-:::note
+<Note>
 The `isUniqueIdentifier` parameter can be beneficial in certain edge cases. For example, if you can't access the anonymous `visitorCode` initially assigned to a visitor but have an internal ID linked through session merging, this parameter is useful.
-:::
+</Note>
 
 <Tabs>
-<TabItem value="ts" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```ts
-import { KameleoonClient } from '@kameleoon/nodejs-sdk';
-import { KameleoonVisitorCodeManager } from '@kameleoon/nodejs-visitor-code-manager';
-import { KameleoonEventSource } from '@kameleoon/nodejs-event-source';
-import { KameleoonRequester } from '@kameleoon/nodejs-requester';
 
 const client = new KameleoonClient({
   siteCode: 'my_site_code',
@@ -3572,14 +3148,10 @@ async function init(): Promise<void> {
 init();
 ```
 
-</TabItem>
-<TabItem value="js" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```js
-import { KameleoonClient } from '@kameleoon/nodejs-sdk';
-import { KameleoonVisitorCodeManager } from '@kameleoon/nodejs-visitor-code-manager';
-import { KameleoonEventSource } from '@kameleoon/nodejs-event-source';
-import { KameleoonRequester } from '@kameleoon/nodejs-requester';
 
 const client = new KameleoonClient({
   siteCode: 'my_site_code',
@@ -3617,7 +3189,7 @@ async function init() {
 init();
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ##### Arguments
@@ -3635,21 +3207,17 @@ init();
 | `KameleoonException.VisitorCodeEmpty`     | The visitor code is empty                                                         |
 | `KameleoonException.Initialization`       | Method was executed before the `kameleoonClient` completed its `initialize` call |
 
-</TabItem>
-<TabItem value="version_5" label="SDK Version 5" default>
+</Tab>
+<Tab title="SDK Version 5">
 
 `flush()` takes the Kameleoon data associated with the visitor and schedules the data to be sent with the next tracking request. The time of the next tracking request is defined in the SDK Configuration's [`trackingInterval`](#configuration-parameters) parameter. You can add visitor data using the [`addData()`](#adddata) and [`getRemoteVisitorData()`](#getremotevisitordata) methods.
 
 The SDK will send all of its stored data to the remote Kameleoon servers if you don't specify a `visitorCode`. Additionally, if there were any tracking requests that previously failed and were stored locally in [offline mode](#initialize), the SDK will attempt to send those stored requests before processing the latest request.
 
 <Tabs>
-<TabItem value="ts" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```ts
-import { KameleoonClient } from '@kameleoon/nodejs-sdk';
-import { KameleoonVisitorCodeManager } from '@kameleoon/nodejs-visitor-code-manager';
-import { KameleoonEventSource } from '@kameleoon/nodejs-event-source';
-import { KameleoonRequester } from '@kameleoon/nodejs-requester';
 
 const client = new KameleoonClient({
   siteCode: 'my_site_code',
@@ -3689,14 +3257,10 @@ async function init(): Promise<void> {
 init();
 ```
 
-</TabItem>
-<TabItem value="js" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```js
-import { KameleoonClient } from '@kameleoon/nodejs-sdk';
-import { KameleoonVisitorCodeManager } from '@kameleoon/nodejs-visitor-code-manager';
-import { KameleoonEventSource } from '@kameleoon/nodejs-event-source';
-import { KameleoonRequester } from '@kameleoon/nodejs-requester';
 
 const client = new KameleoonClient({
   siteCode: 'my_site_code',
@@ -3736,7 +3300,7 @@ async function init() {
 init();
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ##### Arguments
@@ -3760,7 +3324,7 @@ Or an object with the type FlushParamsType, containing:
 | `KameleoonException.VisitorCodeEmpty`     | The visitor code is empty                                                         |
 | `KameleoonException.Initialization`       | Method was executed before the `kameleoonClient` completed its `initialize` call |
 
-</TabItem>
+</Tab>
 </Tabs>
 ---
 
@@ -3771,13 +3335,9 @@ The `getRemoteData()` method retrieves data that is stored on a remote Kameleoon
 For instance, you can use this method to access user preferences, historical data, or any other information pertinent to your application's logic. By storing this data on our highly scalable servers using our [Data API](https://developers.kameleoon.com/apis/data-api-rest/overview), you can efficiently manage large volumes of data and retrieve it for each of your visitors or users.
 
 <Tabs>
-<TabItem value="ts" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```ts
-import { KameleoonClient } from '@kameleoon/nodejs-sdk';
-import { KameleoonVisitorCodeManager } from '@kameleoon/nodejs-visitor-code-manager';
-import { KameleoonEventSource } from '@kameleoon/nodejs-event-source';
-import { KameleoonRequester } from '@kameleoon/nodejs-requester';
 
 const client = new KameleoonClient({
   siteCode: 'my_site_code',
@@ -3788,7 +3348,6 @@ const client = new KameleoonClient({
     requester: new KameleoonRequester(),
   },
 });
-
 
 async function init(): Promise<void> {
   await client.initialize();
@@ -3802,14 +3361,10 @@ async function init(): Promise<void> {
 init();
 ```
 
-</TabItem>
-<TabItem value="js" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```js
-import { KameleoonClient } from '@kameleoon/nodejs-sdk';
-import { KameleoonVisitorCodeManager } from '@kameleoon/nodejs-visitor-code-manager';
-import { KameleoonEventSource } from '@kameleoon/nodejs-event-source';
-import { KameleoonRequester } from '@kameleoon/nodejs-requester';
 
 const client = new KameleoonClient({
   siteCode: 'my_site_code',
@@ -3820,7 +3375,6 @@ const client = new KameleoonClient({
     requester: new KameleoonRequester(),
   },
 });
-
 
 async function init() {
   await client.initialize();
@@ -3834,7 +3388,7 @@ async function init() {
 init();
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ##### Arguments
@@ -3858,7 +3412,7 @@ init();
 #### getRemoteVisitorData()
 
 <Tabs>
-<TabItem value="version_4" label="SDK Version 4">
+<Tab title="SDK Version 4">
 
 `getRemoteVisitorData()` is an asynchronous method that retrieves Kameleoon Visits Data for a specific `visitorCode` from the Kameleoon Data API. This method stores the data for use by other methods when making targeting decisions.
 
@@ -3870,16 +3424,16 @@ The data obtained using this method is essential for certain scenarios, includin
 
 For a clearer understanding of the potential use cases, read [this article]( https://developers.kameleoon.com/feature-management-and-experimentation/using-visit-history-in-feature-flags-and-experiments/).
 
-:::caution
+<Warning>
 By default, `getRemoteVisitorData()` retrieves the latest stored custom data with `scope=Visitor` and attaches it to the visitor, eliminating the need to call the method `addData()`. This feature is especially useful for [synchronizing custom data between multiple devices](https://developers.kameleoon.com/feature-management-and-experimentation/web-sdks/nodejs-sdk/#synchronizing-custom-data-across-devices).
-:::
+</Warning>
 
-:::note
+<Note>
 The `isUniqueIdentifier` parameter can be beneficial in certain edge cases. For example, if you can't access the anonymous `visitorCode` initially assigned to a visitor but have an internal ID linked through session merging, this parameter is useful.
-:::
+</Note>
 
 <Tabs>
-<TabItem value="ts" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```ts
 import {
@@ -3887,9 +3441,6 @@ import {
   KameleoonDataType,
   VisitorDataFiltersType,
 } from '@kameleoon/nodejs-sdk';
-import { KameleoonVisitorCodeManager } from '@kameleoon/nodejs-visitor-code-manager';
-import { KameleoonEventSource } from '@kameleoon/nodejs-event-source';
-import { KameleoonRequester } from '@kameleoon/nodejs-requester';
 
 const client = new KameleoonClient({
   siteCode: 'my_site_code',
@@ -3900,7 +3451,6 @@ const client = new KameleoonClient({
     requester: new KameleoonRequester(),
   },
 });
-
 
 async function init(): Promise<void> {
   await client.initialize();
@@ -3936,14 +3486,10 @@ async function init(): Promise<void> {
 init();
 ```
 
-</TabItem>
-<TabItem value="js" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```js
-import { KameleoonClient } from '@kameleoon/nodejs-sdk';
-import { KameleoonVisitorCodeManager } from '@kameleoon/nodejs-visitor-code-manager';
-import { KameleoonEventSource } from '@kameleoon/nodejs-event-source';
-import { KameleoonRequester } from '@kameleoon/nodejs-requester';
 
 const client = new KameleoonClient({
   siteCode: 'my_site_code',
@@ -3954,7 +3500,6 @@ const client = new KameleoonClient({
     requester: new KameleoonRequester(),
   },
 });
-
 
 async function init() {
   await client.initialize();
@@ -3990,7 +3535,7 @@ async function init() {
 init();
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ##### Arguments
@@ -4026,7 +3571,7 @@ For example, if you want to retrieve data on visitors who completed the goal "Or
 
 The flexibility shown in this example is not limited to goal data. You can use parameters within the `getRemoteVisitorData()` method to retrieve data on a variety of visitor behaviors.
 
-:::note
+<Note>
 Here is the list of available `VisitorDataFiltersType` filters:
 
 | Name                             | Type      | Description                                                                  | Default |
@@ -4042,11 +3587,11 @@ Here is the list of available `VisitorDataFiltersType` filters:
 | conversions (_optional_)         | `boolean` | If true, conversion data will be retrieved.                                  | `false` |
 | experiments (_optional_)         | `boolean` | If true, experiment data will be retrieved.                                  | `false` |
 | kcs (_optional_)                 | `boolean` | If true, Kameleoon Conversion Score (KCS) will be retrieved. Requires the [AI Predictive Targeting add-on](https://help.kameleoon.com/target-users-by-ai-propensity-score-kameleoon-conversion-score/).                  | `false` |
-:::
+</Note>
 
-</TabItem>
+</Tab>
 
-<TabItem value="version_5" label="SDK Version 5" default>
+<Tab title="SDK Version 5">
 
 The `getRemoteVisitorData()` method is an asynchronous function that retrieves Kameleoon Visits Data for a specific `visitorCode` from the Kameleoon Data API. This method stores the data so that it can be accessed when making targeting decisions.
 
@@ -4058,12 +3603,12 @@ The data obtained through this method is crucial when you want to:
 
 For a better understanding of potential use cases, please read [this article]( https://developers.kameleoon.com/feature-management-and-experimentation/using-visit-history-in-feature-flags-and-experiments/).
 
-:::caution
+<Warning>
 By default, `getRemoteVisitorData()` retrieves the latest stored custom data with `scope=Visitor` and attaches it to the visitor without the need to call the method `addData()`. This feature is particularly useful for [synchronizing custom data across multiple devices](https://developers.kameleoon.com/feature-management-and-experimentation/web-sdks/nodejs-sdk/#synchronizing-custom-data-across-devices).
-:::
+</Warning>
 
 <Tabs>
-<TabItem value="ts" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```ts
 import {
@@ -4071,9 +3616,6 @@ import {
   KameleoonDataType,
   VisitorDataFiltersType,
 } from '@kameleoon/nodejs-sdk';
-import { KameleoonVisitorCodeManager } from '@kameleoon/nodejs-visitor-code-manager';
-import { KameleoonEventSource } from '@kameleoon/nodejs-event-source';
-import { KameleoonRequester } from '@kameleoon/nodejs-requester';
 
 const client = new KameleoonClient({
   siteCode: 'my_site_code',
@@ -4084,7 +3626,6 @@ const client = new KameleoonClient({
     requester: new KameleoonRequester(),
   },
 });
-
 
 async function init(): Promise<void> {
   await client.initialize();
@@ -4120,14 +3661,10 @@ async function init(): Promise<void> {
 init();
 ```
 
-</TabItem>
-<TabItem value="js" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```js
-import { KameleoonClient } from '@kameleoon/nodejs-sdk';
-import { KameleoonVisitorCodeManager } from '@kameleoon/nodejs-visitor-code-manager';
-import { KameleoonEventSource } from '@kameleoon/nodejs-event-source';
-import { KameleoonRequester } from '@kameleoon/nodejs-requester';
 
 const client = new KameleoonClient({
   siteCode: 'my_site_code',
@@ -4138,7 +3675,6 @@ const client = new KameleoonClient({
     requester: new KameleoonRequester(),
   },
 });
-
 
 async function init() {
   await client.initialize();
@@ -4174,7 +3710,7 @@ async function init() {
 init();
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ##### Arguments
@@ -4209,7 +3745,7 @@ For example, if you want to retrieve data on visitors who completed the goal "Or
 
 The flexibility shown in this example is not limited to goal data. You can use parameters within the `getRemoteVisitorData()` method to retrieve data on a variety of visitor behaviors.
 
-:::note
+<Note>
 Here is the list of available `VisitorDataFiltersType` filters:
 
 | Name                             | Type      | Description                                                                                                                                                                                                                                                                                                                                            | Default |
@@ -4227,10 +3763,10 @@ Here is the list of available `VisitorDataFiltersType` filters:
 | kcs (_optional_)                 | `boolean` | If true, Kameleoon Conversion Score (KCS) will be retrieved. Requires the [AI Predictive Targeting add-on](https://help.kameleoon.com/target-users-by-ai-propensity-score-kameleoon-conversion-score/).                                                                                                                                                | `false` |
 | visitorCode (_optional_)         | `boolean` | If true, Kameleoon will retrieve the `visitorCode` from the most recent visit and use it for the current visit. This retrieval is necessary if you want to ensure that the visitor, identified by their `visitorCode`, always receives the same variation across visits for [Cross-device experimentation](/core-concepts/cross-device-experimentation). | `true`  |
 | personalization (_optional_)     | `boolean` | If true, personalization data will be retrieved. This is required for the personalization condition                                                                                                                                                                                                                                                    | `false` |
-| cbs (_optional_)                 | `boolean` | <Text x={Shared.RemoteVisitorDataFilter.CBS}/>                                                                                                                                                                                                                                                                                                         | `false` |
-:::
+| cbs (_optional_)                 | `boolean` | If true, Contextual Bandit score data will be retrieved.                                                                                                                                                                                                                                                                                                         | `false` |
+</Note>
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ---
@@ -4240,7 +3776,7 @@ Here is the list of available `VisitorDataFiltersType` filters:
 The `getVisitorWarehouseAudience` method is asynchronous and retrieves all audience data related to a visitor from your data warehouse. To use this method, you’ll need to provide a `visitorCode` and a `warehouseKey`, which typically correspond to your internal user ID. The `customDataIndex` parameter refers to the custom data Kameleoon uses to target your visitors. For more details, refer to the [warehouse targeting documentation](https://help.kameleoon.com/warehouse-audience-targeting/).
 
 <Tabs>
-<TabItem value="ts" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```ts
 import {
@@ -4248,9 +3784,6 @@ import {
   KameleoonDataType,
   CustomData,
 } from '@kameleoon/nodejs-sdk';
-import { KameleoonVisitorCodeManager } from '@kameleoon/nodejs-visitor-code-manager';
-import { KameleoonEventSource } from '@kameleoon/nodejs-event-source';
-import { KameleoonRequester } from '@kameleoon/nodejs-requester';
 
 const client = new KameleoonClient({
   siteCode: 'my_site_code',
@@ -4261,7 +3794,6 @@ const client = new KameleoonClient({
     requester: new KameleoonRequester(),
   },
 });
-
 
 async function init(): Promise<void> {
   await client.initialize();
@@ -4285,14 +3817,10 @@ async function init(): Promise<void> {
 init();
 ```
 
-</TabItem>
-<TabItem value="js" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```js
-import { KameleoonClient } from '@kameleoon/nodejs-sdk';
-import { KameleoonVisitorCodeManager } from '@kameleoon/nodejs-visitor-code-manager';
-import { KameleoonEventSource } from '@kameleoon/nodejs-event-source';
-import { KameleoonRequester } from '@kameleoon/nodejs-requester';
 
 const client = new KameleoonClient({
   siteCode: 'my_site_code',
@@ -4303,7 +3831,6 @@ const client = new KameleoonClient({
     requester: new KameleoonRequester(),
   },
 });
-
 
 async function init() {
   await client.initialize();
@@ -4327,7 +3854,7 @@ async function init() {
 init();
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ##### Arguments
@@ -4356,17 +3883,16 @@ Parameters object consisting of:
 
 #### setLegalConsent()
 
-:::note
+<Note>
 When handling legal consent, it’s important you use the [`getVisitorCode`](#getvisitorcode) method from the `KameleoonClient` class, rather than the deprecated method from `KameleoonUtils`. Note that this method does not require the `domain` as an argument. Instead, you should pass the `domain` to the `KameleoonClient` constructor. Refer to the example above for clarification.
-:::
+</Note>
 
 The method `setLegalConsent` determines whether a visitor has provided legal consent for their personal data's use. If you set the `legalConsent` parameter to `false`, it restricts the types of data you can include in tracking requests. This measure ensures that you comply with legal and regulatory requirements while responsibly managing visitor data. For more information on personal data, refer to the [consent management policy](https://help.kameleoon.com/consent-management-policy/).
 
 <Tabs>
-<TabItem value="ts" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```ts
-import { KameleoonClient } from '@kameleoon/nodejs-sdk';
 
 const client = new KameleoonClient({
   siteCode: 'my_site_code',
@@ -4386,11 +3912,10 @@ async function init(): Promise<void> {
 init();
 ```
 
-</TabItem>
-<TabItem value="js" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```js
-import { KameleoonClient } from '@kameleoon/nodejs-sdk';
 
 const client = new KameleoonClient({
   siteCode: 'my_site_code',
@@ -4410,7 +3935,7 @@ async function init() {
 init();
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ##### Arguments
@@ -4463,18 +3988,12 @@ The parameters object is overloaded with the following types:
 #### trackConversion()
 
 <Tabs>
-<TabItem value="version_4" label="SDK Version 4">
-
-<TrackConversion sec="description___js_old" c={Context}/>
+<Tab title="SDK Version 4">
 
 <Tabs>
-<TabItem value="ts" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```ts
-import { KameleoonClient } from '@kameleoon/nodejs-sdk';
-import { KameleoonVisitorCodeManager } from '@kameleoon/nodejs-visitor-code-manager';
-import { KameleoonEventSource } from '@kameleoon/nodejs-event-source';
-import { KameleoonRequester } from '@kameleoon/nodejs-requester';
 
 const client = new KameleoonClient({
   siteCode: 'my_site_code',
@@ -4511,14 +4030,10 @@ async function init(): Promise<void> {
 init();
 ```
 
-</TabItem>
-<TabItem value="js" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```js
-import { KameleoonClient } from '@kameleoon/nodejs-sdk';
-import { KameleoonVisitorCodeManager } from '@kameleoon/nodejs-visitor-code-manager';
-import { KameleoonEventSource } from '@kameleoon/nodejs-event-source';
-import { KameleoonRequester } from '@kameleoon/nodejs-requester';
 
 const client = new KameleoonClient({
   siteCode: 'my_site_code',
@@ -4555,33 +4070,23 @@ async function init() {
 init();
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ##### Arguments
 
 Parameters object consisting of:
 
-<TrackConversion sec="arguments___js_old" c={Context}/>
-
 ##### Exceptions thrown
 
-<TrackConversion sec="exceptions___js" c={Context}/>
+</Tab>
 
-</TabItem>
-
-<TabItem value="version_5" label="SDK Version 5" default>
-
-<TrackConversion sec="description___js" c={Context}/>
+<Tab title="SDK Version 5">
 
 <Tabs>
-<TabItem value="ts" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```ts
-import { KameleoonClient, CustomData } from '@kameleoon/nodejs-sdk';
-import { KameleoonVisitorCodeManager } from '@kameleoon/nodejs-visitor-code-manager';
-import { KameleoonEventSource } from '@kameleoon/nodejs-event-source';
-import { KameleoonRequester } from '@kameleoon/nodejs-requester';
 
 const client = new KameleoonClient({
   siteCode: 'my_site_code',
@@ -4615,14 +4120,10 @@ async function init(): Promise<void> {
 init();
 ```
 
-</TabItem>
-<TabItem value="js" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```js
-import { KameleoonClient, CustomData } from '@kameleoon/nodejs-sdk';
-import { KameleoonVisitorCodeManager } from '@kameleoon/nodejs-visitor-code-manager';
-import { KameleoonEventSource } from '@kameleoon/nodejs-event-source';
-import { KameleoonRequester } from '@kameleoon/nodejs-requester';
 
 const client = new KameleoonClient({
   siteCode: 'my_site_code',
@@ -4656,20 +4157,16 @@ async function init() {
 init();
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ##### Arguments
 
 Parameters object consisting of:
 
-<TrackConversion sec="arguments___js" c={Context}/>
-
-:::note
-<TrackConversion sec="note_metadata" c={Context}/>
-
+<Note>
 <Tabs>
-<TabItem value="ts" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```ts
 kameleoonClient.addData(visitorCode, new CustomData(5, 'Credit Card'), new CustomData(9, 'Express Delivery'));
@@ -4679,8 +4176,8 @@ kameleoonClient.trackConversion({
     metadata: [new CustomData(5, 'Amex Credit Card')]
 });
 ```
-</TabItem>
-<TabItem value="js" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```js
 kameleoonClient.addData(visitorCode, new CustomData(5, 'Credit Card'), new CustomData(9, 'Express Delivery'));
@@ -4691,15 +4188,13 @@ kameleoonClient.trackConversion({
 });
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
-:::
+</Note>
 
 ##### Exceptions thrown
 
-<TrackConversion sec="exceptions___js" c={Context}/>
-
-</TabItem>
+</Tab>
 </Tabs>
 
 ---
@@ -4710,20 +4205,16 @@ Kameleoon offers built-in integrations with various analytics and CDP solutions,
 
 The SDK builds a tracking code for your active analytics solution based on the experiments that the visitor has triggered in the last five seconds.
 
-:::note
+<Note>
 You must implement both the NodeJS SDK and our Kameleoon JavaScript tag to benefit from this feature. We recommend implementing the [Kameleoon asynchronous tag](https://developers.kameleoon.com/web-experimentation/simple-implementation#asynchronous-tag-without-anti-flicker), which you can install before the closing `<body>` tag in your HTML page, as it will be only used for tracking purposes.
-:::
+</Note>
 
 The `getEngineTrackingCode()` method returns the Kameleoon tracking code for the current visitor. The tracking code is based on the experiments that were triggered during the last five seconds.
 
 <Tabs>
-<TabItem value="ts" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```ts
-import { KameleoonClient } from '@kameleoon/nodejs-sdk';
-import { KameleoonVisitorCodeManager } from '@kameleoon/nodejs-visitor-code-manager';
-import { KameleoonEventSource } from '@kameleoon/nodejs-event-source';
-import { KameleoonRequester } from '@kameleoon/nodejs-requester';
 
 const client = new KameleoonClient({
   siteCode: 'my_site_code',
@@ -4734,7 +4225,6 @@ const client = new KameleoonClient({
     requester: new KameleoonRequester(),
   },
 });
-
 
 async function init(): Promise<void> {
   await client.initialize();
@@ -4757,14 +4247,10 @@ async function init(): Promise<void> {
 init();
 ```
 
-</TabItem>
-<TabItem value="js" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```js
-import { KameleoonClient } from '@kameleoon/nodejs-sdk';
-import { KameleoonVisitorCodeManager } from '@kameleoon/nodejs-visitor-code-manager';
-import { KameleoonEventSource } from '@kameleoon/nodejs-event-source';
-import { KameleoonRequester } from '@kameleoon/nodejs-requester';
 
 const client = new KameleoonClient({
   siteCode: 'my_site_code',
@@ -4775,7 +4261,6 @@ const client = new KameleoonClient({
     requester: new KameleoonRequester(),
   },
 });
-
 
 async function init() {
   await client.initialize();
@@ -4798,10 +4283,10 @@ async function init() {
 init();
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
-:::note
+<Note>
 Result tracking code can be inserted directly into html `<script>` tag
 
 For example:
@@ -4824,8 +4309,7 @@ For example:
   </body>
 </html>
 ```
-
-:::
+</Note>
 
 ##### Arguments
 
@@ -4848,19 +4332,19 @@ For example:
 
 <Tabs>
 
-<TabItem value="version_5" label="SDK Version 5">
+<Tab title="SDK Version 5">
 
 #### onEvent()
 
 The `onEvent()` method fires a callback when a specific event is triggered. The callback function accesses the data associated with the event.
 The SDK methods in this documentation note which event types they trigger, if any.
 
-:::note
+<Note>
 You can only assign one callback to each `EventType`.
-:::
+</Note>
 
 <Tabs>
-<TabItem value="ts" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```ts
 import {
@@ -4868,9 +4352,6 @@ import {
   EventType,
   EvaluationEventDataType,
 } from '@kameleoon/nodejs-sdk';
-import { KameleoonVisitorCodeManager } from '@kameleoon/nodejs-visitor-code-manager';
-import { KameleoonEventSource } from '@kameleoon/nodejs-event-source';
-import { KameleoonRequester } from '@kameleoon/nodejs-requester';
 
 const client = new KameleoonClient({
   siteCode: 'my_site_code',
@@ -4881,7 +4362,6 @@ const client = new KameleoonClient({
     requester: new KameleoonRequester(),
   },
 });
-
 
 async function init(): Promise<void> {
   await client.initialize();
@@ -4895,14 +4375,10 @@ async function init(): Promise<void> {
 init();
 ```
 
-</TabItem>
-<TabItem value="js" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```js
-import { KameleoonClient, EventType } from '@kameleoon/nodejs-sdk';
-import { KameleoonVisitorCodeManager } from '@kameleoon/nodejs-visitor-code-manager';
-import { KameleoonEventSource } from '@kameleoon/nodejs-event-source';
-import { KameleoonRequester } from '@kameleoon/nodejs-requester';
 
 const client = new KameleoonClient({
   siteCode: 'my_site_code',
@@ -4913,7 +4389,6 @@ const client = new KameleoonClient({
     requester: new KameleoonRequester(),
   },
 });
-
 
 async function init() {
   await client.initialize();
@@ -4927,7 +4402,7 @@ async function init() {
 init();
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ##### Events
@@ -4952,7 +4427,7 @@ Events are defined in the `EventType` enum. The `eventData` parameter will have 
 | ----------------------------------- | --------------------------------------------------------------------------------- |
 | `KameleoonException.Initialization` | Method was executed before the `kameleoonClient` completed its `initialize` call |
 
-</TabItem>
+</Tab>
 
 </Tabs>
 
@@ -4965,17 +4440,17 @@ Kameleoon Data types are helper classes used for storing data in predefined form
 Data available in the SDK is not available for targeting and reporting in the Kameleoon app until you add the data (for example, by using the `addData()` method).
 See [use visit history to target users](../using-visit-history-in-feature-flags-and-experiments) for more information.
 
-:::note
+<Note>
 If you are using Kameleoon in hybrid mode, you can call `getRemoteVisitorData()` to automatically fill all data that Kameleoon previously collected.
-:::
+</Note>
 
 #### Browser
 
 Browser contains browser information.
 
-:::note
+<Note>
 Each visitor can only have one `Browser`. Adding a second `Browser` overwrites the first one.
-:::
+</Note>
 
 | Name                 | Type          | Description                                                                                     |
 | -------------------- | ------------- | ----------------------------------------------------------------------------------------------- |
@@ -4983,13 +4458,9 @@ Each visitor can only have one `Browser`. Adding a second `Browser` overwrites t
 | version (_optional_) | `number`      | version of the browser, floating point number represents major and minor version of the browser |
 
 <Tabs>
-<TabItem value="ts" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```ts
-import { KameleoonClient, BrowserType, Browser } from '@kameleoon/nodejs-sdk';
-import { KameleoonVisitorCodeManager } from '@kameleoon/nodejs-visitor-code-manager';
-import { KameleoonEventSource } from '@kameleoon/nodejs-event-source';
-import { KameleoonRequester } from '@kameleoon/nodejs-requester';
 
 const client = new KameleoonClient({
   siteCode: 'my_site_code',
@@ -5000,7 +4471,6 @@ const client = new KameleoonClient({
     requester: new KameleoonRequester(),
   },
 });
-
 
 async function init(): Promise<void> {
   await client.initialize();
@@ -5013,14 +4483,10 @@ async function init(): Promise<void> {
 init();
 ```
 
-</TabItem>
-<TabItem value="js" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```js
-import { KameleoonClient, BrowserType, Browser } from '@kameleoon/nodejs-sdk';
-import { KameleoonVisitorCodeManager } from '@kameleoon/nodejs-visitor-code-manager';
-import { KameleoonEventSource } from '@kameleoon/nodejs-event-source';
-import { KameleoonRequester } from '@kameleoon/nodejs-requester';
 
 const client = new KameleoonClient({
   siteCode: 'my_site_code',
@@ -5031,7 +4497,6 @@ const client = new KameleoonClient({
     requester: new KameleoonRequester(),
   },
 });
-
 
 async function init() {
   await client.initialize();
@@ -5044,7 +4509,7 @@ async function init() {
 init();
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ---
@@ -5057,22 +4522,18 @@ If you add `UniqueIdentifier` for a visitor, `visitorCode` is used as the unique
 
 The `UniqueIdentifier` parameter can be beneficial in certain edge cases. For example, if you can't access the anonymous `visitorCode` initially assigned to a visitor but have an internal ID linked through session merging, this parameter is useful.
 
-:::note
+<Note>
 Each visitor can only have one `UniqueIdentifier`. Adding another `UniqueIdentifier` overwrites the first one.
-:::
+</Note>
 
 | Name               | Type      | Description                                                                                                                                                   |
 | ------------------ | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | value (_required_) | `boolean` | value that specifies if the visitor is associated with another visitor, provided `false` will imply that the visitor is not associated with any other visitor |
 
 <Tabs>
-<TabItem value="ts" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```ts
-import { KameleoonClient, UniqueIdentifier } from '@kameleoon/nodejs-sdk';
-import { KameleoonVisitorCodeManager } from '@kameleoon/nodejs-visitor-code-manager';
-import { KameleoonEventSource } from '@kameleoon/nodejs-event-source';
-import { KameleoonRequester } from '@kameleoon/nodejs-requester';
 
 const client = new KameleoonClient({
   siteCode: 'my_site_code',
@@ -5083,7 +4544,6 @@ const client = new KameleoonClient({
     requester: new KameleoonRequester(),
   },
 });
-
 
 async function init(): Promise<void> {
   await client.initialize();
@@ -5095,14 +4555,10 @@ async function init(): Promise<void> {
 init();
 ```
 
-</TabItem>
-<TabItem value="js" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```js
-import { KameleoonClient, UniqueIdentifier } from '@kameleoon/nodejs-sdk';
-import { KameleoonVisitorCodeManager } from '@kameleoon/nodejs-visitor-code-manager';
-import { KameleoonEventSource } from '@kameleoon/nodejs-event-source';
-import { KameleoonRequester } from '@kameleoon/nodejs-requester';
 
 const client = new KameleoonClient({
   siteCode: 'my_site_code',
@@ -5113,7 +4569,6 @@ const client = new KameleoonClient({
     requester: new KameleoonRequester(),
   },
 });
-
 
 async function init() {
   await client.initialize();
@@ -5125,21 +4580,17 @@ async function init() {
 init();
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ---
 
 #### Conversion
 
-<Conversion sec="description" c={Context}/>
-
 `ConversionParametersType` conversionParameters - an object with conversion parameters described below
 
-<Conversion sec="arguments" c={Context}/>
-
 <Tabs>
-<TabItem value="ts" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```ts
 import {
@@ -5148,9 +4599,6 @@ import {
   Conversion,
   CustomData,
 } from '@kameleoon/nodejs-sdk';
-import { KameleoonVisitorCodeManager } from '@kameleoon/nodejs-visitor-code-manager';
-import { KameleoonEventSource } from '@kameleoon/nodejs-event-source';
-import { KameleoonRequester } from '@kameleoon/nodejs-requester';
 
 const client = new KameleoonClient({
   siteCode: 'my_site_code',
@@ -5161,7 +4609,6 @@ const client = new KameleoonClient({
     requester: new KameleoonRequester(),
   },
 });
-
 
 async function init(): Promise<void> {
   await client.initialize();
@@ -5182,14 +4629,10 @@ async function init(): Promise<void> {
 init();
 ```
 
-</TabItem>
-<TabItem value="js" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```js
-import { KameleoonClient, Conversion, CustomData } from '@kameleoon/nodejs-sdk';
-import { KameleoonVisitorCodeManager } from '@kameleoon/nodejs-visitor-code-manager';
-import { KameleoonEventSource } from '@kameleoon/nodejs-event-source';
-import { KameleoonRequester } from '@kameleoon/nodejs-requester';
 
 const client = new KameleoonClient({
   siteCode: 'my_site_code',
@@ -5200,7 +4643,6 @@ const client = new KameleoonClient({
     requester: new KameleoonRequester(),
   },
 });
-
 
 async function init() {
   await client.initialize();
@@ -5221,7 +4663,7 @@ async function init() {
 init();
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 #### Cookie
@@ -5230,22 +4672,18 @@ init();
 
 The NodeJS SDK doesn't require a `request` or `response` to extract the cookie. Instead, add the cookie manually using `Cookie` data.
 
-:::note
+<Note>
 Each visitor can only have one `Cookie`. Adding a second `Cookie` overwrites the first one.
-:::
+</Note>
 
 | Name                | Type           | Description                                                         |
 | ------------------- | -------------- | ------------------------------------------------------------------- |
 | cookie (_required_) | `CookieType[]` | A list of `CookieType` objects consisting of cookie keys and values |
 
 <Tabs>
-<TabItem value="ts" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```ts
-import { KameleoonClient, CookieType, Cookie } from '@kameleoon/nodejs-sdk';
-import { KameleoonVisitorCodeManager } from '@kameleoon/nodejs-visitor-code-manager';
-import { KameleoonEventSource } from '@kameleoon/nodejs-event-source';
-import { KameleoonRequester } from '@kameleoon/nodejs-requester';
 
 const client = new KameleoonClient({
   siteCode: 'my_site_code',
@@ -5256,7 +4694,6 @@ const client = new KameleoonClient({
     requester: new KameleoonRequester(),
   },
 });
-
 
 async function init(): Promise<void> {
   await client.initialize();
@@ -5273,14 +4710,10 @@ async function init(): Promise<void> {
 init();
 ```
 
-</TabItem>
-<TabItem value="js" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```js
-import { KameleoonClient, Cookie } from '@kameleoon/nodejs-sdk';
-import { KameleoonVisitorCodeManager } from '@kameleoon/nodejs-visitor-code-manager';
-import { KameleoonEventSource } from '@kameleoon/nodejs-event-source';
-import { KameleoonRequester } from '@kameleoon/nodejs-requester';
 
 const client = new KameleoonClient({
   siteCode: 'my_site_code',
@@ -5291,7 +4724,6 @@ const client = new KameleoonClient({
     requester: new KameleoonRequester(),
   },
 });
-
 
 async function init() {
   await client.initialize();
@@ -5308,7 +4740,7 @@ async function init() {
 init();
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ##### Methods
@@ -5317,10 +4749,9 @@ init();
 The method accepts `string` as a parameter, and returns an initialized `Cookie` instance.
 
 <Tabs>
-<TabItem value="ts" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```ts
-import { Cookie } from '@kameleoon/nodejs-sdk';
 
 const cookieString = 'key_1=value_1; key_2=value_2';
 const cookie: Cookie = Cookie.fromString(cookieString);
@@ -5332,11 +4763,10 @@ const cookie: Cookie = Cookie.fromString(cookieString);
 // ]
 ```
 
-</TabItem>
-<TabItem value="js" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```js
-import { Cookie } from '@kameleoon/nodejs-sdk';
 
 const cookieString = 'key_1=value_1; key_2=value_2';
 const cookie = Cookie.fromString(cookieString);
@@ -5348,7 +4778,7 @@ const cookie = Cookie.fromString(cookieString);
 // ]
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ---
@@ -5357,9 +4787,9 @@ const cookie = Cookie.fromString(cookieString);
 
 `GeolocationData` contains the visitor's geolocation details.
 
-:::note
+<Note>
 Each visitor can only have one `GeolocationData`. Adding a second `GeolocationData` overwrites the first one.
-:::
+</Note>
 
 An object parameter with the type `GeolocationInfoType` contains the following fields:
 
@@ -5372,7 +4802,7 @@ An object parameter with the type `GeolocationInfoType` contains the following f
 | coordinates (_optional_) | `[number, number]` | Coordinates array tuple of two location values (longitude and latitude). Coordinate number represents decimal degrees |
 
 <Tabs>
-<TabItem value="ts" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```ts
 import {
@@ -5380,9 +4810,6 @@ import {
   GeolocationData,
   GeolocationInfoType,
 } from '@kameleoon/nodejs-sdk';
-import { KameleoonVisitorCodeManager } from '@kameleoon/nodejs-visitor-code-manager';
-import { KameleoonEventSource } from '@kameleoon/nodejs-event-source';
-import { KameleoonRequester } from '@kameleoon/nodejs-requester';
 
 const client = new KameleoonClient({
   siteCode: 'my_site_code',
@@ -5393,7 +4820,6 @@ const client = new KameleoonClient({
     requester: new KameleoonRequester(),
   },
 });
-
 
 async function init(): Promise<void> {
   await client.initialize();
@@ -5413,14 +4839,10 @@ async function init(): Promise<void> {
 init();
 ```
 
-</TabItem>
-<TabItem value="js" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```js
-import { KameleoonClient, GeolocationData } from '@kameleoon/nodejs-sdk';
-import { KameleoonVisitorCodeManager } from '@kameleoon/nodejs-visitor-code-manager';
-import { KameleoonEventSource } from '@kameleoon/nodejs-event-source';
-import { KameleoonRequester } from '@kameleoon/nodejs-requester';
 
 const client = new KameleoonClient({
   siteCode: 'my_site_code',
@@ -5431,7 +4853,6 @@ const client = new KameleoonClient({
     requester: new KameleoonRequester(),
   },
 });
-
 
 async function init() {
   await client.initialize();
@@ -5451,7 +4872,7 @@ async function init() {
 init();
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ---
@@ -5469,26 +4890,20 @@ To maintain the custom data in future visits, the SDK sends `CustomData` with th
 | overwrite _(optional)_ | `boolean`  | Flag to explicitly control how the values are stored and how they appear in reports. [See more](https://developers.kameleoon.com/core-concepts/custom-data/#default-logic-when-overwrite-parameter-is-false-or-omitted) | `true`  |
 | value (_required_)     | `string[]` | The custom data value. It must be stringified to match the `string` type. _Note:_ value is variadic.                                                                                                                    |         |
 
-:::note
+<Note>
 - Each visitor is allowed only one `CustomData` for each unique `index`. Adding another `CustomData` with the same `index` will replace the existing one.
-
 
 - The custom data ‘index’ can be found in the [Custom Data dashboard](https://help.kameleoon.com/manage-your-custom-data/) under the “INDEX” column.
 
 - To prevent the SDK from sending data with the selected index to Kameleoon servers for privacy reasons, enable the option: **Use this data only locally for targeting purposes** when creating custom data.
 
 - Adding a `CustomData` instance created with a name when the SDK instance is not initialized or the name is not registered, will result in the data being ignored.
-
-:::
+</Note>
 
 <Tabs>
-<TabItem value="ts" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```ts
-import { KameleoonClient, CustomData } from '@kameleoon/nodejs-sdk';
-import { KameleoonVisitorCodeManager } from '@kameleoon/nodejs-visitor-code-manager';
-import { KameleoonEventSource } from '@kameleoon/nodejs-event-source';
-import { KameleoonRequester } from '@kameleoon/nodejs-requester';
 
 const client = new KameleoonClient({
   siteCode: 'my_site_code',
@@ -5499,7 +4914,6 @@ const client = new KameleoonClient({
     requester: new KameleoonRequester(),
   },
 });
-
 
 async function init(): Promise<void> {
   await client.initialize();
@@ -5539,14 +4953,10 @@ async function init(): Promise<void> {
 init();
 ```
 
-</TabItem>
-<TabItem value="js" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```js
-import { KameleoonClient, CustomData } from '@kameleoon/nodejs-sdk';
-import { KameleoonVisitorCodeManager } from '@kameleoon/nodejs-visitor-code-manager';
-import { KameleoonEventSource } from '@kameleoon/nodejs-event-source';
-import { KameleoonRequester } from '@kameleoon/nodejs-requester';
 
 const client = new KameleoonClient({
   siteCode: 'my_site_code',
@@ -5557,7 +4967,6 @@ const client = new KameleoonClient({
     requester: new KameleoonRequester(),
   },
 });
-
 
 async function init() {
   await client.initialize();
@@ -5597,7 +5006,7 @@ async function init() {
 init();
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ---
@@ -5606,22 +5015,18 @@ init();
 
 Device contains information about your device.
 
-:::note
+<Note>
 Each visitor can only have one `Device`. Adding a second `Device` overwrites the first one.
-:::
+</Note>
 
 | Name                    | Type         | Description                                                      |
 | ----------------------- | ------------ | ---------------------------------------------------------------- |
 | deviceType (_required_) | `DeviceType` | possible types for device type (`PHONE`, `TABLET`, `DESKTOP`) |
 
 <Tabs>
-<TabItem value="ts" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```ts
-import { KameleoonClient, DeviceType, Device } from '@kameleoon/nodejs-sdk';
-import { KameleoonVisitorCodeManager } from '@kameleoon/nodejs-visitor-code-manager';
-import { KameleoonEventSource } from '@kameleoon/nodejs-event-source';
-import { KameleoonRequester } from '@kameleoon/nodejs-requester';
 
 const client = new KameleoonClient({
   siteCode: 'my_site_code',
@@ -5632,7 +5037,6 @@ const client = new KameleoonClient({
     requester: new KameleoonRequester(),
   },
 });
-
 
 async function init(): Promise<void> {
   await client.initialize();
@@ -5645,14 +5049,10 @@ async function init(): Promise<void> {
 init();
 ```
 
-</TabItem>
-<TabItem value="js" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```js
-import { KameleoonClient, DeviceType, Device } from '@kameleoon/nodejs-sdk';
-import { KameleoonVisitorCodeManager } from '@kameleoon/nodejs-visitor-code-manager';
-import { KameleoonEventSource } from '@kameleoon/nodejs-event-source';
-import { KameleoonRequester } from '@kameleoon/nodejs-requester';
 
 const client = new KameleoonClient({
   siteCode: 'my_site_code',
@@ -5663,7 +5063,6 @@ const client = new KameleoonClient({
     requester: new KameleoonRequester(),
   },
 });
-
 
 async function init() {
   await client.initialize();
@@ -5676,7 +5075,7 @@ async function init() {
 init();
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ---
@@ -5685,16 +5084,16 @@ init();
 
 `OperatingSystem` contains information about the visitor's operating system.
 
-:::note
+<Note>
 Each visitor can only have one `OperatingSystem`. Adding a second `OperatingSystem` overwrites the first one.
-:::
+</Note>
 
 | Name                         | Type                  | Description                                                                                     |
 | ---------------------------- | --------------------- | ----------------------------------------------------------------------------------------------- |
 | operatingSystem (_required_) | `OperatingSystemType` | possible types for device type: `WINDOWS_PHONE`, `WINDOWS`, `ANDROID`, `LINUX`, `MAC`, `IOS` |
 
 <Tabs>
-<TabItem value="ts" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```ts
 import {
@@ -5702,9 +5101,6 @@ import {
   OperatingSystem,
   OperatingSystemType,
 } from '@kameleoon/nodejs-sdk';
-import { KameleoonVisitorCodeManager } from '@kameleoon/nodejs-visitor-code-manager';
-import { KameleoonEventSource } from '@kameleoon/nodejs-event-source';
-import { KameleoonRequester } from '@kameleoon/nodejs-requester';
 
 const client = new KameleoonClient({
   siteCode: 'my_site_code',
@@ -5715,7 +5111,6 @@ const client = new KameleoonClient({
     requester: new KameleoonRequester(),
   },
 });
-
 
 async function init(): Promise<void> {
   await client.initialize();
@@ -5728,8 +5123,8 @@ async function init(): Promise<void> {
 init();
 ```
 
-</TabItem>
-<TabItem value="js" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```js
 import {
@@ -5737,9 +5132,6 @@ import {
   OperatingSystem,
   OperatingSystemType,
 } from '@kameleoon/nodejs-sdk';
-import { KameleoonVisitorCodeManager } from '@kameleoon/nodejs-visitor-code-manager';
-import { KameleoonEventSource } from '@kameleoon/nodejs-event-source';
-import { KameleoonRequester } from '@kameleoon/nodejs-requester';
 
 const client = new KameleoonClient({
   siteCode: 'my_site_code',
@@ -5750,7 +5142,6 @@ const client = new KameleoonClient({
     requester: new KameleoonRequester(),
   },
 });
-
 
 async function init() {
   await client.initialize();
@@ -5763,7 +5154,7 @@ async function init() {
 init();
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ---
@@ -5772,9 +5163,9 @@ init();
 
 PageView contains information about your web page.
 
-:::note
+<Note>
 Each visitor can have one `PageView` per unique URL. Adding a `PageView` with the same URL notifies the SDK that the visitor revisited the page.
-:::
+</Note>
 
 `PageViewParametersType` pageViewParameters - an object with page view parameters described below
 
@@ -5784,12 +5175,12 @@ Each visitor can have one `PageView` per unique URL. Adding a `PageView` with th
 | title (_required_)      | `string`   | title of the web page                                                              |
 | referrer (_optional_)   | `number[]` | an optional parameter containing a list of referrers indices, has no default value |
 
-:::note
+<Note>
 You can find the [referrer's](https://help.kameleoon.com/create-acquisition-channel) index or ID in your Kameleoon account. Note that this index starts at 0, meaning the first acquisition channel you create for a given site will be assigned 0 as its ID, not 1.
-:::
+</Note>
 
 <Tabs>
-<TabItem value="ts" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```ts
 import {
@@ -5797,9 +5188,6 @@ import {
   PageViewParametersType,
   PageView,
 } from '@kameleoon/nodejs-sdk';
-import { KameleoonVisitorCodeManager } from '@kameleoon/nodejs-visitor-code-manager';
-import { KameleoonEventSource } from '@kameleoon/nodejs-event-source';
-import { KameleoonRequester } from '@kameleoon/nodejs-requester';
 
 const client = new KameleoonClient({
   siteCode: 'my_site_code',
@@ -5810,7 +5198,6 @@ const client = new KameleoonClient({
     requester: new KameleoonRequester(),
   },
 });
-
 
 async function init(): Promise<void> {
   await client.initialize();
@@ -5830,15 +5217,11 @@ async function init(): Promise<void> {
 init();
 ```
 
-</TabItem>
+</Tab>
 
-<TabItem value="js" label="JavaScript">
+<Tab title="JavaScript">
 
 ```js
-import { KameleoonClient, PageView } from '@kameleoon/nodejs-sdk';
-import { KameleoonVisitorCodeManager } from '@kameleoon/nodejs-visitor-code-manager';
-import { KameleoonEventSource } from '@kameleoon/nodejs-event-source';
-import { KameleoonRequester } from '@kameleoon/nodejs-requester';
 
 const client = new KameleoonClient({
   siteCode: 'my_site_code',
@@ -5849,7 +5232,6 @@ const client = new KameleoonClient({
     requester: new KameleoonRequester(),
   },
 });
-
 
 async function init() {
   await client.initialize();
@@ -5869,7 +5251,7 @@ async function init() {
 init();
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ---
@@ -5880,28 +5262,24 @@ init();
 
 If you use internal bots, we suggest you pass the value **curl/8.0** of the userAgent to exclude them from our analytics.
 
-:::note
+<Note>
 A visitor can only have one `UserAgent`. Adding a second `UserAgent` overwrites the first one.
-:::
+</Note>
 
 | Name               | Type     | Description               |
 | ------------------ | -------- | ------------------------- |
 | value (_required_) | `string` | value used for comparison |
 
-:::caution
+<Warning>
 Server-side experiments are more vulnerable to **bot traffic** than client-side experiments. To address this, Kameleoon uses the IAB/ABC International Spiders and Bots List to identify known bots and spiders. We recommend that you pass the user agent to be filtered by Kameleoon when running server-side experiments for each visitor browsing your website, to avoid counting bots in your analytics.
 
 If you use internal bots, we suggest that you pass the value **curl/8.0** of the userAgent to exclude them from our analytics.
-:::
+</Warning>
 
 <Tabs>
-<TabItem value="ts" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```ts
-import { KameleoonClient, UserAgent } from '@kameleoon/nodejs-sdk';
-import { KameleoonVisitorCodeManager } from '@kameleoon/nodejs-visitor-code-manager';
-import { KameleoonEventSource } from '@kameleoon/nodejs-event-source';
-import { KameleoonRequester } from '@kameleoon/nodejs-requester';
 
 const client = new KameleoonClient({
   siteCode: 'my_site_code',
@@ -5912,7 +5290,6 @@ const client = new KameleoonClient({
     requester: new KameleoonRequester(),
   },
 });
-
 
 async function init(): Promise<void> {
   await client.initialize();
@@ -5925,14 +5302,10 @@ async function init(): Promise<void> {
 init();
 ```
 
-</TabItem>
-<TabItem value="js" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```js
-import { KameleoonClient, UserAgent } from '@kameleoon/nodejs-sdk';
-import { KameleoonVisitorCodeManager } from '@kameleoon/nodejs-visitor-code-manager';
-import { KameleoonEventSource } from '@kameleoon/nodejs-event-source';
-import { KameleoonRequester } from '@kameleoon/nodejs-requester';
 
 const client = new KameleoonClient({
   siteCode: 'my_site_code',
@@ -5943,7 +5316,6 @@ const client = new KameleoonClient({
     requester: new KameleoonRequester(),
   },
 });
-
 
 async function init() {
   await client.initialize();
@@ -5956,24 +5328,15 @@ async function init() {
 init();
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
-
 
 #### ApplicationVersion
 
-<ApplicationVersion sec="description" c={Context}/>
-
-<ApplicationVersion sec="arguments" c={Context}/>
-
 <Tabs>
-<TabItem value="ts" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```ts
-import { KameleoonClient, ApplicationVersion } from '@kameleoon/nodejs-sdk';
-import { KameleoonVisitorCodeManager } from '@kameleoon/nodejs-visitor-code-manager';
-import { KameleoonEventSource } from '@kameleoon/nodejs-event-source';
-import { KameleoonRequester } from '@kameleoon/nodejs-requester';
 
 const client = new KameleoonClient({
   siteCode: 'my_site_code',
@@ -5984,7 +5347,6 @@ const client = new KameleoonClient({
     requester: new KameleoonRequester(),
   },
 });
-
 
 async function init(): Promise<void> {
   await client.initialize();
@@ -5997,14 +5359,10 @@ async function init(): Promise<void> {
 init();
 ```
 
-</TabItem>
-<TabItem value="js" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```js
-import { KameleoonClient, ApplicationVersion } from '@kameleoon/nodejs-sdk';
-import { KameleoonVisitorCodeManager } from '@kameleoon/nodejs-visitor-code-manager';
-import { KameleoonEventSource } from '@kameleoon/nodejs-event-source';
-import { KameleoonRequester } from '@kameleoon/nodejs-requester';
 
 const client = new KameleoonClient({
   siteCode: 'my_site_code',
@@ -6015,7 +5373,6 @@ const client = new KameleoonClient({
     requester: new KameleoonRequester(),
   },
 });
-
 
 async function init() {
   await client.initialize();
@@ -6028,7 +5385,7 @@ async function init() {
 init();
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ---
@@ -6037,40 +5394,30 @@ init();
 
 #### DataFile
 
-<DataFile sec="description" c={Context}/>
-
-<DataFile sec="arguments" c={Context}/>
-
 <Tabs>
-<TabItem value="ts" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```ts
-import { FeatureFlag } from '@kameleoon/nodejs-sdk';
 
 const featureFlags: Map<string, FeatureFlag> = dataFile.featureFlags;
 ```
 
-</TabItem>
-<TabItem value="js" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```js
 const featureFlags = dataFile.featureFlags;
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 #### FeatureFlag
 
-<FeatureFlag sec="description_rules" c={Context}/>
-
-<FeatureFlag sec="arguments_rules" c={Context}/>
-
 <Tabs>
-<TabItem value="ts" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```ts
-import { Variation, Rule } from '@kameleoon/nodejs-sdk';
 
 // Check whether the feature flag is enabled in the current environment
 const isEnvironmentEnabled: boolean = featureFlag.environmentEnabled;
@@ -6085,8 +5432,8 @@ const variations: Map<string, Variation> = featureFlag.variations;
 const rules: Rule[] = featureFlag.rules;
 ```
 
-</TabItem>
-<TabItem value="js" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```js
 // Check whether the feature flag is enabled in the current environment
@@ -6102,34 +5449,29 @@ const variations = featureFlag.variations;
 const rules = featureFlag.rules;
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 #### Rule
 
-<Rule sec="description" c={Context}/>
-
-<Rule sec="arguments" c={Context}/>
-
 <Tabs>
-<TabItem value="ts" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```ts
-import { Variation } from '@kameleoon/nodejs-sdk';
 
 // Retrieve all variations of the rule as a map (key = variation key, value = Variation object)
 const variations: Map<string, Variation>  = rule.variations;
 ```
 
-</TabItem>
-<TabItem value="js" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```js
 // Retrieve all variations of the rule as a map (key = variation key, value = Variation object)
 const variations  = rule.variations;
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 #### Variation
@@ -6144,15 +5486,13 @@ const variations  = rule.variations;
 | experimentId | `number` or `null`      | id of the experiment or `null` if the visitor landed on the default variation.                      |
 | variables    | `Map<string, Variable>` | map of variables for the variation, where key is the variable key and value is the variable object. |
 
-:::note
-
+<Note>
 - Ensure that your code handles the case where `id` or `experimentId` may be `null`, indicating a default variation.
 - The `variables` map might be empty if no variables are associated with the variation.
-
-:::
+</Note>
 
 <Tabs>
-<TabItem value="ts" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```ts
 // Retrieving the variation name
@@ -6171,8 +5511,8 @@ const experimentId = variation.experimentId;
 const variables = variation.variables;
 ```
 
-</TabItem>
-<TabItem value="js" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```js
 // Retrieving the variation name
@@ -6191,7 +5531,7 @@ const experimentId = variation.experimentId;
 const variables = variation.variables;
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 #### Variable
@@ -6205,7 +5545,7 @@ const variables = variation.variables;
 | value | `any`    | The value of the variable, which can be of the following types: **boolean**, **number**, **String**, **Record\<string, any\>**, **any[]**. |
 
 <Tabs>
-<TabItem value="ts" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```ts
 // Retrieving the variables map
@@ -6221,8 +5561,8 @@ const isDiscount = variables.get('isDiscount')?.value || false;
 const title = variables.get('title')?.value || '';
 ```
 
-</TabItem>
-<TabItem value="js" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```js
 // Retrieving the variables map
@@ -6238,38 +5578,34 @@ const isDiscount = variables.get('isDiscount')?.value || false;
 const title = variables.get('title')?.value || '';
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ### Deprecated methods
 
-:::caution
+<Warning>
 These methods are deprecated and will be removed in the next major update.
-:::
+</Warning>
 
 #### getFeatureFlagVariationKey()
 
 - 📨 _Sends Tracking Data to Kameleoon_
 - 🎯 _Events:_ [`EventType.Evaluation`](#events-1)
 
-:::note
+<Note>
 Use the [`getVariation`](#getvariation) method instead.
-:::
+</Note>
 
 The `getFeatureFlagVariationKey()` method retrieves the variation key for the specified `visitorCode` in the corresponding feature flag. This method includes a targeting check, finding the appropriate variation exposed to the visitor, saving it to storage, and sending a tracking request.
 
-:::note
+<Note>
 If a user has not been previously assigned a variation key for the feature flag, the SDK will randomly determine a variation based on the feature flag's rules. If the user is already linked to the feature flag, the SDK will return their previously assigned variation key. If the user does not meet any of the specified rules, the default value defined in Kameleoon's feature flag delivery rules will be returned. This default value is not always a variation key—it can also be a boolean or another data type, depending on the feature flag's configuration.
-:::
+</Note>
 
 <Tabs>
-<TabItem value="ts" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```ts
-import { KameleoonClient, CustomData } from '@kameleoon/nodejs-sdk';
-import { KameleoonVisitorCodeManager } from '@kameleoon/nodejs-visitor-code-manager';
-import { KameleoonEventSource } from '@kameleoon/nodejs-event-source';
-import { KameleoonRequester } from '@kameleoon/nodejs-requester';
 
 const client = new KameleoonClient({
   siteCode: 'my_site_code',
@@ -6303,14 +5639,10 @@ async function init(): Promise<void> {
 init();
 ```
 
-</TabItem>
-<TabItem value="js" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```js
-import { KameleoonClient, CustomData } from '@kameleoon/nodejs-sdk';
-import { KameleoonVisitorCodeManager } from '@kameleoon/nodejs-visitor-code-manager';
-import { KameleoonEventSource } from '@kameleoon/nodejs-event-source';
-import { KameleoonRequester } from '@kameleoon/nodejs-requester';
 
 const client = new KameleoonClient({
   siteCode: 'my_site_code',
@@ -6344,7 +5676,7 @@ async function init() {
 init();
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ##### Arguments
@@ -6372,9 +5704,9 @@ init();
 
 #### getVisitorFeatureFlags()
 
-:::note
+<Note>
 Use the [`getVariations`](#getvariations) method instead.
-:::
+</Note>
 
 The `getVisitorFeatureFlags()` method returns a list of feature flags that are active for the visitor with the specified `visitorCode`, ensuring that the visitor is allocated one of the variations.
 
@@ -6382,13 +5714,9 @@ The `getVisitorFeatureFlags()` method returns a list of feature flags that are a
 - 🎯 _Events:_ [`EventType.Evaluation`](#events-1) (for each feature flag)
 
 <Tabs>
-<TabItem value="ts" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```ts
-import { KameleoonClient } from '@kameleoon/nodejs-sdk';
-import { KameleoonVisitorCodeManager } from '@kameleoon/nodejs-visitor-code-manager';
-import { KameleoonEventSource } from '@kameleoon/nodejs-event-source';
-import { KameleoonRequester } from '@kameleoon/nodejs-requester';
 
 const client = new KameleoonClient({
   siteCode: 'my_site_code',
@@ -6416,14 +5744,10 @@ async function init(): Promise<void> {
 init();
 ```
 
-</TabItem>
-<TabItem value="js" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```js
-import { KameleoonClient } from '@kameleoon/nodejs-sdk';
-import { KameleoonVisitorCodeManager } from '@kameleoon/nodejs-visitor-code-manager';
-import { KameleoonEventSource } from '@kameleoon/nodejs-event-source';
-import { KameleoonRequester } from '@kameleoon/nodejs-requester';
 
 const client = new KameleoonClient({
   siteCode: 'my_site_code',
@@ -6451,11 +5775,10 @@ async function init() {
 init();
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
-:::caution
-
+<Warning>
 This method only collects the visitor's _active_ feature flags, meaning the result excludes all feature flags for which the visitor is assigned the `off` (default or control) variation.
 
 For example:
@@ -6479,8 +5802,7 @@ client.getFeatureFlags('my_visitor').forEach(({ key }) => {
   client.getFeatureFlagVariationKey('my_visitor', key);
 });
 ```
-
-:::
+</Warning>
 
 ##### Arguments
 
@@ -6508,20 +5830,16 @@ client.getFeatureFlags('my_visitor').forEach(({ key }) => {
 - 🚫 _Doesn't send Tracking Data to Kameleoon_
 - 🎯 _Events:_ [`EventType.Evaluation`](#events-1) (for each feature flag)
 
-:::note
+<Note>
 Use the [`getVariations`](#getvariations) method instead.
-:::
+</Note>
 
 The `getActiveFeatureFlags()` method returns a `Map`, where the key represents the feature key, and the value contains detailed information about the visitor’s variation and its variables.
 
 <Tabs>
-<TabItem value="ts" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```ts
-import { KameleoonClient } from '@kameleoon/nodejs-sdk';
-import { KameleoonVisitorCodeManager } from '@kameleoon/nodejs-visitor-code-manager';
-import { KameleoonEventSource } from '@kameleoon/nodejs-event-source';
-import { KameleoonRequester } from '@kameleoon/nodejs-requester';
 
 const client = new KameleoonClient({
   siteCode: 'my_site_code',
@@ -6565,14 +5883,10 @@ async function init(): Promise<void> {
 init();
 ```
 
-</TabItem>
-<TabItem value="js" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```js
-import { KameleoonClient } from '@kameleoon/nodejs-sdk';
-import { KameleoonVisitorCodeManager } from '@kameleoon/nodejs-visitor-code-manager';
-import { KameleoonEventSource } from '@kameleoon/nodejs-event-source';
-import { KameleoonRequester } from '@kameleoon/nodejs-requester';
 
 const client = new KameleoonClient({
   siteCode: 'my_site_code',
@@ -6616,16 +5930,14 @@ async function init() {
 init();
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
-:::caution
-
+<Warning>
 This method only collects the visitor's _active_ feature flags, meaning the result excludes all feature flags for which the visitor is assigned the `off` (default or control) variation.
 
 See the [getVisitorFeatureFlags](#getvisitorfeatureflags) method's _CAUTION_ section for more details.
-
-:::
+</Warning>
 
 ##### Arguments
 
@@ -6655,14 +5967,14 @@ See the [getVisitorFeatureFlags](#getvisitorfeatureflags) method's _CAUTION_ sec
 - 📨 _Sends Tracking Data to Kameleoon_
 - 🎯 _Events:_ [`EventType.Evaluation`](#events-1)
 
-:::note
+<Note>
 Use the [`getVariation`](#getvariation) method instead.
-:::
+</Note>
 
 The `getFeatureFlagVariable()` method retrieves a variable for the visitor based on the `visitorCode` within the identified feature flag. This method includes a targeting check, determines the appropriate variation for the visitor, saves it to storage, and sends a tracking request.
 
 <Tabs>
-<TabItem value="ts" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```ts
 import {
@@ -6670,9 +5982,6 @@ import {
   VariableType,
   JSONType,
 } from '@kameleoon/nodejs-sdk';
-import { KameleoonVisitorCodeManager } from '@kameleoon/nodejs-visitor-code-manager';
-import { KameleoonEventSource } from '@kameleoon/nodejs-event-source';
-import { KameleoonRequester } from '@kameleoon/nodejs-requester';
 
 const client = new KameleoonClient({
   siteCode: 'my_site_code',
@@ -6692,7 +6001,6 @@ async function init(): Promise<void> {
     request: req,
     response: res,
   });
-
 
   // -- Get feature variable
   const result = client.getFeatureFlagVariable({
@@ -6725,14 +6033,10 @@ async function init(): Promise<void> {
 init();
 ```
 
-</TabItem>
-<TabItem value="js" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```js
-import { KameleoonClient } from '@kameleoon/nodejs-sdk';
-import { KameleoonVisitorCodeManager } from '@kameleoon/nodejs-visitor-code-manager';
-import { KameleoonEventSource } from '@kameleoon/nodejs-event-source';
-import { KameleoonRequester } from '@kameleoon/nodejs-requester';
 
 const client = new KameleoonClient({
   siteCode: 'my_site_code',
@@ -6753,7 +6057,6 @@ async function init() {
     response: res,
   });
 
-
   // -- Get feature variable
   const variableResult = client.getFeatureFlagVariable({
     visitorCode,
@@ -6767,7 +6070,7 @@ async function init() {
 init();
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ##### Arguments
@@ -6803,20 +6106,16 @@ Parameters object of type `GetFeatureFlagVariableParamsType` containing the foll
 - 📨 _Sends Tracking Data to Kameleoon_
 - 🎯 _Events:_ [`EventType.Evaluation`](#events-1) (for each feature flag)
 
-:::note
+<Note>
 Use the [`getVariation`](#getvariation) method instead.
-:::
+</Note>
 
 The `getFeatureFlagVariables()` method retrieves a list of variable values for a specified visitor and feature flag. This method checks if the user is targeted, identifies the visitor’s assigned variation, stores it, and sends a tracking request.
 
 <Tabs>
-<TabItem value="ts" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```ts
-import { KameleoonClient } from '@kameleoon/nodejs-sdk';
-import { KameleoonVisitorCodeManager } from '@kameleoon/nodejs-visitor-code-manager';
-import { KameleoonEventSource } from '@kameleoon/nodejs-event-source';
-import { KameleoonRequester } from '@kameleoon/nodejs-requester';
 
 const client = new KameleoonClient({
   siteCode: 'my_site_code',
@@ -6827,7 +6126,6 @@ const client = new KameleoonClient({
     requester: new KameleoonRequester(),
   },
 });
-
 
 async function init(): Promise<void> {
   await client.initialize();
@@ -6848,14 +6146,10 @@ async function init(): Promise<void> {
 init();
 ```
 
-</TabItem>
-<TabItem value="js" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```js
-import { KameleoonClient } from '@kameleoon/nodejs-sdk';
-import { KameleoonVisitorCodeManager } from '@kameleoon/nodejs-visitor-code-manager';
-import { KameleoonEventSource } from '@kameleoon/nodejs-event-source';
-import { KameleoonRequester } from '@kameleoon/nodejs-requester';
 
 const client = new KameleoonClient({
   siteCode: 'my_site_code',
@@ -6886,7 +6180,7 @@ async function init() {
 init();
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ##### Arguments
@@ -6917,24 +6211,20 @@ init();
 
 #### onConfigurationUpdate()
 
-:::note
+<Note>
 Use the `onEvent` method with `EventType.ConfigurationUpdate` instead.
-:::
+</Note>
 
 The `onConfigurationUpdate()` method fires a callback upon client configuration update.
 
-:::note
+<Note>
 This method is only applicable to server-sent events for real-time updates.
-:::
+</Note>
 
 <Tabs>
-<TabItem value="ts" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```ts
-import { KameleoonClient } from '@kameleoon/nodejs-sdk';
-import { KameleoonVisitorCodeManager } from '@kameleoon/nodejs-visitor-code-manager';
-import { KameleoonEventSource } from '@kameleoon/nodejs-event-source';
-import { KameleoonRequester } from '@kameleoon/nodejs-requester';
 
 const client = new KameleoonClient({
   siteCode: 'my_site_code',
@@ -6945,7 +6235,6 @@ const client = new KameleoonClient({
     requester: new KameleoonRequester(),
   },
 });
-
 
 async function init(): Promise<void> {
   await client.initialize();
@@ -6959,14 +6248,10 @@ async function init(): Promise<void> {
 init();
 ```
 
-</TabItem>
-<TabItem value="js" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```js
-import { KameleoonClient } from '@kameleoon/nodejs-sdk';
-import { KameleoonVisitorCodeManager } from '@kameleoon/nodejs-visitor-code-manager';
-import { KameleoonEventSource } from '@kameleoon/nodejs-event-source';
-import { KameleoonRequester } from '@kameleoon/nodejs-requester';
 
 const client = new KameleoonClient({
   siteCode: 'my_site_code',
@@ -6977,7 +6262,6 @@ const client = new KameleoonClient({
     requester: new KameleoonRequester(),
   },
 });
-
 
 async function init() {
   await client.initialize();
@@ -6991,7 +6275,7 @@ async function init() {
 init();
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ##### Arguments

@@ -1,216 +1,6 @@
 ---
 title: 'React SDK'
-sidebar_position: 3
-toc_max_heading_level: 4
 ---
-
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-import { Select, Text, Bold, Italic, Code, CodeRef, Ref, If } from '../commons/utils.mdx';
-import SharedDiv, { Shared } from '../commons/shared.mdx';
-import CrossDeviceReconciliation from '../commons/developer-guide/cross-device-reconciliation.mdx';
-import Logging from '../commons/developer-guide/logging.mdx';
-import GetDataFile from '../commons/reference/feature-flags-and-variations/get-data-file.mdx';
-import GetVariations from '../commons/reference/feature-flags-and-variations/get-variations.mdx';
-import GetVariation from '../commons/reference/feature-flags-and-variations/get-variation.mdx';
-import SetForcedVariation from '../commons/reference/feature-flags-and-variations/set-forced-variation.mdx';
-import EvaluateAudiences from '../commons/reference/feature-flags-and-variations/evaluate-audiences.mdx';
-import Conversion from '../commons/reference/data-types/conversion.mdx';
-import TrackConversion from '../commons/reference/goals/track-conversion.mdx';
-import CustomBucketingKey from '../commons/developer-guide/custom-bucketing-key.mdx';
-import ActivatingAFeatureFlag from '../commons/developer-guide/getting-started/activating-a-feature-flag.mdx';
-import DataFile from '../commons/reference/returned-types/data-file.mdx';
-import FeatureFlag from '../commons/reference/returned-types/feature-flag.mdx';
-import Rule from '../commons/reference/returned-types/rule.mdx';
-import ApplicationVersion from '../commons/reference/data-types/application-version.mdx';
-
-export const Context = {
-    IsJs: true,
-    IsServer: true,
-    IsReact: true,
-    IsSnakeCase: false,
-    Common: {
-        Null: "null",
-        True: "true",
-        False: "false",
-        String: "string",
-        Bool: "boolean",
-        Int: "number",
-        Float: "number",
-        SDK: "React",
-    },
-    Params: {
-        VisitorCode: "visitorCode",
-        FeatureKey: "featureKey"
-    },
-    Exceptions: {
-        Language: "Error",
-        Kameleoon: "KameleoonException",
-        Initialization: "KameleoonException.Initialization",
-        VisitorCodeEmpty: "KameleoonException.VisitorCodeEmpty",
-        VisitorCodeMaxLength: "KameleoonException.VisitorCodeMaxLength",
-        FeatureNotFound: "KameleoonException.FeatureFlagConfigurationNotFound",
-        FeatureEnvironmentDisabled: "KameleoonException.FeatureFlagEnvironmentDisabled",
-        FeatureExperimentNotFound: "KameleoonException.FeatureFlagExperimentNotFound",
-        FeatureVariationNotFound: "KameleoonException.FeatureFlagVariationNotFound",
-        StorageRead: "KameleoonException.StorageRead",
-        StorageWrite: "KameleoonException.StorageWrite",
-    },
-    KameleoonClientConfig: {
-        Name: "KameleoonClientConfig",
-        Ref: "#configuration-parameters",
-        TrackingInterval: { FileName: "tracking_interval_millisecond" },
-        IsUniqueIdentifier: { Name: "<>" }
-    },
-    Hook: {
-        UseData: "useData",
-    },
-    // kameleoon.data
-    Conversion: {
-        Name: "Conversion",
-        FullName: "data.Conversion",
-        Ref: "#conversion",
-        Params: {
-            GoalId: { Name: "goalId" },
-            Revenue: { Name: "revenue", Type: "float" },
-            Negative: { Name: "negative" },
-            Metadata: { Name: "metadata", Type: "CustomData[]", DefaultValue: "undefined" },
-        },
-    },
-    CustomData: {
-        Name: "CustomData",
-        FullName: "CustomData",
-        Ref: "#customdata"
-    },
-    UniqueIdentifier: {
-        Name: "UniqueIdentifier",
-        Ref: "#uniqueidentifier"
-    },
-    UserAgent: {
-        Name: "UserAgent",
-        Ref: "#useragent"
-    },
-    ApplicationVersion: {
-        Name: 'ApplicationVersion',
-        Ref: '#applicationversion',
-        Params: {
-            Version: { Type: 'string' },
-        },
-    },
-    // kameleoon.types
-    Variation: {
-        Name: "Variation",
-        FullName: "Variation",
-        Ref: "#variation"
-    },
-    DataFile: {
-        Name: "DataFile",
-        FullName: "DataFile",
-        Ref: "#datafile",
-        Params: {
-            FeatureFlags: { Name: "featureFlags", Type: "Map<string, FeatureFlag>" },
-        }
-    },
-    FeatureFlag: {
-        Name: "FeatureFlag",
-        FullName: "FeatureFlag",
-        Ref: "#featureflag",
-        Params: {
-            EnvironmentEnabled: { Name: "environmentEnabled" },
-            Variations: { Name: "variations", Type: "Map<string, Variation>" },
-            Rules: { Name: "rules", Type: "Rule[]" },
-            DefaultVariationKey: { Name: "defaultVariationKey", Type: "string" },
-        }
-    },
-    Rule: {
-        Name: "Rule",
-        FullName: "Rule",
-        Ref: "#rule",
-        Params: {
-            Variations: { Name: "variations", Type: "Map<string, Variation>" },
-        }
-    },
-    // methods
-    GetVisitorCode: {
-        Name: "getVisitorCode()",
-        Ref: "#getvisitorcode",
-        Params: {
-            DefaultVisitorCode: { Name: "defaultVisitorCode" }
-        }
-    },
-    Flush: {
-        Name: "flush()",
-        Ref: "#flush",
-        Params: {
-            Instant: { Name: "instant" }
-        }
-    },
-    GetVariation: {
-        Name: "getVariation()",
-        Ref: "#getvariation",
-        Return: "Variation",
-        Params: {
-            Track: { Name: "track" }
-        }
-    },
-    GetVariations: {
-        Name: "getVariations()",
-        Ref: "#getvariations",
-        Return: "Map<string, Variation>",
-        Params: {
-            OnlyActive: { Name: "onlyActive" },
-            Track: { Name: "track" }
-        }
-    },
-    SetForcedVariation: {
-        Name: "setForcedVariation()",
-        Ref: "#setforcedvariation",
-        Params: {
-            ExperimentId: { Name: "experimentId" },
-            VariationKey: { Name: "variationKey", Type: "string | null", RemVal: "null" },
-            ForceTargeting: { Name: "forceTargeting" },
-        }
-    },
-    EvaluateAudiences: {
-        Name: "evaluateAudiences()",
-        Ref: "#evaluateaudiences"
-    },
-    GetRemoteVisitorData: {
-        Name: "getRemoteVisitorData()",
-        Ref: "#getremotevisitordata",
-    },
-    TrackConversion: {
-        Name: "trackConversion()",
-        Ref: "#trackconversion",
-        Params: {
-            GoalId: { Name: "goalId" },
-            Revenue: { Name: "revenue", Type: "number" },
-            IsUniqueIdentifier: { Name: "isUniqueIdentifier" },
-            Negative: { Name: "negative" },
-            Metadata: { Name: "metadata", Type: "CustomData[]", DefaultValue: "undefined" }
-        }
-    },
-    IsFeatureActive: {
-        Name: "isFeatureFlagActive()",
-        Ref: "#isfeatureflagactive"
-    },
-    GetEngineTrackingCode: {
-        Name: "getEngineTrackingCode()",
-        Ref: "#getenginetrackingcode"
-    },
-    AddData: {
-        Name: 'addData()',
-        Ref: '#adddata',
-        Params: {
-            Track: { Name: "track" },
-            Data: { Name: 'data', Type: '...KameleoonDataType[]' },
-        }
-    },
-    GetDataFile: {
-        Name: "getDataFile()",
-        Ref: "#getdatafile",
-    },
-};
 
 With the Kameleoon React SDK, you can run feature experiments and activate feature flags on your front-end web and mobile application. Integrating our SDK into your web and mobile application is easy, and its footprint (memory and network usage) is low.
 
@@ -252,7 +42,7 @@ npx @kameleoon/sdk-installer
 To get started to create an entry point for React SDK by creating Kameleoon Client on the top level of your application. Create an instance of `KameleoonClient` using the `createClient()` function, imported from the `kameleoon` package.
 
 <Tabs>
-<TabItem value="tsx" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```tsx
 import {
@@ -271,11 +61,10 @@ const configuration: Partial<SDKConfigurationType> = {
 const client = createClient({ siteCode: 'my_site_code', configuration });
 ```
 
-</TabItem>
-<TabItem value="js" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```jsx
-import { createClient, Environment } from '@kameleoon/react-sdk';
 
 // -- Optional configuration
 const configuration = {
@@ -287,16 +76,15 @@ const configuration = {
 const client = createClient({ siteCode: 'my_site_code', configuration });
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 #### Wrap the application in the Kameleoon Provider
 
 The second step is connecting the previously created Kameleoon Client to `KameleoonProvider` by passing the configured client to `KameleoonProvider`:
 
-
 <Tabs>
-<TabItem value="tsx" label="TS" default>
+<Tab title="TS">
 
 ```tsx
 import {
@@ -322,8 +110,8 @@ function AppWrapper(): JSX.Element {
 }
 ```
 
-</TabItem>
-<TabItem value="jsx" label="JS">
+</Tab>
+<Tab title="JS">
 
 ```jsx
 import {
@@ -349,13 +137,13 @@ function AppWrapper() {
 }
 ```
 
-</TabItem>
-<TabItem value="nextjs_tsx" label="NextJS (TS)">
+</Tab>
+<Tab title="NextJS (TS)">
 
-:::warning
+<Warning>
 If you are using **Next.js** for server-side rendering (SSR), you **have to** use `KameleoonProviderSSR` or `KameleoonProvider` with `stubMode=true`.
 This prevents the SDK client from being initialized on the server and ensures that the React SDK runs exclusively on the client side.
-:::
+</Warning>
 
 ```tsx
 import {
@@ -379,13 +167,13 @@ function AppWrapper(): JSX.Element {
 }
 ```
 
-</TabItem>
-<TabItem value="nextjs_jsx" label="NextJS (JS)">
+</Tab>
+<Tab title="NextJS (JS)">
 
-:::warning
+<Warning>
 If you are using **Next.js** for server-side rendering (SSR), you **have to** use `KameleoonProviderSSR` or `KameleoonProvider` with `stubMode=true`.
 This prevents the SDK client from being initialized on the server and ensures that the React SDK runs exclusively on the client side.
-:::
+</Warning>
 
 ```jsx
 import {
@@ -409,14 +197,13 @@ function AppWrapper() {
 }
 ```
 
-</TabItem>
-<TabItem value="nextjs_externals_tsx" label="NextJS with externals(TS)">
+</Tab>
+<Tab title="NextJS with externals(TS)">
 
-:::warning
+<Warning>
 If you are using **Next.js** for server-side rendering (SSR), you **have to** use `KameleoonProviderSSR` or `KameleoonProvider` with `stubMode=true`.
 This prevents the SDK client from being initialized on the server and ensures that the React SDK runs exclusively on the client side.
-:::
-
+</Warning>
 
 ```tsx
 import {
@@ -450,14 +237,13 @@ function AppWrapper(): JSX.Element {
 }
 ```
 
-</TabItem>
-<TabItem value="nextjs_externals_jsx" label="NextJS with externals(JS)">
+</Tab>
+<Tab title="NextJS with externals(JS)">
 
-:::warning
+<Warning>
 If you are using **Next.js** for server-side rendering (SSR), you **have to** use `KameleoonProviderSSR` or `KameleoonProvider` with `stubMode=true`.
 This prevents the SDK client from being initialized on the server and ensures that the React SDK runs exclusively on the client side.
-:::
-
+</Warning>
 
 ```jsx
 import {
@@ -491,7 +277,7 @@ function AppWrapper() {
 }
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ##### KameleoonProvider
@@ -522,11 +308,9 @@ Use this provider on root level by wrapping your app to gain an access to `Kamel
 `KameleoonClient` initialization is done asynchronously in order to make sure that Kameleoon API call was successful for that hook `useInitialize` is used. You can use `async/await`, `Promise.then()` or any other method to handle asynchronous client initialization.
 
 <Tabs>
-<TabItem value="tsx" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```tsx
-import { useEffect, useCallback } from 'react';
-import { useInitialize } from '@kameleoon/react-sdk';
 
 function MyComponent(): JSX.Element {
   const { initialize } = useInitialize();
@@ -543,12 +327,10 @@ function MyComponent(): JSX.Element {
 }
 ```
 
-</TabItem>
-<TabItem value="jsx" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```jsx
-import { useEffect, useCallback } from 'react';
-import { useInitialize } from '@kameleoon/react-sdk';
 
 function MyComponent() {
   const { initialize } = useInitialize();
@@ -565,36 +347,26 @@ function MyComponent() {
 }
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 #### Activating a feature flag
 
 ##### Assigning a unique ID to a user
 
-<ActivatingAFeatureFlag sec="assigning_a_unique_id_to_a_user" c={Context}/>
-
 ##### Retrieving a flag configuration
-
-<ActivatingAFeatureFlag sec="retrieving_a_feature_flag_configuration___default" c={Context}/>
 
 ##### Adding data points to target a user or filter / breakdown visits in reports
 
-<ActivatingAFeatureFlag sec="adding_data_points_to_target_a_user_or_filter_breakdown_visits_in_reports___server" c={Context}/>
-
 ##### Tracking goal conversions
-
-<ActivatingAFeatureFlag sec="tracking_goal_conversions___param" c={Context}/>
 
 ##### Sending events to analytics solutions
 
-<ActivatingAFeatureFlag sec="sending_events_to_analytics_solutions" c={Context}/>
-
 ### React Native considerations
 
-:::note
+<Note>
 React Native on `android` platform doesn't support `Real Time Update` feature.
-:::
+</Note>
 
 While React SDK works the same way in both React Native and React contexts, it's important to note that setup steps differ.
 Due to the lack of browser API in React Native, React SDK has to have different [external dependency](#external-dependencies) implementations to work correctly.
@@ -613,15 +385,9 @@ If you don't want to use the listed packages, you can provide your own implement
 Example React SDK setup for React Native application:
 
 <Tabs>
-<TabItem value="ts" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```ts
-import { createClient } from '@kameleoon/react-sdk';
-import { KameleoonEventSource } from '@kameleoon/react-native-event-source';
-import { KameleoonStorage } from '@kameleoon/react-native-storage';
-import { KameleoonVisitorCodeManager } from '@kameleoon/react-native-visitor-code-manager';
-import { KameleoonSecurePRNG } from '@kameleoon/react-native-secure-prng';
-import { KameleoonPlatformAnalyzer } from '@kameleoon/react-native-platform-analyzer';
 
 // --- Create KameleoonClient ---
 const client = createClient({
@@ -637,16 +403,10 @@ const client = createClient({
 });
 ```
 
-</TabItem>
-<TabItem value="jsx" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```js
-import { createClient } from '@kameleoon/react-sdk';
-import { KameleoonEventSource } from '@kameleoon/react-native-event-source';
-import { KameleoonStorage } from '@kameleoon/react-native-storage';
-import { KameleoonVisitorCodeManager } from '@kameleoon/react-native-visitor-code-manager';
-import { KameleoonSecurePRNG } from '@kameleoon/react-native-secure-prng';
-import { KameleoonPlatformAnalyzer } from '@kameleoon/react-native-platform-analyzer';
 
 // --- Create KameleoonClient ---
 const client = createClient({
@@ -662,34 +422,24 @@ const client = createClient({
 });
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ### Using a custom bucketing key
 
-<CustomBucketingKey sec="description" c={Context}/>
-
 #### Use cases
 
-<CustomBucketingKey sec="use_cases" c={Context}/>
-
 #### Technical details
-
-<CustomBucketingKey sec="technical_details_1" c={Context}/>
 
 ```jsx
 addData(visitorCode, new CustomData(index, 'newVisitorCode'));
 ```
 
-:::tip
+<Tip>
 [More information in addData()](#adddata)
-:::
-
-<CustomBucketingKey sec="technical_details_2" c={Context}/>
+</Tip>
 
 #### Technical requirementes
-
-<CustomBucketingKey sec="technical_requirements" c={Context}/>
 
 ### Targeting conditions
 
@@ -700,17 +450,12 @@ You can also use your own [external data to target users](/feature-management-an
 
 ### Logging
 
-<Logging sec="logging" c={Context}/>
-
 #### Log levels
 
-<Logging sec="log_levels" c={Context}/>
-
 <Tabs>
-<TabItem value="ts" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```ts
-import { KameleoonClient, KameleoonLogger, LogLevel } from '@kameleoon/react-sdk';
 
 const client = createClient({ siteCode: 'my_site_code', configuration });
 
@@ -719,7 +464,6 @@ client.setLogLevel(LogLevel.NONE);
 // Or use KameleoonLogger
 KameleoonLogger.setLogLevel(LogLevel.NONE);
 
-
 // The `ERROR` log level only allows logging issues that may affect the SDK's main behaviour.
 client.setLogLevel(LogLevel.ERROR);
 // Or use KameleoonLogger
@@ -747,11 +491,10 @@ client.setLogLevel(LogLevel.DEBUG);
 KameleoonLogger.setLogLevel(LogLevel.DEBUG);
 ```
 
-</TabItem>
-<TabItem value="js" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```js
-import { KameleoonClient, KameleoonLogger, LogLevel } from '@kameleoon/react-sdk';
 
 const client = createClient({ siteCode: 'my_site_code', configuration });
 
@@ -760,7 +503,6 @@ client.setLogLevel(LogLevel.NONE);
 // Or use KameleoonLogger
 KameleoonLogger.setLogLevel(LogLevel.NONE);
 
-
 // The `ERROR` log level only allows logging issues that may affect the SDK's main behaviour.
 client.setLogLevel(LogLevel.ERROR);
 // Or use KameleoonLogger
@@ -788,18 +530,15 @@ client.setLogLevel(LogLevel.DEBUG);
 KameleoonLogger.setLogLevel(LogLevel.DEBUG);
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 #### Custom handling of logs
 
-<Logging sec="custom_handling_of_logs" c={Context}/>
-
 <Tabs>
-<TabItem value="ts" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```ts
-import { KameleoonClient, KameleoonLogger, IExternalLogger, LogLevel } from '@kameleoon/react-sdk';
 
 export class CustomLogger implements IExternalLogger {
   // `log` method accepts logs from the SDK
@@ -837,11 +576,10 @@ client.setLogLevel(LogLevel.DEBUG);
 KameleoonLogger.setLogLevel(LogLevel.DEBUG);
 ```
 
-</TabItem>
-<TabItem value="js" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```js
-import { KameleoonClient, KameleoonLogger, LogLevel } from '@kameleoon/react-sdk';
 
 export class CustomLogger {
   // `log` method accepts logs from the SDK
@@ -879,7 +617,7 @@ client.setLogLevel(LogLevel.DEBUG);
 KameleoonLogger.setLogLevel(LogLevel.DEBUG);
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ### Domain information
@@ -892,10 +630,10 @@ The domain you provide indicates the URL address can use the cookie. For example
 
 To be more flexible around subdomains, you can prefix a domain with `.`. For example, the domain `.example.com` allows the cookie to function on both `app.example.com` and `login.example.com`.
 
-:::note
+<Note>
 You can't use regular expressions, special symbols, protocol, or port numbers in the `domain`.
 Additionally, a [specific list of subdomains](https://publicsuffix.org/list/public_suffix_list.dat) are not allowed to be used with the prefix `.`.
-:::
+</Note>
 
 Here's a small domain cheat sheet:
 
@@ -929,9 +667,9 @@ There are two ways to avoid this issue:
 
 SDK external dependencies use the _dependency injection_ pattern to give you the ability to provide your own implementations for certain parts of an SDK.
 
-:::note
+<Note>
 In the React SDK, all external dependencies have default implementations, which use a native browser API so there's no need to provide them unless another API is required for specific use cases.
-:::
+</Note>
 
 Here's the list of available external dependencies:
 
@@ -950,10 +688,9 @@ The following example implements external dependencies. To import an interface f
 #### Storage
 
 <Tabs>
-<TabItem value="ts" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```ts
-import { IExternalStorage } from '@kameleoon/react-sdk';
 
 // --- External Storage implementation ---
 // - JavaScript `Map` is used as an example storage
@@ -988,11 +725,10 @@ const client = createClient({
 });
 ```
 
-</TabItem>
-<TabItem value="js" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```js
-import { KameleoonClient } from '@kameleoon/react-sdk';
 
 // --- External Storage implementation ---
 // - JavaScript `Map` is used as an example storage
@@ -1027,13 +763,13 @@ const client = createClient({
 });
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 #### EventSource
 
 <Tabs>
-<TabItem value="ts" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```ts
 import {
@@ -1083,8 +819,8 @@ const client = createClient({
 });
 ```
 
-</TabItem>
-<TabItem value="js" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```js
 // --- External EventSource implementation ---
@@ -1125,13 +861,13 @@ const client = createClient({
 });
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 #### VisitorCodeManager
 
 <Tabs>
-<TabItem value="ts" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```ts
 import {
@@ -1182,11 +918,10 @@ const client = createClient({
 });
 ```
 
-</TabItem>
-<TabItem value="js" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```js
-import { KameleoonUtils } from '@kameleoon/react-sdk';
 
 // --- External Visitor Code Manager implementation ---
 // - Example uses browser `document.cookie` API
@@ -1224,13 +959,13 @@ const client = createClient({
 });
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 #### Requester
 
 <Tabs>
-<TabItem value="ts" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```ts
 import {
@@ -1260,11 +995,10 @@ const client = createClient({
 });
 ```
 
-</TabItem>
-<TabItem value="js" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```js
-import { KameleoonClient } from '@kameleoon/react-sdk';
 
 // --- External Requester Implementation
 export class MyRequester {
@@ -1283,12 +1017,12 @@ const client = new KameleoonClient({
 });
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
-:::tip
+<Tip>
 [Return mocked result](#simulatesuccessrequest)
-:::
+</Tip>
 
 #### Pseudo Random Number Generator
 
@@ -1298,10 +1032,9 @@ Default Kameleoon implementation relies on Browser's `crypto` or `Math.random` f
 Those API are very secure and reliable, however in some edge cases (especially in some `React Native` engines) you might want to provide your own implementation or use a dedicated Kameleoon package for React Native - `@kameleoon/react-native-secure-prng`
 
 <Tabs>
-<TabItem value="ts" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```ts
-import { IExternalPRNG } from '@kameleoon/react-sdk';
 
 // --- External Pseudo Random Number Generator (PRNG) implementation ---
 class MyPRNG implements IExternalPRNG {
@@ -1320,8 +1053,8 @@ const client = createClient({
 });
 ```
 
-</TabItem>
-<TabItem value="js" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```js
 // --- External Pseudo Random Number Generator (PRNG) implementation ---
@@ -1341,16 +1074,15 @@ const client = createClient({
 });
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 #### Logger
 
 <Tabs>
-<TabItem value="ts" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```ts
-import { KameleoonClient, KameleoonLogger, IExternalLogger, LogLevel } from '@kameleoon/react-sdk';
 
 // --- Custom Logger Implementation
 export class CustomLogger implements IExternalLogger {
@@ -1368,11 +1100,10 @@ const client = createClient({
 });
 ```
 
-</TabItem>
-<TabItem value="js" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```js
-import { KameleoonClient } from '@kameleoon/react-sdk';
 
 // --- Custom Logger Implementation
 export class CustomLogger {
@@ -1390,7 +1121,7 @@ const client = createClient({
 });
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ### Error Handling
@@ -1407,10 +1138,9 @@ Overall handling the errors considered a good practice to make your application 
 ---
 
 <Tabs>
-<TabItem value="tsx" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```tsx
-import { useEffect, useCallback } from 'react';
 import {
   useInitialize,
   useVisitorCode,
@@ -1461,11 +1191,10 @@ function MyComponent(): JSX.Element {
 }
 ```
 
-</TabItem>
-<TabItem value="jsx" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```jsx
-import { useEffect, useCallback } from 'react';
 import {
   useInitialize,
   useVisitorCode,
@@ -1511,23 +1240,17 @@ function MyComponent() {
 }
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ### Cross-device experimentation
 
-<CrossDeviceReconciliation sec="cross_device_experimentation" c={Context}/>
-
 #### Synchronizing custom data across devices
 
-<CrossDeviceReconciliation sec="synchronizing_custom_data" c={Context}/>
-
 <Tabs>
-<TabItem value="tsx" label="TypeScript" default>
+<Tab title="TypeScript">
 
-```tsx title="Device One"
-import { useEffect, useCallback } from 'react';
-import { useInitialize, useData, CustomData } from '@kameleoon/react-sdk';
+```tsx
 
 function MyComponent(): JSX.Element {
   const { initialize } = useInitialize();
@@ -1551,9 +1274,7 @@ function MyComponent(): JSX.Element {
 }
 ```
 
-```tsx title="Device Two"
-import { useEffect, useCallback } from 'react';
-import { useInitialize, useData, CustomData } from '@kameleoon/react-sdk';
+```tsx
 
 function MyComponent(): JSX.Element {
   const { initialize } = useInitialize();
@@ -1576,12 +1297,10 @@ function MyComponent(): JSX.Element {
 }
 ```
 
-</TabItem>
-<TabItem value="jsx" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
-```jsx title="Device One"
-import { useEffect, useCallback } from 'react';
-import { useInitialize, useData, CustomData } from '@kameleoon/react-sdk';
+```jsx
 
 function MyComponent() {
   const { initialize } = useInitialize();
@@ -1605,9 +1324,7 @@ function MyComponent() {
 }
 ```
 
-```jsx title="Device Two"
-import { useEffect, useCallback } from 'react';
-import { useInitialize, useData, CustomData } from '@kameleoon/react-sdk';
+```jsx
 
 function MyComponent() {
   const { initialize } = useInitialize();
@@ -1630,13 +1347,13 @@ function MyComponent() {
 }
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 #### Using custom data for session merging
 
 <Tabs>
-<TabItem value="version_9" label="SDK Version 9">
+<Tab title="SDK Version 9">
 
 [Cross-device experimentation](https://developers.kameleoon.com/core-concepts/cross-device-experimentation) allows you to combine a visitor's history across each of their devices (history reconciliation). One of the powerful features that history reconciliation provides is the ability to merge different visitors sessions into one. To reconcile visit history, you can use [`CustomData`](#customdata) to provide a unique identifier for the visitor.
 
@@ -1652,17 +1369,16 @@ Afterwards, you can use the SDK normally. The following methods might be helpful
 - Use [`getRemoteVisitorData`](#getremotevisitordata) with `isUniqueIdentifier=true` to retrieve data for all linked visitors
 - Use [`trackConversion`](#trackconversion) or [`flush`](#flush) with `isUniqueIdentifier=true` to track some data for specific visitor that is associated with another visitor
 
-:::tip
+<Tip>
 As the custom data you use as the identifier must be set to `Visitor` scope, you need to use [cross-device custom data synchronization](https://developers.kameleoon.com/feature-management-and-experimentation/web-sdks/nodejs-sdk/#synchronizing-custom-data-across-devices) to retrieve the identifier with the [`getRemoteVisitorData`](#getremotevisitordata) method on each device.
-:::
+</Tip>
 
 Here's an example of how to use custom data for session merging. In this example, we have an application with a login page. Since we don't know the user ID at the moment of login, we use an anonymous visitor identifier generated by the [`getVisitorCode`](#getvisitorcode) method. After the user logs in, we can associate the anonymous visitor with the user ID and use it as a unique identifier for the visitor.
 
 <Tabs>
-<TabItem value="ts" label="TypeScript" default>
+<Tab title="TypeScript">
 
-```tsx title="Login Page"
-import { useEffect, useCallback } from 'react';
+```tsx
 import {
   useInitialize,
   useFeatureFlag,
@@ -1697,8 +1413,7 @@ function LoginPage(): JSX.Element {
 }
 ```
 
-```tsx title="Application Page"
-import { useEffect, useCallback } from 'react';
+```tsx
 import {
   useData,
   useFeatureFlag,
@@ -1764,11 +1479,10 @@ function ApplicationPage(props: Props): JSX.Element {
 }
 ```
 
-</TabItem>
-<TabItem value="js" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
-```jsx title="Login Page"
-import { useEffect, useCallback } from 'react';
+```jsx
 import {
   useInitialize,
   useFeatureFlag,
@@ -1803,8 +1517,7 @@ function LoginPage() {
 }
 ```
 
-```jsx title="Application Page"
-import { useEffect, useCallback } from 'react';
+```jsx
 import {
   useData,
   useFeatureFlag,
@@ -1866,12 +1579,12 @@ function ApplicationPage(props) {
 }
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
-</TabItem>
+</Tab>
 
-<TabItem value="version_10" label="SDK Version 10" default>
+<Tab title="SDK Version 10">
 
 [Cross-device experimentation](https://developers.kameleoon.com/core-concepts/cross-device-experimentation) allows you to combine a visitor's history across each of their devices (history reconciliation). One of the powerful features that history reconciliation provides is the ability to merge different visitors sessions into one. To reconcile visit history, you can use [`CustomData`](#customdata) to provide a unique identifier for the visitor.
 
@@ -1884,17 +1597,16 @@ The SDK configuration ensures that associated sessions always see the same varia
 
 Before using other methods make sure to let SDK know that the visitor is a unique identifier by adding [`UniqueIdentifier`](#uniqueidentifier) data to a visitor
 
-:::tip
+<Tip>
 As the custom data you use as the identifier must be set to `Visitor` scope, you need to use [cross-device custom data synchronization](https://developers.kameleoon.com/feature-management-and-experimentation/web-sdks/nodejs-sdk/#synchronizing-custom-data-across-devices) to retrieve the identifier with the [`getRemoteVisitorData`](#getremotevisitordata) method on each device.
-:::
+</Tip>
 
 Here's an example of how to use custom data for session merging. In this example, we have an application with a login page. Since we don't know the user ID at the moment of login, we use an anonymous visitor identifier generated by the [`getVisitorCode`](#getvisitorcode) method. After the user logs in, we can associate the anonymous visitor with the user ID and use it as a unique identifier for the visitor.
 
 <Tabs>
-<TabItem value="ts" label="TypeScript" default>
+<Tab title="TypeScript">
 
-```tsx title="Login Page"
-import { useEffect, useCallback } from 'react';
+```tsx
 import {
   useInitialize,
   useFeatureFlag,
@@ -1929,8 +1641,7 @@ function LoginPage(): JSX.Element {
 }
 ```
 
-```tsx title="Application Page"
-import { useEffect, useCallback } from 'react';
+```tsx
 import {
   useData,
   useFeatureFlag,
@@ -1998,11 +1709,10 @@ function ApplicationPage(props: Props): JSX.Element {
 }
 ```
 
-</TabItem>
-<TabItem value="js" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
-```jsx title="Login Page"
-import { useEffect, useCallback } from 'react';
+```jsx
 import {
   useInitialize,
   useFeatureFlag,
@@ -2037,8 +1747,7 @@ function LoginPage() {
 }
 ```
 
-```jsx title="Application Page"
-import { useEffect, useCallback } from 'react';
+```jsx
 import {
   useData,
   useFeatureFlag,
@@ -2102,9 +1811,9 @@ function ApplicationPage(props) {
 }
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
-</TabItem>
+</Tab>
 
 </Tabs>
 
@@ -2117,7 +1826,7 @@ SDK has a set of utility methods that can be used to simplify the development pr
 Method `simulateSuccessRequest` is used to simulate a successful request to the Kameleoon server. It can be useful for custom [Requester](#requester) implementations when developer needs to simulate a successful request, for example disabling tracking.
 
 <Tabs>
-<TabItem value="ts" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```ts
 import {
@@ -2147,11 +1856,10 @@ class Requester implements IExternalRequester {
 }
 ```
 
-</TabItem>
-<TabItem value="js" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```js
-import { KameleoonUtils } from '@kameleoon/react-sdk';
 
 // - Example of `Requester` with disabled tracking
 class Requester {
@@ -2165,7 +1873,7 @@ class Requester {
 }
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ##### Arguments
@@ -2190,10 +1898,9 @@ Data type `SimulateRequestDataType` is defined as follows:
 Method `getCookieValue` is used to parse a common cookie string (`key_1=value_1; key_2=value_2; ...`) and get the value of a specific cookie key. It's useful when working with a custom implementation of [`VisitorCodeManager`](#visitorcodemanager).
 
 <Tabs>
-<TabItem value="ts" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```ts
-import { KameleoonUtils } from '@kameleoon/react-sdk';
 
 const cookies = 'key_1=value_1; key_2=value_2';
 const key = 'key_1';
@@ -2201,11 +1908,10 @@ const key = 'key_1';
 const value = KameleoonUtils.getCookieValue(cookies, key); // = `value_1`
 ```
 
-</TabItem>
-<TabItem value="js" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```js
-import { KameleoonUtils } from '@kameleoon/react-sdk';
 
 const cookies = 'key_1=value_1; key_2=value_2';
 const key = 'key_1';
@@ -2213,7 +1919,7 @@ const key = 'key_1';
 const value = KameleoonUtils.getCookieValue(cookies, key); // = `value_1`
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ##### Arguments
@@ -2238,11 +1944,11 @@ This section provides the methods you use to create and initialize the Kameleoon
 #### initialize()
 
 <Tabs>
-<TabItem value="version_9" label="SDK Version 9">
+<Tab title="SDK Version 9">
 
 An asynchronous `initialize` function, collected with `useInitialize` hook, that's used for KameleoonClient initialization by fetching Kameleoon SDK related data from server or by retrieving data from local source if data is up-to-date or update interval has not been reached.
 
-:::note
+<Note>
 - If the SDK configuration could not be retrieved but there is an older configuration available in SDK storage, the SDK uses the older configuration as a fallback and the `initialize` does not throw an error.
 
 - Client initialization has an optional _offline mode_.
@@ -2255,15 +1961,12 @@ In _offline mode_ if tracking requests from any of the following methods fail du
 - [getFeatureFlagVairationKey](#getfeatureflagvariationkey)
 - [getFeatureVariable](#getfeatureflagvariable)
 - [sFeatureFlagActive](#isfeatureflagactive)
-
-:::
+</Note>
 
 <Tabs>
-<TabItem value="tsx" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```tsx
-import { useEffect, useCallback } from 'react';
-import { useInitialize } from '@kameleoon/react-sdk';
 
 function MyComponent(): JSX.Element {
   const { initialize } = useInitialize();
@@ -2278,12 +1981,10 @@ function MyComponent(): JSX.Element {
 }
 ```
 
-</TabItem>
-<TabItem value="jsx" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```jsx
-import { useEffect, useCallback } from 'react';
-import { useInitialize } from '@kameleoon/react-sdk';
 
 function MyComponent() {
   const { initialize } = useInitialize();
@@ -2298,7 +1999,7 @@ function MyComponent() {
 }
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ##### Arguments
@@ -2319,12 +2020,12 @@ function MyComponent() {
 | `KameleoonException.ClientConfiguration`   | Couldn't retrieve client configuration from Kameleoon API |
 | `KameleoonException.MaximumRetriesReached` | Maximum retries reached, request failed                   |
 
-</TabItem>
-<TabItem value="version_10" label="SDK Version 10" default>
+</Tab>
+<Tab title="SDK Version 10">
 
 An asynchronous `initialize` function, collected with `useInitialize` hook, that's used for KameleoonClient initialization by fetching Kameleoon SDK related data from server or by retrieving data from local source if data is up-to-date or update interval has not been reached.
 
-:::note
+<Note>
 - If the SDK configuration could not be retrieved but there is an older configuration available in SDK storage, the SDK uses the older configuration as a fallback and the `initialize` does not throw an error.
 
 - SDK supports an _offline mode_.
@@ -2336,15 +2037,12 @@ In _offline mode_ if tracking requests from any of the following methods fail du
 - [getFeatureFlagVairationKey](#getfeatureflagvariationkey)
 - [getFeatureVariable](#getfeatureflagvariable)
 - [sFeatureFlagActive](#isfeatureflagactive)
-
-:::
+</Note>
 
 <Tabs>
-<TabItem value="tsx" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```tsx
-import { useEffect, useCallback } from 'react';
-import { useInitialize } from '@kameleoon/react-sdk';
 
 function MyComponent(): JSX.Element {
   const { initialize } = useInitialize();
@@ -2359,12 +2057,10 @@ function MyComponent(): JSX.Element {
 }
 ```
 
-</TabItem>
-<TabItem value="jsx" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```jsx
-import { useEffect, useCallback } from 'react';
-import { useInitialize } from '@kameleoon/react-sdk';
 
 function MyComponent() {
   const { initialize } = useInitialize();
@@ -2379,7 +2075,7 @@ function MyComponent() {
 }
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ##### Return value
@@ -2394,7 +2090,7 @@ function MyComponent() {
 | `KameleoonException.ClientConfiguration`   | Couldn't retrieve client configuration from Kameleoon API |
 | `KameleoonException.MaximumRetriesReached` | Maximum retries reached, request failed                   |
 
-</TabItem>
+</Tab>
 </Tabs>
 
 #### isInitialized()
@@ -2402,11 +2098,9 @@ function MyComponent() {
 The `isInitialized` function, collected with the `useInitialize` hook, is a small utility method that checks if the SDK initialization has completed. For example, this can be useful when dealing with a deeply nested component tree, because it allows you to quickly check the SDK readiness without having to manage a global state, or pass the initialization result using component props.
 
 <Tabs>
-<TabItem value="tsx" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```tsx
-import { useEffect, useCallback } from 'react';
-import { useInitialize, useFeatureFlag } from '@kameleoon/react-sdk';
 
 function MyComponent(): JSX.Element {
   const { initialize } = useInitialize();
@@ -2430,12 +2124,10 @@ function DeeplyNestedComponent(): JSX.Element {
 }
 ```
 
-</TabItem>
-<TabItem value="jsx" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```jsx
-import { useEffect, useCallback } from 'react';
-import { useInitialize, useFeatureFlag } from '@kameleoon/react-sdk';
 
 function MyComponent() {
   const { initialize } = useInitialize();
@@ -2459,7 +2151,7 @@ function DeeplyNestedComponent() {
 }
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ##### Return value
@@ -2473,7 +2165,7 @@ To get started, you need to create an entry point for React SDK by creating a Ka
 An instance of `KameleoonClient` is created using `createClient()` function.
 
 <Tabs>
-<TabItem value="tsx" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```tsx
 import {
@@ -2492,11 +2184,10 @@ const configuration: Partial<SDKConfigurationType> = {
 const client = createClient({ siteCode: 'my_site_code', configuration });
 ```
 
-</TabItem>
-<TabItem value="js" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```jsx
-import { createClient, Environment } from '@kameleoon/react-sdk';
 
 // -- Optional configuration
 const configuration = {
@@ -2508,7 +2199,7 @@ const configuration = {
 const client = createClient({ siteCode: 'my_site_code', configuration });
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ##### Arguments
@@ -2524,7 +2215,7 @@ An object of type `SDKParameters` containing:
 ##### Configuration Parameters
 
 <Tabs>
-<TabItem value="version_9" label="SDK Version 9">
+<Tab title="SDK Version 9">
 
 | Name                                      | Type          | Description                                                                                                                                                                                                                                                                                   | Default Value                              |
 | ----------------------------------------- |---------------| --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------ |
@@ -2537,13 +2228,13 @@ An object of type `SDKParameters` containing:
 | requestTimeout (_optional_)               | `number`      | timeout in _milliseconds_ for all SDK network requests, if timeout is exceeded request will fail immediately                                                                                                                                                                                  | `10_000` (10 seconds)                      |
 | trackingInterval (_optional_)             | `number`      | Specifies the interval for tracking requests, in milliseconds. All visitors who were evaluated for any feature flag or had associated data will be included in this tracking request, which is performed once per interval. The minimum value is `100` ms and the maximum value is `1_000` ms | `1_000` (1 second)                         |
 
-:::note
+<Note>
 The `domain` parameter is deprecated and will be removed in a future release. Use `cookieDomain` instead.
-:::
+</Note>
 
-</TabItem>
+</Tab>
 
-<TabItem value="version_10" label="SDK Version 10" default>
+<Tab title="SDK Version 10">
 
 | Name                                      | Type                    | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               | Default Value                              |
 |-------------------------------------------|-------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------|
@@ -2557,9 +2248,7 @@ The `domain` parameter is deprecated and will be removed in a future release. Us
 | stubMode (_optional_)                     | `boolean`               | When set to true, the client will operate in stub mode and perform no operations. In this mode, all method calls execute no actions, ensuring that no external actions or side effects occur.                                                                                                                                                                                                                                                                                                                                                                                                                                                             | `false`                                    |
 | defaultDataFile (_optional_)              | `string`                | The `defaultDataFile` feature ensures the Kameleoon SDK is always **READY** by providing a fallback configuration when no cached data file exists. Developers can preload a valid configuration by fetching it from `https://sdk-config.kameleoon.eu/v3/<sitecode>` and passing it as `defaultDataFile` during initialization. When a `dateModified` timestamp (in milliseconds) is provided and is newer than the cached version, the SDK will use the default datafile instead of the cached version. **If `dateModified` is omitted, the default datafile is only applied when no cached version exists**. This ensures the SDK always has a valid configuration, whether default, cached, or updated.                                                       | `undefined`                                |
 
-<SharedDiv sec="set_default_data_file_js" c={Context}/>
-
-</TabItem>
+</Tab>
 
 </Tabs>
 
@@ -2567,9 +2256,9 @@ The `domain` parameter is deprecated and will be removed in a future release. Us
 
 `KameleoonClient` - an instance of KameleoonClient.
 
-:::note
+<Note>
 Make sure not to use several client instances in one application as it is not fully supported yet and may overwrite the local storage configuration and cause unintended behavior (bugs).
-:::
+</Note>
 
 ### Feature flags and variations
 
@@ -2577,13 +2266,10 @@ This section provides the methods you use to retrieve and manage the feature fla
 
 #### getVariation()
 
-<GetVariation sec="description___js" c={Context}/>
-
 <Tabs>
-<TabItem value="tsx" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```tsx
-import { useEffect, useCallback } from 'react';
 import {
   useInitialize,
   useFeatureFlag,
@@ -2635,11 +2321,10 @@ function MyComponent(): JSX.Element {
 }
 ```
 
-</TabItem>
-<TabItem value="jsx" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```js
-import { useEffect, useCallback } from 'react';
 import {
   useInitialize,
   useFeatureFlag,
@@ -2691,32 +2376,23 @@ function MyComponent() {
 }
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ##### Arguments
 
 An object of type `GetVariationParamsType` with the following properties:
 
-<GetVariation sec="arguments" c={Context}/>
-
 ##### Return value
-
-<GetVariation sec="return_value" c={Context}/>
 
 ##### Exceptions thrown
 
-<GetVariation sec="exceptions___js" c={Context}/>
-
 #### getVariations()
 
-<GetVariations sec="description___js" c={Context}/>
-
 <Tabs>
-<TabItem value="tsx" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```ts
-import { useEffect, useCallback } from 'react';
 import {
   useInitialize,
   useFeatureFlag,
@@ -2775,11 +2451,10 @@ function MyComponent(): JSX.Element {
 }
 ```
 
-</TabItem>
-<TabItem value="jsx" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```js
-import { useEffect, useCallback } from 'react';
 import {
   useInitialize,
   useFeatureFlag,
@@ -2838,22 +2513,16 @@ function MyComponent() {
 }
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ##### Arguments
 
 An object of type `GetVariationsParamsType` with the following properties:
 
-<GetVariations sec="arguments" c={Context}/>
-
 ##### Return value
 
-<GetVariations sec="return_value" c={Context}/>
-
 ##### Exceptions thrown
-
-<GetVariations sec="exceptions___js" c={Context}/>
 
 #### isFeatureFlagActive()
 
@@ -2864,15 +2533,14 @@ The method `isFeatureFlagActive()`, used with the `useFeatureFlag` hook, determi
 
 There is also an overload for this method that includes a `track` parameter, allowing you to disable the tracking of the feature evaluation.
 
-:::note
+<Note>
 Visitor must be targeted to has feature flag active
-:::
+</Note>
 
 <Tabs>
-<TabItem value="tsx" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```tsx
-import { useEffect, useCallback } from 'react';
 import {
   useInitialize,
   useData,
@@ -2911,11 +2579,10 @@ function MyComponent(): JSX.Element {
 }
 ```
 
-</TabItem>
-<TabItem value="jsx" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```jsx
-import { useEffect, useCallback } from 'react';
 import {
   useInitialize,
   useData,
@@ -2954,7 +2621,7 @@ function MyComponent() {
 }
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ##### Arguments
@@ -2963,9 +2630,9 @@ There are two overloads available for this method:
 
 1. Two parameters overload:
 
-:::warning
+<Warning>
 This overload is deprecated and will be removed in the next major version. Please use the new overload with an object parameter.
-:::
+</Warning>
 
 | Name                     | Type     | Description                                                              |
 | ------------------------ | -------- | ------------------------------------------------------------------------ |
@@ -3003,11 +2670,9 @@ This overload is deprecated and will be removed in the next major version. Pleas
 The `getFeatureFlags` method collected with the `useFeatureFlag` hook returns a list of feature flags stored in the client configuration.
 
 <Tabs>
-<TabItem value="tsx" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```tsx
-import { useEffect, useCallback } from 'react';
-import { useInitialize, useFeatureFlag } from '@kameleoon/react-sdk';
 
 function MyComponent(): JSX.Element {
   const { initialize } = useInitialize();
@@ -3026,12 +2691,10 @@ function MyComponent(): JSX.Element {
 }
 ```
 
-</TabItem>
-<TabItem value="jsx" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```jsx
-import { useEffect, useCallback } from 'react';
-import { useInitialize, useFeatureFlag } from '@kameleoon/react-sdk';
 
 function MyComponent() {
   const { initialize } = useInitialize();
@@ -3050,7 +2713,7 @@ function MyComponent() {
 }
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ##### Return value
@@ -3067,13 +2730,10 @@ function MyComponent() {
 
 #### setForcedVariation()
 
-<SetForcedVariation sec="description" c={Context}/>
-
 <Tabs>
-<TabItem value="tsx" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```tsx
-import { useEffect, useCallback } from 'react';
 import {
   useInitialize,
   useFeatureFlag,
@@ -3113,11 +2773,10 @@ function MyComponent(): JSX.Element {
 }
 ```
 
-</TabItem>
-<TabItem value="jsx" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```jsx
-import { useEffect, useCallback } from 'react';
 import {
   useInitialize,
   useFeatureFlag,
@@ -3157,26 +2816,19 @@ function MyComponent() {
 }
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ##### Arguments
 
-<SetForcedVariation sec="arguments" c={Context}/>
-
 ##### Exceptions thrown
-
-<SetForcedVariation sec="exceptions___js" c={Context}/>
 
 #### evaluateAudiences()
 
-<EvaluateAudiences sec="description" c={Context}/>
-
 <Tabs>
-<TabItem value="tsx" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```tsx
-import { useEffect, useCallback } from 'react';
 import {
   useInitialize,
   useFeatureFlag,
@@ -3203,11 +2855,10 @@ function MyComponent(): JSX.Element {
 }
 ```
 
-</TabItem>
-<TabItem value="jsx" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```jsx
-import { useEffect, useCallback } from 'react';
 import {
   useInitialize,
   useFeatureFlag,
@@ -3234,28 +2885,19 @@ function MyComponent(): JSX.Element {
 }
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ##### Arguments
 
-<EvaluateAudiences sec="arguments" c={Context}/>
-
 ##### Exceptions thrown
-
-<EvaluateAudiences sec="exceptions___js" c={Context}/>
 
 #### getDataFile()
 
-<GetDataFile sec="tip_qa" c={Context}/>
-
-<GetDataFile sec="description" c={Context}/>
-
 <Tabs>
-<TabItem value="tsx" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```tsx
-import { useEffect, useCallback } from 'react';
 import {
   useFeatureFlag,
 } from '@kameleoon/react-sdk';
@@ -3269,11 +2911,10 @@ function MyComponent(): JSX.Element {
 }
 ```
 
-</TabItem>
-<TabItem value="jsx" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```jsч
-import { useEffect, useCallback } from 'react';
 import {
   useFeatureFlag,
 } from '@kameleoon/react-sdk';
@@ -3287,12 +2928,10 @@ function MyComponent(): JSX.Element {
 }
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ##### Return value
-
-<GetDataFile sec="return_value" c={Context}/>
 
 ### Visitor data
 
@@ -3302,14 +2941,10 @@ This section provides the methods you use to manage visitor data.
 
 `getVisitorCode` method collected from `useVisitorCode` hook obtains a visitor code from the browser cookie. If the visitor code doesn't exist yet, the function generates a random visitor code (or uses the `defaultVisitorCode` value if you provided one) and sets the new visitor code in a cookie.
 
-<SharedDiv sec="get_visitor_code_simulated" c={Context}/>
-
 <Tabs>
-<TabItem value="tsx" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```tsx
-import { useEffect, useCallback } from 'react';
-import { useInitialize, useVisitorCode } from '@kameleoon/react-sdk';
 
 function MyComponent(): JSX.Element {
   const { initialize } = useInitialize();
@@ -3331,12 +2966,10 @@ function MyComponent(): JSX.Element {
 }
 ```
 
-</TabItem>
-<TabItem value="jsx" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```jsx
-import { useEffect, useCallback } from 'react';
-import { useInitialize, useVisitorCode } from '@kameleoon/react-sdk';
 
 function MyComponent() {
   const { initialize } = useInitialize();
@@ -3358,7 +2991,7 @@ function MyComponent() {
 }
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ##### Arguments
@@ -3367,9 +3000,9 @@ function MyComponent() {
 | ------------------------------- | -------- | ------------------------------------------------------------------- |
 | defaultVisitorCode (_optional_) | `string` | visitor code to be used in case there is no visitor code in cookies |
 
-:::note
+<Note>
 If you don't provide a `defaultVisitorCode` and there is no visitor code stored in a cookie, the visitor code will be randomly generated.
-:::
+</Note>
 
 ##### Return value
 
@@ -3388,7 +3021,7 @@ If you don't provide a `defaultVisitorCode` and there is no visitor code stored 
 
 The `addData` function, used with the `useData` hook, collects targeting data to store for other hooks to determine if the current visitor is targeted.
 
-:::note
+<Note>
 - The `addData()` function does not return any value and does not interact with Kameleoon back-end servers on its own. Instead, all the declared data is saved for future transmission via the [flush](#flush) method .This approach helps reduce the number of server calls made, as the data is typically grouped into a single server call triggered by the execution of [flush](#flush).
 
 The [trackConversion](#trackconversion) method also sends out any previously associated data, just like the [flush](#flush). The same holds true for [getFeatureFlagVariationKey](#getfeatureflagvariationkey) and [getFeatureVariable](#getfeatureflagvariable) methods if an experimentation rule is triggered.
@@ -3396,17 +3029,16 @@ The [trackConversion](#trackconversion) method also sends out any previously ass
 - `userAgent` data will not be stored in storage like other data, and it will be sent with every tracking request for bot filtration.
 
 - Check the list of [supported conditions](#targeting-conditions) to know what data types can be used for targeting
-:::
+</Note>
 
-:::tip
+<Tip>
 Each visitor can only have one instance of associated data for most data types. However, `CustomData` is an exception. Visitors can have one instance of associated `CustomData` per `customDataIndex`.
-:::
+</Tip>
 
 <Tabs>
-<TabItem value="tsx" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```tsx
-import { useEffect, useCallback } from 'react';
 import {
   useInitialize,
   useVisitorCode,
@@ -3447,11 +3079,10 @@ function MyComponent(): JSX.Element {
 }
 ```
 
-</TabItem>
-<TabItem value="jsx" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```jsx
-import { useEffect, useCallback } from 'react';
 import {
   useInitialize,
   useVisitorCode,
@@ -3492,7 +3123,7 @@ function MyComponent() {
 }
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ##### Arguments
@@ -3502,11 +3133,11 @@ function MyComponent() {
 | visitorCode (_required_)   | `string`              | unique visitor identification string, can't exceed 255 characters length                                    |
 | kameleoonData (_optional_) | `KameleoonDataType[]` | number of instances of any type of `KameleoonData`, can be added solely in array or as sequential arguments |
 
-:::note
+<Note>
 - `kameleoonData` is variadic argument it can be passed as one or several arguments (see the example)
 
 - The index or ID of the [custom data](https://help.kameleoon.com/create-push-custom-data) can be found in your Kameleoon account. It is important to note that this index starts at `0`, which means that the first custom data you create for a given site will be assigned `0` as its ID, not `1`.
-:::
+</Note>
 
 ##### Exceptions thrown
 
@@ -3517,30 +3148,29 @@ function MyComponent() {
 | `KameleoonException.StorageWrite`         | Couldn't update storage data                                                      |
 | `KameleoonException.Initialization`       | Method was executed before the `kameleoonClient` completed it's `initialize` call |
 
-:::note
+<Note>
 See the [Data types](#data-types) reference for more details of how to manage different data types.
-:::
+</Note>
 
 ---
 
 #### flush()
 
 <Tabs>
-<TabItem value="version_9" label="SDK Version 9">
+<Tab title="SDK Version 9">
 
 Method `flush` collected with `useData` takes the Kameleoon data associated with the visitor and sends the data tracking request along with all of the data that's been added previously using the [addData](#adddata).
 
 If you don't specify a `visitorCode`, the SDK flushes all of its stored data to the remote Kameleoon servers. If any previously failed tracking requests were stored locally during [offline mode](#initialize), the SDK attempts to send the stored requests before executing the latest request.
 
-:::note
+<Note>
 The `isUniqueIdentifier` parameter can be useful in some edge-case scenarios, such as when you can't access the anonymous `visitorCode` that was originally assigned to the visitor, but you do have access to an internal ID that is connected to the anonymous visitor using session merging capabilities.
-:::
+</Note>
 
 <Tabs>
-<TabItem value="tsx" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```tsx
-import { useEffect, useCallback } from 'react';
 import {
   useInitialize,
   useVisitorCode,
@@ -3580,11 +3210,10 @@ function MyComponent(): JSX.Element {
 }
 ```
 
-</TabItem>
-<TabItem value="jsx" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```jsx
-import { useEffect, useCallback } from 'react';
 import {
   useInitialize,
   useVisitorCode,
@@ -3624,7 +3253,7 @@ function MyComponent() {
 }
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ##### Arguments
@@ -3642,19 +3271,18 @@ function MyComponent() {
 | `KameleoonException.VisitorCodeEmpty`     | The visitor code is empty                                                         |
 | `KameleoonException.Initialization`       | Method was executed before the `kameleoonClient` completed it's `initialize` call |
 
-</TabItem>
+</Tab>
 
-<TabItem value="version_10" label="SDK Version 10" default>
+<Tab title="SDK Version 10">
 
 `flush()` takes the Kameleoon data associated with the visitor and schedules the data to be sent with the next tracking request. The time of the next tracking request is defined by SDK Configuration [`trackingInterval`](#configuration-parameters) parameter. Visitor data can be added using [addData](#adddata) and [getRemoteVisitorData](#getremotevisitordata) methods.
 
 If you don't specify a `visitorCode`, the SDK flushes all of its stored data to the remote Kameleoon servers. If any previously failed tracking requests were stored locally during [offline mode](#initialize), the SDK attempts to send the stored requests before executing the latest request.
 
 <Tabs>
-<TabItem value="tsx" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```tsx
-import { useEffect, useCallback } from 'react';
 import {
   useInitialize,
   useVisitorCode,
@@ -3696,11 +3324,10 @@ function MyComponent(): JSX.Element {
 }
 ```
 
-</TabItem>
-<TabItem value="jsx" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```jsx
-import { useEffect, useCallback } from 'react';
 import {
   useInitialize,
   useVisitorCode,
@@ -3742,7 +3369,7 @@ function MyComponent() {
 }
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ##### Arguments
@@ -3766,7 +3393,7 @@ Or an object with the type FlushParamsType, containing:
 | `KameleoonException.VisitorCodeEmpty`     | The visitor code is empty                                                         |
 | `KameleoonException.Initialization`       | Method was executed before the `kameleoonClient` completed it's `initialize` call |
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ---
@@ -3778,11 +3405,9 @@ Asynchronous method `getRemoteData`, collected with the `useData` hook, returns 
 For example, you can use this function to retrieve user preferences, historical data, or any other data relevant to your application's logic. By storing this data on our highly scalable servers using our [Data API], you can efficiently manage massive amounts of data and retrieve it for each of your visitors or users.
 
 <Tabs>
-<TabItem value="tsx" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```tsx
-import { useEffect, useCallback } from 'react';
-import { useData } from '@kameleoon/react-sdk';
 
 function MyComponent(): JSX.Element {
   const { getRemoteData } = useData();
@@ -3800,12 +3425,10 @@ function MyComponent(): JSX.Element {
 }
 ```
 
-</TabItem>
-<TabItem value="jsx" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```jsx
-import { useEffect, useCallback } from 'react';
-import { useData } from '@kameleoon/react-sdk';
 
 function MyComponent() {
   const { getRemoteData } = useData();
@@ -3823,7 +3446,7 @@ function MyComponent() {
 }
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ##### Arguments
@@ -3847,7 +3470,7 @@ function MyComponent() {
 #### getRemoteVisitorData()
 
 <Tabs>
-<TabItem value="version_9" label="SDK Version 9">
+<Tab title="SDK Version 9">
 
 `getRemoteVisitorData()` is an asynchronous method for retrieving Kameleoon Visits Data for the `visitorCode` from the Kameleoon Data API. The method adds the data to storage for other methods to use when making targeting decisions.
 
@@ -3859,19 +3482,18 @@ Data obtained using this method plays an important role when you want to:
 
 Read [this article](https://developers.kameleoon.com/feature-management-and-experimentation/using-visit-history-in-feature-flags-and-experiments/) for a better understanding of possible use cases.
 
-:::caution
+<Warning>
 By default, `getRemoteVisitorData()` automatically retrieves the latest stored custom data with `scope=Visitor` and attaches them to the visitor without the need to call the method `addData()`. It is particularly useful for [synchronizing custom data between multiple devices](https://developers.kameleoon.com/feature-management-and-experimentation/web-sdks/nodejs-sdk/#synchronizing-custom-data-across-devices).
-:::
+</Warning>
 
-:::note
+<Note>
 The `isUniqueIdentifier` parameter can be useful in edge-case scenarios, such as when you can't access the anonymous `visitorCode` that was originally assigned to the visitor, but you do have access to an internal ID that is connected to the anonymous visitor using session merging capabilities.
-:::
+</Note>
 
 <Tabs>
-<TabItem value="tsx" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```tsx
-import { useEffect, useCallback } from 'react';
 import {
   useData,
   KameleoonDataType,
@@ -3916,12 +3538,10 @@ function MyComponent(): JSX.Element {
 }
 ```
 
-</TabItem>
-<TabItem value="jsx" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```jsx
-import { useEffect, useCallback } from 'react';
-import { useData } from '@kameleoon/react-sdk';
 
 function MyComponent() {
   const { getRemoteVisitorData } = useData();
@@ -3961,7 +3581,7 @@ function MyComponent() {
 }
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ##### Arguments
@@ -3997,7 +3617,7 @@ For example, let's say you want to retrieve data on visitors who completed a goa
 
 The flexibility shown in this example is not limited to goal data. You can use parameters within the `getRemoteVisitorData()` method to retrieve data on a variety of visitor behaviors.
 
-:::note
+<Note>
 Here is the list of available `VisitorDataFiltersType` filters:
 
 | Name                             | Type      | Description                                                                                                                                                                                            | Default |
@@ -4013,11 +3633,11 @@ Here is the list of available `VisitorDataFiltersType` filters:
 | conversions (_optional_)         | `boolean` | If true, conversion data will be retrieved.                                                                                                                                                            | `false` |
 | experiments (_optional_)         | `boolean` | If true, experiment data will be retrieved.                                                                                                                                                            | `false` |
 | kcs (_optional_)                 | `boolean` | If true, Kameleoon Conversion Score (KCS) will be retrieved. Requires the [AI Predictive Targeting add-on](https://help.kameleoon.com/target-users-by-ai-propensity-score-kameleoon-conversion-score/) | `false` |
-:::
+</Note>
 
-</TabItem>
+</Tab>
 
-<TabItem value="version_10" label="SDK Version 10" default>
+<Tab title="SDK Version 10">
 
 `getRemoteVisitorData()` is an asynchronous method for retrieving Kameleoon Visits Data for the `visitorCode` from the Kameleoon Data API. The method adds the data to storage for other methods to use when making targeting decisions.
 
@@ -4029,15 +3649,14 @@ Data obtained using this method plays an important role when you want to:
 
 Read [this article](https://developers.kameleoon.com/feature-management-and-experimentation/using-visit-history-in-feature-flags-and-experiments/) for a better understanding of possible use cases.
 
-:::caution
+<Warning>
 By default, `getRemoteVisitorData()` automatically retrieves the latest stored custom data with `scope=Visitor` and attaches them to the visitor without the need to call the method `addData()`. It is particularly useful for [synchronizing custom data between multiple devices](https://developers.kameleoon.com/feature-management-and-experimentation/web-sdks/nodejs-sdk/#synchronizing-custom-data-across-devices).
-:::
+</Warning>
 
 <Tabs>
-<TabItem value="tsx" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```tsx
-import { useEffect, useCallback } from 'react';
 import {
   useData,
   KameleoonDataType,
@@ -4082,12 +3701,10 @@ function MyComponent(): JSX.Element {
 }
 ```
 
-</TabItem>
-<TabItem value="jsx" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```jsx
-import { useEffect, useCallback } from 'react';
-import { useData } from '@kameleoon/react-sdk';
 
 function MyComponent() {
   const { getRemoteVisitorData } = useData();
@@ -4127,7 +3744,7 @@ function MyComponent() {
 }
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ##### Arguments
@@ -4162,7 +3779,7 @@ For example, let's say you want to retrieve data on visitors who completed a goa
 
 The flexibility shown in this example is not limited to goal data. You can use parameters within the `getRemoteVisitorData()` method to retrieve data on a variety of visitor behaviors.
 
-:::note
+<Note>
 Here is the list of available `VisitorDataFiltersType` filters:
 
 | Name                             | Type      | Description                                                                                                                                                                                                                                                                                                                                  | Default |
@@ -4180,10 +3797,10 @@ Here is the list of available `VisitorDataFiltersType` filters:
 | kcs (_optional_)                 | `boolean` | If true, Kameleoon Conversion Score (KCS) will be retrieved. Requires the [AI Predictive Targeting add-on](https://help.kameleoon.com/target-users-by-ai-propensity-score-kameleoon-conversion-score/)                                                                                                                                       | `false` |
 | visitorCode (_optional_)         | `boolean` | If true, Kameleoon will retrieve the `visitorCode` from the most recent visit and use it for the current visit. This is necessary if you want to ensure that the visitor, identified by their `visitorCode`, always receives the same variation across visits for [Cross-device experimentation](/core-concepts/cross-device-experimentation). | `true`  |
 | personalization (_optional_)     | `boolean` | If true, personalization data will be retrieved. This is required for the personalization condition                                                                                                                                                                                                                                          | `false` |
-| cbs (_optional_)                 | `boolean` | <Text x={Shared.RemoteVisitorDataFilter.CBS}/>                                                                                                                                                                                                                                                                                               | `false` |
-:::
+| cbs (_optional_)                 | `boolean` | If true, Contextual Bandit score data will be retrieved.                                                                                                                                                                                                                                                                                               | `false` |
+</Note>
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ---
@@ -4193,11 +3810,9 @@ Here is the list of available `VisitorDataFiltersType` filters:
 Asynchronous method `getVisitorWarehouseAudience` collected with `useData` hook retrieves all audience data associated with the visitor in your data warehouse using the specified `visitorCode` and `warehouseKey`. The `warehouseKey` is typically your internal user ID. The `customDataIndex` parameter corresponds to the Kameleoon custom data that Kameleoon uses to target your visitors. Refer to the [warehouse targeting documentation](https://help.kameleoon.com/warehouse-audience-targeting/) for additional details.
 
 <Tabs>
-<TabItem value="tsx" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```tsx
-import { useEffect, useCallback } from 'react';
-import { useData, CustomData } from '@kameleoon/react-sdk';
 
 function MyComponent(): JSX.Element {
   const { getVisitorWarehouseAudience } = useData();
@@ -4225,12 +3840,10 @@ function MyComponent(): JSX.Element {
 }
 ```
 
-</TabItem>
-<TabItem value="jsx" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```jsx
-import { useEffect, useCallback } from 'react';
-import { useData } from '@kameleoon/react-sdk';
 
 function MyComponent() {
   const { getVisitorWarehouseAudience } = useData();
@@ -4258,7 +3871,7 @@ function MyComponent() {
 }
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ##### Arguments
@@ -4289,21 +3902,18 @@ Parameters object consisting of:
 
 Method `setLegalConsent`, collected with `useVisitorCode` hook, specifies whether the visitor has given legal consent to use personal data. Setting the `legalConsent` parameter to `false` limits the types of data that you can include in tracking requests. This helps you adhere to legal and regulatory requirements while responsibly managing visitor data. You can find more information on personal data in the [consent management policy](https://help.kameleoon.com/consent-management-policy/).
 
-:::note
+<Note>
 - Consent information is in sync between the Kameleoon Engine (application file engine.js) and the React SDK. This synchronization means that once consent is set on either the Engine or the SDK, it's automatically set for both. This feature eliminates the need for manual consent handling and ensures that SDKs operate in compliance with user preferences.
 
 If you use Kameleoon in Hybrid mode, we recommend reading the consent section in our [Hybrid experimentation article](/core-concepts/hybrid-experimentation/#managing-consent-in-hybrid-mode)
 
 - When handling legal consent, it's important to use [`getVisitorCode`](#getvisitorcode) method. Additionally, `getVisitorCode` does not accept `domain` as an argument. Instead, pass it to the [`createClient`](#createclient) function.
-:::
-
+</Note>
 
 <Tabs>
-<TabItem value="ts" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```ts
-import { useEffect, useCallback } from 'react';
-import { useInitialize, useVisitorCode } from '@kameleoon/react-sdk';
 
 function MyComponent(): JSX.Element {
   const { initialize } = useInitialize();
@@ -4324,12 +3934,10 @@ function MyComponent(): JSX.Element {
 }
 ```
 
-</TabItem>
-<TabItem value="js" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```js
-import { useEffect, useCallback } from 'react';
-import { useInitialize, useVisitorCode } from '@kameleoon/react-sdk';
 
 function MyComponent() {
   const { initialize } = useInitialize();
@@ -4350,7 +3958,7 @@ function MyComponent() {
 }
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ##### Arguments
@@ -4376,16 +3984,12 @@ This section provides the methods you use to track when a visitor action achieve
 #### trackConversion()
 
 <Tabs>
-<TabItem value="version_9" label="SDK Version 9">
-
-<TrackConversion sec="description___js_old" c={Context}/>
+<Tab title="SDK Version 9">
 
 <Tabs>
-<TabItem value="tsx" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```tsx
-import { useEffect, useCallback } from 'react';
-import { useInitialize, useVisitorCode, useData } from '@kameleoon/react-sdk';
 
 function MyComponent(): JSX.Element {
   const { initialize } = useInitialize();
@@ -4417,12 +4021,10 @@ function MyComponent(): JSX.Element {
 }
 ```
 
-</TabItem>
-<TabItem value="jsx" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```jsx
-import { useEffect, useCallback } from 'react';
-import { useInitialize, useVisitorCode, useData } from '@kameleoon/react-sdk';
 
 function MyComponent() {
   const { initialize } = useInitialize();
@@ -4454,31 +4056,23 @@ function MyComponent() {
 }
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ##### Arguments
 
 Parameters object consisting of:
-
-<TrackConversion sec="arguments___js_old" c={Context}/>
 
 ##### Exceptions thrown
 
-<TrackConversion sec="exceptions___js" c={Context}/>
+</Tab>
 
-</TabItem>
-
-<TabItem value="version_10" label="SDK Version 10" default>
-
-<TrackConversion sec="description___js" c={Context}/>
+<Tab title="SDK Version 10">
 
 <Tabs>
-<TabItem value="tsx" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```tsx
-import { useEffect, useCallback } from 'react';
-import { useInitialize, useVisitorCode, useData, CustomData } from '@kameleoon/react-sdk';
 
 function MyComponent(): JSX.Element {
   const { initialize } = useInitialize();
@@ -4507,12 +4101,10 @@ function MyComponent(): JSX.Element {
 }
 ```
 
-</TabItem>
-<TabItem value="jsx" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```jsx
-import { useEffect, useCallback } from 'react';
-import { useInitialize, useVisitorCode, useData, CustomData } from '@kameleoon/react-sdk';
 
 function MyComponent() {
   const { initialize } = useInitialize();
@@ -4541,20 +4133,16 @@ function MyComponent() {
 }
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ##### Arguments
 
 Parameters object consisting of:
 
-<TrackConversion sec="arguments___js" c={Context}/>
-
-:::note
-<TrackConversion sec="note_metadata" c={Context}/>
-
+<Note>
 <Tabs>
-<TabItem value="ts" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```ts
 addData(visitorCode, new CustomData(5, 'Credit Card'), new CustomData(9, 'Express Delivery'));
@@ -4564,8 +4152,8 @@ trackConversion({
     metadata: [new CustomData(5, 'Amex Credit Card')]
 });
 ```
-</TabItem>
-<TabItem value="js" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```js
 addData(visitorCode, new CustomData(5, 'Credit Card'), new CustomData(9, 'Express Delivery'));
@@ -4576,15 +4164,13 @@ trackConversion({
 });
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
-:::
+</Note>
 
 ##### Exceptions thrown
 
-<TrackConversion sec="exceptions___js" c={Context}/>
-
-</TabItem>
+</Tab>
 </Tabs>
 
 ---
@@ -4594,11 +4180,9 @@ trackConversion({
 Method `getEngineTrackingCode()` collected with `useFeatureFlag` hook obtains Kameleoon tracking code for the current visitor. Tracking code is built based the feature experiments that were triggered during the last 5 seconds
 
 <Tabs>
-<TabItem value="tsx" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```tsx
-import { useEffect, useCallback } from 'react';
-import { useInitialize, useFeatureFlag } from '@kameleoon/react-sdk';
 
 function MyComponent(): JSX.Element {
   const { initialize } = useInitialize();
@@ -4648,12 +4232,10 @@ function MyComponent(): JSX.Element {
 }
 ```
 
-</TabItem>
-<TabItem value="jsx" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```jsx
-import { useEffect, useCallback } from 'react';
-import { useInitialize, useFeatureFlag } from '@kameleoon/react-sdk';
 
 function MyComponent() {
   const { initialize } = useInitialize();
@@ -4703,10 +4285,10 @@ function MyComponent() {
 }
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
-:::note
+<Note>
 Result tracking code can be inserted directly into html `<script>` tag
 
 For example:
@@ -4729,8 +4311,7 @@ For example:
   </body>
 </html>
 ```
-
-:::
+</Note>
 
 ##### Arguments
 
@@ -4757,17 +4338,16 @@ This section provides the methods you use to handle events.
 
 <Tabs>
 
-<TabItem value="version_10" label="SDK Version 10" default>
+<Tab title="SDK Version 10">
 
 #### onEvent()
 
 Method `onEvent`, collected with the `useInitialize` hook, fires a callback when a specific event is triggered. The callback function has access to the data associated with the event. The SDK methods in this documentation note which event types they can trigger, if any.
 
 <Tabs>
-<TabItem value="tsx" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```tsx
-import { useEffect, useCallback } from 'react';
 import {
   useInitialize,
   EventType,
@@ -4792,12 +4372,10 @@ function MyComponent(): JSX.Element {
 }
 ```
 
-</TabItem>
-<TabItem value="jsx" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```jsx
-import { useEffect, useCallback } from 'react';
-import { useInitialize, EventType } from '@kameleoon/react-sdk';
 
 function MyComponent() {
   const { initialize, onEvent } = useInitialize();
@@ -4817,12 +4395,12 @@ function MyComponent() {
 }
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
-:::note
+<Note>
 You can only assign one callback to each `EventType`.
-:::
+</Note>
 
 ##### Events
 
@@ -4853,11 +4431,11 @@ Events are defined in the `EventType` enum. Depending on the event type, the `ev
 Kameleoon offers built-in integrations with various analytics and CDP solutions, such as [Mixpanel, Google Analytics 4, Segment...](https://help.kameleoon.com/category/user-manual/manage-your-integrations/). To ensure that you can track and analyze your server-side experiments, Kameleoon provides a method `getEngineTrackingCode()` that returns the JavasScript code to be inserted in your page to automatically send the exposure events to the analytics solution you are using. The SDK builds a tracking code for your active analytics solution based on the experiments that the visitor has triggered in the last 5 seconds.
 For more information about hybrid experimentation, please refer to this [documentation](https://developers.kameleoon.com/core-concepts/hybrid-experimentation).
 
-:::note
+<Note>
 To benefit from this feature, you will need to implement both the React SDK and our Kameleoon JavaScript tag. We recommend you implement the [Kameleoon asynchronous tag], which you can install before your closing `<body>` tag in your HTML page, as it will be only used for tracking purposes.
-:::
+</Note>
 
-</TabItem>
+</Tab>
 
 </Tabs>
 
@@ -4869,21 +4447,21 @@ During the [flush](#flush) execution, the SDK collects all the data and sends it
 Data available in the SDK is not available for targeting and reporting in the Kameleoon app until you add the data. For example, by using the `addData()` method.
 See [use visit history to target users](../using-visit-history-in-feature-flags-and-experiments) for more information.
 
-:::note
+<Note>
 If you are using hybrid mode, you can call `getRemoteVisitorData()` to automatically fill all data that Kameleoon has collected previously.
-:::
+</Note>
 
 #### Browser
 
-:::note
+<Note>
 Since React SDK `10.11.0`, `Browser` is automatically detected based on the `User-Agent` string. However, you can still manually override it if needed.
-:::
+</Note>
 
 Browser contains browser information.
 
-:::note
+<Note>
 Each visitor can only have one `Browser`. Adding a second `Browser` overwrites the first one.
-:::
+</Note>
 
 | Name                 | Type          | Description                                                                                     |
 | -------------------- | ------------- | ----------------------------------------------------------------------------------------------- |
@@ -4891,10 +4469,9 @@ Each visitor can only have one `Browser`. Adding a second `Browser` overwrites t
 | version (_optional_) | `number`      | version of the browser, floating point number represents major and minor version of the browser |
 
 <Tabs>
-<TabItem value="tsx" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```tsx
-import { useEffect, useCallback } from 'react';
 import {
   useInitialize,
   useData,
@@ -4920,11 +4497,10 @@ function MyComponent(): JSX.Element {
 }
 ```
 
-</TabItem>
-<TabItem value="jsx" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```jsx
-import { useEffect, useCallback } from 'react';
 import {
   useInitialize,
   useData,
@@ -4950,7 +4526,7 @@ function MyComponent() {
 }
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ---
@@ -4963,20 +4539,18 @@ If you add `UniqueIdentifier` for a visitor, `visitorCode` is used as the unique
 
 The `UniqueIdentifier` can also be useful in other edge-case scenarios, such as when you can't access the anonymous `visitorCode` that was originally assigned to the visitor, but you do have access to an internal ID that is connected to the anonymous visitor using session merging capabilities.
 
-:::note
+<Note>
 Each visitor can only have one `UniqueIdentifier`. Adding another `UniqueIdentifier` overwrites the first one.
-:::
+</Note>
 
 | Name               | Type      | Description                                                                                                                                                   |
 | ------------------ | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | value (_required_) | `boolean` | value that specifies if the visitor is associated with another visitor, provided `false` will imply that the visitor is not associated with any other visitor |
 
 <Tabs>
-<TabItem value="tsx" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```tsx
-import { useEffect, useCallback } from 'react';
-import { useInitialize, useData, UniqueIdentifier } from '@kameleoon/react-sdk';
 
 function MyComponent(): JSX.Element {
   const { initialize } = useInitialize();
@@ -4995,12 +4569,10 @@ function MyComponent(): JSX.Element {
 }
 ```
 
-</TabItem>
-<TabItem value="jsx" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```jsx
-import { useEffect, useCallback } from 'react';
-import { useInitialize, useData, UniqueIdentifier } from '@kameleoon/react-sdk';
 
 function MyComponent() {
   const { initialize } = useInitialize();
@@ -5019,24 +4591,19 @@ function MyComponent() {
 }
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ---
 
 #### Conversion
 
-<Conversion sec="description" c={Context}/>
-
 `ConversionParametersType` conversionParameters - an object with conversion parameters described below
 
-<Conversion sec="arguments" c={Context}/>
-
 <Tabs>
-<TabItem value="tsx" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```tsx
-import { useEffect, useCallback } from 'react';
 import {
   useInitialize,
   useData,
@@ -5071,12 +4638,10 @@ function MyComponent(): JSX.Element {
 }
 ```
 
-</TabItem>
-<TabItem value="jsx" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```jsx
-import { useEffect, useCallback } from 'react';
-import { useInitialize, useData, Conversion, CustomData } from '@kameleoon/react-sdk';
 
 function MyComponent() {
   const { initialize } = useInitialize();
@@ -5104,25 +4669,25 @@ function MyComponent() {
 }
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 #### Cookie
 
 `Cookie` contains information about the cookie stored on the visitor's device.
 
-:::note
+<Note>
 - Generally, the React SDK will attempt to use a `localStorage` cookie for the conditions. If not possible, SDK can use `Cookie` data as an alternative.
 
 - Each visitor can only have one `Cookie`. Adding a second `Cookie` overwrites the first one.
-:::
+</Note>
 
 | Name                | Type           | Description                                                         |
 | ------------------- | -------------- | ------------------------------------------------------------------- |
 | cookie (_required_) | `CookieType[]` | A list of `CookieType` objects consisting of cookie keys and values |
 
 <Tabs>
-<TabItem value="ts" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```ts
 import {
@@ -5155,8 +4720,8 @@ function MyComponent(): JSX.Element {
 }
 ```
 
-</TabItem>
-<TabItem value="js" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```js
 import {
@@ -5189,7 +4754,7 @@ function MyComponent() {
 }
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ##### Methods
@@ -5198,10 +4763,9 @@ function MyComponent() {
 The method accepts `string` as parameter and returns an initialized `Cookie` instance.
 
 <Tabs>
-<TabItem value="ts" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```ts
-import { Cookie } from '@kameleoon/react-sdk';
 
 const cookieString = 'key_1=value_1; key_2=value_2';
 const cookie: Cookie = Cookie.fromString(cookieString);
@@ -5213,11 +4777,10 @@ const cookie: Cookie = Cookie.fromString(cookieString);
 // ]
 ```
 
-</TabItem>
-<TabItem value="js" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```js
-import { Cookie } from '@kameleoon/react-sdk';
 
 const cookieString = 'key_1=value_1; key_2=value_2';
 const cookie = Cookie.fromString(cookieString);
@@ -5229,16 +4792,16 @@ const cookie = Cookie.fromString(cookieString);
 // ]
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 #### GeolocationData
 
 `GeolocationData` contains the visitor's geolocation details
 
-:::note
+<Note>
 Each visitor can only have one `GeolocationData`. Adding a second `GeolocationData` overwrites the first one.
-:::
+</Note>
 
 An object parameter with the type `GeolocationInfoType` containing the following fields:
 
@@ -5251,7 +4814,7 @@ An object parameter with the type `GeolocationInfoType` containing the following
 | coordinates (_optional_) | `[number, number]` | Coordinates array tuple of two position values (longitude and latitude). Coordinate number represents decimal degrees |
 
 <Tabs>
-<TabItem value="ts" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```ts
 import {
@@ -5287,8 +4850,8 @@ function MyComponent(): JSX.Element {
 }
 ```
 
-</TabItem>
-<TabItem value="js" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```js
 import {
@@ -5323,7 +4886,7 @@ function MyComponent() {
 }
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ---
@@ -5342,8 +4905,7 @@ For more information about custom data, please refer to this [article](/core-con
 | overwrite _(optional)_ | `boolean`  | Flag to explicitly control how the values are stored and how they appear in reports. [See more](https://developers.kameleoon.com/core-concepts/custom-data/#default-logic-when-overwrite-parameter-is-false-or-omitted) | `true`  |
 | value (_required_)     | `string[]` | The custom data value. It must be stringified to match the `string` type. _Note:_ value is variadic.                                                                                                                    |         |
 
-:::note
-
+<Note>
 - Each visitor is allowed only one `CustomData` for each unique `index`. Adding another `CustomData` with the same `index` will replace the existing one.
 
 - The custom data ‘index’ can be found in the [Custom Data dashboard](https://help.kameleoon.com/manage-your-custom-data/) under the “INDEX” column.
@@ -5351,15 +4913,12 @@ For more information about custom data, please refer to this [article](/core-con
 - To prevent the SDK from sending data with the selected index to Kameleoon servers for privacy reasons, enable the option: **Use this data only locally for targeting purposes** when creating custom data.
 
 - Adding a `CustomData` instance created with a name when the SDK instance is not initialized or the name is not registered, will result in the data being ignored.
-
-:::
+</Note>
 
 <Tabs>
-<TabItem value="tsx" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```tsx
-import { useEffect, useCallback } from 'react';
-import { useInitialize, useData, CustomData } from '@kameleoon/react-sdk';
 
 function MyComponent(): JSX.Element {
   const { initialize } = useInitialize();
@@ -5411,12 +4970,10 @@ function MyComponent(): JSX.Element {
 }
 ```
 
-</TabItem>
-<TabItem value="jsx" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```jsx
-import { useEffect, useCallback } from 'react';
-import { useInitialize, useData, CustomData } from '@kameleoon/react-sdk';
 
 function MyComponent() {
   const { initialize } = useInitialize();
@@ -5468,34 +5025,33 @@ function MyComponent() {
 }
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ---
 
 #### Device
 
-:::note
+<Note>
 Since React SDK `10.11.0`, `Device` is automatically detected based on the `User-Agent` string. However, you can still manually override it if needed.
 
 **React Native:** Support for this feature is currently experimental and may require adjustments to work correctly. In React Native, the `Device` is automatically detected based on the `DPI` from `react-native.Dimensions`.
-:::
+</Note>
 
 Device contains information about your device.
 
-:::note
+<Note>
 Each visitor can only have one `Device`. Adding a second `Device` overwrites the first one.
-:::
+</Note>
 
 | Name                    | Type         | Description                                                      |
 | ----------------------- | ------------ | ---------------------------------------------------------------- |
 | deviceType (_required_) | `DeviceType` | possible types for device type (`PHONE`, `TABLET`, `DESKTOP`) |
 
 <Tabs>
-<TabItem value="tsx" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```tsx
-import { useEffect, useCallback } from 'react';
 import {
   useInitialize,
   useData,
@@ -5521,11 +5077,10 @@ function MyComponent(): JSX.Element {
 }
 ```
 
-</TabItem>
-<TabItem value="jsx" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```jsx
-import { useEffect, useCallback } from 'react';
 import {
   useInitialize,
   useData,
@@ -5551,34 +5106,33 @@ function MyComponent() {
 }
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ---
 
 #### OperatingSystem
 
-:::note
+<Note>
 Since React SDK `10.11.0`, `OperatingSystem` is automatically detected based on the `User-Agent` string. However, you can still manually override it if needed.
 
 **React Native:** Support for this feature is currently experimental and may require adjustments to work correctly. In React Native, the `OperatingSystem` is automatically detected based on the `react-native.Platform`.
-:::
+</Note>
 
 `OperatingSystem` contains the visitor's operating system information.
 
-:::note
+<Note>
 Each visitor can only have one `OperatingSystem`. Adding a second `OperatingSystem` overwrites the previous one.
-:::
+</Note>
 
 | Name                         | Type                  | Description                                                                                     |
 | ---------------------------- | --------------------- | ----------------------------------------------------------------------------------------------- |
 | operatingSystem (_required_) | `OperatingSystemType` | possible types for device type: `WINDOWS_PHONE`, `WINDOWS`, `ANDROID`, `LINUX`, `MAC`, `IOS` |
 
 <Tabs>
-<TabItem value="tsx" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```tsx
-import { useEffect, useCallback } from 'react';
 import {
   useInitialize,
   useData,
@@ -5604,11 +5158,10 @@ function MyComponent(): JSX.Element {
 }
 ```
 
-</TabItem>
-<TabItem value="jsx" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```jsx
-import { useEffect, useCallback } from 'react';
 import {
   useInitialize,
   useData,
@@ -5634,24 +5187,24 @@ function MyComponent() {
 }
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ---
 
 #### PageView
 
-:::note
+<Note>
 Since React SDK `10.11.0`, `PageView` is automatically detected based on the `window.location?.href` and `document.title`. However, you can still manually override it if needed.
 
 **React Native:** Support for this feature is currently experimental and may require adjustments to work correctly.
-:::
+</Note>
 
 PageView contains information about your web page.
 
-:::note
+<Note>
 Each visitor can have one `PageView` per unique URL. Adding a `PageView` with the same URL as an existing one will notify SDK that the visitor revisited page
-:::
+</Note>
 
 `PageViewParametersType` pageViewParameters - an object with page view parameters described below
 
@@ -5662,10 +5215,9 @@ Each visitor can have one `PageView` per unique URL. Adding a `PageView` with th
 | referrer (_optional_)   | `number[]` | an optional parameter containing a list of referrers Indices, has no default value |
 
 <Tabs>
-<TabItem value="tsx" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```tsx
-import { useEffect, useCallback } from 'react';
 import {
   useInitialize,
   useData,
@@ -5698,12 +5250,10 @@ function MyComponent(): JSX.Element {
 }
 ```
 
-</TabItem>
-<TabItem value="jsx" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```jsx
-import { useEffect, useCallback } from 'react';
-import { useInitialize, useData, PageView } from '@kameleoon/react-sdk';
 
 function MyComponent() {
   const { initialize } = useInitialize();
@@ -5730,7 +5280,7 @@ function MyComponent() {
 }
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ---
@@ -5741,26 +5291,24 @@ Store information on the user-agent of the visitor. Server-side experiments are 
 
 If you use internal bots, we suggest that you pass the value **curl/8.0** of the userAgent to exclude them from our analytics.
 
-:::note
+<Note>
 A visitor can only have one `UserAgent`. Adding a second `UserAgent` overwrites the first one.
-:::
+</Note>
 
 | Name               | Type     | Description               |
 | ------------------ | -------- | ------------------------- |
 | value (_required_) | `string` | value used for comparison |
 
-:::caution
+<Warning>
 Server-side experiments are more vulnerable to **bot traffic** than client-side experiments. To address this, Kameleoon uses the IAB/ABC International Spiders and Bots List to identify known bots and spiders. We recommend that you pass the user agent to be filtered by Kameleoon when running server-side experiments for each visitor browsing your website, to avoid counting bots in your analytics.
 
 If you use internal bots, we suggest that you pass the value **curl/8.0** of the userAgent to exclude them from our analytics.
-:::
+</Warning>
 
 <Tabs>
-<TabItem value="tsx" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```tsx
-import { useEffect, useCallback } from 'react';
-import { useInitialize, useData, UserAgent } from '@kameleoon/react-sdk';
 
 function MyComponent(): JSX.Element {
   const { initialize } = useInitialize();
@@ -5780,12 +5328,10 @@ function MyComponent(): JSX.Element {
 }
 ```
 
-</TabItem>
-<TabItem value="jsx" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```jsx
-import { useEffect, useCallback } from 'react';
-import { useInitialize, useData, UserAgent } from '@kameleoon/react-sdk';
 
 function MyComponent() {
   const { initialize } = useInitialize();
@@ -5805,20 +5351,15 @@ function MyComponent() {
 }
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 #### ApplicationVersion
 
-<ApplicationVersion sec="description" c={Context}/>
-
-<ApplicationVersion sec="arguments" c={Context}/>
-
 <Tabs>
-<TabItem value="ts" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```tsx
-import { useEffect, useCallback } from 'react';
 import {
   useInitialize,
   useData,
@@ -5843,11 +5384,10 @@ function MyComponent(): JSX.Element {
 }
 ```
 
-</TabItem>
-<TabItem value="jsx" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```jsx
-import { useEffect, useCallback } from 'react';
 import {
   useInitialize,
   useData,
@@ -5872,7 +5412,7 @@ function MyComponent() {
 }
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ---
@@ -5881,40 +5421,30 @@ function MyComponent() {
 
 #### DataFile
 
-<DataFile sec="description" c={Context}/>
-
-<DataFile sec="arguments" c={Context}/>
-
 <Tabs>
-<TabItem value="ts" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```ts
-import { FeatureFlag } from '@kameleoon/react-sdk';
 
 const featureFlags: Map<string, FeatureFlag> = dataFile.featureFlags;
 ```
 
-</TabItem>
-<TabItem value="js" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```js
 const featureFlags = dataFile.featureFlags;
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 #### FeatureFlag
 
-<FeatureFlag sec="description_rules" c={Context}/>
-
-<FeatureFlag sec="arguments_rules" c={Context}/>
-
 <Tabs>
-<TabItem value="ts" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```ts
-import { Variation, Rule } from '@kameleoon/react-sdk';
 
 // Check whether the feature flag is enabled in the current environment
 const isEnvironmentEnabled: boolean = featureFlag.environmentEnabled;
@@ -5929,8 +5459,8 @@ const variations: Map<string, Variation> = featureFlag.variations;
 const rules: Rule[] = featureFlag.rules;
 ```
 
-</TabItem>
-<TabItem value="js" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```js
 // Check whether the feature flag is enabled in the current environment
@@ -5946,34 +5476,29 @@ const variations = featureFlag.variations;
 const rules = featureFlag.rules;
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 #### Rule
 
-<Rule sec="description" c={Context}/>
-
-<Rule sec="arguments" c={Context}/>
-
 <Tabs>
-<TabItem value="ts" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```ts
-import { Variation } from '@kameleoon/react-sdk';
 
 // Retrieve all variations of the rule as a map (key = variation key, value = Variation object)
 const variations: Map<string, Variation>  = rule.variations;
 ```
 
-</TabItem>
-<TabItem value="js" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```js
 // Retrieve all variations of the rule as a map (key = variation key, value = Variation object)
 const variations  = rule.variations;
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 #### Variation
@@ -5988,15 +5513,13 @@ const variations  = rule.variations;
 | experimentId | `number` or `null`      | id of the experiment or `null` if the visitor landed on the default variation.                      |
 | variables    | `Map<string, Variable>` | map of variables for the variation, where key is the variable key and value is the variable object. |
 
-:::note
-
+<Note>
 - Ensure that your code handles the case where `id` or `experimentId` may be `null`, indicating a default variation.
 - The `variables` map might be empty if no variables are associated with the variation.
-
-:::
+</Note>
 
 <Tabs>
-<TabItem value="ts" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```ts
 // Retrieving the variation name
@@ -6015,8 +5538,8 @@ const experimentId = variation.experimentId;
 const variables = variation.variables;
 ```
 
-</TabItem>
-<TabItem value="js" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```js
 // Retrieving the variation name
@@ -6035,7 +5558,7 @@ const experimentId = variation.experimentId;
 const variables = variation.variables;
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 #### Variable
@@ -6049,7 +5572,7 @@ const variables = variation.variables;
 | value | `any`    | The value of the variable, which can be of the following types: **boolean**, **number**, **String**, **Record\<string, any\>**, **any[]**. |
 
 <Tabs>
-<TabItem value="ts" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```ts
 // Retrieving the variables map
@@ -6065,8 +5588,8 @@ const isDiscount = variables.get('isDiscount')?.value || false;
 const title = variables.get('title')?.value || '';
 ```
 
-</TabItem>
-<TabItem value="js" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```js
 // Retrieving the variables map
@@ -6082,35 +5605,34 @@ const isDiscount = variables.get('isDiscount')?.value || false;
 const title = variables.get('title')?.value || '';
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ### Deprecated methods
 
-:::caution
+<Warning>
 These methods are deprecated and will be removed in the next major update.
-:::
+</Warning>
 
 #### getFeatureFlagVariationKey()
 
 - 📨 _Sends Tracking Data to Kameleoon_
 - 🎯 _Events:_ `EventType.Evaluation`
 
-:::note
+<Note>
 Use the [`getVariation`](#getvariation) method.
-:::
+</Note>
 
 The method `getFeatureFlagVariationKey()`, which is used with the `useFeatureFlag` hook, retrieves the variation key for a visitor identified by their `visitorCode`. This process includes checking the targeting criteria, identifying the appropriate variation assigned to the visitor, storing this information, and sending a tracking request.
 
-:::note
+<Note>
 If a user has never been associated with a feature flag, the SDK will randomly return a variation key according to the rules of that feature flag. If the user is already linked to the feature flag, the SDK will identify the previously assigned variation key. If the user does not meet any of the specified rules, the SDK will return the default value defined in Kameleoon’s feature flag delivery rules. It’s important to note that the default value may not always be a variation key; it could also be a boolean value or another data type, depending on how the feature flag is configured.
-:::
+</Note>
 
 <Tabs>
-<TabItem value="tsx" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```tsx
-import { useEffect, useCallback } from 'react';
 import {
   useInitialize,
   useFeatureFlag,
@@ -6140,11 +5662,10 @@ function MyComponent(): JSX.Element {
 }
 ```
 
-</TabItem>
-<TabItem value="jsx" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```jsx
-import { useEffect, useCallback } from 'react';
 import {
   useInitialize,
   useFeatureFlag,
@@ -6174,7 +5695,7 @@ function MyComponent() {
 }
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ##### Arguments
@@ -6203,13 +5724,12 @@ function MyComponent() {
 - 🚫 _Doesn't send Tracking Data to Kameleoon_
 - 🎯 _Events:_ `EventType.Evaluation` (for each feature flag)
 
-:::note
+<Note>
 Use the [`getVariations`](#getvariations) method.
-:::
+</Note>
 
 The `getVisitorFeatureFlags` method, utilized with the `useFeatureFlag` hook, returns a list of _active_ feature flags that target the visitor associated with the `visitorCode` (the visitor must have one of the allocated variations).
-:::caution
-
+<Warning>
 This method only collects the feature flags that are currently active for the visitor. As a result, it does not include any feature flags for which the visitor is assigned to the “off” variation (default or control). If you need to retrieve all of the visitor’s feature flags, use `getFeatureFlags` instead.
 
 For example:
@@ -6233,14 +5753,12 @@ getFeatureFlags('my_visitor').forEach(({ key }) => {
   getFeatureFlagVariationKey('my_visitor', key);
 });
 ```
-
-:::
+</Warning>
 
 <Tabs>
-<TabItem value="tsx" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```tsx
-import { useEffect, useCallback } from 'react';
 import {
   useInitialize,
   useFeatureFlag,
@@ -6268,11 +5786,10 @@ function MyComponent(): JSX.Element {
 }
 ```
 
-</TabItem>
-<TabItem value="jsx" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```jsx
-import { useEffect, useCallback } from 'react';
 import {
   useInitialize,
   useFeatureFlag,
@@ -6300,7 +5817,7 @@ function MyComponent() {
 }
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ##### Arguments
@@ -6329,17 +5846,16 @@ function MyComponent() {
 - 🚫 _Doesn't send Tracking Data to Kameleoon_
 - 🎯 _Events:_ `EventType.Evaluation` (for each feature flag)
 
-:::note
+<Note>
 Use the [`getVariations`](#getvariations) method.
-:::
+</Note>
 
 The `getActiveFeatureFlags` method, collected with the `useFeatureFlag` hook, returns a `Map`, where key is feature key and value is detailed information about the visitor's variation and it's variables
 
 <Tabs>
-<TabItem value="ts" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```tsx
-import { useEffect, useCallback } from 'react';
 import {
   useInitialize,
   useFeatureFlag,
@@ -6388,11 +5904,10 @@ function MyComponent(): JSX.Element {
 init();
 ```
 
-</TabItem>
-<TabItem value="js" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```jsx
-import { useEffect, useCallback } from 'react';
 import {
   useInitialize,
   useFeatureFlag,
@@ -6441,14 +5956,14 @@ function MyComponent(): JSX.Element {
 init();
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
-:::caution
+<Warning>
 This method only collects the visitor's _active_ feature flags. This means the result excludes all the feature flags for which the visitor is assigned to the `off` (default or control) variation. When you need all of the visitor's feature flags to iterate over, use `getFeatureFlags` instead.
 
 See the [getVisitorFeatureFlags](#getvisitorfeatureflags) _CAUTION_ section method for more details.
-:::
+</Warning>
 
 ##### Arguments
 
@@ -6478,17 +5993,16 @@ See the [getVisitorFeatureFlags](#getvisitorfeatureflags) _CAUTION_ section meth
 - 📨 _Sends Tracking Data to Kameleoon_
 - 🎯 _Events:_ `EventType.Evaluation`
 
-:::note
+<Note>
 Use the [`getVariation`](#getvariation) method.
-:::
+</Note>
 
 The `getFeatureFlagVariable` method, collected with `useFeatureFlag` hook, returns a variable for the visitor under `visitorCode` in the found feature flag, this includes targeting check, finding the according variation exposed to the visitor and saving it to storage along with sending tracking request.
 
 <Tabs>
-<TabItem value="tsx" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```tsx
-import { useEffect, useCallback } from 'react';
 import {
   useInitialize,
   useVisitorCode,
@@ -6542,11 +6056,10 @@ function MyComponent(): JSX.Element {
 }
 ```
 
-</TabItem>
-<TabItem value="jsx" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```jsx
-import { useEffect, useCallback } from 'react';
 import {
   useInitialize,
   useVisitorCode,
@@ -6580,7 +6093,7 @@ function MyComponent() {
 }
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ##### Arguments
@@ -6615,17 +6128,16 @@ Parameters object of type `GetFeatureFlagVariableParamsType` containing the foll
 - 📨 _Sends Tracking Data to Kameleoon_
 - 🎯 _Events:_ `EventType.Evaluation` (for each feature flag)
 
-:::note
+<Note>
 Use the [`getVariations`](#getvariations) method.
-:::
+</Note>
 
 The `getFeatureFlagVariables` method, collected with the `useFeatureFlag`, hook returns a list of variables for the visitor under `visitorCode` in the found feature flag, this includes targeting check, finding the according variation exposed to the visitor and saving it to storage along with sending tracking request.
 
 <Tabs>
-<TabItem value="tsx" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```tsx
-import { useEffect, useCallback } from 'react';
 import {
   useInitialize,
   useFeatureFlag,
@@ -6653,11 +6165,10 @@ function MyComponent(): JSX.Element {
 }
 ```
 
-</TabItem>
-<TabItem value="jsx" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```jsx
-import { useEffect, useCallback } from 'react';
 import {
   useInitialize,
   useFeatureFlag,
@@ -6685,7 +6196,7 @@ function MyComponent() {
 }
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ##### Arguments
@@ -6716,22 +6227,20 @@ function MyComponent() {
 
 #### onConfigurationUpdate()
 
-:::note
+<Note>
 Use the `onEvent` method with `EventType.ConfigurationUpdate` instead.
-:::
+</Note>
 
 Method `onConfigurationUpdate` collected with `useInitialize` hook fires a callback on client configuration update.
 
-:::note
+<Note>
 This hook only works for server sent events of real time update
-:::
+</Note>
 
 <Tabs>
-<TabItem value="tsx" label="TypeScript" default>
+<Tab title="TypeScript">
 
 ```tsx
-import { useEffect, useCallback } from 'react';
-import { useInitialize } from '@kameleoon/react-sdk';
 
 function MyComponent(): JSX.Element {
   const { initialize, onConfigurationUpdate } = useInitialize();
@@ -6751,12 +6260,10 @@ function MyComponent(): JSX.Element {
 }
 ```
 
-</TabItem>
-<TabItem value="jsx" label="JavaScript">
+</Tab>
+<Tab title="JavaScript">
 
 ```jsx
-import { useEffect, useCallback } from 'react';
-import { useInitialize } from '@kameleoon/react-sdk';
 
 function MyComponent() {
   const { initialize, onConfigurationUpdate } = useInitialize();
@@ -6776,7 +6283,7 @@ function MyComponent() {
 }
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ##### Arguments
