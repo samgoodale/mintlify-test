@@ -1,0 +1,118 @@
+
+export const Shared = {
+    Params: {
+        VisitorCode: "Unique identifier of the user.",
+        FeatureKey: "Key of the feature you want to expose to a user."
+    },
+    Exceptions: {
+        VisitorCodeInvalid: "Exception indicating that the provided visitor code is not valid. It is either empty or longer than 255 characters.",
+        VisitorCodeEmpty: "The visitor code is empty.",
+        VisitorCodeMaxLength: "The visitor code exceeded the maximum length (255 characters).",
+        SdkNotReady: "Exception indicating that the SDK is not fully initialized yet.",
+        PlatformException: "Exception indicating that the native plugin integration works incorrectly.",
+        FeatureNotFound: "Exception indicating that the requested feature key wasn't found in the internal configuration of the SDK. This usually means that the feature flag is not activated in the Kameleoon app (but code implementing the feature is already deployed in the application).",
+        FeatureEnvironmentDisabled: "Exception indicating that feature flag is disabled for the visitor's current environment (for example, production, staging, or development).",
+        FeatureExperimentNotFound: "Exception indicating that the requested experiment id has not been found in the SDK's internal configuration. This is usually normal and means that the rule's corresponding experiment has not yet been activated on Kameleoon's side.",
+        FeatureVariationNotFound: "Exception indicating that the requested variation key(id) has not been found in the internal configuration of the SDK. This is usually normal and means that the variation's corresponding experiment has not yet been activated on Kameleoon's side.",
+        StorageRead: "Couldn't read storage data.",
+        StorageWrite: "Couldn't update storage data.",
+        SiteCodeIsEmpty: "Exception indicating that the specified site code is empty string which is invalid value."
+    },
+    ExternalConfigFile: {
+        NetworkDomain: "Custom domain used by SDKs for outgoing requests, often for proxying. Must be a valid domain (e.g., example.com or sub.example.com). Invalid formats default to Kameleoon's value."
+    },
+    RemoteVisitorDataFilter: {
+        CBS: "If true, Contextual Bandit score data will be retrieved."
+    }
+};
+
+
+<Select name={props.sec}>
+<div name="note_exceptions">
+
+<If c={!props.c.AreErrorsReturnedAsValues}>
+
+<Info>
+In most cases, only the basic error, <Code x={props.c.Exceptions.Kameleoon}/>, needs to be handled, as demonstrated in the example. However, if different types of errors require a response, handle each one separately based on specific requirements. Additionally, for enhanced reliability, general language errors can be handled by including <Code x={props.c.Exceptions.Language}/>.
+</Info>
+
+</If>
+
+</div>
+<div name="get_visitor_code_simulated">
+
+<Info>
+The <Code x={props.c.GetVisitorCode}/> method allows you to set **simulated** variations for a visitor. When cookies (from a **request** or **document**) contain the key `kameleoonSimulationFFData`, the standard evaluation process is bypassed. Instead, the method directly returns a <CodeRef x={props.c.Variation}/> based on the provided data.
+<details>
+<summary>View Details</summary>
+<p>
+You can apply simulations in two ways:
+
+- **Automatically (recommended):** If using Kameleoon Web Experimentation or the SDK in [Hybrid mode](https://developers.kameleoon.com/core-concepts/hybrid-experimentation#linking-feature-experiments-with-front-end-tracking-code), the cookie is created automatically when simulating a variant's display using the [Simulation Panel](https://help.kameleoon.com/use-simulation-mode/).
+- **Manually:** Set the `kameleoonSimulationFFData` cookie manually.
+
+It’s important to distinguish **simulated** variations from **<Ref x={"forced"} href={props.c.SetForcedVariation.Ref}/>** variations:
+- **Simulated variations**: Affect the overall **feature flag** result.
+- **Forced variations**: Are specific to an individual experiment.
+
+⚙️ **Manual setup**
+
+Please ensure the `kameleoonSimulationFFData` cookie follows this format:
+- `kameleoonSimulationFFData={"featureKey":{"expId":10,"varId":20}}`: Simulates the variation with `varId` of experiment `expId` for the given `featureKey`.
+- `kameleoonSimulationFFData={"featureKey":{"expId":0}}`: Simulates the default variation (defined in the **Then, for everyone else in Production, serve** section) for the given `featureKey`.
+
+⚠️ To ensure proper functionality, the cookie value must be encoded as a URI component using a method such as [`encodeURIComponent`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/encodeURIComponent).
+</p>
+</details>
+</Info>
+
+</div>
+
+<div name="coroutine_warning">
+<Warning>
+A common mistake is using suspended functions inside `mapCatching`, `runCatching`, or a `try-catch` block without properly re-throwing `CancellationException`, which can interfere with coroutine cancellation. To ensure correct behavior, try to avoid calling suspend functions within these blocks.
+</Warning>
+</div>
+
+<div name="swift_async_warning">
+<Warning>
+A common mistake is calling `async` functions with `try?` or inside a **nested** `do-catch` block **without rethrowing `CancellationError`**. This can interfere with task cancellation, causing unexpected behavior.
+To ensure correct task cancellation, avoid using `try?` or `do-catch` around `async` functions unless you explicitly rethrow `CancellationError`.
+</Warning>
+</div>
+
+<div name="set_default_data_file_js">
+
+<Tip>
+<details>
+<summary>How to set `defaultDataFile` value correctly</summary>
+
+**Option 1 (Recommended):** Use `JSON.stringify()`
+
+```js
+const dataFileJson = {"configuration":{"consentType":.....,
+    {"key":"show_car","type":"JSON","value":"{\"make\":\"Porsche\",\"model\":\"911\"}"}},
+    "dateModified":1752209266000};
+const dataFileString = JSON.stringify(dataFileJson);
+const configuration = {
+  updateInterval: 20,
+  defaultDataFile: dataFileString
+};
+```
+
+**Option 2:** Raw JSON string (escape special characters)
+```js
+const configuration = {
+  updateInterval: 20,
+  defaultDataFile: `{"configuration":{"consentType":.....,
+    {"key":"show_car","type":"JSON","value":"{\\"make\\":\\"Porsche\\",\\"model\\":\\"911\\"}"},
+    "dateModified":1752209266000}`
+};
+```
+
+</details>
+</Tip>
+
+</div>
+
+</Select>

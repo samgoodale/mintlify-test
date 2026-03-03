@@ -1,0 +1,65 @@
+
+<Select name={props.sec}>
+<div name="description">
+
+The <Code x={props.c.AddData}/> method adds [targeting data](#data-types) to storage so other methods can use the data to decide whether or not to target the current visitor.
+
+The <Code x={props.c.AddData}/> method does not return any value and does not interact with Kameleoon back-end servers on its own. Instead, all the declared data is saved for future transmission using the <CodeRef x={props.c.Flush}/> method. This approach reduces the number of server calls made, as the data is typically grouped into a single server call that is triggered the <Code x={props.c.Flush}/>.
+
+The <CodeRef x={props.c.TrackConversion}/> method also sends out any previously associated data, just like the <Code x={props.c.Flush}/>. The same holds true for <CodeRef x={props.c.GetVariation}/> and <CodeRef x={props.c.GetVariations}/> methods if an experimentation rule is triggered.
+
+<Tip>
+Each visitor can only have one instance of associated data for most data types. However, <CodeRef x={props.c.CustomData}/> is an exception. Visitors can have one instance of associated <Code x={props.c.CustomData}/> per index.
+</Tip>
+</div>
+
+<div name="arguments">
+
+<If c={props.c.IsServer}>
+
+| Name        | Type   | Description                    | Default value |
+|-------------|--------|--------------------------------| ------------- |
+| <Text x={props.c.Params.VisitorCode}/> (_required_) | <Code x={props.c.Common.String}/> | <Text x={Shared.Params.VisitorCode}/> | |
+| <Text x={props.c.AddData.Params.Track.Name}/> (_optional_) | <Code x={props.c.Common.Bool}/> | Specifies whether the added data is eligible for tracking. When set to <Code x={props.c.Common.False}/>, the data is stored locally and used only for targeting evaluation; it is not sent to the Kameleoon Data API. | <Code x={props.c.Common.True}/> |
+| <Text x={props.c.AddData.Params.Data.Name}/> (_required_) | <Code x={props.c.AddData.Params.Data.Type}/> | Collection of Kameleoon data types. | |
+</If>
+
+<If c={props.c.IsClient}>
+
+| Name        | Type   | Description                    | Default value |
+|-------------|--------|--------------------------------| ------------- |
+| <Text x={props.c.AddData.Params.Track.Name}/> (_optional_) | <Code x={props.c.Common.Bool}/> | Specifies whether the added data is eligible for tracking. When set to <Code x={props.c.Common.False}/>, the data is stored locally and used only for targeting evaluation; it is not sent to the Kameleoon Data API. | <Code x={props.c.Common.True}/> |
+| <Text x={props.c.AddData.Params.Data.Name}/> (_required_) | <Code x={props.c.AddData.Params.Data.Type}/> | Collection of Kameleoon data types. |
+</If>
+</div>
+
+<div name="arguments_track_end">
+
+<If c={props.c.IsServer}>
+
+| Name        | Type   | Description                    | Default value |
+|-------------|--------|--------------------------------| ------------- |
+| <Text x={props.c.Params.VisitorCode}/> (_required_) | <Code x={props.c.Common.String}/> | <Text x={Shared.Params.VisitorCode}/> | |
+| <Text x={props.c.AddData.Params.Data.Name}/> (_required_) | <Code x={props.c.AddData.Params.Data.Type}/> | Collection of Kameleoon data types. | |
+| <Text x={props.c.AddData.Params.Track.Name}/> (_optional_) | <Code x={props.c.Common.Bool}/> | Specifies whether the added data is eligible for tracking. When set to <Code x={props.c.Common.False}/>, the data is stored locally and used only for targeting evaluation; it is not sent to the Kameleoon Data API. | <Code x={props.c.Common.True}/> |
+</If>
+
+</div>
+
+<div name="exceptions">
+
+<If c={props.c.IsServer}>
+
+| Type | Description |
+|----- | ----------- |
+| <Code x={props.c.Exceptions.VisitorCodeInvalid}/> | <Text x={Shared.Exceptions.VisitorCodeInvalid}/> |
+</If>
+
+<If c={props.c.IsFlutter}>
+
+| Type | Description |
+|----- | ----------- |
+| <Code x={props.c.Exceptions.PlatformException}/> | <Text x={Shared.Exceptions.PlatformException}/> |
+</If>
+</div>
+</Select>
