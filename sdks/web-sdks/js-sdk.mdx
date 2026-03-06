@@ -21,189 +21,186 @@ import Rule from '/snippets/sdks/reference/returned-types/rule.mdx';
 import ApplicationVersion from '/snippets/sdks/reference/data-types/application-version.mdx';
 
 export const Context = {
-    IsJs: true,
-    IsServer: true,
-    IsSnakeCase: false,
-    Common: {
-        Null: "null",
-        True: "true",
-        False: "false",
-        String: "string",
-        Bool: "boolean",
-        Int: "number",
-        Float: "number",
-        SDK: "JavaScript",
+    "IsJs": true,
+    "IsServer": true,
+    "IsSnakeCase": false,
+    "Common": {
+        "Null": "null",
+        "True": "true",
+        "False": "false",
+        "String": "string",
+        "Bool": "boolean",
+        "Int": "number",
+        "Float": "number",
+        "SDK": "JavaScript",
     },
-    Params: {
-        VisitorCode: "visitorCode",
-        FeatureKey: "featureKey"
+    "Params": {
+        "VisitorCode": "visitorCode",
+        "FeatureKey": "featureKey"
     },
-    Exceptions: {
-        Language: "Error",
-        Kameleoon: "KameleoonException",
-        Initialization: "KameleoonException.Initialization",
-        VisitorCodeEmpty: "KameleoonException.VisitorCodeEmpty",
-        VisitorCodeMaxLength: "KameleoonException.VisitorCodeMaxLength",
-        FeatureNotFound: "KameleoonException.FeatureFlagConfigurationNotFound",
-        FeatureEnvironmentDisabled: "KameleoonException.FeatureFlagEnvironmentDisabled",
-        FeatureExperimentNotFound: "KameleoonException.FeatureFlagExperimentNotFound",
-        FeatureVariationNotFound: "KameleoonException.FeatureFlagVariationNotFound",
-        StorageRead: "KameleoonException.StorageRead",
-        StorageWrite: "KameleoonException.StorageWrite",
+    "Exceptions": {
+        "Language": "Error",
+        "Kameleoon": "KameleoonException",
+        "Initialization": "KameleoonException.Initialization",
+        "VisitorCodeEmpty": "KameleoonException.VisitorCodeEmpty",
+        "VisitorCodeMaxLength": "KameleoonException.VisitorCodeMaxLength",
+        "FeatureNotFound": "KameleoonException.FeatureFlagConfigurationNotFound",
+        "FeatureEnvironmentDisabled": "KameleoonException.FeatureFlagEnvironmentDisabled",
+        "FeatureExperimentNotFound": "KameleoonException.FeatureFlagExperimentNotFound",
+        "FeatureVariationNotFound": "KameleoonException.FeatureFlagVariationNotFound",
+        "StorageRead": "KameleoonException.StorageRead",
+        "StorageWrite": "KameleoonException.StorageWrite",
     },
-    KameleoonClientConfig: {
-        Name: "KameleoonClientConfig",
-        Ref: "#configuration-parameters",
-        TrackingInterval: { FileName: "tracking_interval_millisecond" },
-        IsUniqueIdentifier: { Name: "<>" }
+    "KameleoonClientConfig": {
+        "Name": "KameleoonClientConfig",
+        "Ref": "#configuration-parameters",
+        "TrackingInterval": { "FileName": "tracking_interval_millisecond" },
+        "IsUniqueIdentifier": { "Name": "<>" }
     },
-    Hook: {
-        UseData: "useData",
+    "Hook": {
+        "UseData": "useData",
     },
-    // kameleoon.data
-    Conversion: {
-        Name: "Conversion",
-        FullName: "data.Conversion",
-        Ref: "#conversion",
-        Params: {
-            GoalId: { Name: "goalId" },
-            Revenue: { Name: "revenue", Type: "float" },
-            Negative: { Name: "negative" },
-            Metadata: { Name: "metadata", Type: "CustomData[]", DefaultValue: "undefined" },
+    "Conversion": {
+        "Name": "Conversion",
+        "FullName": "data.Conversion",
+        "Ref": "#conversion",
+        "Params": {
+            "GoalId": { "Name": "goalId" },
+            "Revenue": { "Name": "revenue", "Type": "float" },
+            "Negative": { "Name": "negative" },
+            "Metadata": { "Name": "metadata", "Type": "CustomData[]", "DefaultValue": "undefined" },
         },
     },
-    CustomData: {
-        Name: "CustomData",
-        FullName: "CustomData",
-        Ref: "#customdata"
+    "CustomData": {
+        "Name": "CustomData",
+        "FullName": "CustomData",
+        "Ref": "#customdata"
     },
-    UniqueIdentifier: {
-        Name: "UniqueIdentifier",
-        Ref: "#uniqueidentifier"
+    "UniqueIdentifier": {
+        "Name": "UniqueIdentifier",
+        "Ref": "#uniqueidentifier"
     },
-    UserAgent: {
-        Name: "UserAgent",
-        Ref: "#useragent"
+    "UserAgent": {
+        "Name": "UserAgent",
+        "Ref": "#useragent"
     },
-    ApplicationVersion: {
-        Name: 'ApplicationVersion',
-        Ref: '#applicationversion',
-        Params: {
-            Version: { Type: 'string' },
+    "ApplicationVersion": {
+        "Name": "ApplicationVersion",
+        "Ref": "#applicationversion",
+        "Params": {
+            "Version": { "Type": "string" },
         },
     },
-    // kameleoon.types
-    Variation: {
-        Name: "Variation",
-        FullName: "Variation",
-        Ref: "#variation"
+    "Variation": {
+        "Name": "Variation",
+        "FullName": "Variation",
+        "Ref": "#variation"
     },
-    DataFile: {
-        Name: "DataFile",
-        FullName: "DataFile",
-        Ref: "#datafile",
-        Params: {
-            FeatureFlags: { Name: "featureFlags", Type: "Map<string, FeatureFlag>" },
+    "DataFile": {
+        "Name": "DataFile",
+        "FullName": "DataFile",
+        "Ref": "#datafile",
+        "Params": {
+            "FeatureFlags": { "Name": "featureFlags", "Type": "Map<string, FeatureFlag>" },
         }
     },
-    FeatureFlag: {
-        Name: "FeatureFlag",
-        FullName: "FeatureFlag",
-        Ref: "#featureflag",
-        Params: {
-            EnvironmentEnabled: { Name: "environmentEnabled" },
-            Variations: { Name: "variations", Type: "Map<string, Variation>" },
-            Rules: { Name: "rules", Type: "Rule[]" },
-            DefaultVariationKey: { Name: "defaultVariationKey", Type: "string" },
+    "FeatureFlag": {
+        "Name": "FeatureFlag",
+        "FullName": "FeatureFlag",
+        "Ref": "#featureflag",
+        "Params": {
+            "EnvironmentEnabled": { "Name": "environmentEnabled" },
+            "Variations": { "Name": "variations", "Type": "Map<string, Variation>" },
+            "Rules": { "Name": "rules", "Type": "Rule[]" },
+            "DefaultVariationKey": { "Name": "defaultVariationKey", "Type": "string" },
         }
     },
-    Rule: {
-        Name: "Rule",
-        FullName: "Rule",
-        Ref: "#rule",
-        Params: {
-            Variations: { Name: "variations", Type: "Map<string, Variation>" },
+    "Rule": {
+        "Name": "Rule",
+        "FullName": "Rule",
+        "Ref": "#rule",
+        "Params": {
+            "Variations": { "Name": "variations", "Type": "Map<string, Variation>" },
         }
     },
-    // methods
-    GetVisitorCode: {
-        Name: "getVisitorCode()",
-        Ref: "#getvisitorcode",
-        Params: {
-            DefaultVisitorCode: { Name: "defaultVisitorCode" }
+    "GetVisitorCode": {
+        "Name": "getVisitorCode()",
+        "Ref": "#getvisitorcode",
+        "Params": {
+            "DefaultVisitorCode": { "Name": "defaultVisitorCode" }
         }
     },
-    Flush: {
-        Name: "flush()",
-        Ref: "#flush",
-        Params: {
-            Instant: { Name: "instant" }
+    "Flush": {
+        "Name": "flush()",
+        "Ref": "#flush",
+        "Params": {
+            "Instant": { "Name": "instant" }
         }
     },
-    GetVariation: {
-        Name: "getVariation()",
-        Ref: "#getvariation",
-        Return: "Variation",
-        Params: {
-            Track: { Name: "track" }
+    "GetVariation": {
+        "Name": "getVariation()",
+        "Ref": "#getvariation",
+        "Return": "Variation",
+        "Params": {
+            "Track": { "Name": "track" }
         }
     },
-    GetVariations: {
-        Name: "getVariations()",
-        Ref: "#getvariations",
-        Return: "Map<string, Variation>",
-        Params: {
-            OnlyActive: { Name: "onlyActive" },
-            Track: { Name: "track" }
+    "GetVariations": {
+        "Name": "getVariations()",
+        "Ref": "#getvariations",
+        "Return": "Map<string, Variation>",
+        "Params": {
+            "OnlyActive": { "Name": "onlyActive" },
+            "Track": { "Name": "track" }
         }
     },
-    SetForcedVariation: {
-        Name: "setForcedVariation()",
-        Ref: "#setforcedvariation",
-        Params: {
-            ExperimentId: { Name: "experimentId" },
-            VariationKey: { Name: "variationKey", Type: "string | null", RemVal: "null" },
-            ForceTargeting: { Name: "forceTargeting" },
+    "SetForcedVariation": {
+        "Name": "setForcedVariation()",
+        "Ref": "#setforcedvariation",
+        "Params": {
+            "ExperimentId": { "Name": "experimentId" },
+            "VariationKey": { "Name": "variationKey", "Type": "string | null", "RemVal": "null" },
+            "ForceTargeting": { "Name": "forceTargeting" },
         }
     },
-    EvaluateAudiences: {
-        Name: "evaluateAudiences()",
-        Ref: "#evaluateaudiences"
+    "EvaluateAudiences": {
+        "Name": "evaluateAudiences()",
+        "Ref": "#evaluateaudiences"
     },
-    GetRemoteVisitorData: {
-        Name: "getRemoteVisitorData()",
-        Ref: "#getremotevisitordata",
+    "GetRemoteVisitorData": {
+        "Name": "getRemoteVisitorData()",
+        "Ref": "#getremotevisitordata",
     },
-    TrackConversion: {
-        Name: "trackConversion()",
-        Ref: "#trackconversion",
-        Params: {
-            GoalId: { Name: "goalId" },
-            Revenue: { Name: "revenue", Type: "number" },
-            IsUniqueIdentifier: { Name: "isUniqueIdentifier" },
-            Negative: { Name: "negative" },
-            Metadata: { Name: "metadata", Type: "CustomData[]", DefaultValue: "undefined" }
+    "TrackConversion": {
+        "Name": "trackConversion()",
+        "Ref": "#trackconversion",
+        "Params": {
+            "GoalId": { "Name": "goalId" },
+            "Revenue": { "Name": "revenue", "Type": "number" },
+            "IsUniqueIdentifier": { "Name": "isUniqueIdentifier" },
+            "Negative": { "Name": "negative" },
+            "Metadata": { "Name": "metadata", "Type": "CustomData[]", "DefaultValue": "undefined" }
         }
     },
-    IsFeatureActive: {
-        Name: "isFeatureFlagActive()",
-        Ref: "#isfeatureflagactive"
+    "IsFeatureActive": {
+        "Name": "isFeatureFlagActive()",
+        "Ref": "#isfeatureflagactive"
     },
-    GetEngineTrackingCode: {
-        Name: "getEngineTrackingCode()",
-        Ref: "#getenginetrackingcode"
+    "GetEngineTrackingCode": {
+        "Name": "getEngineTrackingCode()",
+        "Ref": "#getenginetrackingcode"
     },
-    AddData: {
-        Name: 'addData()',
-        Ref: '#adddata',
-        Params: {
-            Track: { Name: "track" },
-            Data: { Name: 'data', Type: '...KameleoonDataType[]' },
+    "AddData": {
+        "Name": "addData()",
+        "Ref": "#adddata",
+        "Params": {
+            "Track": { "Name": "track" },
+            "Data": { "Name": "data", "Type": "...KameleoonDataType[]" },
         }
     },
-    GetDataFile: {
-        Name: "getDataFile()",
-        Ref: "#getdatafile",
+    "GetDataFile": {
+        "Name": "getDataFile()",
+        "Ref": "#getdatafile",
     },
 };
 
@@ -2977,7 +2974,7 @@ The `isUniqueIdentifier` can be helpful in unique situations; for example, if yo
     | ------------------------------- | ------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
     | visitorCode (_required_)        | `string`                 | unique visitor identification string, can't exceed 255 characters.                                                                                       | -                                                                                                              |
     | shouldAddData (_optional_)      | `boolean`                | boolean flag identifying whether the retrieved custom data should be added to storage automatically (without calling the `addData` method afterwards).   | `true`                                                                                                         |
-    | filters (_optional_)            | `VisitorDataFiltersType` | filters for specifying what data should be retrieved from visits, by default, only `customData` is retrieved from the current and latest previous visit. | `{ previousVisitAmount: 1, currentVisit: true customData: true }`, other filters parameters are set to `false` |
+    | filters (_optional_)            | `VisitorDataFiltersType` | filters for specifying what data should be retrieved from visits, by default, only `customData` is retrieved from the current and latest previous visit. | `\{ previousVisitAmount: 1, currentVisit: true customData: true \}`, other filters parameters are set to `false` |
     | isUniqueIdentifier (_optional_) | `boolean`                | optional parameter that, when `true`, specifies that the `visitorCode` is a unique identifier.                                                           | `false`                                                                                                        |
 
     ##### Return value
@@ -3018,8 +3015,8 @@ Here is the list of available `VisitorDataFiltersType` filters:
     | conversions (_optional_)         | `boolean` | If true, conversion data will be retrieved.                                                                                                                                                            | `false` |
     | experiments (_optional_)         | `boolean` | If true, experiment data will be retrieved.                                                                                                                                                            | `false` |
     | kcs (_optional_)                 | `boolean` | If true, Kameleoon Conversion Score (KCS) will be retrieved. Requires the [AI Predictive Targeting add-on](https://help.kameleoon.com/target-users-by-ai-propensity-score-kameleoon-conversion-score/) | `false` |
-    |
-</Note>                              |           |                                                                                                                                                                                                        |         |
+</Note>
+
   </Tab>
   <Tab title="TypeScript">
     `getRemoteVisitorData()` is an asynchronous method for retrieving Kameleoon Visits Data for the `visitorCode` from the Kameleoon Data API. The method adds data to storage for other methods to use when making targeting decisions.
@@ -3173,8 +3170,7 @@ Here is the list of available `VisitorDataFiltersType` filters:
     | visitorCode (_optional_)         | `boolean` | If true, Kameleoon will retrieve the `visitorCode` from the most recent visit and use it for the current visit. This is necessary if you want to ensure that the visitor, identified by their `visitorCode`, always receives the same variation across visits for [Cross-device experimentation](/core-concepts/cross-device-experimentation). | `true`  |
     | personalization (_optional_)     | `boolean` | If true, personalization data will be retrieved. This is required for the personalization condition                                                                                                                                                                                                                                            | `false` |
     | cbs (_optional_)                 | `boolean` | <Text x={Shared.RemoteVisitorDataFilter.CBS} />                                                                                                                                                                                                                                                                                                | `false` |
-    |
-</Note>                              |           |                                                                                                                                                                                                                                                                                                                                                |         |
+</Note>
   </Tab>
 </Tabs>
 

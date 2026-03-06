@@ -1194,9 +1194,10 @@ Here is the list of `kameleoon.VisitorWarehouseAudienceOptParams` fields:
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-WarehouseKey | `string` | A unique key to identify the warehouse data (usually, your internal user ID). This field is optional.
-Timeout | `time.Duration` | The timeout parameter specifies the maximum amount of time the method can block to wait for a result, in milliseconds. This field is optional; if not provided, the method will use the default timeout value provided when [initializing the SDK]. This field is optional.
-</Note>note
+WarehouseKey | `string` | A unique key to identify the warehouse data (usually, your internal user ID). This field is optional. |
+Timeout | `time.Duration` | The timeout parameter specifies the maximum amount of time the method can block to wait for a result, in milliseconds. This field is optional; if not provided, the method will use the default timeout value provided when [initializing the SDK]. This field is optional. |
+</Note>
+
 For `GetVisitorWarehouseAudience` method parameters are passed into the function as `params` of struct `VisitorWarehouseAudienceParams` to make some of them optional (`WarehouseKey` and `Timeout`).
 
 For `GetVisitorWarehouseAudienceWithOptParams` method only optional parameters are passed into the function as `params` of struct `VisitorWarehouseAudienceOptParams`.
