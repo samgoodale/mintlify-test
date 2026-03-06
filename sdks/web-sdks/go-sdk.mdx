@@ -1,0 +1,1858 @@
+---
+title: 'Go SDK'
+---
+
+import { Select, Text, Bold, Italic, Code, CodeRef, Ref, If } from '/snippets/sdks/utils.mdx';
+import SharedDiv, { Shared } from '/snippets/sdks/shared.mdx';
+import CrossDeviceReconciliation from '/snippets/sdks/developer-guide/cross-device-reconciliation.mdx';
+import ActivatingAFeatureFlag from '/snippets/sdks/developer-guide/getting-started/activating-a-feature-flag.mdx';
+import TargetingConditions from '/snippets/sdks/developer-guide/targeting-conditions.mdx';
+import Logging from '/snippets/sdks/developer-guide/logging.mdx';
+import GetVariations from '/snippets/sdks/reference/feature-flags-and-variations/get-variations.mdx';
+import GetVariation from '/snippets/sdks/reference/feature-flags-and-variations/get-variation.mdx';
+import Geolocation from '/snippets/sdks/reference/data-types/geolocation.mdx';
+import Browser from '/snippets/sdks/reference/data-types/browser.mdx';
+import Conversion from '/snippets/sdks/reference/data-types/conversion.mdx';
+import TrackConversion from '/snippets/sdks/reference/goals/track-conversion.mdx';
+import UpdateConfigurationHandler from '/snippets/sdks/reference/events/update-configuration-handler.mdx';
+import AddData from '/snippets/sdks/reference/visitor-data/add-data.mdx';
+import SetForcedVariation from '/snippets/sdks/reference/feature-flags-and-variations/set-forced-variation.mdx';
+import EvaluateAudiences from '/snippets/sdks/reference/feature-flags-and-variations/evaluate-audiences.mdx';
+import GetDataFile from '/snippets/sdks/reference/feature-flags-and-variations/get-data-file.mdx';
+import GetFeatureList from '/snippets/sdks/reference/feature-flags-and-variations/get-feature-list.mdx';
+import GetEngineTrackingCode from '/snippets/sdks/reference/goals/get-engine-tracking-code.mdx';
+import CustomBucketingKey from '/snippets/sdks/developer-guide/custom-bucketing-key.mdx';
+import DataFile from '/snippets/sdks/reference/returned-types/data-file.mdx';
+import FeatureFlag from '/snippets/sdks/reference/returned-types/feature-flag.mdx';
+import Rule from '/snippets/sdks/reference/returned-types/rule.mdx';
+
+export const Context = {
+    IsServer: true,
+    AreErrorsReturnedAsValues: true,
+    IsSnakeCase: false,
+    Common: {
+        Null: "nil",
+        True: "true",
+        False: "false",
+        Int: "int",
+        String: "string",
+        Bool: "bool",
+        Float: "float64",
+        Int: "int",
+        SDK: "Go",
+    },
+    Params: {
+        VisitorCode: "visitorCode",
+        FeatureKey: "featureKey"
+    },
+    Exceptions: {
+        Language: "error",
+        Kameleoon: "errs.KameleoonError",
+        VisitorCodeInvalid: "errs.VisitorCodeInvalid",
+        FeatureNotFound: "errs.FeatureNotFound",
+        FeatureEnvironmentDisabled: "errs.FeatureEnvironmentDisabled",
+        FeatureExperimentNotFound: "errs.FeatureExperimentNotFound",
+        FeatureVariationNotFound: "errs.FeatureVariationNotFound",
+    },
+    Hook: {
+        UseData: "useData",
+    },
+    KameleoonClientConfig: {
+        Ref: "#additional-configuration",
+        TrackingInterval: { FileName: "tracking_interval" },
+        IsUniqueIdentifier: { Name: "<>" }
+    },
+    // kameleoon.data
+    Conversion: {
+        Name: "Conversion",
+        FullName: "types.Conversion",
+        Ref: "#conversion",
+        Params: {
+            GoalId: { Name: "goalId" },
+            Revenue: { Name: "ConversionOptParams.Revenue", Type: "float64" },
+            Negative: { Name: "ConversionOptParams.Negative" },
+            Metadata: { Name: "ConversionOptParams.Metadata", Type: "[]*types.CustomData", DefaultValue: "nil" },
+        },
+    },
+    CustomData: {
+        Name: "CustomData",
+        FullName: "types.CustomData",
+        Ref: "#customdata"
+    },
+    UniqueIdentifier: {
+        Name: "UniqueIdentifier",
+        Ref: "#uniqueidentifier"
+    },
+    UserAgent: {
+        Name: "UserAgent",
+        Ref: "#useragent"
+    },
+    Geolocation: {
+        Name: "Geolocation",
+        Ref: "#geolocation",
+        Params: {
+            Region: { Type: "string" },
+            City: { Type: "string" },
+            PostalCode: { Name: "postalCode", Type: "string" },
+            Latitude: { Type: "float64" },
+            Longitude: { Type: "float64" },
+        }
+    },
+    Browser: {
+        Name: "Browser",
+        Ref: "#browser",
+        Params: {
+        BrowserType: {
+            Name: "browserType",
+            Type: "BrowserType",
+            Chrome: "BrowserTypeChrome",
+            IE: "BrowserTypeIE",
+            Firefox: "BrowserTypeFirefox",
+            Safari: "BrowserTypeSafari",
+            Opera: "BrowserTypeOpera",
+            Other: "BrowserTypeOther"
+        },
+        Version: { Type: "float32" },
+        },
+    },
+    // kameleoon.types
+    Variation: {
+        Name: "Variation",
+        FullName: "types.Variation",
+        Ref: "#variation"
+    },
+    DataFile: {
+        Name: "DataFile",
+        FullName: "types.DataFile",
+        Ref: "#datafile",
+        Params: {
+            FeatureFlags: { Name: "FeatureFlags", Type: "map[string]FeatureFlag" },
+        }
+    },
+    FeatureFlag: {
+        Name: "FeatureFlag",
+        FullName: "types.FeatureFlag",
+        Ref: "#featureflag",
+        Params: {
+            EnvironmentEnabled: { Name: "IsEnvironmentEnabled" },
+            Variations: { Name: "Variations", Type: "map[string]Variation" },
+            Rules: { Name: "Rules", Type: "[]Rule" },
+            DefaultVariationKey: { Name: "DefaultVariationKey", Type: "string" },
+        }
+    },
+    Rule: {
+        Name: "Rule",
+        FullName: "types.Rule",
+        Ref: "#rule",
+        Params: {
+            Variations: { Name: "Variations", Type: "map[string]Variation" },
+        }
+    },
+    // methods
+    Flush: {
+        Name: "Flush*()",
+        InstantName: "FlushVisitorInstantly()",
+        Ref: "#flushall--flushvisitor--flushvisitorinstantly",
+        Params: {}
+    },
+    GetRemoteVisitorData: {
+        Name: "GetRemoteVisitorData()",
+        Ref: "#getremotevisitordata",
+    },
+    GetVisitorCode: {
+        Name: "GetVisitorCode()",
+        Ref: "#getvisitorcode",
+        Params: {
+            DefaultVisitorCode: { Name: "defaultVisitorCode" }
+        }
+    },
+    TrackConversion: {
+        Name: "TrackConversion()",
+        Ref: "#trackconversion",
+        Params: {
+            GoalId: { Name: "goalId" },
+            Revenue: { Name: "TrackConversionOptParams.Revenue", "Type": "float64"},
+            IsUniqueIdentifier: { Name: "isUniqueIdentifier" },
+            Negative: { Name: "TrackConversionOptParams.Negative" },
+            Metadata: { Name: "TrackConversionOptParams.Metadata", Type: "[]*CustomData", DefaultValue: "nil"}
+        }
+    },
+    GetVariation: {
+        Name: "GetVariation()",
+        Ref: "#getvariation",
+        Return: "Variation",
+        Params: {
+            Track: { Name: "GetVariationOptParams.Track" }
+        }
+    },
+    GetVariations: {
+        Name: "GetVariations()",
+        Ref: "#getvariations",
+        Return: "map[string]Variation",
+        Params: {
+            OnlyActive: { Name: "GetVariationsOptParams.OnlyActive" },
+            Track: { Name: "GetVariationsOptParams.Track" }
+        }
+    },
+    IsFeatureActive: {
+        Name: "IsFeatureActive()",
+        Ref: "#isfeatureactive"
+    },
+    AddData: {
+        Name: "AddData()",
+        Ref: "#adddata",
+        Params: {
+            Track: { Name: "track" },
+            Data: { Name: "allData", Type: "...types.Data" }
+        }
+    },
+    GetEngineTrackingCode: {
+        Name: "GetEngineTrackingCode()",
+        Ref: "#getenginetrackingcode"
+    },
+    SetForcedVariation: {
+        Name: "SetForcedVariation()",
+        Ref: "#setforcedvariation",
+        Params: {
+            ExperimentId: { Name: "experimentId" },
+            VariationKey: { Name: "variationKey", Type: "string", RemVal: '""' },
+            ForceTargeting: { Name: "SetForcedVariationOptParams.ForceTargeting" },
+        }
+    },
+    EvaluateAudiences: {
+        Name: "EvaluateAudiences()",
+        Ref: "#evaluateaudiences"
+    },
+    UpdateConfigurationHandler: {
+        Name: "OnUpdateConfiguration",
+        Ref: "#updateconfigurationhandler",
+        Params: {
+            Handler: { Name: "handler", Type: "func()" }
+        }
+    },
+    GetFeatureList: {
+        Name: "GetFeatureList()",
+        Ref: "#getfeaturelist",
+        Return: "[]string",
+    },
+    GetDataFile: {
+        Name: "GetDataFile()",
+        Ref: "#getdatafile",
+    },
+};
+
+With the Go SDK, you can run experiments and activate feature flags. Integrating our SDK into your web application is easy, and its footprint (memory and network usage) is low.
+
+**Getting started**: For help getting started, see the [developer guide](#developer-guide).
+
+**Changelog**: Latest version of the Go SDK: 3.17.0 [Changelog](https://github.com/Kameleoon/client-go/blob/master/CHANGELOG.md).
+
+**SDK methods**: For the full reference documentation of the Go SDK, see the [reference](#reference) section.
+
+## Developer guide
+
+Follow this section to install and configure the SDK, and learn about advanced features.
+
+### Getting started
+
+#### Installing the Go client
+
+To install the Kameleoon Go SDK, use the `go get` command and install our package directly from our GitHub repository. Simply run the command below:
+
+```shell
+go get github.com/Kameleoon/client-go/v3
+```
+
+#### Additional configuration
+
+To provide additional settings for the Go SDK, you can use a configuration file, which lets you customize the SDK's behavior. You can download a sample configuration file [here](./assets/client%20configs/client-go.yaml).
+
+We recommend installing this file to the default path `/etc/kameleoon/client-go.yaml`, which will be read automatically. If you need to customize this path, you can provide an additional argument to the `NewClient()` method. Either specify a string that indicates an alternative path to the configuration file, or add a JavaScript object (map) containing the configuration.
+
+The current version of the Go SDK has the following keys available in the configuration file:
+
+Key                  | Description
+---------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ `client_id`         | A `client_id` is required for authentication to the Kameleoon service.
+ `client_secret`     | A `client_secret` is required for authentication to the Kameleoon service.
+ `top_level_domain`  | The current top-level domain for your website . Use the format: `example.com`. Don’t include `https://`, `www`, or other subdomains. Kameleoon uses this information to set the corresponding cookie on the top-level domain. This field is mandatory.
+ `session_duration`  | Sets the time interval that Kameleoon stores the visitor and their associated data in memory (RAM). Note that increasing the session duration increases the amount of RAM that needs to be allocated to store visitor data. The default session duration is 30 minutes.
+ `refresh_interval`  | Specifies the refresh interval, in minutes, that the SDK fetches the configuration for the active experiments and feature flags. The value determines the maximum time it takes to propagate changes, such as activating or deactivating feature flags or launching experiments, to your production servers. If left unspecified, the default interval is set to 60 minutes. Additionally, we offer a [streaming mode](/feature-management-and-experimentation/technical-considerations/#streaming-premium-option) that uses server-sent events (SSE) to push new configurations to the SDK automatically and apply new configurations in real-time, without any delays.
+ `default_timeout`   | Specifies the timeout for network requests from the SDK that are not overriden by method-specific timeouts. The default value is 10 seconds. Set the value to 30 seconds or more if you do not have a stable connection. Some methods have additional parameters for method-specific timeouts, but if you do not specify them explicitly, this default value is used.
+ `tracking_interval` | Specifies the interval for tracking requests. All visitors who were evaluated for any feature flag or had data flushed will be included in this tracking request, which is performed once per interval. The minimum value is `100ms` and the maximum value is `1s`, which is also the default value.
+ `verbose_mode`      | Boolean value (`true` or `false`) that turns on additional logging, including network requests and debug information. This field is deprecated and will be removed in SDK version `4.0.0`. Use [`logging.SetLogLevel`](#log-levels) instead.
+ `proxy_url`         | This sets the proxy host for all outgoing server calls made by the SDK.
+ `environment`       | Environment from which a feature flag’s configuration is to be used. The value can be **production**, **staging**, **development**. If no value is specified, the default environment is **production**. For more information on managing environments, please refer to this [article](https://help.kameleoon.com/manage-environments/).
+ `network_domain`    | <Text x={Shared.ExternalConfigFile.NetworkDomain}/>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+
+<Note>
+To learn more about `client_id` and `client_secret`, and instructions on how to obtain them, please refer to this [article](https://help.kameleoon.com/api-credentials). It's worth noting that our Go SDK utilizes the Automation API and follows the OAuth 2.0 client credentials flow.
+</Note>
+
+#### Initializing the Kameleoon Client
+
+Once you have installed our SDK in your application, you must initialize Kameleoon. All interactions with the SDK, such as triggering an experiment, are accomplished via the object (the Kameleoon client) created using the `NewClient()` method.
+
+You can customize the behavior of the SDK (for example, the environment or the credentials) by providing a [configuration object](#additional-configuration).
+
+```go
+import (
+	kameleoon "github.com/Kameleoon/client-go/v3"
+)
+
+// First option
+config := &kameleoon.KameleoonClientConfig{
+	Network: kameleoon.NetworkConfig{ // Optional
+		ProxyURL:        "http://proxy-pass:1234/", // Optional
+		DoTimeout:       10 * time.Second, // Optional
+		ReadTimeout:     5 * time.Second, // Optional
+		WriteTimeout:    5 * time.Second, // Optional
+		MaxConnsPerHost: 10000, // Optional
+	},
+	ClientID:         "your-client-id", // This field is required. Please enter your client_id here.
+	ClientSecret:     "your-client-secret", // This field is required. Please enter your client_secret here.
+	TopLevelDomain:   "example.com", // This field is strictly recommended, otherwise you may have problems when using subdomains.
+	RefreshInterval:  time.Hour, // Optional (60 minutes by default)
+	TrackingInterval: time.Second, // Optional (1000 ms by default)
+	Environment:      "staging", // Optional
+	SessionDuration:  30 * time.Minute, // Optional (30 minutes by default)
+    NetworkDomain:    "example.com", // Optional
+}
+client, err := KameleoonClientFactory.Create("your-project-sitecode", config)
+
+// Second option
+config, err := LoadConfig("/etc/kameleoon/client-go.yaml")
+client, err := KameleoonClientFactory.Create("your-project-sitecode", config)
+// Notice: In the example above, the configuration is loaded every time. To load it once, use `CreateFromFile`.
+
+// Third option
+client, err := KameleoonClientFactory.CreateFromFile("your-project-sitecode", "/etc/kameleoon/client-go.yaml")
+```
+
+#### Activating a feature flag
+
+##### Assigning a unique ID to a user
+
+<ActivatingAFeatureFlag sec="assigning_a_unique_id_to_a_user" c={Context}/>
+
+##### Retrieving a flag configuration
+
+<ActivatingAFeatureFlag sec="retrieving_a_feature_flag_configuration___default" c={Context}/>
+
+##### Adding data points to target a user or filter / breakdown visits in reports
+
+<ActivatingAFeatureFlag sec="adding_data_points_to_target_a_user_or_filter_breakdown_visits_in_reports___server" c={Context}/>
+
+##### Tracking flag exposition and goal conversions
+
+<ActivatingAFeatureFlag sec="tracking_goal_conversions___method" c={Context}/>
+
+##### Sending events to analytics solutions
+
+<ActivatingAFeatureFlag sec="sending_events_to_analytics_solutions" c={Context}/>
+
+### Cross-device experimentation
+
+<CrossDeviceReconciliation sec="cross_device_experimentation" c={Context}/>
+
+#### Synchronizing custom data across devices
+
+<CrossDeviceReconciliation sec="synchronizing_custom_data" c={Context}/>
+
+```go
+// In this example, Custom data with index `90` was set to "Visitor" scope in Kameleoon.
+const VisitorScopeCustomDataIndex = 90
+
+kameleoonClient.AddData(visitorCode, types.NewCustomData(VisitorScopeCustomDataIndex, "your data"))
+err := kameleoonClient.FlushVisitor(visitorCode)
+```
+
+```go
+// Before working with the data, call the `GetRemoteVisitorData` method.
+_, err := kameleoonClient.GetRemoteVisitorData(visitorCode, true)
+
+// After calling the method, the SDK on Device B will have access to CustomData of Visitor scope defined on Device A.
+// So, "your data" will be available for targeting and tracking the visitor.
+```
+
+#### Using custom data for session merging
+
+<CrossDeviceReconciliation sec="using_custom_data_session_merging" c={Context}/>
+
+```go
+// In this example, `91` represents the Custom Data's index
+// configured as a unique identifier in Kameleoon.
+const MappingIndex = 91
+const FeatureKey = "ff123"
+
+// 1. Before the visitor is authenticated
+
+// Retrieve the variation for an unauthenticated visitor.
+// Assume `anonymousVisitorCode` is the randomly generated ID for that visitor.
+anonymousVariation, err := kameleoonClient.GetVariation(anonymousVisitorCode, FeatureKey)
+
+// 2. After the visitor is authenticated
+
+// Assume `userId` is the authenticated visitor's visitor code.
+kameleoonClient.AddData(anonymousVisitorCode, types.NewCustomData(MappingIndex, userId))
+err := kameleoonClient.FlushVisitorInstantly(anonymousVisitorCode)
+
+// Indicate that `userId` is a unique identifier.
+kameleoonClient.AddData(userId, types.NewUniqueIdentifier(true))
+
+// 3. After the visitor has been authenticated
+
+// Retrieve the variation for the `userId`, which will match the anonymous visitor code's variation.
+userVariation, err := kameleoonClient.GetVariation(userId, FeatureKey)
+isSameVariation := userVariation.Key == anonymousVariation.Key // true
+
+// The `userId` and `anonymousVisitorCode` are now linked and tracked as a single visitor.
+err := kameleoonClient.TrackConversionRevenue(userId, 123, 10.0)
+
+// Additionally, the linked visitors will share all fetched remote visitor data.
+_, err := kameleoonClient.GetRemoteVisitorData(userId, true)
+```
+
+<CrossDeviceReconciliation sec="cross_device_visitor_code" c={Context}/>
+
+### Using a custom bucketing key
+
+<CustomBucketingKey sec="description" c={Context}/>
+
+#### Use cases
+
+<CustomBucketingKey sec="use_cases" c={Context}/>
+
+#### Technical details
+
+<CustomBucketingKey sec="technical_details_1" c={Context}/>
+
+```go
+client.AddData(visitorCode, types.NewCustomData(index, "newVisitorCode"))
+```
+
+<CustomBucketingKey sec="technical_details_2" c={Context}/>
+
+#### Technical requirementes
+
+<CustomBucketingKey sec="technical_requirements" c={Context}/>
+
+### Targeting conditions
+
+<TargetingConditions sec="targeting_conditons_description" c={Context}/>
+
+### Logging
+
+<Logging sec="logging" c={Context}/>
+
+#### Log levels
+
+<Logging sec="log_levels" c={Context}/>
+
+```go
+import (
+	"development.kameleoon.net/sdk/go-sdk/v3/logging"
+)
+
+// The `NONE` log level does not allow logging.
+logging.SetLogLevel(logging.NONE)
+
+// The `ERROR` log level only allows logging issues that may affect the SDK's primary behavior.
+logging.SetLogLevel(logging.ERROR)
+
+// The `WARNING` log level allows logging issues which may require additional attention.
+// It extends the `ERROR` log level.
+// The `WARNING` log level is a default log level.
+logging.SetLogLevel(logging.WARNING)
+
+//The `INFO` log level allows logging general information on the SDK's internal processes.
+// It extends the `WARNING` log level.
+logging.SetLogLevel(logging.INFO)
+
+// The `DEBUG` level logs additional details about the SDK’s internal processes and extends the `INFO` level
+// with more granular. diagnostic output.
+// This information is not intended for end-user interpretation but can be sent to our support team
+// to assist with internal troubleshooting.
+logging.SetLogLevel(logging.DEBUG)
+```
+
+#### Custom handling of logs
+
+<Logging sec="custom_handling_of_logs" c={Context}/>
+
+```go
+import (
+    "development.kameleoon.net/sdk/go-sdk/v3/logging"
+    "github.com/sirupsen/logrus"
+)
+
+type CustomLogger struct {
+}
+
+func NewCustomLogger() logging.LoggerWithLevel {
+    return &CustomLogger{}
+}
+
+func (dl CustomLogger) Log(level logging.LogLevel, message string) {
+    switch level {
+    case logging.NONE:
+    case logging.ERROR:
+        logrus.Error(message)
+    case logging.WARNING:
+        logrus.Warn(message)
+    case logging.INFO:
+        logrus.Info(message)
+    case logging.DEBUG:
+        logrus.Debug(message)
+    }
+}
+
+// Log level filtering is applied separately from log handling logic.
+// The custom logger will only accept logs that meet or exceed the specified log level.
+// Ensure the log level is set correctly.
+logging.SetLogLevel(logging.DEBUG) // Optional; defaults to `logging.WARNING`.
+logging.SetLogger(NewCustomLogger())
+```
+
+## Reference
+
+This is a full reference documentation of the Go SDK.
+
+### Initialization
+
+#### Create()
+
+Call this method before any others to initialize the SDK. This method is in `KameleoonClientFactory`. This creates an instance of `KameleoonClient` to manage all interactions between the SDK and your app.
+
+```go
+const siteCode = "sitecode"
+config := &kameleoon.KameleoonClientConfig{
+	// ...
+}
+
+client, err := KameleoonClientFactory.Create(siteCode, config)
+```
+
+##### Arguments
+
+Name     | Type                   | Description
+-------- | ---------------------- | ------------
+siteCode _(required)_ | string                 | This is a [unique key](https://help.kameleoon.com/question/how-do-i-find-my-site-id/) of the Kameleoon project you are using with the SDK.
+cfg _(required)_ | *KameleoonClientConfig | Represents either the path to the SDK configuration file or the configuration object. If you provide the configuration object, it must contain the correct configuration keys.
+
+##### Return value
+
+Type            | Description
+--------------- | ------------
+KameleoonClient | An instance of the **KameleoonClient** that will be used to manage your experiments and feature flags.
+error           | An error occurred in the `Create` call. The error can be `errs.SiteCodeIsEmpty` or `errs.ConfigCredentialsInvalid`.
+
+#### CreateFromFile()
+
+Call this method before any others to initialize the SDK. This method is in `KameleoonClientFactory`. This creates an instance of `KameleoonClient` to manage all interactions between the SDK and your app.
+
+```go
+const siteCode = "sitecode"
+client, err := KameleoonClientFactory.CreateFromFile(siteCode, "/etc/kameleoon/client-go.yaml")
+```
+
+###### Arguments
+
+Name     | Type    | Description
+-------- | ------- | ------------
+siteCode _(required)_ | string  | A Kameleoon **siteCode**.
+cfgPath  _(required)_ | string  | A path to the config file. The file is loaded if only the `KameleoonClientFactory` does not store a `KameleoonClient` instance with the specified **siteCode**.
+
+###### Return value
+
+Type            | Description
+--------------- | ------------
+KameleoonClient | An instance of the **KameleoonClient** that will be used to manage your experiments and feature flags.
+error           | An error occurred within `Create`. The error can be `errs.SiteCodeIsEmpty` or `errs.ConfigCredentialsInvalid`.
+
+#### Forget()
+
+The `Forget` method removes a `KameleoonClient` instance from the `KameleoonClientFactory` with the specified **siteCode** and frees resources used by the `KameleoonClient` instance. The `KameleoonClient` instance must not be used after calling the `Forget` method.
+
+```go
+const siteCode = "sitecode"
+KameleoonClientFactory.Forget(siteCode)
+```
+
+###### Arguments
+
+Name     | Type    | Description
+-------- | ------- | ------------
+siteCode | string  | The **siteCode** of the `KameleoonClient` instance to be removed from the `KameleoonClientFactory`. This field is mandatory.
+
+#### WaitInit()
+
+The initialization of the Kameleoon Client is not immediate, as it requires a server request to our CDN (Content Delivery Network) to retrieve the current configuration for all active experiments and feature flags.
+
+The `WaitInit` method of the `kameleoon.KameleoonClient` allows you to wait until the `KameleoonClient` instance is ready for use.
+
+```go
+err := client.WaitInit()
+if err != nil {
+	// Client wasn't initialized properly
+	fmt.Println(err)
+} else {
+	// The SDK has been initialized; you can fetch a feature flag / experiment configuration here.
+}
+```
+
+##### Return value
+
+Type  | Description
+----- | ------------
+error | An error occurred during the initialization process.
+
+### Feature flags and variations
+
+#### IsFeatureActive() / IsFeatureActiveWithTracking()
+
+- 📨 _Sends Tracking Data to Kameleoon (depending on the `track` parameter)_
+
+Use this method if you want to retrieve the configuration of a simple feature flag, that has only a turn ON / OFF state, as opposed to more complex feature flags with multiple variations or targeting options. If your feature flag has variations and variables, you should use the [`GetVariation`](#getvariation) method.
+
+It takes a **visitorCode** and **featureKey** as mandatory arguments to check if the feature flag is active for a given user.
+
+If the user has not been associated with your feature flag before, the SDK returns a random boolean value (**true** if the user should have this feature or **false** if not). However, if the user has already been registered with this feature flag, the SDK detects the previous feature flag value.
+
+<Note>
+It is important to set up proper error handling in your code to catch any potential exceptions that may occur, as shown in the code example.
+</Note>
+
+If you specify a `visitorCode`, the `IsFeatureActive` method uses it as the unique visitor identifier, which is useful for [cross-device experimentation](/core-concepts/cross-device-experimentation). When you specify a `visitorCode` and set the `isUniqueIdentifier` parameter to `true`, the SDK links the flushed data with the visitor associated with the specified identifier.
+
+<Note>
+The parameter `isUniqueIdentifier` is deprecated. Please use [`UniqueIdentifier`](#uniqueidentifier) instead.
+
+The `isUniqueIdentifier` can be helpful in unique situations; for example, if you cannot access the anonymous `visitorCode` given to a visitor, but you can use an internal ID linked to that visitor through session merging.
+</Note>
+
+```go
+const featureKey = "new_checkout"
+
+// Check if a Feature Flag is active (ON / OFF)
+hasNewCheckout, err := client.IsFeatureActive(visitorCode, featureKey)
+// disabling tracking
+hasNewCheckout, err := client.IsFeatureActiveWithTracking(visitorCode, featureKey, false)
+
+if err != nil {
+	switch err.(type) {
+	case *errs.VisitorCodeInvalid:
+		// The provided visitor code is not valid. Trigger the old checkout for this visitor.
+		hasNewCheckout = false
+	case *errs.FeatureConfigNotFound:
+		// The Feature Key is not yet in the configuration file that has been fetched by the SDK. Trigger the old checkout for this visitor.
+		hasNewCheckout = false
+	default:
+		// Handle unexpected errors
+		panic(err)
+	}
+}
+if hasNewCheckout {
+	// Implement new checkout code here
+}
+```
+
+##### Arguments
+
+Name | Type | Description
+--------- | ------- | -----------
+visitorCode | string | The user's unique identifier. This field is mandatory.
+featureKey | string | The key of the feature you want to expose to a user. This field is mandatory.
+isUniqueIdentifier (Deprecated) | bool | A parameter for specifying if the visitorCode is a unique identifier. If not provided, the default value is `false`. The field is optional.
+track | bool | A parameter of the `IsFeatureActiveWithTracking` method to enable or disable tracking of the feature evaluation. `IsFeatureActive(visitorCode, featureKey)` is equivalent to `IsFeatureActiveWithTracking(visitorCode, featureKey, true)`.
+
+##### Return value
+
+Type | Description
+--------- | -------
+bool | Value of the feature flag that is registered for a given **visitorCode**.
+
+##### Exceptions thrown
+
+Type | Description
+--------- | -------
+errs.FeatureConfigNotFound | This error indicates that the requested feature key could not be found in the internal configuration of the SDK. This typically occurs when the feature flag has not yet been retrieved by the SDK, which can happen if the SDK is in [polling](https://developers.kameleoon.com/feature-management-and-experimentation/technical-considerations#polling) mode.
+errs.VisitorCodeInvalid    | This error is returned when the visitor code provided is invalid, meaning that it is either empty or its length exceeds 255 characters.
+
+#### GetVariation()
+<GetVariation sec="description" c={Context}/>
+
+```go
+const featureKey = "new_checkout"
+
+variation, err := client.GetVariation(visitorCode, featureKey)
+// disabling tracking
+variation, err := client.GetVariation(visitorCode, featureKey, NewGetVariationOptParams().Track(false))
+
+if err != nil {
+	// handle error
+}
+
+// Fetch a variable value for the assigned variation
+title := variation.Variables["title"].Value
+
+switch (variation.Key) {
+	case "on":
+		// Main variation key is selected for visitorCode
+	case "alternative_variation":
+		// Alternative variation key
+	default:
+		// Default variation key
+}
+```
+
+##### Arguments
+<GetVariation sec="arguments" c={Context}/>
+
+##### Return value
+<GetVariation sec="return_value" c={Context}/>
+
+##### Exceptions thrown
+<GetVariation sec="exceptions" c={Context}/>
+
+#### GetVariations()
+<GetVariations sec="description" c={Context}/>
+
+```go
+variations, err := client.GetVariations(visitorCode)
+// all active variations
+variations, err := client.GetVariations(visitorCode, NewGetVariationsOptParams().OnlyActive(true))
+// disable tracking
+variations, err := client.GetVariations(visitorCode, NewGetVariationsOptParams().Track(false))
+
+if err != nil {
+	// handle error
+}
+```
+
+##### Arguments
+<GetVariations sec="arguments" c={Context}/>
+
+##### Return value
+<GetVariations sec="return_value" c={Context}/>
+
+##### Exceptions thrown
+<GetVariations sec="exceptions" c={Context}/>
+
+##### Arguments
+
+| Name        | Type   | Description                    |
+|-------------|--------|--------------------------------|
+| visitorCode | string | Unique identifier of the user. This field is required. |
+| OnlyActive  | bool | An optional parameter indicating whether to return variations for active (`true`) or all (`false`) feature flags (Defaults to `false`). |
+| Track | bool | An optional parameter to enable or disable tracking of the feature evaluation (Defaults to `true`).|
+
+##### Return value
+
+| Type | Description |
+| ---- | ----------- |
+| `map[string]Variation` | Map that contains the assigned [`Variations`](#variation) of the feature flags using the keys of the corresponding features. |
+
+##### Exceptions thrown
+
+| Type | Description |
+|----- | ----------- |
+| VisitorCodeInvalid | Exception indicating that the provided visitor code is not valid. It is either empty or longer than 255 characters. |
+
+#### GetFeatureList()
+
+<GetFeatureList sec="description" c={Context}/>
+
+```go
+arrayFeatureKeys := client.GetFeatureList()
+```
+
+##### Return value
+
+<GetFeatureList sec="return_value" c={Context}/>
+
+#### SetForcedVariation()
+
+<SetForcedVariation sec="description" c={Context}/>
+
+```go
+const experimentId = 9516
+
+// Forcing the variation "on" in the experiment 9516 for the visitor.
+err := client.SetForcedVariation(visitorCode, experimentId, "on")
+
+// Forcing the variation "on" while preserving segmentation and targeting conditions during the experiment.
+err := client.SetForcedVariation(
+    visitorCode, experimentId, "on", NewSetForcedVariationOptParams().ForceTargeting(false),
+)
+
+// Resetting the forced variation in the experiment 9516 for the visitor.
+err := client.SetForcedVariation(visitorCode, experimentId, "")
+
+if err != nil {
+    // Handling the error
+}
+```
+
+##### Arguments
+
+<SetForcedVariation sec="arguments" c={Context}/>
+
+##### Exceptions thrown
+
+<SetForcedVariation sec="exceptions" c={Context}/>
+
+#### EvaluateAudiences()
+
+<EvaluateAudiences sec="description" c={Context}/>
+
+```go
+if err := client.EvaluateAudiences(visitorCode); err != nil {
+    // Handling the error
+}
+```
+
+##### Arguments
+
+<EvaluateAudiences sec="arguments" c={Context}/>
+
+##### Exceptions thrown
+
+<EvaluateAudiences sec="exceptions" c={Context}/>
+
+#### GetDataFile()
+
+<GetDataFile sec="tip_qa" c={Context}/>
+
+<GetDataFile sec="description" c={Context}/>
+
+```go
+dataFile := client.GetDataFile()
+```
+
+##### Return value
+
+<GetDataFile sec="return_value" c={Context}/>
+
+### Visitor data
+
+#### GetVisitorCode()
+
+<Note>
+This method was previously called `ObtainVisitorCode`, which was removed in SDK version `3.0.0`.
+</Note>
+
+To ensure user identification consistency, especially when using Kameleoon in [hybrid mode](/core-concepts/hybrid-experimentation/), you should call the [`GetVisitorCode()`](#getvisitorcode) method to obtain the Kameleoon `visitorCode` for the current visitor. Here's how it works:
+
+1. Kameleoon checks if there is a **kameleoonVisitorCode** cookie associated with the current HTTP request. If found, Kameleoon this code as the visitor identifier.
+
+2. If no cookie is found, the method will either randomly generate a new identifier, or use the **defaultVisitorCode** argument if it is passed. Using your identifiers as visitor codes allows you to match Kameleoon visitors with your own users without additional look-ups.
+
+3. The server-side **kameleoonVisitorCode** cookie is then set with the identifier value via HTTP header and the method returns the identifier value.
+
+For more information, please refer to this [article](https://developers.kameleoon.com/core-concepts/hybrid-experimentation).
+
+<Note>
+If you decide to provide your own `User ID` instead of using the Kameleoon generated visitorCode, it is your responsibility to ensure that the User ID is unique. The SDK does not check for uniqueness. It's important to note that the User ID you provide must not exceed 255 characters, as any excess characters will result in an exception being thrown.
+</Note>
+
+<SharedDiv sec="get_visitor_code_simulated" c={Context}/>
+
+```go
+visitorCode, err := client.GetVisitorCode(req, resp)
+
+visitorCode, err := client.GetVisitorCode(req, resp, "defaultVisitorCode")
+```
+
+##### Arguments
+
+Name | Type | Description
+--------- | ------- | -----------
+request | *fasthttp.Request | The current fasthttp.Request object should be passed as the first parameter. This field is mandatory.
+response | *fasthttp.Response |  The current fasthttp.Response object should be passed as the second parameter. This field is mandatory.
+defaultVisitorCode | string | This parameter will be used as the **visitorCode** if no existing **kameleoonVisitorCode** cookie is found on the request. This field is optional, and by default a random **visitorCode** will be generated.
+
+##### Return value
+
+Type | Description
+--------- | -------
+(string, error) | A pair consisting of a **visitorCode** that will be associated with this particular user and an error. It should be used with most methods of the SDK.
+
+#####  Exceptions thrown
+
+Error Message | Description
+--------- | -------
+errs.VisitorCodeInvalid | This error is returned when the visitor code provided is invalid, meaning that it is either empty or its length exceeds 255 characters.
+
+#### AddData()
+<AddData sec="description" c={Context}/>
+
+```go
+import (
+	"github.com/Kameleoon/client-go/v3/types"
+)
+
+client.AddData(visitorCode, types.NewBrowser(types.BrowserTypeChrome))
+
+client.AddData(visitorCode,
+	types.NewPageViewWithTitle("https://url.com", "title", 3),
+	types.NewConversionWithRevenue(32, 10, false),
+)
+```
+
+##### Arguments
+<AddData sec="arguments" c={Context}/>
+
+##### Exceptions
+<AddData sec="exceptions" c={Context}/>
+
+#### FlushAll() / FlushVisitor() / FlushVisitorInstantly()
+
+- 📨 _Sends Tracking Data to Kameleoon_
+
+The `FlushAll()/FlushVisitor()/FlushVisitorInstantly()` methods collects the Kameleoon data linked to the visitor. It then sends a tracking request, along with all data added using the `AddData` method, which has not yet been sent using one of [these methods](/feature-management-and-experimentation/faq#when-does-the-sdk-send-a-tracking-request-for-analytics). `Flush*()` is non-blocking as the server call is made asynchronously.
+
+`Flush*()` lets you control when the data associated with a given `visitorCode` is sent to our servers. For instance, if you call `AddData()` a dozen times, it would be inefficient to send data to the server after each time `AddData()` is invoked, so all you have to do is call `Flush()` once at the end.
+
+The `FlushVisitor()/FlushVisitorInstantly()` method uses `visitorCode` as the unique visitor identifier, which is useful for [cross-device experimentation](/core-concepts/cross-device-experimentation). When you specify a `visitorCode` and set the `isUniqueIdentifier` parameter to `true`, the SDK links the flushed data with the visitor associated with the specified identifier.
+
+<Note>
+The parameter `isUniqueIdentifier` is deprecated. Please use [`UniqueIdentifier`](#uniqueidentifier) instead.
+
+The `isUniqueIdentifier` can be helpful in unique situations; for example, if you cannot access the anonymous `visitorCode` given to a visitor, but you can use an internal ID linked to that visitor through session merging.
+</Note>
+
+```go
+import (
+	"github.com/Kameleoon/client-go/v3/types"
+)
+
+visitorCode, err := client.GetVisitorCode(req, resp)
+
+client.AddData(visitorCode, types.NewBrowser(types.BrowserTypeChrome))
+client.AddData(visitorCode, types.NewConversionWithRevenue(32, 10, false))
+
+client.FlushVisitor(visitorCode) // Interval tracking (most performant tracking method)
+client.FlushAll() // Interval tracking for all visitors' unsent data
+
+client.FlushVisitorInstantly(visitorCode) // Instant tracking
+client.FlushAll(true) // Instant tracking for all visitors' unsent data
+
+// if you operate with a unique ID
+client.AddData(types.NewUniqueIdentifier(true))
+client.FlushVisitor(visitorCode)
+```
+
+##### Arguments
+
+Name | Type | Description
+--------- | ------- | -----------
+visitorCode | string | The user's unique identifier. This field is mandatory for `FlushVisitor()/FlushVisitorInstantly()`.
+isUniqueIdentifier (Deprecated) | bool | A parameter of the `FlushVisitor` method for specifying if the visitorCode is a unique identifier. If not provided, the default value is `false`. The field is optional.
+
+##### Exceptions thrown
+
+Type | Description
+--------- | -------
+errs.VisitorCodeInvalid | This exception is raised when the visitor code provided is invalid, meaning that it is either empty or its length exceeds 255 characters.
+
+#### GetRemoteData()
+
+The `GetRemoteData()` method retrieves external data stored on Kameleoon's remote server for the specified **siteCode** (specified in `KameleoonClient` constructor) according to a **key** passed as an argument. This key is typically the Kameleoon Visitor Code or your User ID.
+
+You can use this method to retrieve user preferences, historical data, or any other data relevant to your application's logic. By storing this data on our highly scalable servers using our Data API, you can efficiently manage massive amounts of data and retrieve it for all of your visitors or users.
+
+The return value of the method is a JSON object that can be decoded using the `json.Unmarshal()` function. You can use this data to build advanced targeting segments for feature flags and experiments, or filter experiment and personalization reports based on any value stored in the retrieved data.
+
+```go
+type Test1 struct {
+	Value string `json:"some field to insert or update"`
+}
+
+remoteData, err := s.client.GetRemoteData("USER_ID") // uses default timeout
+var test1 Test1
+err = json.Unmarshal(remoteData, &test1)
+
+remoteData, err := s.client.GetRemoteData("USER_ID", 1000)
+```
+
+<Note>
+Note that, since a server call is required, this mechanism is asynchronous.
+</Note>
+
+We offer built-in integrations with Mixpanel, Segment, and GA4 to fetch external cohorts and utilize them in feature experiments. The key utilized in these integrations is either our Visitor code or your User ID. You can refer to the sample code provided below to retrieve and utilize Mixpanel cohorts:
+
+```go
+//Retrieve and use Mixpanel Cohorts
+type Cohort struct {
+	Id        string `json:"mixpanel_cohort_id"`
+	Name      string `json:"mixpanel_cohort_name"`
+	ProjectId string `json:"mixpanel_cohort_project_id"`
+}
+
+type MixPanelCohorts struct {
+	Cohorts []Cohort `json:"mixpanel_cohorts"`
+}
+
+remoteData, err := s.client.GetRemoteData("USER_ID")
+var mixPanel MixPanelCohorts
+if err = json.Unmarshal(remoteData, &mixPanel); err == nil {
+	cohorts := make([]string, len(mixPanel.Cohorts))
+	for _, cohort := range mixPanel.Cohorts {
+		cohorts = append(cohorts, cohort.Id)
+	}
+	client.AddData(visitorCode, types.NewCustomData(customDataIndex, cohorts...))
+}
+```
+
+##### Arguments
+
+Name | Type | Description
+--------- | ------- | -----------
+key | string | The key with which the data you are trying to retrieve is associated. This field is mandatory. This key is typically the Kameleoon Visitor Code or your own User ID.
+timeout | int | The timeout parameter specifies the maximum amount of time the method can block to wait for a result, in milliseconds. This field is optional; if not provided, the method will use the default timeout value provided when [initializing the SDK](#initialization).
+
+##### Return value
+
+| Type | Description
+------ | -------
+[]byte | This returns the information associated with retrieving data for a specific **key**. The result needs to be decoded using the `json.Unmarshal`() function.
+
+##### Exceptions thrown
+
+Type | Description
+--------- | -------
+error | Error indicating that the request timed out.
+
+#### GetRemoteVisitorData()
+
+`GetRemoteVisitorData()` is an asynchronous method for retrieving Kameleoon Visits Data for the `VisitorCode` from the Kameleoon Data API. The method adds the data to storage for other methods to use when making targeting decisions.
+
+Data obtained using this method plays an important role when you want to:
+
+* use data collected from other devices.
+* access a user's history, such as previously visited pages during past visits.
+* use data that is only accessible on the client-side, like datalayer variables and goals that only convert on the front-end.
+
+Read [this article]( https://developers.kameleoon.com/feature-management-and-experimentation/using-visit-history-in-feature-flags-and-experiments/) for a better understanding of possible use cases.
+
+<Warning>
+By default, `GetRemoteVisitorData()` automatically retrieves the latest stored custom data with `Scope=Visitor` and attaches them to the visitor without the need to call the `AddData()` method. It is particularly useful for [synchronizing custom data between multiple devices](https://developers.kameleoon.com/feature-management-and-experimentation/web-sdks/nodejs-sdk/#synchronizing-custom-data-across-devices).
+</Warning>
+
+<Note>
+The parameter `IsUniqueIdentifier` is deprecated. Please use [`UniqueIdentifier`](#uniqueidentifier) instead.
+
+The `isUniqueIdentifier` can be helpful in unique situations; for example, if you cannot access the anonymous `visitorCode` given to a visitor, but you can use an internal ID linked to that visitor through session merging.
+</Note>
+
+```go
+visitorCode := "visitorCode"
+var visitorData []types.Data
+var err error
+
+// Visitor data will be fetched and automatically added for `visitorCode`
+visitorData, err = client.GetRemoteVisitorData(visitorCode, true) // default timeout will be used
+visitorData, err = client.GetRemoteVisitorData(visitorCode, true, time.Second) // 1000 milliseconds timeout
+
+// If you only want to fetch data and add it yourself manually, set `addData` to `false`.
+visitorData, err = client.GetRemoteVisitorData(visitorCode, false) // default timeout will be used
+visitorData, err = client.GetRemoteVisitorData(visitorCode, false, time.Second) // 1000 milliseconds timeout
+
+// If you operate with a unique ID
+client.AddData(types.NewUniqueIdentifier(true))
+visitorData, err = client.GetRemoteVisitorData(visitorCode, true)
+
+// If you want to fetch a custom list of data types
+var visitorData = client.GetRemoteVisitorDataWithFilter(
+    visitorCode,
+    true,
+    types.RemoteVisitorDataFilter{PreviousVisitAmount: 10, CustomData: true, Conversion: true, Experiments: true},
+    // default timeout will be used
+)
+// or
+var visitorData = client.GetRemoteVisitorDataWithFilter(
+    visitorCode,
+    true,
+    types.RemoteVisitorDataFilter{PreviousVisitAmount: 10, CustomData: true, Conversion: true, Experiments: true},
+    time.Second, // 1000 milliseconds timeout
+)
+```
+
+##### Arguments of GetRemoteVisitorData
+
+Name | Type | Description
+--------- | ------- | -----------
+visitorCode | string | The visitor code for which you want to retrieve the assigned data. This field is mandatory.
+addData | bool | A boolean indicating whether the method should automatically add retrieved data for a visitor. This field is mandatory.
+timeout | time.Duration | The timeout parameter specifies the maximum amount of time the method can block to wait for a result, in milliseconds. This field is optional; if not provided, the method will use the default timeout value provided when [initializing the SDK](#initialization).
+
+##### Arguments of GetRemoteVisitorDataWithFilter
+
+Name | Type | Description
+--------- | ------- | -----------
+visitorCode | string | The visitor code for which you want to retrieve the assigned data. This field is mandatory.
+addData | bool | A boolean indicating whether the method should automatically add retrieved data for a visitor. This field is mandatory.
+filter | types.RemoteVisitorDataFilter | Filter for specifying what data should be retrieved from visits. This field is mandatory.
+timeout | time.Duration | The timeout parameter specifies the maximum amount of time the method can block to wait for a result, in milliseconds. This field is optional; if not provided, the method will use the default timeout value provided when [initializing the SDK](#initialization).
+
+##### Arguments of GetRemoteVisitorDataWithOptParams
+
+<Note>
+The `GetRemoteVisitorDataWithOptParams` method is deprecated. Please use [`GetRemoteVisitorDataWithFilter`](https://developers.kameleoon.com/feature-management-and-experimentation/web-sdks/go-sdk/#arguments-of-getremotevisitordatawithfilter) and [`UniqueIdentifier`](#uniqueidentifier). instead.
+</Note>
+
+Name | Type | Description
+--------- | ------- | -----------
+visitorCode | string | The visitor code for which you want to retrieve the assigned data. This field is mandatory.
+addData | bool | A boolean indicating whether the method should automatically add retrieved data for a visitor. This field is mandatory.
+filter | types.RemoteVisitorDataFilter | Filter for specifying what data should be retrieved from visits. This field is mandatory.
+params | kameleoon.RemoteVisitorDataOptParams | Optional parameters.
+
+<Note>
+Here is the list of `kameleoon.RemoteVisitorDataOptParams` fields:
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| IsUniqueIdentifier _(optional)_ (Deprecated) | `bool` | A parameter for specifying if the visitorCode is a unique identifier. If not provided, the default value is `false`. |
+| Timeout _(optional)_ | `time.Duration` | The timeout parameter specifies the maximum amount of time the method can block to wait for a result, in milliseconds. This field is optional; if not provided, the method will use the default timeout value provided when [initializing the SDK](#initialization).
+
+The default value of `kameleoon.RemoteVisitorDataOptParams` which is `types.RemoteVisitorDataFilter{PreviousVisitAmount: 1, CurrentVisit: true, CustomData: true}`, can be gotten with `types.DefaultRemoteVisitorDataFilter()` function.
+</Note>
+
+##### Return value
+
+| Type | Description
+------ | -------
+[]types.Data | A slice of data assigned to the given visitor.
+error | An occurred error.
+
+##### Using parameters in GetRemoteVisitorData()
+
+The `GetRemoteVisitorData()` method offers flexibility by allowing you to define various parameters when retrieving data on visitors. Whether you're targeting based on goals, experiments, or variations, the same approach applies across all data types.
+
+For example, let's say you want to retrieve data on visitors who completed a goal "Order transaction". You can specify parameters within the `GetRemoteVisitorData()` method to refine your targeting. For instance, if you want to target only users who converted on the goal in their last five visits, you can set the `PreviousVisitAmount` parameter to 5 and `Conversions` to true.
+
+The flexibility shown in this example is not limited to goal data. You can use parameters within the `GetRemoteVisitorData()` method to retrieve data on a variety of visitor behaviors.
+
+<Note>
+Here is the list of available `types.RemoteVisitorDataFilter` options:
+
+| Name                             | Type   | Description                                                                  | Default |
+| -------------------------------- | ------ | ---------------------------------------------------------------------------- | ------- |
+| PreviousVisitAmount _(optional)_ | `int`  | Number of previous visits to retrieve data from. Number between `1` and `25` | `1`     |
+| CurrentVisit _(optional)_        | `bool` | If true, current visit data will be retrieved                                | `true`  |
+| CustomData _(optional)_          | `bool` | If true, custom data will be retrieved.                                      | `true`  |
+| PageViews _(optional)_           | `bool` | If true, page data will be retrieved.                                        | `false` |
+| Geolocation _(optional)_         | `bool` | If true, geolocation data will be retrieved.                                 | `false` |
+| Device _(optional)_              | `bool` | If true, device data will be retrieved.                                      | `false` |
+| Browser _(optional)_             | `bool` | If true, browser data will be retrieved.                                     | `false` |
+| OperatingSystem _(optional)_     | `bool` | If true, operating system data will be retrieved.                            | `false` |
+| Conversions _(optional)_         | `bool` | If true, conversion data will be retrieved.                                  | `false` |
+| Experiments _(optional)_         | `bool` | If true, experiment data will be retrieved.                                  | `false` |
+| Kcs _(optional)_                 | `bool` | If true, Kameleoon Conversion Score (KCS) will be retrieved. Requires the [AI Predictive Targeting add-on](https://help.kameleoon.com/target-users-by-ai-propensity-score-kameleoon-conversion-score/)                                    | `false` |
+| VisitorCode _(optional)_         | `bool` | If true, Kameleoon will retrieve the `visitorCode` from the most recent visit and use it for the current visit. This is necessary if you want to ensure that the visitor, identified by their `visitorCode`, always receives the same variation across visits for [Cross-device experimentation](/core-concepts/cross-device-experimentation). | `true` |
+| Personalization _(optional)_     | `bool` | If true, personalization data will be retrieved. This is required for the personalization condition. | `false` |
+| cbs _(optional)_                 | `bool` | <Text x={Shared.RemoteVisitorDataFilter.CBS}/> | `false` |
+</Note>
+
+#### GetVisitorWarehouseAudience()
+
+Retrieves all audience data associated with the visitor in your data warehouse using the specified `VisitorCode` and `WarehouseKey`. The `WarehouseKey` is typically your internal user ID. The `CustomDataIndex` parameter corresponds to the Kameleoon custom data that Kameleoon uses to target your visitors. You can refer to the [warehouse targeting documentation](https://help.kameleoon.com/warehouse-audience-targeting/) for additional details. The method returns a `CustomData` object, confirming that the data has been added to the visitor and is available for targeting purposes.
+
+```go
+customData, err = client.GetVisitorWarehouseAudience(VisitorWarehouseAudienceParams{
+    VisitorCode:     "visitorCode",
+    CustomDataIndex: 10,
+    WarehouseKey:    "warehouseKey", // optional
+    Timeout:         5 * time.Second, // optional
+})
+
+customData, err = c.GetVisitorWarehouseAudienceWithOptParams(
+    "visitorCode", 10, VisitorWarehouseAudienceOptParams{WarehouseKey: "warehouseKey", Timeout: 5 * time.Second})
+```
+
+##### Arguments of GetVisitorWarehouseAudience
+
+Name | Type | Description
+--------- | ------- | -----------
+VisitorCode | string | A unique visitor identification string, can't exceed 255 characters length.
+CustomDataIndex | int | An integer representing the index of the custom data you want to use to target your BigQuery Audiences.
+WarehouseKey | string | A unique key to identify the warehouse data (usually, your internal user ID). This field is optional.
+Timeout | time.Duration | The timeout parameter specifies the maximum amount of time the method can block to wait for a result, in milliseconds. This field is optional; if not provided, the method will use the default timeout value provided when [initializing the SDK](#initialization). This field is optional.
+
+##### Arguments of GetVisitorWarehouseAudienceWithOptParams
+
+Name | Type | Description
+--------- | ------- | -----------
+visitorCode | string | A unique visitor identification string, can't exceed 255 characters length.
+customDataIndex | int | An integer representing the index of the custom data you want to use to target your BigQuery Audiences.
+params | `kameleoon.VisitorWarehouseAudienceOptParams` | Optional parameters.
+
+<Note>
+Here is the list of `kameleoon.VisitorWarehouseAudienceOptParams` fields:
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+WarehouseKey | `string` | A unique key to identify the warehouse data (usually, your internal user ID). This field is optional.
+Timeout | `time.Duration` | The timeout parameter specifies the maximum amount of time the method can block to wait for a result, in milliseconds. This field is optional; if not provided, the method will use the default timeout value provided when [initializing the SDK]. This field is optional.
+</Note>note
+For `GetVisitorWarehouseAudience` method parameters are passed into the function as `params` of struct `VisitorWarehouseAudienceParams` to make some of them optional (`WarehouseKey` and `Timeout`).
+
+For `GetVisitorWarehouseAudienceWithOptParams` method only optional parameters are passed into the function as `params` of struct `VisitorWarehouseAudienceOptParams`.
+
+##### Return value
+
+| Type | Description
+------ | -------
+*types.CustomData | A `CustomData` instance confirming that the data has been added to the visitor.
+error | An occurred error.
+
+#### SetLegalConsent()
+
+You must use this method to specify whether the visitor has given legal consent to use personal data. Setting the `legalConsent` parameter to `false` limits the types of data that you can include in tracking requests. This method helps you adhere to legal and regulatory requirements while responsibly managing visitor data. You can find more information on personal data in the [consent management policy](https://help.kameleoon.com/consent-management-policy/).
+
+```go
+visitorCode, err := kameleoonClient.GetVisitorCode(req, resp)
+
+err := kameleoonClient.SetLegalConsent(visitorCode, true, resp)
+```
+##### Arguments
+
+Name        | Type               | Description
+----------- | ------------------ | ------------
+visitorCode | string             | The user's unique identifier. This field is required.
+consent     | bool               | A boolean value representing the legal consent status. `true` indicates the visitor has given legal consent, `false` indicates the visitor has never provided, or has withdrawn, legal consent. This field is required.
+response    | *fasthttp.Response | The HTTP response where values in the cookies will be adjusted based on the legal consent status. This field is optional.
+
+##### Exceptions thrown
+
+Type | Description
+--------- | -------
+errs.VisitorCodeInvalid | This error is returned when the visitor code provided is invalid, meaning that it is either empty or its length exceeds 255 characters.
+
+### Goals and third-party analytics
+
+#### TrackConversion()
+
+<TrackConversion sec="description" c={Context}/>
+
+```go
+import (
+	"github.com/Kameleoon/client-go/v3/types"
+)
+
+const goalID = 83023
+
+client.TrackConversion(visitorCode, goalID)
+
+client.TrackConversionRevenue(visitorCode, goalID, 10.0)
+
+// Add metadata
+client.TrackConversionWithOptParams(visitorCode, goalID, TrackConversionOptParams{
+    Metadata: []*types.CustomData{
+        types.NewCustomData(3, "metadata1", "md2"),
+        types.NewCustomData(5, "md3")
+    },
+})
+```
+
+##### Arguments
+<TrackConversion sec="arguments" c={Context}/>
+
+<Note>
+<TrackConversion sec="note_metadata" c={Context}/>
+```go
+kameleoonClient.AddData(visitorCode, types.NewCustomData(5, "Credit Card"), types.NewCustomData(9, "Express Delivery"));
+kameleoonClient.TrackConversionWithOptParams(visitorCode, 10, TrackConversionOptParams{
+    Metadata: []*types.CustomData{
+        types.NewCustomData(9, "Amex Credit Card"),
+    },
+})
+```
+</Note>
+
+##### Exceptions
+<TrackConversion sec="exceptions" c={Context}/>
+
+#### GetEngineTrackingCode()
+
+<GetEngineTrackingCode sec="description" c={Context}/>
+
+```go
+engineTrackingCode := kameleoonClient.GetEngineTrackingCode(visitorCode)
+```
+
+##### Arguments
+
+<GetEngineTrackingCode sec="arguments" c={Context}/>
+
+##### Return value
+
+<GetEngineTrackingCode sec="return_value" c={Context}/>
+
+### Events
+
+#### OnUpdateConfiguration()
+```go
+kameleoonClient.OnUpdateConfiguration(
+	// configuration was updated
+)
+```
+
+<UpdateConfigurationHandler sec="description" c={Context}/>
+
+##### Arguments
+
+<UpdateConfigurationHandler sec="arguments" c={Context}/>
+
+### Data types
+
+#### Browser
+
+<Browser sec="description" c={Context}/>
+
+<Browser sec="arguments" c={Context}/>
+
+```go
+client.AddData(visitorCode, types.NewBrowser(types.BrowserTypeChrome))
+
+client.AddData(visitorCode, types.NewBrowser(types.BrowserTypeSafari, 16.0))
+```
+
+#### Conversion
+
+<Conversion sec="description" c={Context}/>
+
+<Conversion sec="arguments" c={Context}/>
+
+```go
+client.AddData(visitorCode, types.NewConversion(32, true))
+
+client.AddData(visitorCode, types.NewConversionWithRevenue(33, 10.0, false))
+
+client.AddData(
+    visitorCode,
+    types.NewConversionWithOptParams(34, types.ConversionOptParams{
+        Revenue: 5.0,
+        Metadata: []*types.CustomData{
+            types.NewCustomData(3, "metadata1", "md2"),
+            types.NewCustomData(5, "md3"),
+        },
+    }),
+)
+```
+
+```go
+client.AddData(visitorCode, types.NewConversion(32, false))
+
+client.AddData(visitorCode, types.NewConversionWithRevenue(32, 10, false))
+```
+
+#### Cookie
+
+`Cookie` contains information about the cookie stored on the visitor's device.
+
+| Name | Type | Description  |
+| ---- | ---- | -----------  |
+| cookies | `map[string]string` | A string object map consisting of cookie keys and values. This field is required.
+
+<Tip>
+Each visitor can only have one `Cookie`. Adding second `Cookie` overwrites the first one.
+</Tip>
+
+```go
+cookie := types.NewCookie(map[string]string{
+  "k1": "v1",
+  "k2": "v2",
+})
+client.AddData(visitorCode, cookie)
+```
+
+#### Geolocation
+
+<Geolocation sec="description" c={Context}/>
+
+<Geolocation sec="arguments" c={Context}/>
+
+```go
+client.AddData(visitorCode, types.NewGeolocation("France", "Île-de-France", "Paris"))
+
+client.AddData(visitorCode, types.NewGeolocationWithCoords(48.856667, 2.352222, "France", "Île-de-France", "Paris"))
+```
+
+#### CustomData
+
+`CustomData` allows any type of data to be easily associated with each visitor. It can then be used as a targeting condition in [segments](https://help.kameleoon.com/create-new-segment/) or as a filter/breakdown in experiment reports. To learn more about custom data, please refer to this [article](/core-concepts/custom-data).
+
+| Name | Type | Description | Default |
+| ---- | ---- | ----------- | ------- |
+| index/name _(required)_ | `int`/`string` | Index or Name of the custom data. **Either `index` or `name` must be provided** to identify the data. | |
+| values _(required)_ | `...string` | The values of the custom data to be stored. | |
+| overwrite _(optional)_ | `bool` | Flag to explicitly control how the values are stored and how they appear in reports. [See more](https://developers.kameleoon.com/core-concepts/custom-data/#default-logic-when-overwrite-parameter-is-false-or-omitted) | `true` |
+
+```go
+client.AddData(visitorCode, types.NewCustomData(1, "value"))
+
+// With several values
+client.AddData(visitorCode, types.NewCustomData(1, "value1", "value2"))
+
+// To set the 'overwrite' flag to false
+client.AddData(
+    visitorCode,
+    types.NewCustomDataWithOptParams(1, NewCustomDataOptParams().Overwrite(false), "value"),
+)
+
+// To use a name instead of the index
+client.AddData(visitorCode, types.NewNamedCustomData("my-custom-data", "value"))
+
+// To use a name instead of the index
+// and set the 'overwrite' flag to false
+client.AddData(
+    visitorCode,
+    types.NewNamedCustomDataWithOptParams("my-custom-data", NewCustomDataOptParams().Overwrite(false), "value"),
+)
+```
+
+<Note>
+- Each visitor is allowed only one `CustomData` for each unique `index`. Adding another `CustomData` with the same `index` will replace the existing one.
+
+- The custom data ‘index’ can be found in the [Custom Data dashboard](https://help.kameleoon.com/manage-your-custom-data/) under the “INDEX” column.
+
+- To prevent the SDK from sending data with the selected index to Kameleoon servers for privacy reasons, enable the option: **Use this data only locally for targeting purposes** when creating custom data.
+
+- Adding a `CustomData` instance created with a name when the SDK instance configuration is not up to date or the name is not registered, will result in the data being ignored.
+</Note>
+
+#### Device
+
+You can use device data to filter experiment or personalization reports by any associated value.
+
+###### NewDevice
+
+Name | Type | Description
+---- | ---- | -----------
+deviceType | DeviceType | List of devices: **Phone**, **Tablet**, **Desktop**. This field is mandatory.
+
+```go
+client.AddData(visitorCode, types.NewDevice(types.DeviceTypeDesktop))
+```
+
+#### OperatingSystem
+
+`OperatingSystem` contains information about the operating system on the visitor's device.
+
+##### NewOperatingSystem
+
+| Name | Type | Description  |
+| ---- | ---- | -----------  |
+| type | `types.OperatingSystemType` | List of operating systems: **Windows**, **Mac**, **iOS**, **Linux**, **Android** and **WindowsPhone**. This field is required.
+
+<Tip>
+Each visitor can only have one `OperatingSystem`. Adding a second `OperatingSystem` overwrites the first one.
+</Tip>
+
+```go
+client.AddData(visitorCode, types.NewOperatingSystem(types.OperatingSystemTypeWindows))
+```
+
+#### PageView
+
+You can use pageview data to filter experiment or personalization reports by any associated value.
+
+<Note>
+The index or ID of the [referrer](https://help.kameleoon.com/create-acquisition-channel) can be found in your Kameleoon account. It is important to note that this index starts at 0. This menas the first acquisition channel you create for a given site will be assigned 0 as its ID, not 1.
+</Note>
+
+##### NewPageView
+
+Name | Type | Description
+--------- | ------- | -----------
+url | string | The URL of the page viewed. This field is mandatory.
+referrers | ...int | The referrers of the viewed pages. This field is optional.
+
+##### NewPageViewWithTitle
+
+Name | Type | Description
+--------- | ------- | -----------
+url | string | The URL of the page viewed. This field is mandatory.
+title | string | The title of the page viewed. This field is mandatory.
+referrers | ...int | The referrers of the viewed pages. This field is optional.
+
+```go
+client.AddData(visitorCode, types.NewPageView("https://url.com", 3))
+
+client.AddData(visitorCode, types.NewPageViewWithTitle("https://url.com", "title", 3))
+```
+
+#### UserAgent
+
+Server-side experiments are more likely to be affected by bot traffic than client-side experiments. Kameleoon uses the IAB/ABC International Spiders and Bots List to tackle this issue and recognize known bots and spiders. Kameleoon also uses the `UserAgent` field to filter out bots and other unwanted traffic that might distort your conversion metrics. For more details, see our help article on [bot filtering](https://help.kameleoon.com/question/how-does-kameleoon-filter-bot-traffic-from-my-results/).
+
+If you use internal bots, we suggest that you pass the value **curl/8.0** of the userAgent to exclude them from our analytics.
+
+##### NewUserAgent
+
+Name | Type | Description
+---- | ---- | -----------
+value | string | The User-Agent value that will be sent with tracking requests. This field is mandatory.
+
+```go
+client.AddData(visitorCode, types.NewUserAgent("visitor_user_agent"))
+```
+
+#### UniqueIdentifier
+
+If you don't add `UniqueIdentifier` for a visitor, `visitorCode` is used as the unique visitor identifier, which is useful for [Cross-device experimentation](/core-concepts/cross-device-experimentation). When you add `UniqueIdentifier` for a visitor, the SDK links the flushed data with the visitor associated with the specified identifier.
+
+The `isUniqueIdentifier` can be helpful in unique situations; for example, if you cannot access the anonymous `visitorCode` given to a visitor, but you can use an internal ID linked to that visitor through session merging.
+
+##### NewUniqueIdentifier
+
+Name | Type | Description
+---- | ---- | -----------
+value | bool | Parameter for specifying if the visitor_code is a unique identifier. This field is mandatory.
+
+```go
+client.AddData(types.NewUniqueIdentifier(true))
+```
+
+### Returned Types
+
+#### DataFile
+
+<DataFile sec="description" c={Context}/>
+
+<DataFile sec="arguments" c={Context}/>
+
+```go
+featureFlags := dataFile.FeatureFlags
+```
+
+#### FeatureFlag
+
+<FeatureFlag sec="description_rules" c={Context}/>
+
+<FeatureFlag sec="arguments_rules" c={Context}/>
+
+```go
+// Check whether the feature flag is enabled in the current environment
+isEnvironmentEnabled := featureFlag.IsEnvironmentEnabled
+
+// Retrieve the key of the default variation
+defaultVariationKey = featureFlag.DefaultVariationKey
+
+// Retrieve the default variation object
+defaultVariation := featureFlag.DefaultVariation()
+
+// Retrieve all variations of the feature flag as a map (key = variation key, value = Variation object)
+variations := featureFlag.Variations
+
+// Retrieve all targeting rules associated with the feature flag
+rules := featureFlag.Rules
+```
+
+#### Rule
+
+<Rule sec="description" c={Context}/>
+
+<Rule sec="arguments" c={Context}/>
+
+```go
+// Retrieve all variations of the rule as a map (key = variation key, value = Variation object)
+variations := rule.Variations
+```
+
+#### Variation
+
+`Variation` contains information about the visitor's assigned variation (or the default variation, if no specific assignment exists).
+
+| Name        | Type                         | Description                                                                 |
+| ----------- | ---------------------------- | --------------------------------------------------------------------------- |
+| Name | `string` | The name of the variation. |
+| Key       | `string`                     | The unique key identifying the variation.                                   |
+| VariationID        | `*int`                    | The ID of the assigned variation (or `nil` if it's the default variation).  |
+| ExperimentID | `*int`                 | The ID of the experiment associated with the variation (or `nil` if default). |
+| Variables | `map[string]Variable`      | A map containing the variables of the assigned variation, keyed by variable names. This could be an empty collection if no variables are associated. |
+
+<Note>
+- The `Variation` object provides details about the assigned variation and its associated experiment, while the [`Variable`](#variable) object contains specific details about each variable within a variation.
+- Ensure that your code handles the case where `VariationID` or `ExperimentID` may be `nil`, indicating a default variation.
+- The `Variables` map might be empty if no variables are associated with the variation.
+</Note>
+
+```go
+// Retrieving the variation name
+var variationName string = variation.Name
+
+// Retrieving the variation key
+var variationKey string = variation.Key
+
+// Retrieving the variation id
+var variationID *int = variation.VariationID
+
+// Retrieving the experiment id
+var experimentID *int = variation.ExperimentID
+
+// Retrieving the variables map
+var variables map[string]Variable = variation.Variables
+```
+
+#### Variable
+
+`Variable` contains information about a variable associated with the assigned variation.
+
+| Name    | Type          | Description                                                                                                                   |
+| ------- |---------------|-------------------------------------------------------------------------------------------------------------------------------|
+| Key   | `string`      | The unique key identifying the variable.                                                                                      |
+| Type  | `string`      | The type of the variable. Possible values: **BOOLEAN**, **NUMBER**, **STRING**, **JSON**, **JS**, **CSS**.                    |
+| Value | `interface{}` | The value of the variable, which can be of the following types: **bool**, **int**, **float**, **string**, **map**, **array**. |
+
+```go
+// Retrieving the variables map
+var variables map[string]Variable = variation.Variables
+
+// Variable type can be retrieved for further processing
+var variableType string = variables["isDiscount"].Type
+
+// Retrieving the variable value by key
+var isDiscount bool = variables["isDiscount"].Value.(bool)
+
+// Variable value can be of different types
+var title string = variables["title"].Value.(string)
+```
+
+### Deprecated methods
+
+<Warning>
+These methods are deprecated and will be removed in SDK version `4.0.0`.
+</Warning>
+
+#### GetFeatureVariationKey()
+
+- 📨 _Sends Tracking Data to Kameleoon_
+
+<Note>
+Use [`GetVariation()`](#getvariation) instead.
+</Note>
+
+This method retrieves the configuration of a [feature experiment](https://help.kameleoon.com/create-feature-experiments/) with several feature variations. You can use it to get a variation key for a given user by providing the **visitorCode** and **featureKey** as mandatory arguments.
+
+If the user has never been associated with the feature flag, the SDK returns a variation key randomly, following the feature flag rules. If the user is already registered with the feature flag, the SDK detects the previous **variation key** value. If the user doesn't match any of the rules, the default value defined in Kameleoon's feature flag delivery rules will be returned. It's important to note that the default value may not be a variation key, but a boolean value or another data type, depending on the feature flag configuration.
+
+<Note>
+Don't forget to handle potential exceptions with proper error handling in your code. See the example code for guidance.
+</Note>
+
+If you specify a `visitorCode`, the `GetFeatureVariationKey` method uses it as the unique visitor identifier, which is useful for [cross-device experimentation](https://developers.kameleoon.com/core-concepts/cross-device-experimentation). When you specify a `visitorCode` and set the `isUniqueIdentifier` parameter to `true`, the SDK links the flushed data with the visitor associated with the specified identifier.
+
+<Note>
+The parameter `isUniqueIdentifier` is deprecated. Please use [`UniqueIdentifier`](#uniqueidentifier) instead.
+
+The `isUniqueIdentifier` can be helpful in unique situations; for example, if you cannot access the anonymous `visitorCode` given to a visitor, but you can use an internal ID linked to that visitor through session merging.
+</Note>
+
+```go
+// Feature Experiment with variations
+const variationKey = ""
+
+if variationKey, err := s.client.GetFeatureVariationKey(visitorCode, featureKey); err == nil {
+	switch variationKey {
+	case "variation 1":
+		// The visitor has been bucketed with variation 1 key.
+	case "variation 2":
+		// The visitor has been bucketed with variation 2 key.
+	default:
+		//The visitor has been bucketed with the default variation or is part of the unallocated traffic sample.
+	}
+} else {
+	// An error occurred; the feature flag key has not been found in the current configuration fetched by the SDK.
+}
+```
+
+##### Arguments
+
+| Name        | Type   | Description |
+| ----------- | ------ | ----------- |
+| visitorCode | string | The user's unique identifier. This field is mandatory. |
+| featureKey  | string | The key of the feature you want to expose to a user. This field is mandatory. |
+| isUniqueIdentifier (Deprecated) | bool | A parameter for specifying if the visitorCode is a unique identifier. If not provided, the default value is `false`. The field is optional.
+
+##### Return value
+
+| Type    | Description                                                                       |
+| ------- | --------------------------------------------------------------------------------- |
+| string  | Variation key of the feature flag that is registered for a given **visitorCode**. |
+
+##### Exceptions thrown
+
+Type                               | Description
+---------------------------------- | ------------
+errs.FeatureConfigNotFound      | This error indicates that the requested feature key could not be found in the internal configuration of the SDK. This typically occurs when the feature flag has not yet been retrieved by the SDK, which can happen if the SDK is in [polling](https://developers.kameleoon.com/feature-management-and-experimentation/technical-considerations#polling) mode.
+errs.VisitorCodeInvalid         | This error is returned when the visitor code provided is invalid, meaning that it is either empty or its length exceeds 255 characters.
+errs.FeatureEnvironmentDisabled | This error indicates that the feature flag is disabled for the current environment.
+
+#### GetActiveFeatureListForVisitor()
+
+<Note>
+Use [`GetActiveFeatures()`](#getactivefeatures) instead.
+</Note>
+
+The `GetActiveFeatureListForVisitor()` method takes a `visitorCode` parameter. When you call this method with a specific `visitorCode`, the method returns a list of feature flag keys that are available for that `visitorCode`.
+
+Don't forget to handle potential exceptions with proper error handling in your code. For example, see the following code:
+
+```go
+arrayFeatureFlagKeys, err := client.GetActiveFeatureListForVisitor(visitorCode)
+```
+
+#####  Arguments
+
+Name | Type | Description
+--------- | ------- | -----------
+visitorCode | string | The user's unique identifier. This field is mandatory.
+
+##### Return value
+
+| Type | Description
+------ | -------
+| []string | List of feature flag keys that are active for a specific `visitorCode`.
+
+#####  Exceptions thrown
+
+| Type                    | Description                                                                                                                             |
+|-------------------------|-----------------------------------------------------------------------------------------------------------------------------------------|
+| errs.VisitorCodeInvalid | This error is returned when the visitor code provided is invalid, meaning that it is either empty or its length exceeds 255 characters. |
+
+#### GetActiveFeatures()
+
+<Note>
+Use [`GetVariations()`](#getvariations) instead.
+</Note>
+
+The `GetActiveFeatures()` method retrieves information about the active feature flags that are available for the specified visitor code.
+
+Don't forget to handle potential exceptions with proper error handling in your code. For example, see the following code:
+
+```go
+activeFeatures, err := client.GetActiveFeatures(visitorCode)
+```
+
+#####  Arguments
+
+| Name        | Type   | Description                                            |
+|-------------|--------|--------------------------------------------------------|
+| visitorCode | string | The user's unique identifier. This field is mandatory. |
+
+##### Return value
+
+| Type                       | Description                                                                                            |
+|----------------------------|--------------------------------------------------------------------------------------------------------|
+| map[string]types.Variation | Map that contains the assigned variations of the active features using the active feature IDs as keys. |
+
+#####  Exceptions thrown
+
+| Type                    | Description                                                                                                                             |
+|-------------------------|-----------------------------------------------------------------------------------------------------------------------------------------|
+| errs.VisitorCodeInvalid | This error is returned when the visitor code provided is invalid, meaning that it is either empty or its length exceeds 255 characters. |
+
+#### GetFeatureVariable()
+
+- 📨 _Sends Tracking Data to Kameleoon_
+
+<Note>
+Use [`GetVariation()`](#getvariation) instead.
+</Note>
+
+To get a [feature variable](https://help.kameleoon.com/define-feature-variables/) of a variation key associated with a user, call the `GetFeatureVariable()` method of our SDK.
+
+This method takes a **visitorCode**, **featureKey** and **variableKey** as mandatory arguments to get a variable of the variation key for a given user.
+
+If the user has never been associated with the feature flag, the SDK returns a variable value of the variation key randomly, following the feature flag rules. If the user is already registered with the feature flag, the SDK detects the previous **variation key** value and returns the **variable** value. If the user doesn't match any of the rules, the default value will be returned.
+
+Don't forget to handle potential exceptions with proper error handling in your code. See the example code for guidance.
+
+<Note>
+The parameter `isUniqueIdentifier` is deprecated. Please use [`UniqueIdentifier`](#uniqueidentifier) instead.
+
+The `isUniqueIdentifier` can be helpful in unique situations; for example, if you cannot access the anonymous `visitorCode` given to a visitor, but you can use an internal ID linked to that visitor through session merging.
+</Note>
+
+```go
+visitorCode, err := client.GetVisitorCode(req, resp)
+featureKey := "featureKey"
+variableKey = "variableKey"
+
+if variableValue, err := s.client.GetFeatureVariable(visitorCode, featureKey, variableKey); err == nil {
+	// your custom code depending of variableValue
+} else {
+	// An error occurred; the feature flag has not been found in the current configuration fetched by the SDK.
+}
+```
+
+##### Arguments
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| visitorCode | string | The user's unique identifier. This field is mandatory. |
+| featureKey  | string | The key of the feature you want to expose to a user. This field is mandatory. |
+| variableKey | string | The name of the variable for which you want to get a value. This field is mandatory. |
+| isUniqueIdentifier (Deprecated) | bool | A parameter for specifying if the visitorCode is a unique identifier. If not provided, the default value is `false`. The field is optional. |
+
+##### Return value
+
+| Type    | Description                                                          |
+| ------- | -------------------------------------------------------------------- |
+| interface{} | The value of a variable associated with a particular feature flag's variation that has been registered for a specific visitorCode. Possible types: bool, float64, string, map[string]interface{} |
+
+##### Exceptions thrown
+
+Type                               | Description
+---------------------------------- | ------------
+errs.FeatureConfigNotFound      | This error indicates that the requested feature key could not be found in the SDK's internal configuration. This typically occurs when the feature flag has not yet been retrieved by the SDK, which can happen if the SDK is in [polling](https://developers.kameleoon.com/feature-management-and-experimentation/technical-considerations#polling) mode.
+errs.VisitorCodeInvalid         | This error is returned when the visitor code provided is invalid, meaning that it is either empty or its length exceeds 255 characters.
+errs.FeatureVariationNotFound   | This error indicates that the requested variation ID could not be found in the SDK's internal configuration. This typically occurs when the feature flag has not yet been retrieved by the SDK, which can happen if the SDK is in [polling](https://developers.kameleoon.com/feature-management-and-experimentation/technical-considerations#polling) mode.
+errs.FeatureVariableNotFound    | This error indicates that the requested variable key has not been found. Check that the variable's key defined in the Kameleoon Platform matches the one in your code.
+errs.FeatureEnvironmentDisabled | This error indicates that the feature flag is disabled for the current environment.
+
+#### GetFeatureVariationVariables()
+
+<Note>
+Use [`GetVariation()`](#getvariation) instead.
+</Note>
+
+To retrieve all variables associated with a feature flag, you must call the `GetFeatureVariationVariables` method. This method requires two mandatory arguments: **featureKey** and **variationKey**. The method returns the data with the object type, as defined in the Kameleoon Platform.
+
+Don't forget to handle potential exceptions with proper error handling in your code. Check out the example code for guidance.
+
+```go
+featureKey := "test_feature_variables"
+variationKey := "on"
+
+if allVariables, err := s.client.GetFeatureVariationVariables(featureKey, variationKey); err == nil {
+	// your custom code
+} else {
+	// An error occurred; the feature flag or variation doesn't exist in the client configuration
+}
+```
+
+##### Arguments
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| featureKey | string | The key of the feature flag you want to obtain. This field is mandatory. |
+| variationKey | string | The key of the variation you want to obtain. This field is mandatory. |
+
+##### Return value
+
+| Type | Description |
+| ---- | ----------- |
+| map[string]interface{} | Data associated with this feature flag and variation. Possible values: string, bool, float64 or map[string]interface{} (depending on the type defined in the Kameleoon Platform). |
+
+##### Exceptions thrown
+
+Type                               | Description
+---------------------------------- | ------------
+errs.FeatureConfigNotFound      | This error indicates that the requested feature key could not be found in the SDK's internal configuration. This typically occurs when the feature flag has not yet been retrieved by the SDK, which can happen if the SDK is in [polling](https://developers.kameleoon.com/feature-management-and-experimentation/technical-considerations#polling) mode.
+errs.FeatureVariationNotFound   | This error indicates that the requested variation key could not be found in the SDK's internal configuration. This typically occurs when the feature flag has not yet been retrieved by the SDK, which can happen if the SDK is in [polling](https://developers.kameleoon.com/feature-management-and-experimentation/technical-considerations#polling) mode.
+errs.FeatureEnvironmentDisabled | This error indicates that the feature flag is disabled for the current environment.

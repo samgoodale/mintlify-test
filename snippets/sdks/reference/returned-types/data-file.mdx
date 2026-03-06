@@ -1,0 +1,18 @@
+
+<Select name={props.sec}>
+<div name="description">
+
+The <Code x={props.c.DataFile}/> contains the SDK configuration details.
+
+It can be extended with additional information if required by clients. If you need more details, please contact your Customer Success Manager.
+
+</div>
+
+<div name="arguments">
+
+| Name                                         | Type                                              | Description                                                         |
+| -------------------------------------------- | ------------------------------------------------- | ------------------------------------------------------------------- |
+| <Text x={props.c.DataFile.Params.FeatureFlags}/> | <Code x={props.c.DataFile.Params.FeatureFlags.Type}/> | A map of <CodeRef x={props.c.FeatureFlag}/> objects, keyed by feature flag keys. |
+
+</div>
+</Select>

@@ -1,0 +1,1866 @@
+---
+title: 'PHP SDK'
+---
+
+import { Select, Text, Bold, Italic, Code, CodeRef, Ref, If } from '/snippets/sdks/utils.mdx';
+import SharedDiv, { Shared } from '/snippets/sdks/shared.mdx';
+import CrossDeviceReconciliation from '/snippets/sdks/developer-guide/cross-device-reconciliation.mdx';
+import ActivatingAFeatureFlag from '/snippets/sdks/developer-guide/getting-started/activating-a-feature-flag.mdx';
+import TargetingConditions from '/snippets/sdks/developer-guide/targeting-conditions.mdx';
+import Logging from '/snippets/sdks/developer-guide/logging.mdx';
+import GetVariations from '/snippets/sdks/reference/feature-flags-and-variations/get-variations.mdx';
+import GetVariation from '/snippets/sdks/reference/feature-flags-and-variations/get-variation.mdx';
+import Geolocation from '/snippets/sdks/reference/data-types/geolocation.mdx';
+import Browser from '/snippets/sdks/reference/data-types/browser.mdx';
+import Conversion from '/snippets/sdks/reference/data-types/conversion.mdx';
+import TrackConversion from '/snippets/sdks/reference/goals/track-conversion.mdx';
+import AddData from '/snippets/sdks/reference/visitor-data/add-data.mdx';
+import SetForcedVariation from '/snippets/sdks/reference/feature-flags-and-variations/set-forced-variation.mdx';
+import EvaluateAudiences from '/snippets/sdks/reference/feature-flags-and-variations/evaluate-audiences.mdx';
+import GetDataFile from '/snippets/sdks/reference/feature-flags-and-variations/get-data-file.mdx';
+import GetFeatureList from '/snippets/sdks/reference/feature-flags-and-variations/get-feature-list.mdx';
+import GetEngineTrackingCode from '/snippets/sdks/reference/goals/get-engine-tracking-code.mdx';
+import CustomBucketingKey from '/snippets/sdks/developer-guide/custom-bucketing-key.mdx';
+import DataFile from '/snippets/sdks/reference/returned-types/data-file.mdx';
+import FeatureFlag from '/snippets/sdks/reference/returned-types/feature-flag.mdx';
+import Rule from '/snippets/sdks/reference/returned-types/rule.mdx';
+
+export const Context = {
+    IsServer: true,
+    IsSnakeCase: false,
+    Common: {
+        Null: "null",
+        True: "true",
+        False: "false",
+        String: "string",
+        Bool: "bool",
+        Float: "float",
+        Int: "int",
+        SDK: "PHP",
+    },
+    Params: {
+        VisitorCode: "visitorCode",
+        FeatureKey: "featureKey"
+    },
+    Exceptions: {
+        Language: "Exception",
+        Kameleoon: "KameleoonException",
+        VisitorCodeInvalid: "VisitorCodeInvalid",
+        FeatureNotFound: "FeatureNotFound",
+        FeatureEnvironmentDisabled: "FeatureEnvironmentDisabled",
+        FeatureExperimentNotFound: "FeatureExperimentNotFound",
+        FeatureVariationNotFound: "FeatureVariationNotFound",
+    },
+    Hook: {
+        UseData: "useData",
+    },
+    KameleoonClientConfig: {
+        Ref: "#additional-configuration",
+        TrackingInterval: { FileName: "<>" },
+        IsUniqueIdentifier: { Name: "<>" }
+    },
+    // kameleoon.data
+    Conversion: {
+        Name: "Conversion",
+        FullName: "Data\\Conversion",
+        Ref: "#conversion",
+        Params: {
+            GoalId: { Name: "goalId" },
+            Revenue: { Name: "revenue", Type: "float" },
+            Negative: { Name: "negative" },
+            Metadata: { Name: "metadata", Type: "?array<CustomData>", DefaultValue: "null" },
+        },
+    },
+    CustomData: {
+        Name: "CustomData",
+        FullName: "Data\\CustomData",
+        Ref: "#customdata"
+    },
+    UniqueIdentifier: {
+        Name: "UniqueIdentifier",
+        Ref: "#uniqueidentifier"
+    },
+    UserAgent: {
+        Name: "UserAgent",
+        FullName: "Data\\UserAgent",
+        Ref: "#useragent"
+    },
+    Geolocation: {
+        Name: "Geolocation",
+        Ref: "#geolocation",
+        Params: {
+            Region: { Type: "?string" },
+            City: { Type: "?string" },
+            PostalCode: { Name: "postalCode", Type: "?string" },
+            Latitude: { Type: "float" },
+            Longitude: { Type: "float" },
+        }
+    },
+    Browser: {
+        Name: "Browser",
+        Ref: "#browser",
+        Params: {
+            BrowserType: {
+                Name: "browserType",
+                Type: "int",
+                Chrome: "CHROME",
+                IE: "INTERNET_EXPLORER",
+                Firefox: "FIREFOX",
+                Safari: "SAFARI",
+                Opera: "OPERA",
+                Other: "OTHER"
+            },
+            Version: { Type: "float" },
+        },
+    },
+    // kameleoon.types
+    Variation: {
+        Name: "Variation",
+        FullName: "Types\\Variation",
+        Ref: "#variation"
+    },
+    DataFile: {
+        Name: "DataFile",
+        FullName: "Types\\DataFile",
+        Ref: "#datafile",
+        Params: {
+            FeatureFlags: { Name: "featureFlags", Type: "array<string, FeatureFlag>" },
+        }
+    },
+    FeatureFlag: {
+        Name: "FeatureFlag",
+        FullName: "Types\\FeatureFlag",
+        Ref: "#featureflag",
+        Params: {
+            EnvironmentEnabled: { Name: "isEnvironmentEnabled" },
+            Variations: { Name: "variations", Type: "array<string, Variation>" },
+            Rules: { Name: "rules", Type: "array<Rule>" },
+            DefaultVariationKey: { Name: "defaultVariationKey", Type: "string" },
+        }
+    },
+    Rule: {
+        Name: "Rule",
+        FullName: "Types\\Rule",
+        Ref: "#rule",
+        Params: {
+            Variations: { Name: "variations", Type: "array<string, Variation>" },
+        }
+    },
+    // methods
+    Flush: {
+        Name: "flush()",
+        Ref: "#flush",
+        Params: {
+            Instant: { Name: "instant" },
+        }
+    },
+    GetRemoteVisitorData: {
+        Name: "getRemoteVisitorData()",
+        Ref: "#getremotevisitordata",
+    },
+    GetVisitorCode: {
+        Name: "getVisitorCode()",
+        Ref: "#getvisitorcode",
+        Params: {
+            DefaultVisitorCode: { Name: "defaultVisitorCode" }
+        }
+    },
+    TrackConversion: {
+        Name: "trackConversion()",
+        Ref: "#trackconversion",
+        Params: {
+            GoalId: { Name: "goalId" },
+            Revenue: { Name: "revenue", Type: "float" },
+            IsUniqueIdentifier: { Name: "isUniqueIdentifier" },
+            Negative: { Name: "negative" },
+            Metadata: { Name: "metadata", Type: "?array<CustomData>", DefaultValue: "null" }
+        }
+    },
+    GetEngineTrackingCode: {
+        Name: "getEngineTrackingCode()",
+        Ref: "#getenginetrackingcode"
+    },
+    SetForcedVariation: {
+        Name: "setForcedVariation()",
+        Ref: "#setforcedvariation",
+        Params: {
+            ExperimentId: { Name: "experimentId" },
+            VariationKey: { Name: "variationKey", Type: "?string", RemVal: "null" },
+            ForceTargeting: { Name: "forceTargeting" },
+            Timeout: { Name: "timeout", Type: "?int", Default: "null" },
+        }
+    },
+    EvaluateAudiences: {
+        Name: "evaluateAudiences()",
+        Ref: "#evaluateaudiences",
+        Params: {
+            Timeout: { Name: "timeout", Type: "?int", Default: "null" },
+        }
+    },
+    IsFeatureActive: {
+        Name: "isFeatureActive()",
+        Ref: "#isfeatureactive"
+    },
+    GetVariation: {
+        Name: "getVariation()",
+        Ref: "#getvariation",
+        Return: "Variation",
+        Params: {
+            Track: { Name: "track" }
+        }
+    },
+    GetVariations: {
+        Name: "getVariations()",
+        Ref: "#getvariations",
+        Return: "array<string, Types\\Variation>",
+        Params: {
+            OnlyActive: { Name: "onlyActive" },
+            Track: { Name: "track" }
+        }
+    },
+    AddData: {
+        Name: "addData()",
+        Ref: "#adddata",
+        Params: {
+            Track: { Name: "track" },
+            Data: { Name: "data", Type: "...Data" }
+        }
+    },
+    GetFeatureList: {
+        Name: "getFeatureList()",
+        Ref: "#getfeaturelist",
+        Return: "array<string>",
+    },
+    GetDataFile: {
+        Name: "getDataFile()",
+        Ref: "#getdatafile",
+    },
+};
+
+With the PHP SDK, you can run experiments and activate feature flags on your back-end PHP server. Integrating our SDK into your web-application is easy, and its footprint ( memory and network usage) is low.
+
+**Getting started**: For help getting started, see the [Developer guide](#developer-guide).
+
+**Changelog**: Latest version of the PHP SDK: 4.19.0 [Changelog](https://github.com/Kameleoon/client-php/blob/master/CHANGELOG.md).
+
+**SDK methods**: For the full reference documentation of the PHP SDK, see the [reference](#reference) section.
+
+## Developer guide
+
+This guide is designed to help you integrate our SDK into your application code.
+
+### Getting started
+
+You should first install our SDK. Once uncompressed, you will see two directories: **kameleoon/** and **job/**.
+
+#### Installing the PHP client (Composer package)
+
+<Warning>
+Please carefully read the sections on [installing the cron job](#installing-the-cron-job) and [using the PHP SDK without a cron job](#using-the-php-sdk-without-a-cron-job).
+</Warning>
+
+The installation package is available on [Packagist](https://packagist.org/packages/kameleoon/kameleoon-client-php). You can install the PHP SDK by adding it as a dependency using Composer:
+
+```json
+{
+  "require": {
+    "kameleoon/kameleoon-client-php": "^4.18.0"
+  }
+}
+```
+Finally, execute the following command to regenerate the autoloader:
+
+```bash
+composer install
+```
+
+#### Installing the cron job
+
+<Tip>
+We strongly recommend setting up a cron job. However, if you are unable to install it, refer to [using the PHP SDK without a cron job](#using-the-php-sdk-without-a-cron-job) for guidance.
+</Tip>
+
+The **job/** directory corresponds to a job that must be executed via a standard job scheduler (like cron). To ensure full functionality of the PHP SDK, installing and running the cron job worker is **mandatory**. Without it, tracking will **not** work, ie no data will be collected and displayed in Kameleoon dashboard for the experiments.
+
+We suggest installing the script at `/usr/local/opt/kameleoon/kameleoon-client-php-process-queries.sh` and using our default supplied crontab entry. However, you can install it in another location and modify the crontab entry accordingly.
+
+##### Using the PHP SDK without a cron job
+
+If you cannot install the cron job, you can use Kameleoon in [hybrid mode](/core-concepts/hybrid-experimentation) to benefit from the Kameleoon Application Engine's, `engine.js` (previously named, `kameleoon.js`) tracking capabilities. Our SDK provides the [`getEngineTrackingCode()`](#getenginetrackingcode) method, which sends exposure events to Kameleoon or any other analytics solution you use on your website.
+
+<Warning>
+This approach **does not replace** the need for the cron job when it comes to data collection by the SDK. It is merely a way to collect tracking data from the **client-side** using the front-end engine.
+In other words, the **only** way for the PHP SDK to collect and process experiment data server-side is through the **cron job**.
+The hybrid mode is useful for tracking purposes, but **does not enable backend data collection**.
+</Warning>
+
+#### Additional configuration
+
+You can customize the behavior of the PHP SDK via a configuration file. We provide a sample configuration file named `client-php.json.sample` in the SDK archive. You can also [download a sample configuration](./assets/client%20configs/client-php.json) file. We suggest to install this file to the default path of `/tmp/kameleoon/client-php.json`. The following table shows the available properties that you can set:
+
+| Key | Description | Default value |
+| --- | ----------- | ------------- |
+| `clientId` / `client_id` _(required)_        | Required for authentication to the Kameleoon service. To find your `client_id`, see the [API credentials](https://help.kameleoon.com/api-credentials/) documentation. | |
+| `clientSecret` / `client_secret` _(required)_   | Required for authentication to the Kameleoon service. To find your `client_secret`, see the [API credentials](https://help.kameleoon.com/api-credentials/) documentation. | |
+| `kameleoonWorkDir` / `kameleoon_work_dir` _(optional)_ | Specifies a working directory for the PHP client (which will create files in this directory). The directory needs to be writable by the PHP user.| `/tmp/kameleoon/client-php/`|
+| `refreshIntervalMinute` / `refresh_interval_minute` _(optional)_  | Specifies the refresh interval, in minutes, that the SDK fetches the configuration for the active experiments and feature flags. The value determines the maximum time it takes to propagate changes, such as activating or deactivating feature flags or launching experiments, to your production servers. | `60` minutes |
+| `defaultTimeoutMillisecond` / `default_timeout_millisecond` _(optional)_  | Specifies the timeout, in milliseconds, for network requests from the SDK. Set the value to `30` seconds or more if you do not have a stable connection. Some methods have an additional parameter that you can use to override the default timeout for that particular method. If you do not specify the timeout for a method explicitly, the SDK uses this default value. | `10000` milliseconds |
+| `cookieOptions->topLevelDomain` / `cookie_options.domain` _(required in hybrid mode)_ | The current top-level domain for your website . Use the format: `example.com`. Don't include `https://`, `www`, or other subdomains. Kameleoon uses this information to set the corresponding cookie on the top-level domain. | `null` |
+| `cookieOptions->secure` / `cookie_options.secure` _(optional)_ | Controls the **Secure** cookie attribute. | `false` |
+| `cookieOptions->httpOnly` / `cookie_options.http_only` _(optional)_ | Controls the **HttpOnly** cookie attribute. | `false` |
+| `cookieOptions->sameSite` / `cookie_options.samesite` _(optional)_ | Controls the **SameSite** cookie attribute. | `Lax` |
+| `environment` / `environment` _(optional)_ | Environment from which the feature flag’s configuration is to be used. The value can be `production`, `staging`, `development`. See the [managing environments](https://help.kameleoon.com/manage-environments/) article for details. [More information](https://www.kameleoon.com/en/blog/configure-your-feature-flags-and-launch-your-releases-using-next-level-multi-environment) | `production` |
+| `networkDomain` / `network_domain` _(optional)_ | <Text x={Shared.ExternalConfigFile.NetworkDomain}/> | `null` |
+| `debugMode` / `debug_mode` _(deprecated)_ | The parameter sends additional information to our tracking servers to help analyze issues. It should usually be off (**false**), but activating it (**true**) has no impact on SDK performance. This field is deprecated and will be removed in SDK version `5.0.0`. Use [`KameleoonLogger::setLogLevel`](#log-levels) instead. | `false` |
+
+<Note>
+If you do not use the default path (`/tmp/kameleoon/client-php.json`) for the configuration file, you will need to:
+
+- pass your configuration file's path as a third argument to the `KameleoonClientFactory::create()` method;
+- modify your crontab entry to add the --conf argument to the job script (so, for instance, it would be `bash /usr/local/opt/bin/kameleoon-client-php-process-queries.sh --conf /my/path/kameleoon.json`).
+</Note>
+
+<Note>
+To learn more about `client_id` and `client_secret`, and how to obtain them, refer to the [API credentials](https://help.kameleoon.com/api-credentials) article. Note that the Kameleoon PHP SDK uses the Automation API and follows the OAuth 2.0 client credentials flow.
+</Note>
+
+#### Initializing the Kameleoon client
+
+After installing the SDK into your application and configuring the correct credentials (in `/tmp/kameleoon/client-php.json`), the next step is to create the Kameleoon client in your application code. For example:
+
+```php
+require "vendor/autoload.php";
+
+use Kameleoon\KameleoonClientConfig;
+use Kameleoon\KameleoonClientFactory;
+use Kameleoon\Exception\ConfigCredentialsInvalid;
+use Kameleoon\Exception\KameleoonException;
+use Kameleoon\Exception\SiteCodeIsEmpty;
+
+$siteCode = "a8st4f59bj";
+
+try {
+    // Read from default configuration path: "/tmp/kameleoon/php-client/"
+    $kameleoonClient = KameleoonClientFactory::create($siteCode);
+} catch (SiteCodeIsEmpty $ex) {
+    // indicates that provided site code is empty
+} catch (ConfigCredentialsInvalid $ex) {
+    // indicates that provided clientId / clientSecret are not valid
+} catch (KameleoonException $ex) {
+    // probably indicates that the SDK is unable to access the **Kameleoon working directory**
+}
+
+try {
+    $kameleoonClient = KameleoonClientFactory::create($siteCode, "custom/file/path/client-php.json");
+} catch (SiteCodeIsEmpty $ex) {
+    // indicates that provided site code is empty
+} catch (ConfigCredentialsInvalid $ex) {
+    // indicates that provided clientId / clientSecret are not valid
+} catch (KameleoonException $ex) {
+    // probably indicates that the SDK is unable to access the **Kameleoon working directory**
+}
+
+try {
+    $cookieOptions = KameleoonClientConfig::createCookieOptions(
+        "example.com", // domain: optional, but strictly recommended
+        false, // secure: optional (false by default)
+        false, // httponly: optional (false by default)
+        "Lax" // samesite: optional (Lax by default)
+    );
+    $config = new KameleoonClientConfig(
+        "<clientId>", // clientId: mandatory
+        "<clientSecret>", // clientSecret: mandatory
+        "/tmp/kameleoon/php-client/", // kameleoonWorkDir: optional / ("/tmp/kameleoon/php-client/" by default)
+        60, // refreshIntervalMinute: in minutes, optional (60 minutes by default)
+        10_000, // defaultTimeoutMillisecond: in milliseconds, optional (10_000 ms by default)
+        false, // debugMode: optional (false by default)
+        $cookieOptions, // cookieOptions: optional
+        "development", // environment: optional ("production" by default)
+        "example.com", // networkDomain: optional (null by default)
+    );
+    $kameleoonClient = KameleoonClientFactory::createWithConfig($siteCode, $config);
+} catch (SiteCodeIsEmpty $ex) {
+    // indicates that provided site code is empty
+} catch (ConfigCredentialsInvalid $ex) {
+    // indicates that provided clientId / clientSecret are not valid
+} catch (KameleoonException $ex) {
+    // probably indicates that the SDK is unable to access the **Kameleoon working directory**
+}
+```
+
+A KameleoonClient is a singleton object that acts as a bridge between your application and the Kameleoon platform. It includes all the methods and properties you need to run an experiment. Note that the SDK takes its settings from a [configuration file.](#additional-configuration) By default, the path `/tmp/kameleoon/client-php.json` will be used, but you can use a different path for the configuration file by providing an optional third argument to the `KameleoonClientFactory::create()` method.
+
+<Note>
+It's your responsibility as the application developer to use correct logic in your application code within the context of A/B testing via Kameleoon. A good practice is to always assume that the current visitor can be left out of the experiment because the experiment has not yet been launched. Leaving out the current visitor is simple, as it corresponds to the implementation of the default / reference variation logic. The code samples in the next paragraph show examples of such an approach.
+</Note>
+
+#### Activating a feature flag
+
+##### Assigning a unique ID to a user
+
+<ActivatingAFeatureFlag sec="assigning_a_unique_id_to_a_user" c={Context}/>
+
+##### Retrieving a flag configuration
+
+<ActivatingAFeatureFlag sec="retrieving_a_feature_flag_configuration___cron_job_interval_tracking" c={Context}/>
+
+##### Adding data points to target a user or filter / breakdown visits in reports
+
+<ActivatingAFeatureFlag sec="adding_data_points_to_target_a_user_or_filter_breakdown_visits_in_reports___server" c={Context}/>
+
+##### Tracking goal conversions
+
+<ActivatingAFeatureFlag sec="tracking_goal_conversions___param___cron_job_interval_tracking" c={Context}/>
+
+##### Sending events to analytics solutions
+
+<ActivatingAFeatureFlag sec="sending_events_to_analytics_solutions" c={Context}/>
+
+### Cross-device experimentation
+
+<CrossDeviceReconciliation sec="cross_device_experimentation" c={Context}/>
+
+#### Synchronizing custom data across devices
+
+<CrossDeviceReconciliation sec="synchronizing_custom_data" c={Context}/>
+
+```php
+// In this example, Custom data with index `90` was set to "Visitor" scope on Kameleoon.
+const VISITOR_SCOPE_CUSTOM_DATA_INDEX = 90;
+
+$kameleoonClient->addData($visitorCode, new CustomData(VISITOR_SCOPE_CUSTOM_DATA_INDEX, "your data"));
+$kameleoonClient->flush($visitorCode);
+```
+
+```php
+// Call the `getRemoteVisitorData` method before working with the data.
+$kameleoonClient->getRemoteVisitorData($visitorCode);
+
+// After the call, the SDK on Device B will have access to CustomData of Visitor scope defined on Device A.
+// So, "your data" will be available to target and track the visitor.
+```
+
+#### Using custom data for session merging
+
+<CrossDeviceReconciliation sec="using_custom_data_session_merging" c={Context}/>
+
+```php
+// In this example, `91` represents the Custom Data's index
+// configured as a unique identifier in Kameleoon.
+const MAPPING_INDEX = 91;
+const FEATURE_KEY = "ff123";
+
+// 1. Before the visitor is authenticated
+
+// Retrieve the variation for an unauthenticated visitor.
+// Assume `anonymousVisitorCode` is the randomly generated ID for that visitor.
+$anonymousVariation = $kameleoonClient->getVariation($anonymousVisitorCode, FEATURE_KEY);
+
+// 2. After the visitor is authenticated
+
+// Assume `userId` is the authenticates visitor's visitor code.
+$kameleoonClient->addData($anonymousVisitorCode, new CustomData(MAPPING_INDEX, $userId));
+$kameleoonClient->flush($anonymousVisitorCode, null, null, true);
+
+// Indicate that `userId` is a unique identifier.
+$kameleoonClient->addData($userId, new UniqueIdentifier(true));
+
+// 3. After the visitor has been authenticated
+
+// Retrieve the variation for the `userId`, which will match the anonymous visitor code's variation.
+$userVariation = $kameleoonClient->getVariation($userId, FEATURE_KEY);
+$isSameVariation = $userVariation->key == $anonymousVariation->key; // true
+
+// The `userId` and `anonymousVisitorCode` are now linked and tracked as a single visitor.
+$kameleoonClient->trackConversion($userId, 123, 10.0);
+
+// Additionally, the linked visitors will share all fetched remote visitor data.
+$kameleoonClient->getRemoteVisitorData($userId);
+```
+
+<CrossDeviceReconciliation sec="cross_device_visitor_code" c={Context}/>
+
+### Using a custom bucketing key
+
+<CustomBucketingKey sec="description" c={Context}/>
+
+#### Use cases
+
+<CustomBucketingKey sec="use_cases" c={Context}/>
+
+#### Technical details
+
+<CustomBucketingKey sec="technical_details_1" c={Context}/>
+
+```php
+$kameleoonClient->addData($visitorCode, new Kameleoon\Data\CustomData(1, "newVisitorCode"));
+```
+
+<CustomBucketingKey sec="technical_details_2" c={Context}/>
+
+#### Technical requirementes
+
+<CustomBucketingKey sec="technical_requirements" c={Context}/>
+
+### Targeting conditions
+
+<TargetingConditions sec="targeting_conditons_description" c={Context}/>
+
+### Logging
+
+<Logging sec="logging" c={Context}/>
+
+#### Log levels
+
+<Logging sec="log_levels" c={Context}/>
+
+```php
+use Kameleoon\logging\KameleoonLogger;
+use Kameleoon\logging\LogLevel;
+
+// The `NONE` log level does not allow logging.
+KameleoonLogger::setLogger(LogLevel::NONE);
+
+// The `ERROR` log level only allows logging issues that may affect the SDK's primary behavior.
+KameleoonLogger::setLogger(LogLevel::ERROR);
+
+// The `WARNING` log level allows logging issues which may require additional attention.
+// It extends the `ERROR` log level.
+// The `WARNING` log level is a default log level.
+KameleoonLogger::setLogger(LogLevel::WARNING);
+
+// The `INFO` log level allows logging general information on the SDK's internal processes.
+// It extends the `WARNING` log level.
+KameleoonLogger::setLogger(LogLevel::INFO);
+
+// The `DEBUG` level logs additional details about the SDK’s internal processes and extends the `INFO` level
+// with more granular. diagnostic output.
+// This information is not intended for end-user interpretation but can be sent to our support team
+// to assist with internal troubleshooting.
+KameleoonLogger::setLogger(LogLevel::DEBUG);
+```
+
+#### Custom handling of logs
+
+<Logging sec="custom_handling_of_logs" c={Context}/>
+
+```php
+use Kameleoon\logging\KameleoonLogger;
+use Kameleoon\logging\Logger;
+use Kameleoon\logging\LogLevel;
+use Monolog\Logger as MonologLogger;
+
+public class CustomLogger implements Logger {
+    // Monolog logger
+    private MonologLogger $inner;
+
+    public function __construct(MonologLogger $inner)
+    {
+        $this->inner = $inner;
+    }
+
+    // `log` method accepts logs from the SDK
+    public function log($level, string $message): void
+    {
+        // Custom log handling logic here. For example:
+        switch ($level) {
+            case LogLevel::ERROR:
+                $this->inner->error($message);
+                break;
+            case LogLevel::WARNING:
+                $this->inner->warning($message);
+                break;
+            case LogLevel::INFO:
+                $this->inner->info($message);
+                break;
+            case LogLevel::DEBUG:
+                $this->inner->debug($message);
+                break;
+        }
+    }
+}
+
+// Log level filtering is applied separately from log handling logic.
+// The custom logger will only accept logs that meet or exceed the specified log level.
+// Ensure the log level is set correctly.
+KameleoonLogger::setLogLevel(LogLevel::DEBUG); // Optional; defaults to `LogLevel::WARNING`.
+KameleoonLogger::setLogger(new CustomLogger($inner));
+```
+
+## Reference
+
+This is a full reference documentation of the PHP SDK.
+
+### Initialization
+
+#### create()
+This method in `Kameleoon\KameleoonClientFactory` creates a `KameleoonClient` instance by providing your SDK configuration in a configuration file. You need to initialize the SDK by creating this instance of `KameleoonClient` before you can use other SDK methods. All interactions with the SDK use this `KameleoonClient` instance. To provide the configuration as a `KameleoonClientConfig` object instead, see the [`createWithConfig`](#createWithConfig) method.
+
+```php
+require "vendor/autoload.php";
+
+use Kameleoon\KameleoonClientFactory;
+use Kameleoon\Exception\ConfigCredentialsInvalid;
+use Kameleoon\Exception\KameleoonException;
+use Kameleoon\Exception\SiteCodeIsEmpty;
+
+$siteCode = "a8st4f59bj";
+
+try {
+    // Read from default configuration path: "/tmp/kameleoon/php-client/"
+    $kameleoonClient = KameleoonClientFactory::create($siteCode);
+} catch (SiteCodeIsEmpty $ex) {
+    // indicates that provided site code is empty
+} catch (ConfigCredentialsInvalid $ex) {
+    // indicates that provided clientId / clientSecret are not valid
+} catch (KameleoonException $ex) {
+    // probably indicates that the SDK is unable to access the **Kameleoon working directory**
+}
+
+try {
+    $kameleoonClient = KameleoonClientFactory::create($siteCode, "custom/file/path/client-php.json");
+} catch (SiteCodeIsEmpty $ex) {
+    // indicates that provided site code is empty
+} catch (ConfigCredentialsInvalid $ex) {
+    // indicates that provided clientId / clientSecret are not valid
+} catch (KameleoonException $ex) {
+    // probably indicates that the SDK is unable to access the **Kameleoon working directory**
+}
+```
+
+##### Arguments
+
+| Name | Type | Description |
+| -------- | ------- | ----------- |
+| siteCode | String | This is a [unique key](https://help.kameleoon.com/question/how-do-i-find-my-site-id/) of the Kameleoon project you are using with the SDK. This field is mandatory.|
+|configurationFilePath | String | Path to the SDK configuration file. This field is optional and set to `/tmp/kameleoon/client-php.json` by default.|
+
+##### Return value
+
+|Type | Description |
+|-------- | ------- |
+| Kameleoon\KameleoonClient | An instance of the **KameleoonClient** class that will be used to manage your experiments and feature flags.|
+
+##### Exceptions thrown
+
+| Type | Description |
+|-------- | -------  |
+| SiteCodeIsEmpty  | Exception indicating that the requested credentials were not provided (either using the configuration file or the config parameter in the method).|
+| ConfigCredentialsInvalid  | Exception indicating that the requested credentials were not provided (either using the configuration file or the config parameter in the method).|
+| KameleoonException | Exception that may indicate that the SDK is unable to access the **Kameleoon working directory**. |
+
+#### createWithConfig()
+
+This method in `Kameleoon\KameleoonClientFactory` creates a `KameleoonClient` instance and allows you to pass your SDK configuration in a `KameleoonClientConfig` object. You need to initialize the SDK by creating this `KameleoonClient` instance before you can use other SDK methods. All interactions with the SDK use this `KameleoonClient` instance. To provide your SDK configuration in a file instead, use the [`create`](#create) method.
+
+```php
+require "vendor/autoload.php";
+
+use Kameleoon\KameleoonClientConfig;
+use Kameleoon\KameleoonClientFactory;
+use Kameleoon\Exception\ConfigCredentialsInvalid;
+use Kameleoon\Exception\KameleoonException;
+use Kameleoon\Exception\SiteCodeIsEmpty;
+
+$siteCode = "a8st4f59bj";
+
+try {
+    $cookieOptions = KameleoonClientConfig::createCookieOptions(
+        "example.com", // domain: optional, but strictly recommended
+        false, // secure: optional (false by default)
+        false, // httponly: optional (false by default)
+        "Lax" // samesite: optional (Lax by default)
+    );
+    $config = new KameleoonClientConfig(
+        "<clientId>", // clientId: mandatory
+        "<clientSecret>", // clientSecret: mandatory
+        "/tmp/kameleoon/php-client/", // kameleoonWorkDir: optional / ("/tmp/kameleoon/php-client/" by default)
+        60, // refreshIntervalMinute: in minutes, optional (60 minutes by default)
+        10_000, // defaultTimeoutMillisecond: in milliseconds, optional (10_000 ms by default)
+        false, // debugMode: optional (false by default)
+        $cookieOptions, // cookieOptions: optional
+        "development", // environment: optional ("production" by default)
+        "example.com", // networkDomain: optional (null by default)
+    );
+    $kameleoonClient = KameleoonClientFactory::create($siteCode, $config);
+} catch (SiteCodeIsEmpty $ex) {
+    // indicates that provided site code is empty
+} catch (ConfigCredentialsInvalid $ex) {
+    // indicates that provided clientId / clientSecret are not valid
+} catch (KameleoonException $ex) {
+    // probably indicates that the SDK is unable to access the **Kameleoon working directory**
+}
+```
+
+##### Arguments
+
+| Name | Type | Description |
+|-------- | ------- | ----------- |
+| siteCode | String | Code of the website you want to run experiments on. This unique code ID can be found in the Kameleoon app. This field is mandatory.|
+| kameleoonConfig | KameleoonClientConfig |  Configuration SDK object that you pass. This field is optional.|
+
+##### Return value
+
+| Type | Description |
+| -------- | ------- |
+| KameleoonClient | An instance of the **KameleoonClient** class that you use to manage your experiments and feature flags.|
+
+##### Exceptions thrown
+
+| Type | Description |
+|-------- | -------  |
+| SiteCodeIsEmpty  | Exception indicating that the requested credentials were not provided (either using the configuration file or the config parameter in the method).|
+| ConfigCredentialsInvalid  | Exception indicating that the requested credentials were not provided (either using the configuration file or the config parameter in the method).|
+| KameleoonException | Exception that may indicate that the SDK is unable to access the **Kameleoon working directory**. |
+
+### Feature flags and variations
+
+#### isFeatureActive()
+
+- 📨 _Sends Tracking Data to Kameleoon (depending on the `track` parameter)_
+
+<Note>
+This method was previously called `activateFeature`, which was removed in SDK version `4.0.0`.
+</Note>
+
+This method takes a **visitorCode** and **featureKey** as mandatory arguments to check if the specified feature will be active for a given user.
+
+If such a user has never been associated with this feature flag, the SDK returns a boolean value randomly (**true** if the user should have this feature or **false** if not). If a user with a given **visitorCode** is already registered with this feature flag, it will detect the previous **FeatureFlag** value.
+
+You have to make sure that proper error handling is set up in your code as shown in the example to the right to catch potential exceptions.
+
+If you specify a `visitorCode`, the `isFeatureActive()` method uses it as the unique visitor identifier, which is useful for [cross-device experimentation](https://developers.kameleoon.com/feature-management-and-experimentation/use-external-data-to-target-users). When you specify a `visitorCode` and set the `isUniqueIdentifier` parameter to `true`, the SDK links the flushed data with the visitor associated with the specified identifier.
+
+<Note>
+The parameter `isUniqueIdentifier` is deprecated. Please use [`UniqueIdentifier`](#uniqueidentifier) instead.
+
+The `isUniqueIdentifier` can also be useful in other edge-case scenarios, such as when you can't access the anonymous `visitorCode` that was originally assigned to the visitor, but you do have access to an internal ID that is connected to the anonymous visitor using session merging capabilities.
+</Note>
+
+```php
+$visitorCode = $kameleoonClient->getVisitorCode();
+$featureKey = "new_checkout";
+$hasNewCheckout = false;
+
+try {
+    $hasNewCheckout = $kameleoonClient->isFeatureActive($visitorCode, $featureKey, $timeout);
+    // disabling tracking
+    $hasNewCheckout = $kameleoonClient->isFeatureActive($visitorCode, $featureKey, $timeout, null, false);
+} catch (Kameleoon\Exception\FeatureNotFound $e) {
+    // Feature toggle not yet activated on Kameleoon's side - we consider the feature inactive.
+    $hasNewCheckout = false;
+} catch (Kameleoon\Exception\VisitorCodeInvalid $e) {
+    // VisitorCode, which you passed to a method, is invalid and can't be accepted.
+} catch (Kameleoon\Exception\DataFileInvalid $e) {
+    // It appears that the configuration has not been loaded and
+    // there is no previously saved version of the configuration available.
+} catch (Exception $e) {
+    // This is a generic Exception handler which will handle all exceptions.
+    echo "Exception: ",  $e->getMessage(), "\n";
+}
+if ($hasNewCheckout) {
+    // Implement new checkout code here.
+}
+```
+
+##### Arguments
+
+| Name | Type | Description |
+|-------- | ------- | ----------- |
+| visitorCode | string | Unique identifier of the user. This field is mandatory.|
+|featureKey | string | Key of the feature you want to expose to a user. This field is mandatory.|
+|timeout | ?int | Timeout (in milliseconds). This parameter specifies the maximum amount of time the method can block to wait for a result. This field is optional. If a timeout value is not provided, the SDK uses the [`default_timeout`](#additional-configuration) specified in your configuration.|
+| isUniqueIdentifier (Deprecated) | ?bool | An optional parameter for specifying if the visitorCode is a unique identifier. If not provided, the default value is `null`. The field is optional.|
+| track | bool | An optional parameter to enable or disable tracking of the feature evaluation (`true` by default). |
+
+##### Return value
+
+| Type | Description |
+|-------- | -------  |
+| bool | Value of the feature that is registered for a given **visitorCode**. |
+
+##### Exceptions thrown
+
+| Type | Description |
+| -------- | ------- |
+| FeatureNotFound  | Exception indicating that the requested feature ID has not been found in the internal configuration of the SDK. This is usually normal and means that the feature flag has not yet been activated on Kameleoon's side (but code implementing the feature is already deployed on the web-application's side). |
+| VisitorCodeInvalid | Exception indicating that the provided visitor code is not valid (empty, or longer than 255 characters).|
+|DataFileInvalid | Exception indicating that the configuration has not been loaded and there is no previously saved version of the configuration available.|
+
+#### getVariation()
+<GetVariation sec="description" c={Context}/>
+
+```php
+$featureKey = "new_checkout";
+
+try {
+    $variation = $kameleoonClient->getVariation($visitorCode, $featureKey);
+    // disabling tracking
+    $variation = $kameleoonClient->getVariation($visitorCode, $featureKey, false);
+} catch (Kameleoon\Exception\FeatureNotFound $e) {
+    // An error has occurred; the feature flag isn't found in the current configuration.
+} catch (Kameleoon\Exception\FeatureEnvironmentDisabled $e) {
+    // The feature flag is disabled for the environment.
+} catch (Kameleoon\Exception\VisitorCodeInvalid $e) {
+    // The visitor code you passed to the method is invalid and can't be accepted by the SDK.
+}
+
+// Fetch a variable value for the assigned variation
+$title = $variation->variables["title"]->value;
+
+switch ($variation->key) {
+    case "on":
+        // Main variation key is selected for visitorCode
+        break;
+    case "alternative_variation":
+        // Alternative variation key
+        break;
+    default:
+        // Default variation key
+        break;
+}
+```
+
+##### Arguments
+<GetVariation sec="arguments" c={Context}/>
+
+##### Return value
+<GetVariation sec="return_value" c={Context}/>
+
+##### Exceptions thrown
+<GetVariation sec="exceptions" c={Context}/>
+
+#### getVariations()
+<GetVariations sec="description" c={Context}/>
+
+```php
+try {
+    $variations = $kameleoonClient->getVariations($visitorCode);
+    // only active variations
+    $variations = $kameleoonClient->getVariations($visitorCode, true);
+    // disable tracking
+    $variations = $kameleoonClient->getVariations($visitorCode, $onlyActive, false);
+} catch (Kameleoon\Exception\VisitorCodeInvalid $e) {
+    // Handle exception
+}
+```
+
+##### Arguments
+<GetVariations sec="arguments" c={Context}/>
+
+##### Return value
+<GetVariations sec="return_value" c={Context}/>
+
+##### Exceptions thrown
+<GetVariations sec="exceptions" c={Context}/>
+
+#### getFeatureList()
+
+<GetFeatureList sec="description" c={Context}/>
+
+```php
+$arrayFeatureKeys = $kameleoonClient->getFeatureList();
+```
+
+##### Arguments
+
+| Name | Type | Description |
+|------|------|-------------|
+| timeout _(optional)_ | `?int` | Timeout (in milliseconds). This parameter specifies the maximum amount of time the method can block to wait for a result. If a timeout value is not provided, the SDK uses the [`default_timeout`](#additional-configuration) specified in your configuration.
+
+##### Return value
+
+<GetFeatureList sec="return_value" c={Context}/>
+
+#### setForcedVariation()
+
+<SetForcedVariation sec="description" c={Context}/>
+
+```php
+$experimentId = 9516;
+try {
+    // Forcing the variation "on" for the experiment 9516 for the visitor
+    $kameleoonClient->setForcedVariation($visitorCode, $experimentId, "on");
+
+    // Forcing the variation "on" while preserving segmentation and targeting conditions during the experiment
+    $kameleoonClient->setForcedVariation($visitorCode, $experimentId, "on", false);
+
+    // Resetting the forced variation for the experiment 9516 for the visitor
+    $kameleoonClient->setForcedVariation($visitorCode, $experimentId, null);
+} catch (Kameleoon\Exception\KameleoonException $e) {
+    // Handling the error
+}
+```
+
+##### Arguments
+
+<SetForcedVariation sec="arguments" c={Context}/>
+
+##### Exceptions thrown
+
+<SetForcedVariation sec="exceptions" c={Context}/>
+
+#### evaluateAudiences()
+
+<EvaluateAudiences sec="description" c={Context}/>
+
+```php
+try {
+    $kameleoonClient->evaluateAudiences($visitorCode);
+} catch (Kameleoon\Exception\KameleoonException $e) {
+    // Handling the exception
+}
+```
+
+##### Arguments
+
+<EvaluateAudiences sec="arguments" c={Context}/>
+
+##### Exceptions thrown
+
+<EvaluateAudiences sec="exceptions" c={Context}/>
+
+#### getDataFile()
+
+<GetDataFile sec="tip_qa" c={Context}/>
+
+<GetDataFile sec="description" c={Context}/>
+
+```php
+try {
+    $dataFile = $kameleoonClient->getDataFile();
+} catch (Kameleoon\Exception\KameleoonException $e) {
+    // Recommended (but optional) safeguard for unexpected exceptions from third-party libraries
+}
+```
+
+##### Arguments
+
+| Name | Type | Description |
+|------|------|-------------|
+| timeout _(optional)_ | `?int` | Timeout (in milliseconds). This parameter specifies the maximum amount of time the method can block to wait for a result. If a timeout value is not provided, the SDK uses the [`default_timeout`](#additional-configuration) specified in your configuration.
+
+##### Return value
+
+<GetDataFile sec="return_value" c={Context}/>
+
+### Visitor data
+
+#### getVisitorCode()
+
+<Note>
+This method was previously called `obtainVisitorCode`, which was removed in SDK version `4.0.0`.
+</Note>
+
+Call this method to obtain the Kameleoon **visitorCode** for the current visitor. Calling is especially important when using Kameleoon in a mixed front-end and back-end environment, where user identification consistency must be guaranteed. The implementation logic is described here:
+
+1. First, we check if there is a **kameleoonVisitorCode** cookie or query parameter associated with the current HTTP request. If so, we use this as the visitor identifier.
+
+2. If no cookie or parameter is present in the current request, we have two options for generating an identifier. One option is to create a new identifier randomly, and the other is to use the **defaultVisitorCode** argument if it has been provided. This feature allows our customers to input their own identifiers as visitor codes, which can be beneficial; it seamlessly matches Kameleoon visitors with their own users, eliminating the need for extra look-ups in a matching table.
+
+3. In any case, the server-side (via HTTP header) **kameleoonVisitorCode** cookie is set with the value. The method returns this visitor value.
+
+<!-- TODO: link -->
+For more information, refer to [this article](/core-concepts/hybrid-experimentation/).
+
+<Note>
+If you provide your own `visitorCode`, its uniqueness must be guaranteed on your end - the SDK cannot check it. Also note that the length of `visitorCode` is limited to **255** characters. Any excess characters will throw an exception.
+</Note>
+
+<SharedDiv sec="get_visitor_code_simulated" c={Context}/>
+
+```php
+require "vendor/autoload.php";
+
+// The cookie's domain must be provided in the configuration file if no argument is given.
+
+$visitorCode = $kameleoonClient->getVisitorCode();
+
+// default visitor code provided
+$visitorCode = $kameleoonClient->getVisitorCode($defaultVisitorCode);
+```
+
+##### Arguments
+
+| Name | Type | Description    |
+|-------- | ------- | ----------- |
+|defaultVisitorCode | String | This parameter will be used as the **visitorCode** if no existing **kameleoonVisitorCode** cookie is found on the request. This field is optional, and, by default, a random **visitorCode** will be generated.|
+|timeout | ?int | Timeout (in milliseconds). This parameter specifies the maximum amount of time the method can block to wait for a result. This field is optional. If a timeout value is not provided, the SDK uses the [`default_timeout`](#additional-configuration) specified in your configuration. |
+
+##### Return value
+
+| Type | Description |
+|-------- | -------  |
+|String | A **visitorCode** that will be associated with this particular user and should be used with most of the methods of the SDK.|
+
+##### Exceptions thrown
+
+|Type | Description |
+|-------- | ------- |
+| InvalidArgumentException  | Exception indicating that the cookie's domain value was not provided (either via the configuration file, or via the **topLevelDomain** parameter on the method).|
+
+#### addData()
+<AddData sec="description" c={Context}/>
+
+```php
+// Add a single data item (tracked by default)
+$kameleoonClient->addData($visitorCode, new Kameleoon\Data\Browser(Kameleoon\Data\Browser::CHROME));
+
+// Add multiple data items (tracked by default)
+$kameleoonClient->addData(
+    $visitorCode,
+    new Kameleoon\Data\PageView("https://url.com", "title", [3]),
+    new Kameleoon\Data\UserAgent("UserAgent")
+);
+
+// Add multiple data items stored locally for targeting only (not sent to the Kameleoon Data API)
+$kameleoonClient->addData(
+    $visitorCode,
+    false,
+    new Kameleoon\Data\PageView("https://url.com", "title", [3]),
+    new Kameleoon\Data\UserAgent("UserAgent")
+);
+```
+
+##### Arguments
+<AddData sec="arguments_track" c={Context}/>
+
+##### Exceptions
+<AddData sec="exceptions" c={Context}/>
+
+#### flush()
+
+- 📨 _Sends Tracking Data to Kameleoon_
+
+The `flush()` method is responsible for sending the Kameleoon data linked to a specific visitor. It triggers a tracking request that includes all the data previously added with the `addData` method, which has not yet been sent during an earlier call to [one of the methods](/feature-management-and-experimentation/faq#when-does-the-sdk-send-a-tracking-request-for-analytics). `flush()` is non-blocking, as the server call is made asynchronously, unless the `instant` parameter is set to `true`.
+
+The `flush()` function lets you decide when the data linked to a specific `visitorCode` is sent to our servers. For example, if you call `addData()` multiple times—say a dozen times—it would be inefficient to send data to the server every time you perform a call. Instead, you can gather all your data first and then call `flush()` once at the end to send everything at once.
+
+If you specify a `visitorCode`, the `flush()` method uses it as the unique visitor identifier, which is useful for [cross-device experimentation](/core-concepts/cross-device-experimentation). When you specify a `visitorCode` and set the `isUniqueIdentifier` parameter to `true`, the SDK links the flushed data with the visitor associated with the specified identifier.
+
+<Note>
+The parameter `isUniqueIdentifier` is deprecated. Please use [`UniqueIdentifier`](#uniqueidentifier) instead.
+
+The `isUniqueIdentifier` can be helpful in unique situations; for example, if you cannot access the anonymous `visitorCode` given to a visitor, but you can use an internal ID linked to that visitor through session merging.
+</Note>
+
+```php
+$visitorCode = $kameleoonClient->getVisitorCode();
+
+$kameleoonClient->addData(
+    $visitorCode,
+    new Kameleoon\Data\Browser(Kameleoon\Data\Browser::CHROME).
+    new Kameleoon\Data\PageView("https://url.com", "title", array(3)),
+    new Kameleoon\Data\Conversion(32, 10, false)
+);
+
+$kameleoonClient->flush($visitorCode); // Interval tracking, non-blocking operation
+
+$kameleoonClient->flush($visitorCode, null, null, true); // Instant tracking, blocking operation
+
+// if you operate with unique ID
+$kameleoonClient->addData($visitorCode, new Kameleoon\Data\UniqueIdentifier(true));
+$kameleoonClient->flush($visitorCode);
+```
+
+##### Arguments
+
+| Name | Type | Description     |
+|--------- | ------- | ----------- |
+| visitorCode | string | Unique identifier of the user. This field is mandatory.|
+|timeout | ?int | Timeout (in milliseconds). This parameter specifies the maximum amount of time the method can block to wait for a result. This field is optional. If a timeout value is not provided, the SDK uses the [`default_timeout`](#additional-configuration) specified in your configuration.|
+|isUniqueIdentifier (Deprecated) | ?bool | An optional parameter for specifying if the visitorCode is a unique identifier. If not provided, the default value is `null`. The field is optional.|
+| instant | bool | Boolean flag indicating whether the data should be sent instantly (`true`) or according to the scheduled tracking interval (`false`). If not provided, the default value is `false`. This field is optional.|
+
+#### getRemoteData()
+
+<Note>
+This method was previously called `retrieveDataFromRemoteSource`, which was removed in SDK version `4.0.0`.
+</Note>
+
+The `getRemoteData()` method lets you retrieve data based on a **key** you provide for a specific **siteCode** (set in `KameleoonClientFactory.create()`). A Kameleoon server stores this data. The Data API is typically used to save this data on our remote servers. This method, combined with our scalable servers, makes storing large amounts of data easy. You can then access this data later for each visitor or user.
+
+```php
+$test_value = $kameleoonClient->getRemoteData("test"); // default timeout will be used
+
+$test_value = $kameleoonClient->getRemoteData("test", 1000); // 1000 milliseconds timeout
+
+try {
+    $test_value = $kameleoonClient->getRemoteData("test");
+} catch (Exception $e) {
+    // Timeout or Json Decoding Exception
+}
+```
+
+##### Arguments
+
+| Name | Type | Description    |
+|-------- | ------- | -----------|
+|key | string | The key that the data you try to get is associated with. This field is mandatory.|
+|timeout | ?int | Timeout (in milliseconds). This parameter specifies the maximum amount of time the method can block to wait for a result. This field is optional. If a timeout value is not provided, the SDK uses the [`default_timeout`](#additional-configuration) specified in your configuration.|
+
+##### Return value
+| Type | Description |
+|------ | -------    |
+|Object | Object associated with retrieving data for specific **key**.|
+
+##### Exceptions thrown
+
+| Type | Description |
+|-------- | -------  |
+| Exception  | Exception indicating that the request timed out or retrieved data can't be decoded with `json_decode` method.|
+
+#### getRemoteVisitorData()
+
+`getRemoteVisitorData()` is an asynchronous method for retrieving Kameleoon Visits Data for the `visitorCode` from the Kameleoon Data API. The method adds data to storage for other methods to use when making targeting decisions.
+
+Data obtained using this method plays an important role when you want to:
+
+* use data collected from other devices.
+* access a user's history, such as previously visited pages during past visits.
+* use data that is only accessible on the client-side, like datalayer variables and goals that only convert on the front-end.
+
+Read [this article]( https://developers.kameleoon.com/feature-management-and-experimentation/using-visit-history-in-feature-flags-and-experiments/) for a better understanding of possible use cases.
+
+<Warning>
+By default, `getRemoteVisitorData()` automatically retrieves the latest stored custom data with `scope=Visitor` and attaches them to the visitor without the need to call the method `addData()`. It is particularly useful for [synchronizing custom data between multiple devices](https://developers.kameleoon.com/feature-management-and-experimentation/web-sdks/nodejs-sdk/#synchronizing-custom-data-across-devices).
+</Warning>
+
+<Note>
+The parameter `isUniqueIdentifier` is deprecated. Please use [`UniqueIdentifier`](#uniqueidentifier) instead.
+
+The `isUniqueIdentifier` can be helpful in unique situations; for example, if you cannot access the anonymous `visitorCode` given to a visitor, but you can use an internal ID linked to that visitor through session merging.
+</Note>
+
+```php
+$visitorCode = "visitorCode";
+
+// Visitor data will be fetched and automatically added for `visitorCode`
+$dataArray = $kameleoonClient->getRemoteVisitorData($visitorCode, null); // default timeout will be used
+$dataArray = $kameleoonClient->getRemoteVisitorData($visitorCode, 1000); // 1000 milliseconds timeout
+
+// If you only want to fetch data and add it yourself manually, set shouldAddData == `false`
+$dataArray = $kameleoonClient->getRemoteVisitorData($visitorCode, null, false); // default timeout will be used
+$dataArray = $kameleoonClient->getRemoteVisitorData($visitorCode, 1000, false); // 1000 milliseconds timeout
+```
+
+##### Arguments
+
+| Name | Type | Description     |
+|-------- | ------- | -----------|
+|visitorCode | `string` | The visitor code for which you want to retrieve the assigned data. This field is mandatory.|
+|timeout | `?int` | Timeout (in milliseconds). This parameter specifies the maximum amount of time the method can block to wait for a result. This field is optional. If a timeout value is not provided, the SDK uses the [`default_timeout`](#additional-configuration) specified in your configuration. |
+|addData | `bool` | A boolean indicating whether the method should automatically add retrieved data for a visitor. If not specified, the default value is **true**. This field is optional.|
+|filter | `Kameleoon\Types\RemoteVisitorDataFilter` | Filter for specifying what data should be retrieved from visits, by default only `CustomData` is retrieved from the current and latest previous visit (`new RemoteVisitorDataFilter(1, true, true)` or `new RemoteVisitorDataFilter()`). Other filters parameters are set to `false`. This filed is optional.|
+|isUniqueIdentifier (Deprecated) | `?bool` | An optional parameter for specifying if the visitorCode is a unique identifier. If not provided, the default value is `null`. The field is optional.|
+
+##### Return value
+
+| Type | Description |
+|----- | ----------- |
+| `array<Kameleoon\Data>` | A list of data assigned to the given visitor. |
+
+##### Using parameters in getRemoteVisitorData()
+
+The `getRemoteVisitorData()` method offers flexibility by allowing you to define various parameters when retrieving data on visitors. Whether you're targeting based on goals, experiments, or variations, the same approach applies across all data types.
+
+For example, let's say you want to retrieve data on visitors who completed a goal "Order transaction". You can specify parameters within the `getRemoteVisitorData()` method to refine your targeting. For instance, if you want to target only users who converted on the goal in their last five visits, you can set the `previousVisitAmount` parameter to 5 and `conversions` to true.
+
+The flexibility shown in this example is not limited to goal data. You can use parameters within the `getRemoteVisitorData()` method to retrieve data on a variety of visitor behaviors.
+
+<Note>
+Here is the list of available `Kameleoon\Types\RemoteVisitorDataFilter` options:
+
+| Name                             | Type   | Description                                                                  | Default |
+| -------------------------------- | ------ | ---------------------------------------------------------------------------- | ------- |
+| previousVisitAmount _(optional)_ | `int`  | Number of previous visits to retrieve data from. Number between `1` and `25` | `1`     |
+| currentVisit _(optional)_        | `bool` | If true, current visit data will be retrieved                                | `true`  |
+| customData _(optional)_          | `bool` | If true, custom data will be retrieved.                                      | `true`  |
+| pageViews _(optional)_           | `bool` | If true, page data will be retrieved.                                        | `false` |
+| geolocation _(optional)_         | `bool` | If true, geolocation data will be retrieved.                                 | `false` |
+| device _(optional)_              | `bool` | If true, device data will be retrieved.                                      | `false` |
+| browser _(optional)_             | `bool` | If true, browser data will be retrieved.                                     | `false` |
+| operatingSystem _(optional)_     | `bool` | If true, operating system data will be retrieved.                            | `false` |
+| conversions _(optional)_         | `bool` | If true, conversion data will be retrieved.                                  | `false` |
+| experiments _(optional)_         | `bool` | If true, experiment data will be retrieved.                                  | `false` |
+| kcs _(optional)_                 | `bool` | If true, Kameleoon Conversion Score (KCS) will be retrieved. Requires the [AI Predictive Targeting add-on](https://help.kameleoon.com/target-users-by-ai-propensity-score-kameleoon-conversion-score/)                                    | `false` |
+| visitorCode _(optional)_         | `bool` | If true, Kameleoon will retrieve the `visitorCode` from the most recent visit and use it for the current visit. This is necessary if you want to ensure that the visitor, identified by their `visitorCode`, always receives the same variation across visits for [Cross-device experimentation](/core-concepts/cross-device-experimentation). | `true` |
+| cbs _(optional)_                 | `bool` | <Text x={Shared.RemoteVisitorDataFilter.CBS}/> | `false` |
+| personalization (_optional_)     | `bool` | If true, personalization data will be retrieved. This is required for the personalization condition. | `false` |
+</Note>
+
+#### getVisitorWarehouseAudience()
+
+This method retrieves all audience data associated with the visitor in your data warehouse using the specified `visitorCode` and `warehouseKey`. The `warehouseKey` is typically your internal user ID. The `customDataIndex` parameter corresponds to the Kameleoon custom data that Kameleoon uses to target your visitors. You can refer to the [warehouse targeting documentation](https://help.kameleoon.com/warehouse-audience-targeting/) for additional details. The method passes the result to the returned future as a `CustomData` object, confirming that the data has been added to the visitor and is available for targeting purposes.
+
+```php
+$warehouseAudienceCustomData = $kameleoonClient->getVisitorWarehouseAudience($visitorCode, $customDataIndex);
+
+// If you need to specify warehouse key
+$warehouseAudienceCustomData = $kameleoonClient->getVisitorWarehouseAudience(
+    $visitorCode, $customDataIndex, $warehouseKeyValue
+);
+
+// If you need to specify warehouse key & timeout
+$warehouseAudienceCustomData = $kameleoonClient->getVisitorWarehouseAudience(
+    $visitorCode, $customDataIndex, $warehouseKeyValue, 2000
+);
+```
+
+##### Arguments
+
+| Name | Type | Description |
+|-------- | ------- | ----------- |
+|visitorCode | string | The unique identifier of the visitor for whom you want to retrieve and add the data.|
+|customDataIndex | int | An integer representing the index of the custom data you want to use to target your BigQuery Audiences.|
+|warehouseKey | string | The unique key to identify the warehouse data (usually, your internal user ID). This field is optional.|
+|timeout | ?int | Timeout (in milliseconds). This parameter specifies the maximum amount of time the method can block to wait for a result. This field is optional. If a timeout value is not provided, the SDK uses the [`default_timeout`](#additional-configuration) specified in your configuration.|
+
+##### Return value
+
+| Type | Description |
+|------ | -------    |
+|`?Customdata` | `CustomData` instance confirming that the data has been added to the visitor. If value is `null`, the request is failed and `CustomData` wasn't added to the visitor.|
+
+##### Exceptions thrown
+
+|Type | Description |
+|-------- | ------- |
+|`VisitorCodeInvalid` | Exception indicating that the provided visitor code is not valid (it is either empty or longer than 255 characters).|
+
+#### setLegalConsent()
+
+You must use this method to specify whether the visitor has given legal consent to use thier personal data. Setting the `legalConsent` parameter to `false` limits the types of data that you can include in tracking requests. This method helps you adhere to legal and regulatory requirements while responsibly managing visitor data. You can find more information on personal data in the [consent management policy](https://help.kameleoon.com/consent-management-policy/).
+
+```php
+$visitorCode = $kameleoonClient->getVisitorCode();
+$kameleoonClient->setLegalConsent($visitorCode, true);
+```
+
+##### Arguments
+
+| Name | Type | Description |
+|---- | ---- | -----------  |
+|visitorCode | string | The user's unique identifier. This field is required.|
+|legalConsent | bool | A boolean value representing the legal consent status. `true` indicates the visitor has given legal consent, `false` indicates the visitor has never provided, or has withdrawn, legal consent. This field is required.|
+
+#####  Exceptions thrown
+
+|Type | Description |
+|-------- | ------- |
+|VisitorCodeInvalid | Exception indicating that the provided visitor code is not valid (empty, or longer than 255 characters).|
+
+### Goals and third party analytics
+
+#### getEngineTrackingCode()
+
+<GetEngineTrackingCode sec="description" c={Context}/>
+
+```php
+$engineTrackingCode = $kameleoonClient->getEngineTrackingCode($visitorCode);
+```
+
+##### Arguments
+
+<GetEngineTrackingCode sec="arguments" c={Context}/>
+
+##### Return value
+
+<GetEngineTrackingCode sec="return_value" c={Context}/>
+
+#### trackConversion()
+<TrackConversion sec="description" c={Context}/>
+
+```php
+require "vendor/autoload.php";
+
+$kameleoonClient = Kameleoon\KameleoonClientFactory::create("a8st4f59bj", "/tmp/kameleoon/client-php.json");
+$visitorCode = $kameleoonClient->getVisitorCode();
+$goalID = 83023;
+
+$kameleoonClient->trackConversion($visitorCode, $goalID);
+
+// if you operate with unique ID
+$kameleoonClient->addData($visitorCode, new Kameleoon\Data\UniqueIdentifier(true));
+$kameleoonClient->trackConversion($visitorCode, $goalID, 0.0);
+
+// Add metadata
+$cd = new Kameleoon\Data\CustomData(1, "metadata");
+$kameleoonClient->trackConversion($visitorCode, $goalID, 0.0, null, null, false, [$cd]);
+```
+
+##### Arguments
+<TrackConversion sec="arguments" c={Context}/>
+
+<Note>
+<TrackConversion sec="note_metadata" c={Context}/>
+
+```php
+$kameleoonClient->addData(
+    $visitorCode,
+    new CustomData(5, "Credit Card"),
+    new CustomData(9, "Express Delivery")
+);
+$kameleoonClient->trackConversion($visitorCode, 10, 0.0, null, null, false, [new CustomData(5, "Amex Credit Card")]);
+```
+</Note>
+
+##### Exceptions
+<TrackConversion sec="exceptions" c={Context}/>
+
+### Data types
+
+You can use the following pre-defined data types from `Kameleoon\Data`.
+
+#### Browser
+
+<Browser sec="description" c={Context}/>
+
+<Browser sec="arguments" c={Context}/>
+
+```php
+$kameleoonClient->addData($visitorCode, new Kameleoon\Data\Browser(Kameleoon\Data\Browser::CHROME));
+
+$kameleoonClient->addData($visitorCode, new Kameleoon\Data\Browser(Kameleoon\Data\Browser::CHROME, 10.0));
+```
+
+#### PageView
+
+| Name      | Type   | Description                                        | Default |
+|-----------|--------|----------------------------------------------------| ------- |
+| url _(required)_       | `string` | URL of the page viewed. This field is mandatory.   | |
+| title _(required)_     | `?string` | Title of the page viewed. This field is mandatory. | `null` |
+| referrers _(optional)_ | `?array<int>`  | Referrers of viewed pages. This field is optional. | `null` |
+
+<Note>
+The index (ID) of the referrer is available in our Back-Office in the Acquisition channel configuration page. Be careful: this index starts at 0, so the first [acquisition channel](https://help.kameleoon.com/create-acquisition-channel) you create for a given site would have the ID 0, not 1.
+</Note>
+
+```php
+$kameleoonClient->addData(
+    $visitorCode,
+    new Kameleoon\Data\PageView("https://url.com", "title", [3])
+);
+```
+
+#### Conversion
+
+<Conversion sec="description" c={Context}/>
+<Conversion sec="arguments" c={Context}/>
+
+```php
+$kameleoonClient->addData($visitorCode, new Kameleoon\Data\Conversion(32, 10, false));
+
+$cd = new Kameleoon\Data\CustomData(1, "metadata");
+$kameleoonClient->addData($visitorCode, new Kameleoon\Data\Conversion(32, 0.0, false, [$cd]));
+```
+
+#### CustomData
+
+`CustomData` allows any type of data to be easily associated with each visitor. It can then be used as a targeting condition in [segments](https://help.kameleoon.com/create-new-segment/) or as a filter/breakdown in experiment reports.
+To learn more about custom data, please refer to this [article](/core-concepts/custom-data).
+
+| Name | Type | Description | Default |
+| ---- | ---- | ----------- | ------- |
+| indexOrName _(required)_ | `int`/`string` | Index or Name of the custom data. **Either `index` or `name` must be provided** to identify the data. | |
+| values _(required)_ | `string...` | Value(s) of the custom data to be stored. | |
+| overwrite _(optional)_ | `bool` | Flag to explicitly control how the values are stored and how they appear in reports. [See more](https://developers.kameleoon.com/core-concepts/custom-data/#default-logic-when-overwrite-parameter-is-false-or-omitted) | `true` |
+
+<Note>
+- Each visitor is allowed only one `CustomData` for each unique `index`. Adding another `CustomData` with the same `index` will replace the existing one.
+
+- The custom data ‘index’ can be found in the [Custom Data dashboard](https://help.kameleoon.com/manage-your-custom-data/) under the “INDEX” column.
+
+- To prevent the SDK from sending data with the selected index to Kameleoon servers for privacy reasons, enable the option: **Use this data only locally for targeting purposes** when creating custom data.
+
+- Adding a `CustomData` instance created with a name when the SDK instance configuration is not up to date or the name is not registered, will result in the data being ignored.
+</Note>
+
+```php
+$kameleoonClient->addData($visitorCode, new Kameleoon\Data\CustomData(1, "value"));
+
+// With several values
+$kameleoonClient->addData($visitorCode, new Kameleoon\Data\CustomData(1, "value1", "value2"));
+
+// To set the 'overwrite' flag to false
+$kameleoonClient->addData($visitorCode, Kameleoon\Data\CustomData::newWithOverwrite(1, false, "value"));
+
+// To use a name instead of the index
+$kameleoonClient->addData($visitorCode, new Kameleoon\Data\CustomData("my-custom-data", "value"));
+
+// To use a name instead of the index
+// and set the 'overwrite' flag to false
+$kameleoonClient->addData($visitorCode, Kameleoon\Data\CustomData::newWithOverwrite("my-custom-data", false, "value"));
+```
+
+#### Device
+
+| Name    | Type   | Description                                                                                          |
+| ------- | ------ | ---------------------------------------------------------------------------------------------------- |
+| type | int | List of devices: PHONE, TABLET, DESKTOP. This field is mandatory. |
+
+```php
+$kameleoonClient->addData($visitorCode, new Kameleoon\Data\Device(Kameleoon\Data\Device::PHONE));
+```
+
+#### UserAgent
+
+Keep track of visitors' user-agent information. Server-side experiments are more likely to be affected by bot traffic than client-side experiments. Kameleoon uses the IAB/ABC International Spiders and Bots List to tackle this issue and recognize known bots and spiders. Kameleoon also uses the `UserAgent` field to filter out bots and other unwanted traffic that might distort your conversion metrics. For more details, see our help article on [bot filtering](https://help.kameleoon.com/question/how-does-kameleoon-filter-bot-traffic-from-my-results/).
+
+If you use internal bots, we suggest that you pass the value **curl/8.0** of the userAgent to exclude them from our analytics.
+
+| Name    | Type   | Description                                                                                          |
+| ------- | ------ | ---------------------------------------------------------------------------------------------------- |
+| value | string | The User-Agent value that will be sent with tracking requests. This field is mandatory. |
+
+```php
+$kameleoonClient->addData($visitorCode, new Kameleoon\Data\UserAgent("TestUserAgent"));
+```
+
+#### UniqueIdentifier
+
+If you don't add `UniqueIdentifier` for a visitor, `visitorCode` is used as the unique visitor identifier, which is useful for [Cross-device experimentation](/core-concepts/cross-device-experimentation). When you add `UniqueIdentifier` for a visitor, the SDK links the flushed data with the visitor associated with the specified identifier.
+
+The `isUniqueIdentifier` can be helpful in unique situations; for example, if you cannot access the anonymous `visitorCode` given to a visitor, but you can use an internal ID linked to that visitor through session merging.
+
+| Name    | Type   | Description  |
+| ------- | ------ | ------------ |
+| value | bool | Parameter for specifying if the `visitorCode` is a unique identifier. This field is required. |
+
+```php
+$kameleoonClient->addData($visitorCode, new Kameleoon\Data\UniqueIdentifier(true));
+```
+
+#### OperatingSystem
+
+`OperatingSystem` contains information about the operating system on the visitor's device.
+
+| Name | Type | Description  |
+| ---- | ---- | -----------  |
+| type | `int` | List of operating systems: `WINDOWS`, `MAC`, `IOS`, `LINUX`, `ANDROID` and `WINDOWS_PHONE`. This field is required.|
+
+<Tip>
+Each visitor can only have one `OperatingSystem`. Adding a second `OperatingSystem` overwrites the first one.
+</Tip>
+
+```php
+$kameleoonClient->addData($visitorCode, new Kameleoon\Data\OperatingSystem(Kameleoon\Data\OperatingSystem::WINDOWS));
+```
+
+#### Cookie
+
+`Cookie` contains information about the cookie stored on the visitor's device.
+
+| Name | Type | Description  |
+| ---- | ---- | -----------  |
+| cookies | `array` | A string object map consisting of cookie keys and values. This field is required.|
+
+<Tip>
+Each visitor can only have one `Cookie`. Adding a second `Cookie` overwrites the first one.
+</Tip>
+
+```php
+$cookie = new Kameleoon\Data\Cookie([
+   "k1" => "v1",
+   "k2" => "v2",
+]);
+$kameleoonClient->addData($visitorCode, $cookie);
+```
+
+#### Geolocation
+
+<Geolocation sec="description" c={Context}/>
+<Geolocation sec="arguments" c={Context}/>
+
+```php
+$kameleoonClient->addData($visitorCode, new Kameleoon\Data\Geolocation("France", "Île-de-France", "Paris"));
+```
+
+### Returned Types
+
+#### DataFile
+
+<DataFile sec="description" c={Context}/>
+
+<DataFile sec="arguments" c={Context}/>
+
+```php
+$featureFlags = $dataFile->featureFlags;
+```
+
+#### FeatureFlag
+
+<FeatureFlag sec="description_rules" c={Context}/>
+
+<FeatureFlag sec="arguments_rules" c={Context}/>
+
+```php
+// Check whether the feature flag is enabled in the current environment
+$isEnvironmentEnabled = $featureFlag->isEnvironmentEnabled;
+
+// Retrieve the key of the default variation
+$defaultVariationKey = $featureFlag->defaultVariationKey;
+
+// Retrieve the default variation object
+$defaultVariation = $featureFlag->getDefaultVariation();
+
+// Retrieve all variations of the feature flag as a map (key = variation key, value = Variation object)
+$variations = $featureFlag->variations;
+
+// Retrieve all targeting rules associated with the feature flag
+$rules = $featureFlag->rules;
+```
+
+#### Rule
+
+<Rule sec="description" c={Context}/>
+
+<Rule sec="arguments" c={Context}/>
+
+```php
+// Retrieve all variations of the rule as a map (key = variation key, value = Variation object)
+$variations = $rule->variations;
+```
+
+#### Variation
+
+`Variation` contains information about the assigned variation to the visitor (or the default variation if no specific assignment exists).
+
+| Name        | Type                         | Description                                                                 |
+| ----------- | ---------------------------- | --------------------------------------------------------------------------- |
+| name | `string` | The name of the variation. |
+| key       | `string`                     | The unique key identifying the variation.                                   |
+| id        | `?int`                    | The ID of the assigned variation (or `null` if it's the default variation).  |
+| experimentId | `?int`                 | The ID of the experiment associated with the variation (or `null` if default). |
+| variables | `array<string, Variable>`      | An array containing the variables of the assigned variation, keyed by variable names. This could be an empty collection if no variables are associated. |
+
+<Note>
+- The `Variation` object provides details about the assigned variation and its associated experiment, while the [`Variable`](#variable) object contains specific details about each variable within a variation.
+- Ensure that your code handles the case where `id` or `experimentId` may be `null`, indicating a default variation.
+- The `variables` array might be empty if no variables are associated with the variation.
+</Note>
+
+```php
+// Retrieving the variation name
+$variationName = $variation->name;
+
+// Retrieving the variation key
+$variationKey = $variation->key;
+
+// Retrieving the variation id
+$variationId = $variation->id;
+
+// Retrieving the experiment id
+$experimentId = $variation->experimentId;
+
+// Retrieving the variables map
+$variables = $variation->variables;
+```
+
+#### Variable
+
+`Variable` contains information about a variable associated with the assigned variation.
+
+| Name    | Type      | Description                                                                                                      |
+| ------- | --------- | ---------------------------------------------------------------------------------------------------------------- |
+| key   | `string`  | The unique key identifying the variable.                                                                         |
+| type  | `string`  | The type of the variable. Possible values: **BOOLEAN**, **NUMBER**, **STRING**, **JSON**, **JS**, **CSS**        |
+| value | `?mixed`  | The value of the variable, which can be of the following types: **bool**, **int**, **float**, **string**, **stdClass**, **array**, **null**. |
+
+```php
+// Retrieving the variables map
+$variables = $variation->variables;
+
+// Variable type can be retrieved for further processing
+$type = $variables["isDiscount"]->type;
+
+// Retrieving the variable value by key
+$isDiscount = (bool) $variables["isDiscount"]->value;
+
+// Variable value can be of different types
+$title = (string) $variables["title"]->value;
+```
+
+### Deprecated methods
+
+<Warning>
+These methods are deprecated and will be removed in SDK version `5.0.0`.
+</Warning>
+
+#### getFeatureVariationKey()
+
+- 📨 _Sends Tracking Data to Kameleoon_
+
+<Note>
+Use [`getVariation()`](#getvariation) instead.
+</Note>
+
+To get feature variation key, call the `getFeatureVariationKey()` method of our SDK.
+
+This method takes a **visitorCode** and **featureKey** as mandatory arguments to get the variation key for a given user.
+
+If a user has never been associated with this feature flag, the SDK returns a variation key randomly (according to the feature flag rules). If a user with a given **visitorCode** is already registered with this feature flag, it will detect the previous **variation key** value. If the user does not match any of the rules, the default value will be returned, which we can define in your customer's account.
+
+You have to make sure that proper error handling is set up in your code as shown in the example to the right to catch potential exceptions.
+
+If you specify a `visitorCode`, the `getFeatureVariationKey()` method uses it as the unique visitor identifier, which is useful for [Cross-device experimentation](/core-concepts/cross-device-experimentation). When you specify a `visitorCode` and set the `isUniqueIdentifier` parameter to `true`, the SDK links the flushed data with the visitor associated with the specified identifier.
+
+<Note>
+The parameter `isUniqueIdentifier` is deprecated. Please use [`UniqueIdentifier`](#uniqueidentifier) instead.
+
+The `isUniqueIdentifier` can also be useful in other edge-case scenarios, such as when you can't access the anonymous `visitorCode` that was originally assigned to the visitor, but you do have access to an internal ID that is connected to the anonymous visitor using session merging capabilities.
+</Note>
+
+```php
+$visitorCode = $kameleoonClient->getVisitorCode();
+$featureKey = "featureKey";
+$variationKey = "";
+
+try {
+    $variationKey = $kameleoonClient->getFeatureVariationKey($visitorCode, $featureKey);
+    switch ($variationKey) {
+        case "on":
+            // Main variation key is selected for visitorCode
+            break;
+        case "alternativeVariation":
+            // Alternative variation key
+            break;
+        default:
+            // Default variation key
+            break;
+    }
+} catch (Kameleoon\Exception\FeatureNotFound $e) {
+    // Feature toggle not yet activated on Kameleoon's side - we consider the feature inactive.
+} catch (Kameleoon\Exception\DataFileInvalid $e) {
+    // It appears that the configuration has not been loaded
+    // and there is no previously saved version of the configuration available.
+} catch (Kameleoon\Exception\VisitorCodeInvalid $e) {
+    // VisitorCode, which you passed to a method, is invalid and can't be accepted.
+} catch (Kameleoon\Exception\FeatureEnvironmentDisabled){
+    // The feature flag is disabled for the environment.
+} catch (Exception $e) {
+    // This is a generic Exception handler which will handle all exceptions.
+    echo "Exception: ",  $e->getMessage(), "\n";
+}
+```
+
+##### Arguments
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| visitorCode | string | Unique identifier of the user. This field is mandatory.   |
+| featureKey | string | Key of the feature you want to expose to a user. This field is mandatory. |
+| timeout | ?int | Timeout (in milliseconds). This parameter specifies the maximum amount of time the method can block to wait for a result. This field is optional. If a timeout value is not provided, the SDK uses the [`default_timeout`](#additional-configuration) specified in your configuration.|
+| isUniqueIdentifier (Deprecated) | ?bool | An optional parameter for specifying if the visitorCode is a unique identifier. If not provided, the default value is `null`. The field is optional.|
+
+##### Return value
+
+| Type | Description |
+| ---- | ----------- |
+| string | Variation key of the feature flag that is registered for a given **visitorCode**. |
+
+##### Exceptions thrown
+
+| Type | Description |
+| ---- | ----------- |
+|FeatureNotFound  | Exception indicating that the requested feature ID has not been found in the internal configuration of the SDK. This is usually normal and means that the feature flag has not yet been activated on Kameleoon's side (but code implementing the feature is already deployed on the web-application's side).|
+FeatureEnvironmentDisabled | Exception indicating that feature flag is disabled for the visitor's current environment (for example, production, staging, or development).|
+|VisitorCodeInvalid | Exception indicating that the provided visitor code is not valid (empty, or longer than 255 characters).|
+|DataFileInvalid | Exception indicating that the configuration has not been loaded and there is no previously saved version of the configuration available.|
+
+#### getActiveFeatureListForVisitor()
+
+<Note>
+Use [`getActiveFeatures()`](#getActiveFeatures) instead.
+</Note>
+
+This method takes only input parameters: **visitorCode**. Result contains only active feature flags for a given visitor.
+
+```php
+$visitorCode = "visitor";
+$arrayFeatureFlagKeys = $kameleoonClient->getActiveFeatureListForVisitor($visitorCode);
+```
+
+#####  Arguments
+
+Name | Type | Description
+--------- | ------- | -----------
+visitorCode | string | Unique identifier of the user. This field is mandatory.
+timeout | ?int | Timeout (in milliseconds). This parameter specifies the maximum amount of time the method can block to wait for a result. This field is optional. If a timeout value is not provided, the SDK uses the [`default_timeout`](#additional-configuration) specified in your configuration.
+
+##### Return value
+| Type | Description
+------ | -------
+| any | List of feature flag keys which are active for a given **visitorCode**
+
+#####  Exceptions thrown
+
+Type | Description
+--------- | -------
+VisitorCodeInvalid | Exception indicating that the provided visitor code is not valid (empty, or longer than 255 characters).
+DataFileInvalid | Exception indicating that the configuration has not been loaded and there is no previously saved version of the configuration available.
+
+#### getActiveFeatures()
+
+<Note>
+Use [`getVariations()`](#getvariations) instead.
+</Note>
+
+`getActiveFeatures` method retrieves information about the active feature flags that are available for the specified visitor code.
+
+```php
+$visitorCode = "visitor";
+$arrayActiveFeatures = $kameleoonClient->getActiveFeatures($visitorCode);
+```
+
+#####  Arguments
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| visitorCode | string | Unique identifier of the user. This field is mandatory. |
+| timeout     | ?int   | Timeout (in milliseconds). This parameter specifies the maximum amount of time the method can block to wait for a result. This field is optional. If a timeout value is not provided, the SDK uses the [`default_timeout`](#additional-configuration) specified in your configuration. |
+
+##### Return value
+
+| Type  | Description                                                                                                 |
+|-------|-------------------------------------------------------------------------------------------------------------|
+| array | An array that contains the assigned variations of the active features using the active feature IDs as keys. |
+
+##### Exceptions thrown
+
+| Type               | Description                                                                                                                              |
+|--------------------|------------------------------------------------------------------------------------------------------------------------------------------|
+| VisitorCodeInvalid | Exception indicating that the provided visitor code is not valid (empty, or longer than 255 characters).                                 |
+| DataFileInvalid    | Exception indicating that the configuration has not been loaded and there is no previously saved version of the configuration available. |
+
+#### getFeatureVariable()
+
+- 📨 _Sends Tracking Data to Kameleoon_
+
+<Note>
+- Use [`getVariation()`](#getvariation) instead.
+- This method was previously called `obtainFeatureVariable`, which has been deprecated since SDK version `3.0.0` and will be removed in a future release.
+</Note>
+
+To get the variable of a variation key associated with a user, call the `getFeatureVariable()` method.
+
+This method takes a **visitorCode**, **featureKey**, and **variableName** as mandatory arguments to get a variable of the variation key for a given user.
+
+If the user has never been associated with this feature flag, the SDK returns a variable value of the variation key randomly (according to the feature flag rules). If a user with a given **visitorCode** is already registered with this feature flag, the method will detect the **variable** value for the associated **variation**. If the user does not match any of the rules, the default variable will be returned.
+
+Ensure proper error handling is set up in your code as shown in the example to the right to catch potential exceptions.
+
+If you specify a `visitorCode`, the `getFeatureVariable()` method uses it as the unique visitor identifier, which is useful for [Cross-device experimentation](/core-concepts/cross-device-experimentation). When you specify a `visitorCode` and set the `isUniqueIdentifier` parameter to `true`, the SDK links the flushed data with the visitor associated with the specified identifier.
+
+<Note>
+The parameter `isUniqueIdentifier` is deprecated. Please use [`UniqueIdentifier`](#uniqueidentifier) instead.
+
+The `isUniqueIdentifier` is useful in other edge-case scenarios, such as when you can't access the anonymous `visitorCode` that was originally assigned to the visitor, but you do have access to an internal ID that is connected to the anonymous visitor using session merging capabilities.
+</Note>
+
+```php
+$visitorCode = $kameleoonClient->getVisitorCode();
+$featureKey = "featureKey";
+$variableName = "variableName";
+
+try {
+    $variationValue = $kameleoonClient->getFeatureVariable($visitorCode, $featureKey, $variableName);
+    // Your custom code depending of variableValue
+} catch (Kameleoon\Exception\FeatureNotFound $e) {
+    // Feature toggle not yet activated on Kameleoon's side - we consider the feature inactive.
+} catch (Kameleoon\Exception\FeatureEnvironmentDisabled){
+    // The feature flag is disabled for the environment.
+} catch (Kameleoon\Exception\VisitorCodeInvalid $e) {
+    // VisitorCode, which you passed to a method, is invalid and can't be accepted.
+} catch (Kameleoon\Exception\FeatureVariableNotFound $e) {
+    // Requested variable not defined on Kameleoon's side.
+} catch (Kameleoon\Exception\DataFileInvalid $e) {
+    // It appears that the configuration has not been loaded
+    // and there is no previously saved version of the configuration available.
+} catch (Exception $e) {
+    // This is a generic Exception handler which will handle all exceptions.
+    echo "Exception: " . $e->getMessage() . "\n";
+}
+```
+
+##### Arguments
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| visitorCode | string | Unique identifier of the user. This field is mandatory. |
+| featureKey | string | Key of the feature you want to expose to a user. This field is mandatory. |
+| variableName | string | Name of the variable you want to get a value. This field is mandatory. |
+| timeout | ?int | Timeout (in milliseconds). This parameter specifies the maximum amount of time the method can block to wait for a result. This field is optional. If a timeout value is not provided, the SDK uses the [`default_timeout`](#additional-configuration) specified in your configuration.
+| isUniqueIdentifier (Deprecated) | ?bool | An optional parameter for specifying if the visitorCode is a unique identifier. If not provided, the default value is `null`. The field is optional.|
+
+##### Return value
+
+| Type    | Description                                                          |
+| ------- | -------------------------------------------------------------------- |
+| Any | Value of variable of variation that is registered for a given **visitorCode** for this feature flag. Possible types: bool, int, float, string, object, array |
+
+##### Exceptions thrown
+
+| Type | Description |
+| ---- | ----------- |
+| FeatureNotFound  | Exception indicating that the requested feature ID has not been found in the internal configuration of the SDK. This is usually normal and means that the feature flag has not yet been activated on Kameleoon's side (but code implementing the feature is already deployed on the web-application's side).|
+|FeatureEnvironmentDisabled | Exception indicating that feature flag is disabled for the visitor's current environment (for example, production, staging, or development).|
+|VisitorCodeInvalid | Exception indicating that the provided visitor code is not valid (empty, or longer than 255 characters).|
+|FeatureVariableNotFound | Exception indicating that the requested variable has not been found. Check that the variable's ID (or key) matches your code.|
+|DataFileInvalid | Exception indicating that the configuration has not been loaded and there is no previously saved version of the configuration available.|
+
+#### getFeatureVariationVariables()
+
+<Note>
+- Use [`getVariation()`](#getvariation) instead.
+- This method was previously called `getFeatureAllVariables`, which was removed in SDK version `4.0.0`.
+</Note>
+
+To retrieve the all feature variables, call the `getFeatureVariationVariables()` method. A feature variable can be changed easily via our web application.
+
+This method takes **featureKey** and **variationKey** as mandatory arguments. It will return the data with the object type, as defined on the web interface. The method throws an error (`FeatureNotFound`) if the requested feature flag has not been found in the SDK's client configuration. If the variation key isn't found, the method throws the `FeatureVariationNotFound` error.
+
+```php
+$featureKey = "test_feature_variables";
+$variationKey = "on";
+
+try {
+    $variables = $kameleoonClient->getFeatureVariationVariables($featureKey, $variationKey);
+    $firstName = $variables["firstName"];
+} catch (Kameleoon\Exception\FeatureNotFound $e) {
+    // The feature is not yet activated on Kameleoon's side.
+} catch (Kameleoon\Exception\FeatureEnvironmentDisabled){
+    // The feature flag is disabled for the environment.
+} catch (Kameleoon\Exception\FeatureVariationNotFound $e) {
+    // The variation is not yet activated on Kameleoon's side, i.e., the associated experiment is not online.
+} catch (Kameleoon\Exception\DataFileInvalid $e) {
+    // It appears that the configuration has not been loaded
+    // and there is no previously saved version of the configuration available.
+} catch (Exception $e) {
+    // This is a generic Exception handler which will handle all exceptions.
+    echo "Exception: " . $e->getMessage() . "\n";
+}
+```
+
+##### Arguments
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| featureKey | string | Key of the feature flag you want to obtain. This field is mandatory. |
+| variationKey | string | Key of the variation you want to obtain. This field is mandatory. |
+| timeout | ?int | Timeout (in milliseconds). This parameter specifies the maximum amount of time the method can block to wait for a result. This field is optional. If a timeout value is not provided, the SDK uses the [`default_timeout`](#additional-configuration) specified in your configuration.|
+
+##### Return value
+
+| Type | Description |
+| ---- | ----------- |
+| Any  | Value of the variation variable that is registered for a given **visitorCode** for this feature flag. Possible types: bool, int, float, string, object, array |
+
+##### Exceptions thrown
+
+| Type | Description |
+|-------- | ------------ |
+|FeatureNotFound  | Exception indicating that the requested feature ID has not been found in the SDK's internal configuration. This is usually normal and means that the feature flag has not yet been activated on Kameleoon's side (but code implementing the feature is already deployed on the web-application's side).|
+|FeatureEnvironmentDisabled | Exception indicating that feature flag is disabled for the visitor's current environment (for example, production, staging, or development).|
+|FeatureVariationNotFound | Exception indicating that the requested variation ID has not been found in the SDK's internal configuration. This is usually normal and means that the variation's corresponding experiment has not yet been activated on Kameleoon's side.|
+|DataFileInvalid | Exception indicating that the configuration has not been loaded and there is no previously saved version of the configuration available.|
