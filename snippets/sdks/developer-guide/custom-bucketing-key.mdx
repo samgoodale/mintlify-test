@@ -1,5 +1,6 @@
+import { Select, Text, Bold, Italic, Code, CodeRef, Ref, If } from '/snippets/sdks/utils.mdx';
 
-export function getContext(props) {
+export const getContext = (props) => {
   if (props.c.IsSnakeCase) {
     return {
       NewVisitorCode: 'new_visitor_code',
