@@ -1,11 +1,11 @@
 
-<Select name={props.sec}>
+<props.ui.Select name={props.sec}>
 <div name="description">
 
-<Code x={props.c.ApplicationVersion}/> represents the semantic version number of your application.
+<props.ui.Code x={props.c.ApplicationVersion}/> represents the semantic version number of your application.
 
 <Tip>
-A **visitor** can have only one <Code x={props.c.ApplicationVersion}/>. Adding a second instance will overwrite the first one.
+A **visitor** can have only one <props.ui.Code x={props.c.ApplicationVersion}/>. Adding a second instance will overwrite the first one.
 </Tip>
 </div>
 
@@ -13,7 +13,7 @@ A **visitor** can have only one <Code x={props.c.ApplicationVersion}/>. Adding a
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| version (_optional_) | <Code x={props.c.Common.String}/> | The mobile application version. This field must follow semantic versioning. Accepted formats are `major`, `major.minor`, or `major.minor.patch`. |
+| version (_optional_) | <props.ui.Code x={props.c.Common.String}/> | The mobile application version. This field must follow semantic versioning. Accepted formats are `major`, `major.minor`, or `major.minor.patch`. |
 
 </div>
-</Select>
+</props.ui.Select>

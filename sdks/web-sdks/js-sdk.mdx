@@ -18,7 +18,9 @@ import ActivatingAFeatureFlag from '/snippets/sdks/developer-guide/getting-start
 import DataFile from '/snippets/sdks/reference/returned-types/data-file.mdx';
 import FeatureFlag from '/snippets/sdks/reference/returned-types/feature-flag.mdx';
 import Rule from '/snippets/sdks/reference/returned-types/rule.mdx';
-import ApplicationVersion from '/snippets/sdks/reference/data-types/application-version.mdx';
+import ApplicationVersion from '/snippets/sdks/ref
+export const SdkUi = { Select, Text, Bold, Italic, Code, CodeRef, Ref, If };
+erence/data-types/application-version.mdx';
 
 export const Context = {
     "IsJs": true,
@@ -385,7 +387,7 @@ The `domain` parameter is deprecated and will be removed in a future release. Us
     | trackingInterval (_optional_)             | `number`      | Specifies the interval for tracking requests in milliseconds. All visitors who were evaluated for any feature flag or had associated data are included in this tracking request, which is performed once per interval. The minimum value is `100` ms and the maximum value is `1_000` ms                                                                                                                                                                                                                                                                                                                                                                                                                  | `1_000` (1 second)                         |                          |
     | defaultDataFile (_optional_)              | `string`      | The `defaultDataFile` feature ensures the Kameleoon SDK is always **READY** by providing a fallback configuration when no cached data file exists. Developers can preload a valid configuration by fetching it from `https://sdk-config.kameleoon.eu/v3/<sitecode>` and passing it as `defaultDataFile` during initialization. When a `dateModified` timestamp (in milliseconds) is provided and is newer than the cached version, the SDK will use the default datafile instead of the cached version. **`If dateModified is omitted, the default datafile is only applied when no cached version exists`**. This ensures the SDK always has a valid configuration, whether default, cached, or updated. | `undefined`                                |                          |
 
-    <SharedDiv sec="set_default_data_file_js" c={Context} />
+    <SharedDiv sec="set_default_data_file_js" c={Context} ui={SdkUi} shared={Shared} />
   </Tab>
 </Tabs>
 
@@ -397,35 +399,35 @@ Do not use several client instances in one application, as it is not fully suppo
 
 ##### Assigning a unique ID to a user
 
-<ActivatingAFeatureFlag sec="assigning_a_unique_id_to_a_user" c={Context} />
+<ActivatingAFeatureFlag sec="assigning_a_unique_id_to_a_user" c={Context} ui={SdkUi} shared={Shared} />
 
 ##### Retrieving a flag configuration
 
-<ActivatingAFeatureFlag sec="retrieving_a_feature_flag_configuration___default" c={Context} />
+<ActivatingAFeatureFlag sec="retrieving_a_feature_flag_configuration___default" c={Context} ui={SdkUi} shared={Shared} />
 
 ##### Adding data points to target a user or filter / breakdown visits in reports
 
-<ActivatingAFeatureFlag sec="adding_data_points_to_target_a_user_or_filter_breakdown_visits_in_reports___server" c={Context} />
+<ActivatingAFeatureFlag sec="adding_data_points_to_target_a_user_or_filter_breakdown_visits_in_reports___server" c={Context} ui={SdkUi} shared={Shared} />
 
 ##### Tracking goal conversions
 
-<ActivatingAFeatureFlag sec="tracking_goal_conversions___param" c={Context} />
+<ActivatingAFeatureFlag sec="tracking_goal_conversions___param" c={Context} ui={SdkUi} shared={Shared} />
 
 ##### Sending events to analytics solutions
 
-<ActivatingAFeatureFlag sec="sending_events_to_analytics_solutions" c={Context} />
+<ActivatingAFeatureFlag sec="sending_events_to_analytics_solutions" c={Context} ui={SdkUi} shared={Shared} />
 
 ### Using a custom bucketing key
 
-<CustomBucketingKey sec="description" c={Context} />
+<CustomBucketingKey sec="description" c={Context} ui={SdkUi} shared={Shared} />
 
 #### Use cases
 
-<CustomBucketingKey sec="use_cases" c={Context} />
+<CustomBucketingKey sec="use_cases" c={Context} ui={SdkUi} shared={Shared} />
 
 #### Technical details
 
-<CustomBucketingKey sec="technical_details_1" c={Context} />
+<CustomBucketingKey sec="technical_details_1" c={Context} ui={SdkUi} shared={Shared} />
 
 ```js
 client.addData(visitorCode, new CustomData(index, 'newVisitorCode'));
@@ -435,11 +437,11 @@ client.addData(visitorCode, new CustomData(index, 'newVisitorCode'));
 [More information in addData()](#adddata)
 </Tip>
 
-<CustomBucketingKey sec="technical_details_2" c={Context} />
+<CustomBucketingKey sec="technical_details_2" c={Context} ui={SdkUi} shared={Shared} />
 
 #### Technical requirementes
 
-<CustomBucketingKey sec="technical_requirements" c={Context} />
+<CustomBucketingKey sec="technical_requirements" c={Context} ui={SdkUi} shared={Shared} />
 
 ### Targeting conditions
 
@@ -449,11 +451,11 @@ You can also use your own [external data to target users](/feature-management-an
 
 ### Logging
 
-<Logging sec="logging" c={Context} />
+<Logging sec="logging" c={Context} ui={SdkUi} shared={Shared} />
 
 #### Log levels
 
-<Logging sec="log_levels" c={Context} />
+<Logging sec="log_levels" c={Context} ui={SdkUi} shared={Shared} />
 
 <Tabs>
   <Tab title="TypeScript">
@@ -537,7 +539,7 @@ You can also use your own [external data to target users](/feature-management-an
 
 #### Custom handling of logs
 
-<Logging sec="custom_handling_of_logs" c={Context} />
+<Logging sec="custom_handling_of_logs" c={Context} ui={SdkUi} shared={Shared} />
 
 <Tabs>
   <Tab title="TypeScript">
@@ -1148,11 +1150,11 @@ Handling errors makes your application more stable and avoids technical issues.
 
 ### Cross-device experimentation
 
-<CrossDeviceReconciliation sec="cross_device_experimentation" c={Context} />
+<CrossDeviceReconciliation sec="cross_device_experimentation" c={Context} ui={SdkUi} shared={Shared} />
 
 #### Synchronizing custom data across devices
 
-<CrossDeviceReconciliation sec="synchronizing_custom_data" c={Context} />
+<CrossDeviceReconciliation sec="synchronizing_custom_data" c={Context} ui={SdkUi} shared={Shared} />
 
 <Tabs>
   <Tab title="TypeScript">
@@ -1404,7 +1406,7 @@ As the custom data you use as the identifier must be set to the `Visitor` scope,
     </Tabs>
   </Tab>
   <Tab title="TypeScript">
-    <CrossDeviceReconciliation sec="using_custom_data_session_merging" c={Context} />
+    <CrossDeviceReconciliation sec="using_custom_data_session_merging" c={Context} ui={SdkUi} shared={Shared} />
 
     <Tabs>
       <Tab title="TypeScript">
@@ -1851,7 +1853,7 @@ This is the full reference documentation for the Kameleoon JavaScript SDK.
 
 #### getVariation()
 
-<GetVariation sec="description___js" c={Context} />
+<GetVariation sec="description___js" c={Context} ui={SdkUi} shared={Shared} />
 
 <Tabs>
   <Tab title="TypeScript">
@@ -1950,19 +1952,19 @@ This is the full reference documentation for the Kameleoon JavaScript SDK.
 
 An object of type `GetVariationParamsType` with the following properties:
 
-<GetVariation sec="arguments" c={Context} />
+<GetVariation sec="arguments" c={Context} ui={SdkUi} shared={Shared} />
 
 ##### Return value
 
-<GetVariation sec="return_value" c={Context} />
+<GetVariation sec="return_value" c={Context} ui={SdkUi} shared={Shared} />
 
 ##### Exceptions thrown
 
-<GetVariation sec="exceptions___js" c={Context} />
+<GetVariation sec="exceptions___js" c={Context} ui={SdkUi} shared={Shared} />
 
 #### getVariations()
 
-<GetVariations sec="description___js" c={Context} />
+<GetVariations sec="description___js" c={Context} ui={SdkUi} shared={Shared} />
 
 <Tabs>
   <Tab title="TypeScript">
@@ -2075,15 +2077,15 @@ An object of type `GetVariationParamsType` with the following properties:
 
 An object of type `GetVariationParamsType` with the following properties:
 
-<GetVariations sec="arguments" c={Context} />
+<GetVariations sec="arguments" c={Context} ui={SdkUi} shared={Shared} />
 
 ##### Return value
 
-<GetVariations sec="return_value" c={Context} />
+<GetVariations sec="return_value" c={Context} ui={SdkUi} shared={Shared} />
 
 ##### Exceptions thrown
 
-<GetVariations sec="exceptions___js" c={Context} />
+<GetVariations sec="exceptions___js" c={Context} ui={SdkUi} shared={Shared} />
 
 #### isFeatureFlagActive()
 
@@ -2249,7 +2251,7 @@ The `getFeatureFlags()` method returns a list of feature flags stored in the cli
 
 #### setForcedVariation()
 
-<SetForcedVariation sec="description" c={Context} />
+<SetForcedVariation sec="description" c={Context} ui={SdkUi} shared={Shared} />
 
 <Tabs>
   <Tab title="TypeScript">
@@ -2324,15 +2326,15 @@ The `getFeatureFlags()` method returns a list of feature flags stored in the cli
 
 ##### Arguments
 
-<SetForcedVariation sec="arguments" c={Context} />
+<SetForcedVariation sec="arguments" c={Context} ui={SdkUi} shared={Shared} />
 
 ##### Exceptions thrown
 
-<SetForcedVariation sec="exceptions___js" c={Context} />
+<SetForcedVariation sec="exceptions___js" c={Context} ui={SdkUi} shared={Shared} />
 
 #### evaluateAudiences()
 
-<EvaluateAudiences sec="description" c={Context} />
+<EvaluateAudiences sec="description" c={Context} ui={SdkUi} shared={Shared} />
 
 <Tabs>
   <Tab title="TypeScript">
@@ -2381,17 +2383,17 @@ The `getFeatureFlags()` method returns a list of feature flags stored in the cli
 
 ##### Arguments
 
-<EvaluateAudiences sec="arguments" c={Context} />
+<EvaluateAudiences sec="arguments" c={Context} ui={SdkUi} shared={Shared} />
 
 ##### Exceptions thrown
 
-<EvaluateAudiences sec="exceptions___js" c={Context} />
+<EvaluateAudiences sec="exceptions___js" c={Context} ui={SdkUi} shared={Shared} />
 
 #### getDataFile()
 
-<GetDataFile sec="tip_qa" c={Context} />
+<GetDataFile sec="tip_qa" c={Context} ui={SdkUi} shared={Shared} />
 
-<GetDataFile sec="description" c={Context} />
+<GetDataFile sec="description" c={Context} ui={SdkUi} shared={Shared} />
 
 <Tabs>
   <Tab title="TypeScript">
@@ -2422,7 +2424,7 @@ The `getFeatureFlags()` method returns a list of feature flags stored in the cli
 
 ##### Return value
 
-<GetDataFile sec="return_value" c={Context} />
+<GetDataFile sec="return_value" c={Context} ui={SdkUi} shared={Shared} />
 
 ### Visitor data
 
@@ -2430,7 +2432,7 @@ The `getFeatureFlags()` method returns a list of feature flags stored in the cli
 
 The `getVisitorCode()` method obtains a visitor code from the browser cookie. If the visitor code doesn't exist, the method generates a random visitor code (or uses the `defaultVisitorCode` value if you provided one) and sets the new visitor code in a cookie.
 
-<SharedDiv sec="get_visitor_code_simulated" c={Context} />
+<SharedDiv sec="get_visitor_code_simulated" c={Context} ui={SdkUi} shared={Shared} />
 
 <Tabs>
   <Tab title="TypeScript">
@@ -3336,7 +3338,7 @@ The `setLegalConsent` method specifies whether the visitor has given legal conse
 
 <Tabs>
   <Tab title="TypeScript">
-    <TrackConversion sec="description___js_old" c={Context} />
+    <TrackConversion sec="description___js_old" c={Context} ui={SdkUi} shared={Shared} />
 
     <Tabs>
       <Tab title="TypeScript">
@@ -3408,14 +3410,14 @@ The `setLegalConsent` method specifies whether the visitor has given legal conse
 
     Parameters object consisting of:
 
-    <TrackConversion sec="arguments___js_old" c={Context} />
+    <TrackConversion sec="arguments___js_old" c={Context} ui={SdkUi} shared={Shared} />
 
     ##### Exceptions thrown
 
-    <TrackConversion sec="exceptions___js" c={Context} />
+    <TrackConversion sec="exceptions___js" c={Context} ui={SdkUi} shared={Shared} />
   </Tab>
   <Tab title="TypeScript">
-    <TrackConversion sec="description___js" c={Context} />
+    <TrackConversion sec="description___js" c={Context} ui={SdkUi} shared={Shared} />
 
     <Tabs>
       <Tab title="TypeScript">
@@ -3481,10 +3483,10 @@ The `setLegalConsent` method specifies whether the visitor has given legal conse
 
     Parameters object consisting of:
 
-    <TrackConversion sec="arguments___js" c={Context} />
+    <TrackConversion sec="arguments___js" c={Context} ui={SdkUi} shared={Shared} />
 
     <Note>
-<TrackConversion sec="note_metadata" c={Context} />
+<TrackConversion sec="note_metadata" c={Context} ui={SdkUi} shared={Shared} />
 
     <Tabs>
       <Tab title="TypeScript">
@@ -3514,7 +3516,7 @@ The `setLegalConsent` method specifies whether the visitor has given legal conse
 
 ##### Exceptions thrown
 
-<TrackConversion sec="exceptions___js" c={Context} />
+<TrackConversion sec="exceptions___js" c={Context} ui={SdkUi} shared={Shared} />
 
 ---
 
@@ -3865,11 +3867,11 @@ Each visitor can only have one `UniqueIdentifier`. Adding another `UniqueIdentif
 
 #### Conversion
 
-<Conversion sec="description" c={Context} />
+<Conversion sec="description" c={Context} ui={SdkUi} shared={Shared} />
 
 `ConversionParametersType` conversionParameters - an object with conversion parameters described below
 
-<Conversion sec="arguments" c={Context} />
+<Conversion sec="arguments" c={Context} ui={SdkUi} shared={Shared} />
 
 <Tabs>
   <Tab title="TypeScript">
@@ -4464,9 +4466,9 @@ If you use internal bots, we suggest that you pass the value **curl/8.0** of the
 
 #### ApplicationVersion
 
-<ApplicationVersion sec="description" c={Context} />
+<ApplicationVersion sec="description" c={Context} ui={SdkUi} shared={Shared} />
 
-<ApplicationVersion sec="arguments" c={Context} />
+<ApplicationVersion sec="arguments" c={Context} ui={SdkUi} shared={Shared} />
 
 <Tabs>
   <Tab title="TypeScript">
@@ -4511,9 +4513,9 @@ If you use internal bots, we suggest that you pass the value **curl/8.0** of the
 
 #### DataFile
 
-<DataFile sec="description" c={Context} />
+<DataFile sec="description" c={Context} ui={SdkUi} shared={Shared} />
 
-<DataFile sec="arguments" c={Context} />
+<DataFile sec="arguments" c={Context} ui={SdkUi} shared={Shared} />
 
 <Tabs>
   <Tab title="TypeScript">
@@ -4532,9 +4534,9 @@ If you use internal bots, we suggest that you pass the value **curl/8.0** of the
 
 #### FeatureFlag
 
-<FeatureFlag sec="description_rules" c={Context} />
+<FeatureFlag sec="description_rules" c={Context} ui={SdkUi} shared={Shared} />
 
-<FeatureFlag sec="arguments_rules" c={Context} />
+<FeatureFlag sec="arguments_rules" c={Context} ui={SdkUi} shared={Shared} />
 
 <Tabs>
   <Tab title="TypeScript">
@@ -4573,9 +4575,9 @@ If you use internal bots, we suggest that you pass the value **curl/8.0** of the
 
 #### Rule
 
-<Rule sec="description" c={Context} />
+<Rule sec="description" c={Context} ui={SdkUi} shared={Shared} />
 
-<Rule sec="arguments" c={Context} />
+<Rule sec="arguments" c={Context} ui={SdkUi} shared={Shared} />
 
 <Tabs>
   <Tab title="TypeScript">

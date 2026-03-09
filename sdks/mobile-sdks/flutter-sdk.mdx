@@ -22,7 +22,9 @@ import EvaluateAudiences from '/snippets/sdks/reference/feature-flags-and-variat
 import GetDataFile from '/snippets/sdks/reference/feature-flags-and-variations/get-data-file.mdx';
 import DataFile from '/snippets/sdks/reference/returned-types/data-file.mdx';
 import FeatureFlag from '/snippets/sdks/reference/returned-types/feature-flag.mdx';
-import Rule from '/snippets/sdks/reference/returned-types/rule.mdx';
+import Rule from '/snippets/sdks/refere
+export const SdkUi = { Select, Text, Bold, Italic, Code, CodeRef, Ref, If };
+nce/returned-types/rule.mdx';
 
 export const Context = {
   IsClient: true,
@@ -363,15 +365,15 @@ When a user completes a desired action (for example, making a purchase), it coun
 
 ### Using a custom bucketing key
 
-<CustomBucketingKey sec="description" c={Context}/>
+<CustomBucketingKey sec="description" c={Context} ui={SdkUi} shared={Shared}/>
 
 #### Use cases
 
-<CustomBucketingKey sec="use_cases" c={Context}/>
+<CustomBucketingKey sec="use_cases" c={Context} ui={SdkUi} shared={Shared}/>
 
 #### Technical details
 
-<CustomBucketingKey sec="technical_details_1" c={Context}/>
+<CustomBucketingKey sec="technical_details_1" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```dart
 try {
@@ -381,23 +383,23 @@ try {
 }
 ```
 
-<CustomBucketingKey sec="technical_details_2" c={Context}/>
+<CustomBucketingKey sec="technical_details_2" c={Context} ui={SdkUi} shared={Shared}/>
 
 #### Technical requirementes
 
-<CustomBucketingKey sec="technical_requirements" c={Context}/>
+<CustomBucketingKey sec="technical_requirements" c={Context} ui={SdkUi} shared={Shared}/>
 
 ### Targeting conditions
 
-<TargetingConditions sec="targeting_conditons_description" c={Context}/>
+<TargetingConditions sec="targeting_conditons_description" c={Context} ui={SdkUi} shared={Shared}/>
 
 ### Logging
 
-<Logging sec="logging" c={Context}/>
+<Logging sec="logging" c={Context} ui={SdkUi} shared={Shared}/>
 
 #### Log levels
 
-<Logging sec="log_levels" c={Context}/>
+<Logging sec="log_levels" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```dart
 // The `none` log level does not allow logging.
@@ -424,7 +426,7 @@ KameleoonLogger.setLogLevel(LogLevel.debug);
 
 #### Custom handling of logs
 
-<Logging sec="custom_handling_of_logs" c={Context}/>
+<Logging sec="custom_handling_of_logs" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```dart
 import 'package:logging/logging.dart' as logging;
@@ -655,7 +657,7 @@ if (hasNewCheckout) {
 
 #### getVariation()
 
-<GetVariation sec="description" c={Context}/>
+<GetVariation sec="description" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```dart
 final String featureKey = "featureKey";
@@ -689,19 +691,19 @@ switch (variation?.key) {
 
 ##### Arguments
 
-<GetVariation sec="arguments" c={Context}/>
+<GetVariation sec="arguments" c={Context} ui={SdkUi} shared={Shared}/>
 
 ##### Return value
 
-<GetVariation sec="return_value" c={Context}/>
+<GetVariation sec="return_value" c={Context} ui={SdkUi} shared={Shared}/>
 
 ##### Exceptions thrown
 
-<GetVariation sec="exceptions" c={Context}/>
+<GetVariation sec="exceptions" c={Context} ui={SdkUi} shared={Shared}/>
 
 #### getVariations()
 
-<GetVariations sec="description" c={Context}/>
+<GetVariations sec="description" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```dart
 try {
@@ -717,19 +719,19 @@ try {
 
 ##### Arguments
 
-<GetVariations sec="arguments" c={Context}/>
+<GetVariations sec="arguments" c={Context} ui={SdkUi} shared={Shared}/>
 
 ##### Return value
 
-<GetVariations sec="return_value" c={Context}/>
+<GetVariations sec="return_value" c={Context} ui={SdkUi} shared={Shared}/>
 
 ##### Exceptions thrown
 
-<GetVariations sec="exceptions" c={Context}/>
+<GetVariations sec="exceptions" c={Context} ui={SdkUi} shared={Shared}/>
 
 #### getFeatureList()
 
-<GetFeatureList sec="description" c={Context}/>
+<GetFeatureList sec="description" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```dart
 try {
@@ -741,12 +743,12 @@ try {
 
 ##### Return value
 
-<GetFeatureList sec="return_value" c={Context}/>
+<GetFeatureList sec="return_value" c={Context} ui={SdkUi} shared={Shared}/>
 
 #### getDataFile()
 
-<GetDataFile sec="tip_qa" c={Context}/>
-<GetDataFile sec="description" c={Context}/>
+<GetDataFile sec="tip_qa" c={Context} ui={SdkUi} shared={Shared}/>
+<GetDataFile sec="description" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```dart
 try {
@@ -758,15 +760,15 @@ try {
 
 ##### Return value
 
-<GetDataFile sec="return_value" c={Context}/>
+<GetDataFile sec="return_value" c={Context} ui={SdkUi} shared={Shared}/>
 
 ##### Errors thrown
 
-<GetDataFile sec="exceptions" c={Context}/>
+<GetDataFile sec="exceptions" c={Context} ui={SdkUi} shared={Shared}/>
 
 #### setForcedVariation()
 
-<SetForcedVariation sec="description" c={Context}/>
+<SetForcedVariation sec="description" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```dart
 final experimentId = 9516;
@@ -786,15 +788,15 @@ try {
 
 ##### Arguments
 
-<SetForcedVariation sec="arguments" c={Context}/>
+<SetForcedVariation sec="arguments" c={Context} ui={SdkUi} shared={Shared}/>
 
 ##### Errors thrown
 
-<SetForcedVariation sec="exceptions" c={Context}/>
+<SetForcedVariation sec="exceptions" c={Context} ui={SdkUi} shared={Shared}/>
 
 #### evaluateAudiences()
 
-<EvaluateAudiences sec="description" c={Context}/>
+<EvaluateAudiences sec="description" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```dart
 try {
@@ -806,13 +808,13 @@ try {
 
 ##### Errors thrown
 
-<EvaluateAudiences sec="exceptions" c={Context}/>
+<EvaluateAudiences sec="exceptions" c={Context} ui={SdkUi} shared={Shared}/>
 
 ### Goals
 
 #### trackConversion()
 
-<TrackConversion sec="description" c={Context}/>
+<TrackConversion sec="description" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```dart
 kameleoonClient.trackConversion(goalId); // default revenue
@@ -824,10 +826,10 @@ kameleoonClient.trackConversionWithOptParams(goalId, revenue: 10, metadata: [Cus
 ```
 
 ##### Arguments
-<TrackConversion sec="arguments" c={Context}/>
+<TrackConversion sec="arguments" c={Context} ui={SdkUi} shared={Shared}/>
 
 <Note>
-<TrackConversion sec="note_metadata" c={Context}/>
+<TrackConversion sec="note_metadata" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```dart
 kameleoonClient.addData([
@@ -846,7 +848,7 @@ kameleoonClient.trackConversionWithOptParams(1000, metadata: [CustomData.withInd
 This method was previously called `updateConfigurationHandler`, which was removed in SDK version `3.0.0` release.
 </Note>
 
-<UpdateConfigurationHandler sec="description" c={Context}/>
+<UpdateConfigurationHandler sec="description" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```dart
 kameleoonClient.onUpdateConfiguration((timestamp) {
@@ -856,23 +858,23 @@ kameleoonClient.onUpdateConfiguration((timestamp) {
 
 ##### Arguments
 
-<UpdateConfigurationHandler sec="arguments" c={Context}/>
+<UpdateConfigurationHandler sec="arguments" c={Context} ui={SdkUi} shared={Shared}/>
 
 ### Visitor data
 
 #### getVisitorCode()
-<GetVisitorCode sec="description" c={Context}/>
+<GetVisitorCode sec="description" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```dart
 final visitorCode = await kameleoonClient.getVisitorCode();
 ```
 
 #####  Return value
-<GetVisitorCode sec="return_value" c={Context}/>
+<GetVisitorCode sec="return_value" c={Context} ui={SdkUi} shared={Shared}/>
 
 #### addData()
 
-<AddData sec="description" c={Context}/>
+<AddData sec="description" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```dart
 try {
@@ -888,11 +890,11 @@ try {
 
 ##### Arguments
 
-<AddData sec="arguments" c={Context}/>
+<AddData sec="arguments" c={Context} ui={SdkUi} shared={Shared}/>
 
 ##### Exceptions
 
-<AddData sec="exceptions" c={Context}/>
+<AddData sec="exceptions" c={Context} ui={SdkUi} shared={Shared}/>
 
 #### flush()
 
@@ -1128,8 +1130,8 @@ This section lists the `Data` types supported by Kameleoon. We provide several s
 
 #### Conversion
 
-<Conversion sec="description" c={Context}/>
-<Conversion sec="arguments" c={Context}/>
+<Conversion sec="description" c={Context} ui={SdkUi} shared={Shared}/>
+<Conversion sec="arguments" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```dart
 try {
@@ -1209,9 +1211,9 @@ try {
 This data type is available for both types of SDKs: Mobile & Web.
 </Note>
 
-<Geolocation sec="description" c={Context}/>
+<Geolocation sec="description" c={Context} ui={SdkUi} shared={Shared}/>
 
-<Geolocation sec="arguments" c={Context}/>
+<Geolocation sec="arguments" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```dart
 try {
@@ -1227,9 +1229,9 @@ try {
 The data type is available only for Web SDK
 </Note>
 
-<Browser sec="description" c={Context}/>
+<Browser sec="description" c={Context} ui={SdkUi} shared={Shared}/>
 
-<Browser sec="arguments" c={Context}/>
+<Browser sec="arguments" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```dart
 try {
@@ -1320,9 +1322,9 @@ try {
 
 #### DataFile
 
-<DataFile sec="description" c={Context}/>
+<DataFile sec="description" c={Context} ui={SdkUi} shared={Shared}/>
 
-<DataFile sec="arguments" c={Context}/>
+<DataFile sec="arguments" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```dart
 final featureFlags = dataFile.featureFlags
@@ -1330,9 +1332,9 @@ final featureFlags = dataFile.featureFlags
 
 #### FeatureFlag
 
-<FeatureFlag sec="description_rules" c={Context}/>
+<FeatureFlag sec="description_rules" c={Context} ui={SdkUi} shared={Shared}/>
 
-<FeatureFlag sec="arguments_rules" c={Context}/>
+<FeatureFlag sec="arguments_rules" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```dart
 // Check whether the feature flag is enabled in the current environment
@@ -1353,9 +1355,9 @@ final rules = featureFlag.rules
 
 #### Rule
 
-<Rule sec="description" c={Context}/>
+<Rule sec="description" c={Context} ui={SdkUi} shared={Shared}/>
 
-<Rule sec="arguments" c={Context}/>
+<Rule sec="arguments" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```dart
 // Retrieve all variations of the rule as a map (key = variation key, value = Variation object)

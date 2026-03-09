@@ -1,12 +1,12 @@
 
-<Select name={props.sec}>
+<props.ui.Select name={props.sec}>
 <div name="description">
 
-The <Code x={props.c.Conversion}/> data set stored here can be used to filter experiment and personalization reports by any goal associated with it.
+The <props.ui.Code x={props.c.Conversion}/> data set stored here can be used to filter experiment and personalization reports by any goal associated with it.
 
 <Tip>
-- Each visitor can have multiple <Code x={props.c.Conversion}/> objects.
-- You can find the <Code x={props.c.Conversion.Params.GoalId}/> in the Kameleoon app.
+- Each visitor can have multiple <props.ui.Code x={props.c.Conversion}/> objects.
+- You can find the <props.ui.Code x={props.c.Conversion.Params.GoalId}/> in the Kameleoon app.
 </Tip>
 
 </div>
@@ -14,10 +14,10 @@ The <Code x={props.c.Conversion}/> data set stored here can be used to filter ex
 
 | Name | Type | Description | Default |
 | ---- | ---- | ----------- | ------- |
-| <Text x={props.c.Conversion.Params.GoalId.Name}/> (_required_) | <Code x={props.c.Common.Int}/> | ID of the goal. | |
-| <Text x={props.c.Conversion.Params.Revenue.Name}/> (_optional_) | <Code x={props.c.Conversion.Params.Revenue.Type}/> | Revenue of the conversion | `0` |
-| <Text x={props.c.Conversion.Params.Negative.Name}/> (_optional_) | <Code x={props.c.Common.Bool}/> | Defines if the revenue is positive or negative. | <Code x={props.c.Common.False}/> |
-| <Text x={props.c.Conversion.Params.Metadata.Name}/> (_optional_) | <Code x={props.c.Conversion.Params.Metadata.Type}/> | Metadata of the conversion. | <Code x={props.c.Conversion.Params.Metadata.DefaultValue}/> |
+| <props.ui.Text x={props.c.Conversion.Params.GoalId.Name}/> (_required_) | <props.ui.Code x={props.c.Common.Int}/> | ID of the goal. | |
+| <props.ui.Text x={props.c.Conversion.Params.Revenue.Name}/> (_optional_) | <props.ui.Code x={props.c.Conversion.Params.Revenue.Type}/> | Revenue of the conversion | `0` |
+| <props.ui.Text x={props.c.Conversion.Params.Negative.Name}/> (_optional_) | <props.ui.Code x={props.c.Common.Bool}/> | Defines if the revenue is positive or negative. | <props.ui.Code x={props.c.Common.False}/> |
+| <props.ui.Text x={props.c.Conversion.Params.Metadata.Name}/> (_optional_) | <props.ui.Code x={props.c.Conversion.Params.Metadata.Type}/> | Metadata of the conversion. | <props.ui.Code x={props.c.Conversion.Params.Metadata.DefaultValue}/> |
 
 </div>
-</Select>
+</props.ui.Select>

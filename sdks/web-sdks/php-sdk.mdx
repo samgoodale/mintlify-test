@@ -23,7 +23,9 @@ import GetEngineTrackingCode from '/snippets/sdks/reference/goals/get-engine-tra
 import CustomBucketingKey from '/snippets/sdks/developer-guide/custom-bucketing-key.mdx';
 import DataFile from '/snippets/sdks/reference/returned-types/data-file.mdx';
 import FeatureFlag from '/snippets/sdks/reference/returned-types/feature-flag.mdx';
-import Rule from '/snippets/sdks/reference/returned-types/rule.mdx';
+import Rule from '/snippets/sdks/reference/
+export const SdkUi = { Select, Text, Bold, Italic, Code, CodeRef, Ref, If };
+returned-types/rule.mdx';
 
 export const Context = {
     IsServer: true,
@@ -398,31 +400,31 @@ It's your responsibility as the application developer to use correct logic in yo
 
 ##### Assigning a unique ID to a user
 
-<ActivatingAFeatureFlag sec="assigning_a_unique_id_to_a_user" c={Context}/>
+<ActivatingAFeatureFlag sec="assigning_a_unique_id_to_a_user" c={Context} ui={SdkUi} shared={Shared}/>
 
 ##### Retrieving a flag configuration
 
-<ActivatingAFeatureFlag sec="retrieving_a_feature_flag_configuration___cron_job_interval_tracking" c={Context}/>
+<ActivatingAFeatureFlag sec="retrieving_a_feature_flag_configuration___cron_job_interval_tracking" c={Context} ui={SdkUi} shared={Shared}/>
 
 ##### Adding data points to target a user or filter / breakdown visits in reports
 
-<ActivatingAFeatureFlag sec="adding_data_points_to_target_a_user_or_filter_breakdown_visits_in_reports___server" c={Context}/>
+<ActivatingAFeatureFlag sec="adding_data_points_to_target_a_user_or_filter_breakdown_visits_in_reports___server" c={Context} ui={SdkUi} shared={Shared}/>
 
 ##### Tracking goal conversions
 
-<ActivatingAFeatureFlag sec="tracking_goal_conversions___param___cron_job_interval_tracking" c={Context}/>
+<ActivatingAFeatureFlag sec="tracking_goal_conversions___param___cron_job_interval_tracking" c={Context} ui={SdkUi} shared={Shared}/>
 
 ##### Sending events to analytics solutions
 
-<ActivatingAFeatureFlag sec="sending_events_to_analytics_solutions" c={Context}/>
+<ActivatingAFeatureFlag sec="sending_events_to_analytics_solutions" c={Context} ui={SdkUi} shared={Shared}/>
 
 ### Cross-device experimentation
 
-<CrossDeviceReconciliation sec="cross_device_experimentation" c={Context}/>
+<CrossDeviceReconciliation sec="cross_device_experimentation" c={Context} ui={SdkUi} shared={Shared}/>
 
 #### Synchronizing custom data across devices
 
-<CrossDeviceReconciliation sec="synchronizing_custom_data" c={Context}/>
+<CrossDeviceReconciliation sec="synchronizing_custom_data" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```php
 // In this example, Custom data with index `90` was set to "Visitor" scope on Kameleoon.
@@ -442,7 +444,7 @@ $kameleoonClient->getRemoteVisitorData($visitorCode);
 
 #### Using custom data for session merging
 
-<CrossDeviceReconciliation sec="using_custom_data_session_merging" c={Context}/>
+<CrossDeviceReconciliation sec="using_custom_data_session_merging" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```php
 // In this example, `91` represents the Custom Data's index
@@ -478,41 +480,41 @@ $kameleoonClient->trackConversion($userId, 123, 10.0);
 $kameleoonClient->getRemoteVisitorData($userId);
 ```
 
-<CrossDeviceReconciliation sec="cross_device_visitor_code" c={Context}/>
+<CrossDeviceReconciliation sec="cross_device_visitor_code" c={Context} ui={SdkUi} shared={Shared}/>
 
 ### Using a custom bucketing key
 
-<CustomBucketingKey sec="description" c={Context}/>
+<CustomBucketingKey sec="description" c={Context} ui={SdkUi} shared={Shared}/>
 
 #### Use cases
 
-<CustomBucketingKey sec="use_cases" c={Context}/>
+<CustomBucketingKey sec="use_cases" c={Context} ui={SdkUi} shared={Shared}/>
 
 #### Technical details
 
-<CustomBucketingKey sec="technical_details_1" c={Context}/>
+<CustomBucketingKey sec="technical_details_1" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```php
 $kameleoonClient->addData($visitorCode, new Kameleoon\Data\CustomData(1, "newVisitorCode"));
 ```
 
-<CustomBucketingKey sec="technical_details_2" c={Context}/>
+<CustomBucketingKey sec="technical_details_2" c={Context} ui={SdkUi} shared={Shared}/>
 
 #### Technical requirementes
 
-<CustomBucketingKey sec="technical_requirements" c={Context}/>
+<CustomBucketingKey sec="technical_requirements" c={Context} ui={SdkUi} shared={Shared}/>
 
 ### Targeting conditions
 
-<TargetingConditions sec="targeting_conditons_description" c={Context}/>
+<TargetingConditions sec="targeting_conditons_description" c={Context} ui={SdkUi} shared={Shared}/>
 
 ### Logging
 
-<Logging sec="logging" c={Context}/>
+<Logging sec="logging" c={Context} ui={SdkUi} shared={Shared}/>
 
 #### Log levels
 
-<Logging sec="log_levels" c={Context}/>
+<Logging sec="log_levels" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```php
 use Kameleoon\logging\KameleoonLogger;
@@ -542,7 +544,7 @@ KameleoonLogger::setLogger(LogLevel::DEBUG);
 
 #### Custom handling of logs
 
-<Logging sec="custom_handling_of_logs" c={Context}/>
+<Logging sec="custom_handling_of_logs" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```php
 use Kameleoon\logging\KameleoonLogger;
@@ -788,7 +790,7 @@ if ($hasNewCheckout) {
 |DataFileInvalid | Exception indicating that the configuration has not been loaded and there is no previously saved version of the configuration available.|
 
 #### getVariation()
-<GetVariation sec="description" c={Context}/>
+<GetVariation sec="description" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```php
 $featureKey = "new_checkout";
@@ -822,16 +824,16 @@ switch ($variation->key) {
 ```
 
 ##### Arguments
-<GetVariation sec="arguments" c={Context}/>
+<GetVariation sec="arguments" c={Context} ui={SdkUi} shared={Shared}/>
 
 ##### Return value
-<GetVariation sec="return_value" c={Context}/>
+<GetVariation sec="return_value" c={Context} ui={SdkUi} shared={Shared}/>
 
 ##### Exceptions thrown
-<GetVariation sec="exceptions" c={Context}/>
+<GetVariation sec="exceptions" c={Context} ui={SdkUi} shared={Shared}/>
 
 #### getVariations()
-<GetVariations sec="description" c={Context}/>
+<GetVariations sec="description" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```php
 try {
@@ -846,17 +848,17 @@ try {
 ```
 
 ##### Arguments
-<GetVariations sec="arguments" c={Context}/>
+<GetVariations sec="arguments" c={Context} ui={SdkUi} shared={Shared}/>
 
 ##### Return value
-<GetVariations sec="return_value" c={Context}/>
+<GetVariations sec="return_value" c={Context} ui={SdkUi} shared={Shared}/>
 
 ##### Exceptions thrown
-<GetVariations sec="exceptions" c={Context}/>
+<GetVariations sec="exceptions" c={Context} ui={SdkUi} shared={Shared}/>
 
 #### getFeatureList()
 
-<GetFeatureList sec="description" c={Context}/>
+<GetFeatureList sec="description" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```php
 $arrayFeatureKeys = $kameleoonClient->getFeatureList();
@@ -870,11 +872,11 @@ $arrayFeatureKeys = $kameleoonClient->getFeatureList();
 
 ##### Return value
 
-<GetFeatureList sec="return_value" c={Context}/>
+<GetFeatureList sec="return_value" c={Context} ui={SdkUi} shared={Shared}/>
 
 #### setForcedVariation()
 
-<SetForcedVariation sec="description" c={Context}/>
+<SetForcedVariation sec="description" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```php
 $experimentId = 9516;
@@ -894,15 +896,15 @@ try {
 
 ##### Arguments
 
-<SetForcedVariation sec="arguments" c={Context}/>
+<SetForcedVariation sec="arguments" c={Context} ui={SdkUi} shared={Shared}/>
 
 ##### Exceptions thrown
 
-<SetForcedVariation sec="exceptions" c={Context}/>
+<SetForcedVariation sec="exceptions" c={Context} ui={SdkUi} shared={Shared}/>
 
 #### evaluateAudiences()
 
-<EvaluateAudiences sec="description" c={Context}/>
+<EvaluateAudiences sec="description" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```php
 try {
@@ -914,17 +916,17 @@ try {
 
 ##### Arguments
 
-<EvaluateAudiences sec="arguments" c={Context}/>
+<EvaluateAudiences sec="arguments" c={Context} ui={SdkUi} shared={Shared}/>
 
 ##### Exceptions thrown
 
-<EvaluateAudiences sec="exceptions" c={Context}/>
+<EvaluateAudiences sec="exceptions" c={Context} ui={SdkUi} shared={Shared}/>
 
 #### getDataFile()
 
-<GetDataFile sec="tip_qa" c={Context}/>
+<GetDataFile sec="tip_qa" c={Context} ui={SdkUi} shared={Shared}/>
 
-<GetDataFile sec="description" c={Context}/>
+<GetDataFile sec="description" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```php
 try {
@@ -942,7 +944,7 @@ try {
 
 ##### Return value
 
-<GetDataFile sec="return_value" c={Context}/>
+<GetDataFile sec="return_value" c={Context} ui={SdkUi} shared={Shared}/>
 
 ### Visitor data
 
@@ -967,7 +969,7 @@ For more information, refer to [this article](/core-concepts/hybrid-experimentat
 If you provide your own `visitorCode`, its uniqueness must be guaranteed on your end - the SDK cannot check it. Also note that the length of `visitorCode` is limited to **255** characters. Any excess characters will throw an exception.
 </Note>
 
-<SharedDiv sec="get_visitor_code_simulated" c={Context}/>
+<SharedDiv sec="get_visitor_code_simulated" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```php
 require "vendor/autoload.php";
@@ -1000,7 +1002,7 @@ $visitorCode = $kameleoonClient->getVisitorCode($defaultVisitorCode);
 | InvalidArgumentException  | Exception indicating that the cookie's domain value was not provided (either via the configuration file, or via the **topLevelDomain** parameter on the method).|
 
 #### addData()
-<AddData sec="description" c={Context}/>
+<AddData sec="description" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```php
 // Add a single data item (tracked by default)
@@ -1023,10 +1025,10 @@ $kameleoonClient->addData(
 ```
 
 ##### Arguments
-<AddData sec="arguments_track" c={Context}/>
+<AddData sec="arguments_track" c={Context} ui={SdkUi} shared={Shared}/>
 
 ##### Exceptions
-<AddData sec="exceptions" c={Context}/>
+<AddData sec="exceptions" c={Context} ui={SdkUi} shared={Shared}/>
 
 #### flush()
 
@@ -1254,7 +1256,7 @@ $kameleoonClient->setLegalConsent($visitorCode, true);
 
 #### getEngineTrackingCode()
 
-<GetEngineTrackingCode sec="description" c={Context}/>
+<GetEngineTrackingCode sec="description" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```php
 $engineTrackingCode = $kameleoonClient->getEngineTrackingCode($visitorCode);
@@ -1262,14 +1264,14 @@ $engineTrackingCode = $kameleoonClient->getEngineTrackingCode($visitorCode);
 
 ##### Arguments
 
-<GetEngineTrackingCode sec="arguments" c={Context}/>
+<GetEngineTrackingCode sec="arguments" c={Context} ui={SdkUi} shared={Shared}/>
 
 ##### Return value
 
-<GetEngineTrackingCode sec="return_value" c={Context}/>
+<GetEngineTrackingCode sec="return_value" c={Context} ui={SdkUi} shared={Shared}/>
 
 #### trackConversion()
-<TrackConversion sec="description" c={Context}/>
+<TrackConversion sec="description" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```php
 require "vendor/autoload.php";
@@ -1290,10 +1292,10 @@ $kameleoonClient->trackConversion($visitorCode, $goalID, 0.0, null, null, false,
 ```
 
 ##### Arguments
-<TrackConversion sec="arguments" c={Context}/>
+<TrackConversion sec="arguments" c={Context} ui={SdkUi} shared={Shared}/>
 
 <Note>
-<TrackConversion sec="note_metadata" c={Context}/>
+<TrackConversion sec="note_metadata" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```php
 $kameleoonClient->addData(
@@ -1306,7 +1308,7 @@ $kameleoonClient->trackConversion($visitorCode, 10, 0.0, null, null, false, [new
 </Note>
 
 ##### Exceptions
-<TrackConversion sec="exceptions" c={Context}/>
+<TrackConversion sec="exceptions" c={Context} ui={SdkUi} shared={Shared}/>
 
 ### Data types
 
@@ -1314,9 +1316,9 @@ You can use the following pre-defined data types from `Kameleoon\Data`.
 
 #### Browser
 
-<Browser sec="description" c={Context}/>
+<Browser sec="description" c={Context} ui={SdkUi} shared={Shared}/>
 
-<Browser sec="arguments" c={Context}/>
+<Browser sec="arguments" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```php
 $kameleoonClient->addData($visitorCode, new Kameleoon\Data\Browser(Kameleoon\Data\Browser::CHROME));
@@ -1345,8 +1347,8 @@ $kameleoonClient->addData(
 
 #### Conversion
 
-<Conversion sec="description" c={Context}/>
-<Conversion sec="arguments" c={Context}/>
+<Conversion sec="description" c={Context} ui={SdkUi} shared={Shared}/>
+<Conversion sec="arguments" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```php
 $kameleoonClient->addData($visitorCode, new Kameleoon\Data\Conversion(32, 10, false));
@@ -1469,8 +1471,8 @@ $kameleoonClient->addData($visitorCode, $cookie);
 
 #### Geolocation
 
-<Geolocation sec="description" c={Context}/>
-<Geolocation sec="arguments" c={Context}/>
+<Geolocation sec="description" c={Context} ui={SdkUi} shared={Shared}/>
+<Geolocation sec="arguments" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```php
 $kameleoonClient->addData($visitorCode, new Kameleoon\Data\Geolocation("France", "Île-de-France", "Paris"));
@@ -1480,9 +1482,9 @@ $kameleoonClient->addData($visitorCode, new Kameleoon\Data\Geolocation("France",
 
 #### DataFile
 
-<DataFile sec="description" c={Context}/>
+<DataFile sec="description" c={Context} ui={SdkUi} shared={Shared}/>
 
-<DataFile sec="arguments" c={Context}/>
+<DataFile sec="arguments" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```php
 $featureFlags = $dataFile->featureFlags;
@@ -1490,9 +1492,9 @@ $featureFlags = $dataFile->featureFlags;
 
 #### FeatureFlag
 
-<FeatureFlag sec="description_rules" c={Context}/>
+<FeatureFlag sec="description_rules" c={Context} ui={SdkUi} shared={Shared}/>
 
-<FeatureFlag sec="arguments_rules" c={Context}/>
+<FeatureFlag sec="arguments_rules" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```php
 // Check whether the feature flag is enabled in the current environment
@@ -1513,9 +1515,9 @@ $rules = $featureFlag->rules;
 
 #### Rule
 
-<Rule sec="description" c={Context}/>
+<Rule sec="description" c={Context} ui={SdkUi} shared={Shared}/>
 
-<Rule sec="arguments" c={Context}/>
+<Rule sec="arguments" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```php
 // Retrieve all variations of the rule as a map (key = variation key, value = Variation object)

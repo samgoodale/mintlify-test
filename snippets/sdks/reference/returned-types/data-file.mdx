@@ -1,8 +1,8 @@
 
-<Select name={props.sec}>
+<props.ui.Select name={props.sec}>
 <div name="description">
 
-The <Code x={props.c.DataFile}/> contains the SDK configuration details.
+The <props.ui.Code x={props.c.DataFile}/> contains the SDK configuration details.
 
 It can be extended with additional information if required by clients. If you need more details, please contact your Customer Success Manager.
 
@@ -12,7 +12,7 @@ It can be extended with additional information if required by clients. If you ne
 
 | Name                                         | Type                                              | Description                                                         |
 | -------------------------------------------- | ------------------------------------------------- | ------------------------------------------------------------------- |
-| <Text x={props.c.DataFile.Params.FeatureFlags}/> | <Code x={props.c.DataFile.Params.FeatureFlags.Type}/> | A map of <CodeRef x={props.c.FeatureFlag}/> objects, keyed by feature flag keys. |
+| <props.ui.Text x={props.c.DataFile.Params.FeatureFlags}/> | <props.ui.Code x={props.c.DataFile.Params.FeatureFlags.Type}/> | A map of <props.ui.CodeRef x={props.c.FeatureFlag}/> objects, keyed by feature flag keys. |
 
 </div>
-</Select>
+</props.ui.Select>
