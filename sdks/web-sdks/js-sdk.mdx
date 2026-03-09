@@ -2,207 +2,6 @@
 title: "JavaScript/Typescript SDK"
 ---
 
-import { Select, Text, Bold, Italic, Code, CodeRef, Ref, If } from '/snippets/sdks/utils.mdx';
-import SharedDiv, { Shared } from '/snippets/sdks/shared.mdx';
-import CrossDeviceReconciliation from '/snippets/sdks/developer-guide/cross-device-reconciliation.mdx';
-import EvaluateAudiences from '/snippets/sdks/reference/feature-flags-and-variations/evaluate-audiences.mdx';
-import GetDataFile from '/snippets/sdks/reference/feature-flags-and-variations/get-data-file.mdx';
-import GetVariations from '/snippets/sdks/reference/feature-flags-and-variations/get-variations.mdx';
-import GetVariation from '/snippets/sdks/reference/feature-flags-and-variations/get-variation.mdx';
-import Logging from '/snippets/sdks/developer-guide/logging.mdx';
-import SetForcedVariation from '/snippets/sdks/reference/feature-flags-and-variations/set-forced-variation.mdx';
-import Conversion from '/snippets/sdks/reference/data-types/conversion.mdx';
-import TrackConversion from '/snippets/sdks/reference/goals/track-conversion.mdx';
-import CustomBucketingKey from '/snippets/sdks/developer-guide/custom-bucketing-key.mdx';
-import ActivatingAFeatureFlag from '/snippets/sdks/developer-guide/getting-started/activating-a-feature-flag.mdx';
-import DataFile from '/snippets/sdks/reference/returned-types/data-file.mdx';
-import FeatureFlag from '/snippets/sdks/reference/returned-types/feature-flag.mdx';
-import Rule from '/snippets/sdks/reference/returned-types/rule.mdx';
-import ApplicationVersion from '/snippets/sdks/reference/data-types/application-version.mdx';
-
-export const Context = {
-    "IsJs": true,
-    "IsServer": true,
-    "IsSnakeCase": false,
-    "Common": {
-        "Null": "null",
-        "True": "true",
-        "False": "false",
-        "String": "string",
-        "Bool": "boolean",
-        "Int": "number",
-        "Float": "number",
-        "SDK": "JavaScript",
-    },
-    "Params": {
-        "VisitorCode": "visitorCode",
-        "FeatureKey": "featureKey"
-    },
-    "Exceptions": {
-        "Language": "Error",
-        "Kameleoon": "KameleoonException",
-        "Initialization": "KameleoonException.Initialization",
-        "VisitorCodeEmpty": "KameleoonException.VisitorCodeEmpty",
-        "VisitorCodeMaxLength": "KameleoonException.VisitorCodeMaxLength",
-        "FeatureNotFound": "KameleoonException.FeatureFlagConfigurationNotFound",
-        "FeatureEnvironmentDisabled": "KameleoonException.FeatureFlagEnvironmentDisabled",
-        "FeatureExperimentNotFound": "KameleoonException.FeatureFlagExperimentNotFound",
-        "FeatureVariationNotFound": "KameleoonException.FeatureFlagVariationNotFound",
-        "StorageRead": "KameleoonException.StorageRead",
-        "StorageWrite": "KameleoonException.StorageWrite",
-    },
-    "KameleoonClientConfig": {
-        "Name": "KameleoonClientConfig",
-        "Ref": "#configuration-parameters",
-        "TrackingInterval": { "FileName": "tracking_interval_millisecond" },
-        "IsUniqueIdentifier": { "Name": "<>" }
-    },
-    "Hook": {
-        "UseData": "useData",
-    },
-    "Conversion": {
-        "Name": "Conversion",
-        "FullName": "data.Conversion",
-        "Ref": "#conversion",
-        "Params": {
-            "GoalId": { "Name": "goalId" },
-            "Revenue": { "Name": "revenue", "Type": "float" },
-            "Negative": { "Name": "negative" },
-            "Metadata": { "Name": "metadata", "Type": "CustomData[]", "DefaultValue": "undefined" },
-        },
-    },
-    "CustomData": {
-        "Name": "CustomData",
-        "FullName": "CustomData",
-        "Ref": "#customdata"
-    },
-    "UniqueIdentifier": {
-        "Name": "UniqueIdentifier",
-        "Ref": "#uniqueidentifier"
-    },
-    "UserAgent": {
-        "Name": "UserAgent",
-        "Ref": "#useragent"
-    },
-    "ApplicationVersion": {
-        "Name": "ApplicationVersion",
-        "Ref": "#applicationversion",
-        "Params": {
-            "Version": { "Type": "string" },
-        },
-    },
-    "Variation": {
-        "Name": "Variation",
-        "FullName": "Variation",
-        "Ref": "#variation"
-    },
-    "DataFile": {
-        "Name": "DataFile",
-        "FullName": "DataFile",
-        "Ref": "#datafile",
-        "Params": {
-            "FeatureFlags": { "Name": "featureFlags", "Type": "Map<string, FeatureFlag>" },
-        }
-    },
-    "FeatureFlag": {
-        "Name": "FeatureFlag",
-        "FullName": "FeatureFlag",
-        "Ref": "#featureflag",
-        "Params": {
-            "EnvironmentEnabled": { "Name": "environmentEnabled" },
-            "Variations": { "Name": "variations", "Type": "Map<string, Variation>" },
-            "Rules": { "Name": "rules", "Type": "Rule[]" },
-            "DefaultVariationKey": { "Name": "defaultVariationKey", "Type": "string" },
-        }
-    },
-    "Rule": {
-        "Name": "Rule",
-        "FullName": "Rule",
-        "Ref": "#rule",
-        "Params": {
-            "Variations": { "Name": "variations", "Type": "Map<string, Variation>" },
-        }
-    },
-    "GetVisitorCode": {
-        "Name": "getVisitorCode()",
-        "Ref": "#getvisitorcode",
-        "Params": {
-            "DefaultVisitorCode": { "Name": "defaultVisitorCode" }
-        }
-    },
-    "Flush": {
-        "Name": "flush()",
-        "Ref": "#flush",
-        "Params": {
-            "Instant": { "Name": "instant" }
-        }
-    },
-    "GetVariation": {
-        "Name": "getVariation()",
-        "Ref": "#getvariation",
-        "Return": "Variation",
-        "Params": {
-            "Track": { "Name": "track" }
-        }
-    },
-    "GetVariations": {
-        "Name": "getVariations()",
-        "Ref": "#getvariations",
-        "Return": "Map<string, Variation>",
-        "Params": {
-            "OnlyActive": { "Name": "onlyActive" },
-            "Track": { "Name": "track" }
-        }
-    },
-    "SetForcedVariation": {
-        "Name": "setForcedVariation()",
-        "Ref": "#setforcedvariation",
-        "Params": {
-            "ExperimentId": { "Name": "experimentId" },
-            "VariationKey": { "Name": "variationKey", "Type": "string | null", "RemVal": "null" },
-            "ForceTargeting": { "Name": "forceTargeting" },
-        }
-    },
-    "EvaluateAudiences": {
-        "Name": "evaluateAudiences()",
-        "Ref": "#evaluateaudiences"
-    },
-    "GetRemoteVisitorData": {
-        "Name": "getRemoteVisitorData()",
-        "Ref": "#getremotevisitordata",
-    },
-    "TrackConversion": {
-        "Name": "trackConversion()",
-        "Ref": "#trackconversion",
-        "Params": {
-            "GoalId": { "Name": "goalId" },
-            "Revenue": { "Name": "revenue", "Type": "number" },
-            "IsUniqueIdentifier": { "Name": "isUniqueIdentifier" },
-            "Negative": { "Name": "negative" },
-            "Metadata": { "Name": "metadata", "Type": "CustomData[]", "DefaultValue": "undefined" }
-        }
-    },
-    "IsFeatureActive": {
-        "Name": "isFeatureFlagActive()",
-        "Ref": "#isfeatureflagactive"
-    },
-    "GetEngineTrackingCode": {
-        "Name": "getEngineTrackingCode()",
-        "Ref": "#getenginetrackingcode"
-    },
-    "AddData": {
-        "Name": "addData()",
-        "Ref": "#adddata",
-        "Params": {
-            "Track": { "Name": "track" },
-            "Data": { "Name": "data", "Type": "...KameleoonDataType[]" },
-        }
-    },
-    "GetDataFile": {
-        "Name": "getDataFile()",
-        "Ref": "#getdatafile",
-    },
-};
 
 With the Kameleoon JavaScript SDK, you can run experiments and activate feature flags. Integrating our SDK into your web application is easy, and its footprint (memory and network usage) is low.
 
@@ -385,7 +184,35 @@ The `domain` parameter is deprecated and will be removed in a future release. Us
     | trackingInterval (_optional_)             | `number`      | Specifies the interval for tracking requests in milliseconds. All visitors who were evaluated for any feature flag or had associated data are included in this tracking request, which is performed once per interval. The minimum value is `100` ms and the maximum value is `1_000` ms                                                                                                                                                                                                                                                                                                                                                                                                                  | `1_000` (1 second)                         |                          |
     | defaultDataFile (_optional_)              | `string`      | The `defaultDataFile` feature ensures the Kameleoon SDK is always **READY** by providing a fallback configuration when no cached data file exists. Developers can preload a valid configuration by fetching it from `https://sdk-config.kameleoon.eu/v3/<sitecode>` and passing it as `defaultDataFile` during initialization. When a `dateModified` timestamp (in milliseconds) is provided and is newer than the cached version, the SDK will use the default datafile instead of the cached version. **`If dateModified is omitted, the default datafile is only applied when no cached version exists`**. This ensures the SDK always has a valid configuration, whether default, cached, or updated. | `undefined`                                |                          |
 
-    <SharedDiv sec="set_default_data_file_js" c={Context} />
+    <Tip>
+    <details>
+    <summary>How to set `defaultDataFile` value correctly</summary>
+
+    **Option 1 (Recommended):** Use `JSON.stringify()`
+
+    ```js
+    const dataFileJson = {"configuration":{"consentType":.....,
+        {"key":"show_car","type":"JSON","value":"{\"make\":\"Porsche\",\"model\":\"911\"}"}},
+        "dateModified":1752209266000};
+    const dataFileString = JSON.stringify(dataFileJson);
+    const configuration = {
+      updateInterval: 20,
+      defaultDataFile: dataFileString
+    };
+    ```
+
+    **Option 2:** Raw JSON string (escape special characters)
+    ```js
+    const configuration = {
+      updateInterval: 20,
+      defaultDataFile: `{"configuration":{"consentType":.....,
+        {"key":"show_car","type":"JSON","value":"{\\"make\\":\\"Porsche\\",\\"model\\":\\"911\\"}"},
+        "dateModified":1752209266000}`
+    };
+    ```
+
+    </details>
+    </Tip>
   </Tab>
 </Tabs>
 
@@ -397,35 +224,69 @@ Do not use several client instances in one application, as it is not fully suppo
 
 ##### Assigning a unique ID to a user
 
-<ActivatingAFeatureFlag sec="assigning_a_unique_id_to_a_user" c={Context} />
+To assign a unique ID to a user, you can use the [`getVisitorCode()`](#getvisitorcode) method. If a **visitor code** doesn’t exist (from the request headers cookie), the method generates a random unique ID or uses a `defaultVisitorCode` that you would have generated. The ID is then set in a response headers cookie.
+
+If you are using Kameleoon in [Hybrid mode](https://developers.kameleoon.com/core-concepts/hybrid-experimentation/), calling the `getVisitorCode()` method ensures that the unique ID (**visitor code**) is shared between the application file `engine.js` (previously named, `kameleoon.js`) and the SDK.
 
 ##### Retrieving a flag configuration
 
-<ActivatingAFeatureFlag sec="retrieving_a_feature_flag_configuration___default" c={Context} />
+To implement a feature flag in your code, you must first create the feature flag in your Kameleoon account.
+
+To determine the status or variation of a feature flag for a specific user, you should use the [`getVariation()`](#getvariation) or [`isFeatureFlagActive()`](#isfeatureflagactive) method to retrieve the configuration based on the `featureKey`.
+
+The `getVariation()` method handles both simple feature flags with ON/OFF states and more complex flags with multiple variations. The method retrieves the appropriate variation for the user by checking the feature rules, assigning the variation, and returning it based on the `featureKey` and `visitorCode`.
+
+The `isFeatureFlagActive()` method can be used if you want to retrieve the configuration of a simple feature flag that has only an ON or OFF state, as opposed to more complex feature flags with multiple variations or targeting options.
+
+If your feature flag has associated variables (such as specific behaviors tied to each variation) `getVariation()` also enables you to access the [`Variation`](#variation) object, which provides details about the assigned variation and its associated experiment. This method checks whether the user is targeted, finds the visitor’s assigned variation, and saves it to storage. When `track=true`, the SDK will send the exposure event to the specified experiment on the next tracking request, which is automatically triggered based on the SDK’s [`tracking_interval_millisecond`](#configuration-parameters). By default, this interval is set to 1000 milliseconds (1 second).
+
+The `getVariation()` method allows you to control whether tracking is done. If `track=false`, no exposure events will be sent by the SDK. This is useful if you prefer not to track data through the SDK and instead rely on client-side tracking managed by the Kameleoon engine, for example. Additionally, setting `track=false` is helpful when using the `getVariations()` method, where you might only need the variations for all flags without triggering any tracking events. If you want to know more about how tracking works, view [this article](https://developers.kameleoon.com/feature-management-and-experimentation/faq/#when-does-the-sdk-send-a-tracking-request-for-analytics)
 
 ##### Adding data points to target a user or filter / breakdown visits in reports
 
-<ActivatingAFeatureFlag sec="adding_data_points_to_target_a_user_or_filter_breakdown_visits_in_reports___server" c={Context} />
+To target a user, ensure you've added relevant data points to their profile before retrieving the feature variation or checking if the flag is active. Use the [`addData()`](#adddata) method to add these data points to the user's profile.
+
+To retrieve data points collected on other devices or to access past user data (collected client-side when using Kameleoon in Hybrid mode), use the [`getRemoteVisitorData()`](#getremotevisitordata) method. This method asynchronously fetches data from the servers. It is important to call `getRemoteVisitorData()` *before* retrieving the variation or checking if the feature flag is active, as this data might be required to assign a user to a given variation.
+
+To learn more about available targeting conditions, see the [detailed article on the subject](/feature-management-and-experimentation/using-visit-history-in-feature-flags-and-experiments).
+
+Additionally, the data points you add to the visitor profile will be available when analyzing your experiments, allowing you to filter and break down your results by factors like device and browser. Kameleoon Hybrid mode automatically collects a variety of data points on the client-side, making it easy to break down your results based on these pre-collected data points. See the complete list [here](https://help.kameleoon.com/experiments-results-charts/#Breakdownnbsp).
+
+If you need to track additional data points beyond what's automatically collected, you can use Kameleoon's [Custom Data feature](#customdata). Custom Data allows you to capture and analyze specific information relevant to your experiments. Don't forget to call the [`flush()`](#flush) method to send the collected data to Kameleoon servers for analysis.
+
+<Note>
+To ensure your results are accurate, it's recommended to filter out bots by using the [`UserAgent`](#useragent) data type.
+</Note>
 
 ##### Tracking goal conversions
 
-<ActivatingAFeatureFlag sec="tracking_goal_conversions___param" c={Context} />
+When a user completes a desired action (such as making a purchase), it is recorded as a conversion. To track conversions, use the [`trackConversion()`](#trackconversion) method and provide the required `visitorCode` and `goalId` parameters.
+
+The conversion tracking request will be sent along with the next scheduled tracking request, which the SDK sends at regular intervals (defined by [`tracking_interval_millisecond`](#configuration-parameters)). If you prefer to send the request immediately, use the [`flush()`](#flush) method with the parameter `instant=true`.
 
 ##### Sending events to analytics solutions
 
-<ActivatingAFeatureFlag sec="sending_events_to_analytics_solutions" c={Context} />
+To track conversions and send exposure events to your customer analytics solution, you must first implement Kameleoon in [Hybrid mode](/core-concepts/hybrid-experimentation/). Then, use the [`getEngineTrackingCode()`](#getenginetrackingcode) method.
+
+The `getEngineTrackingCode()` method retrieves the unique tracking code required to send exposure events to your analytics solution. Using this method allows you to record events and send them to your desired analytics platform.
 
 ### Using a custom bucketing key
 
-<CustomBucketingKey sec="description" c={Context} />
+By default, Kameleoon uses a unique, anonymous visitor ID (`visitorCode`) to assign users to feature flag variations. This ID is typically generated and stored on the user's device (in a browser cookie for client-side and server-side SDKs—in persistent storage for mobile SDKs). However, in certain scenarios you may need to ensure all users of the same organization see the same variant of a feature flag.
+
+The **Custom Bucketing Key** option allows you to override this default behavior by providing your own custom identifier for bucketing. This override ensures that Kameleoon's assignment logic uses your specified key instead of the default `visitorCode`.
 
 #### Use cases
 
-<CustomBucketingKey sec="use_cases" c={Context} />
+Using a custom bucketing key is essential for maintaining consistency and accuracy in your feature flag assignments, particularly in these situations:
+
+- **Account-level or organizational experiments:** For B2B products or scenarios where you want to assign all users from the same organization to the same variation, you can use an identifier like an `accountId`. Custom bucketing keys are crucial for A/B testing features that impact an entire team or company.
+
+By implementing a custom bucketing key, you ensure greater consistency and accuracy in your experiments, leading to more reliable results and a better user experience.
 
 #### Technical details
 
-<CustomBucketingKey sec="technical_details_1" c={Context} />
+When you configure a custom bucketing key for a feature flag, you provide Kameleoon with a specific identifier from your application's data:
 
 ```js
 client.addData(visitorCode, new CustomData(index, 'newVisitorCode'));
@@ -435,11 +296,22 @@ client.addData(visitorCode, new CustomData(index, 'newVisitorCode'));
 [More information in addData()](#adddata)
 </Tip>
 
-<CustomBucketingKey sec="technical_details_2" c={Context} />
+- **Providing the custom key:** You provide your custom identifier to the Kameleoon SDK using the [`addData()`](#adddata) method. In this method, you will pass your chosen custom bucketing key as a [`CustomData`](#customdata) object. Here, `newVisitorCode` refers to the identifier you wish to use for your bucketing (for example, the new `userId` or `accountId`).
+
+<Warning>
+For the custom bucketing key to function correctly, it must also be defined and configured for the feature flag during the flag creation or editing process. Without this corresponding configuration, the SDK's bucketing will not apply your custom key. For detailed instructions on how to set this up in Kameleoon, refer to this [article](https://help.kameleoon.com/create-feature-flag/#Advanced_Flag_Settings).
+</Warning>
+
+- **Bucketing logic:** Once a custom bucketing key is provided through the `addData()` method, all hash calculations for assigning users to variations will use this `newVisitorCode` (your custom key) instead of the default `visitorCode`. Using the `newVisitorCode` means that the bucketing decision is tied to your custom identifier, ensuring consistent assignments across various contexts where that identifier is present.
+- **Data tracking and analytics:** It's crucial to note that while the `newVisitorCode` (your custom key) is used for bucketing decisions, **all subsequent data (tracking events and conversions, for example) is sent and associated with the _original_ `visitorCode`.** This separation ensures that your analytics accurately reflect individual user journeys and interactions within your experiment's broader context, even when bucketing is performed at a higher level (like an account) or across multiple devices/sessions. Your original visitor data remains intact for comprehensive reporting.
 
 #### Technical requirementes
 
-<CustomBucketingKey sec="technical_requirements" c={Context} />
+To effectively use a custom bucketing key:
+
+- The key must be a `string`.
+- It must be unique for the entity you intend to bucket (for example, if using a `userId`, each user's ID should be unique).
+- The key must be available to the SDK at the exact moment the feature flag decision is evaluated for that user or request.
 
 ### Targeting conditions
 
@@ -449,11 +321,11 @@ You can also use your own [external data to target users](/feature-management-an
 
 ### Logging
 
-<Logging sec="logging" c={Context} />
+The SDK generates logs to reflect various internal processes and issues.
 
 #### Log levels
 
-<Logging sec="log_levels" c={Context} />
+The SDK supports configuring limiting logging by a log level.
 
 <Tabs>
   <Tab title="TypeScript">
@@ -537,7 +409,11 @@ You can also use your own [external data to target users](/feature-management-an
 
 #### Custom handling of logs
 
-<Logging sec="custom_handling_of_logs" c={Context} />
+The SDK writes its logs to the console output by default. This behaviour can be overridden.
+
+<Note>
+Logging limiting by a log level is performed apart from the log handling logic.
+</Note>
 
 <Tabs>
   <Tab title="TypeScript">
@@ -1148,11 +1024,23 @@ Handling errors makes your application more stable and avoids technical issues.
 
 ### Cross-device experimentation
 
-<CrossDeviceReconciliation sec="cross_device_experimentation" c={Context} />
+To support visitors who access an app from multiple devices, Kameleoon allows the synchronization of previously collected visitor data across each of the visitor's devices and reconciliation of their visit history across devices through cross-device experimentation. Case studies and detailed information on how Kameleoon handles data across devices are available in the [article on cross-device experimentation](/core-concepts/cross-device-experimentation).
 
 #### Synchronizing custom data across devices
 
-<CrossDeviceReconciliation sec="synchronizing_custom_data" c={Context} />
+Although custom mapping synchronization is used to align visitor data across devices, it is not always necessary. Below are two scenarios where custom mapping sync is not required:
+
+**Same user ID across devices**
+If the same user ID is used consistently across all devices, synchronization is handled automatically without a custom mapping sync. It is enough to call the `getRemoteVisitorData()` method when you want to sync the data collected between multiple devices.
+
+**Multi-server instances with consistent IDs**
+In complex setups involving multiple servers (for example, distributed server instances), where the same user ID is available across servers, synchronization between servers (with `getRemoteVisitorData()`) is sufficient without additional custom mapping sync.
+
+Customers who need additional data can refer to the [`getRemoteVisitorData()`](#getremotevisitordata) method description for further guidance. In the below code, it is assumed that the same unique identifier (in this case, the `visitorCode`, which can also be referred to as `userId`) is used consistently between the two devices for accurate data retrieval.
+
+<Note>
+If you want to sync collected data in real time, you need to choose the scope **Visitor** for your custom data.
+</Note>
 
 <Tabs>
   <Tab title="TypeScript">
@@ -1404,7 +1292,31 @@ As the custom data you use as the identifier must be set to the `Visitor` scope,
     </Tabs>
   </Tab>
   <Tab title="TypeScript">
-    <CrossDeviceReconciliation sec="using_custom_data_session_merging" c={Context} />
+    [Cross-device experimentation](/core-concepts/cross-device-experimentation) allows for combining a visitor's history across each of their devices (history reconciliation). History reconciliation allow merging different visitor sessions into one. To reconcile visit history, use [`CustomData`](#customdata) to provide a unique identifier for the visitor. For more information, see the [dedicated documentation](/core-concepts/cross-device-experimentation/#activating-cross-device-history-reconciliation).
+
+    After cross-device reconciliation is enabled, calling [`getRemoteVisitorData()`](#getremotevisitordata) with the parameter `userId` retrieves all known data for a given user.
+
+    Sessions with the same identifier will always be shown the same variation in an experiment. In the Visitor view of your experiment's results pages, these sessions will appear as a single visitor.
+
+    The SDK configuration ensures that associated sessions always see the same variation of the experiment. However, there are some limitations regarding cross-device variation allocation. These limitations are outlined [here](/core-concepts/cross-device-experimentation#critical-points-and-practical-insights).
+
+    Follow the [activating cross-device history reconciliation](#cross-device-experimentation) guide to set up your custom data on the Kameleoon platform.
+
+
+
+    Afterwards, you can use the SDK normally. The following methods that may be helpful in the context of session merging:
+    - `getRemoteVisitorData()` with added [`UniqueIdentifier(true)`](#uniqueidentifier) - to retrieve data for all linked visitors.
+    - [`trackConversion()`](#trackconversion) or [`flush()`](#flush) with added `UniqueIdentifier(true)` data - to track some data for specific visitor that is associated with another visitor.
+
+
+
+
+
+    <Tip>
+    As the custom data you use as the identifier must be set to **Visitor scope**, you need to use [cross-device custom data synchronization](/core-concepts/cross-device-experimentation) to retrieve the identifier with the [`getRemoteVisitorData()`](#getremotevisitordata) method on each device.
+    </Tip>
+
+    Here's an example of how to use custom data for session merging.
 
     <Tabs>
       <Tab title="TypeScript">
@@ -1851,7 +1763,22 @@ This is the full reference documentation for the Kameleoon JavaScript SDK.
 
 #### getVariation()
 
-<GetVariation sec="description___js" c={Context} />
+* 📨 _Sends Tracking Data to Kameleoon (depending on the `track` parameter)_
+* 🎯 _Events:_ [`EventType.Evaluation`](#events-1)
+
+
+
+Retrieves the [`Variation`](#variation) assigned to a given visitor for a specific feature flag.
+
+This method takes a `visitorCode` and `featureKey` as mandatory arguments. The `track` argument is optional and defaults to `true`.
+
+It returns the assigned `Variation` for the visitor. If the visitor is not associated with any feature flag rules, the method returns the default `Variation` for the given feature flag.
+
+Ensure that proper error handling is implemented in your code to manage potential exceptions.
+
+<Note>
+The default variation refers to the variation assigned to a visitor when they do not match any predefined delivery rules for a feature flag. In other words, it is the fallback variation applied to all users who are not targeted by specific rules. It's represented as the variation in the "Then, for everyone else..." section in a management interface.
+</Note>
 
 <Tabs>
   <Tab title="TypeScript">
@@ -1950,19 +1877,49 @@ This is the full reference documentation for the Kameleoon JavaScript SDK.
 
 An object of type `GetVariationParamsType` with the following properties:
 
-<GetVariation sec="arguments" c={Context} />
+| Name        | Type   | Description                    | Default |
+|-------------|--------|--------------------------------| ------- |
+| visitorCode (_required_) | `string` | Unique identifier of the user. |  |
+| featureKey (_required_)  | `string` | Key of the feature you want to expose to a user. | |
+| track (_optional_) | `boolean` | An optional parameter to enable or disable tracking of the feature evaluation.| `true` |
 
 ##### Return value
 
-<GetVariation sec="return_value" c={Context} />
+| Type | Description |
+| ---- | ----------- |
+| `Variation` | An assigned [`Variation`](#variation) to a given visitor for a specific feature flag. |
 
 ##### Exceptions thrown
 
-<GetVariation sec="exceptions___js" c={Context} />
+| Type | Description |
+| ---- | ----------- |
+| `KameleoonException.Initialization` | Method was executed before the `kameleoonClient` completed it's [`initialize`](#initialize) call. |
+| `KameleoonException.VisitorCodeEmpty` | The visitor code is empty. |
+| `KameleoonException.VisitorCodeMaxLength` | The visitor code exceeded the maximum length (255 characters). |
+| `KameleoonException.FeatureFlagConfigurationNotFound` | Exception indicating that the requested feature key wasn't found in the internal configuration of the SDK. This usually means that the feature flag is not activated in the Kameleoon app (but code implementing the feature is already deployed in the application). |
+| `KameleoonException.FeatureFlagEnvironmentDisabled` | Exception indicating that feature flag is disabled for the visitor's current environment (for example, production, staging, or development). |
 
 #### getVariations()
 
-<GetVariations sec="description___js" c={Context} />
+* 📨 _Sends Tracking Data to Kameleoon (depending on the `track` parameter)_
+* 🎯 _Events:_ [`EventType.Evaluation`](#events-1)
+
+
+
+Retrieves a map of [`Variation`](#variation) objects assigned to a given visitor across all feature flags.
+
+This method iterates over all available feature flags and returns the assigned `Variation` for each flag associated with the specified visitor. It takes `visitorCode` as a mandatory argument, while `onlyActive` and `track` are optional.
+
+- If `onlyActive` is set to `true`, the method `getVariations()` will return feature flags variations provided the user is not bucketed with the `off` variation.
+- The `track` parameter controls whether or not the method will track the variation assignments. By default, it is set to `true`. If set to `false`, the tracking will be disabled.
+
+The returned map consists of feature flag keys as keys and their corresponding `Variation` as values. If no variation is assigned for a feature flag, the method returns the default `Variation` for that flag.
+
+Proper error handling should be implemented to manage potential exceptions.
+
+<Note>
+The default variation refers to the variation assigned to a visitor when they do not match any predefined delivery rules for a feature flag. In other words, it is the fallback variation applied to all users who are not targeted by specific rules. It's represented as the variation in the "Then, for everyone else..." section in a management interface.
+</Note>
 
 <Tabs>
   <Tab title="TypeScript">
@@ -2075,15 +2032,25 @@ An object of type `GetVariationParamsType` with the following properties:
 
 An object of type `GetVariationParamsType` with the following properties:
 
-<GetVariations sec="arguments" c={Context} />
+| Name        | Type   | Description                    | Default |
+|-------------|--------|--------------------------------| ------- |
+| visitorCode (_required_) | `string` | Unique identifier of the user. |  |
+| onlyActive (_optional_)  | `boolean` | An optional parameter indicating whether to return variations for active (`true`) or all (`false`) feature flags. | `false` |
+| track (_optional_) | `boolean` | An optional parameter to enable or disable tracking of the feature evaluation.| `true` |
 
 ##### Return value
 
-<GetVariations sec="return_value" c={Context} />
+| Type | Description |
+| ---- | ----------- |
+| `Map<string, Variation>` | Map that contains the assigned [`Variation`](#variation) objects of the feature flags using the keys of the corresponding features. |
 
 ##### Exceptions thrown
 
-<GetVariations sec="exceptions___js" c={Context} />
+| Type                                                | Description                                                                                       |
+| --------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| `KameleoonException.Initialization`       | Method was executed before the `kameleoonClient` completed it's [`initialize`](#initialize) call. |
+| `KameleoonException.VisitorCodeEmpty`     | The visitor code is empty.                                                    |
+| `KameleoonException.VisitorCodeMaxLength` | The visitor code exceeded the maximum length (255 characters).                                                |
 
 #### isFeatureFlagActive()
 
@@ -2249,7 +2216,29 @@ The `getFeatureFlags()` method returns a list of feature flags stored in the cli
 
 #### setForcedVariation()
 
-<SetForcedVariation sec="description" c={Context} />
+The method allows you to programmatically assign a specific [`Variation`](#variation) to a user, bypassing the standard evaluation process. This is especially valuable for controlled experiments where the usual evaluation logic is not required or must be skipped. It can also be helpful in scenarios like debugging or custom testing.
+
+When a **forced** variation is set, it overrides Kameleoon's real-time evaluation logic. Processes like segmentation, targeting conditions, and algorithmic calculations are skipped. To preserve segmentation and targeting conditions during an experiment, set `forceTargeting=false` instead.
+
+
+
+<Info>
+**Simulated** variations always take precedence in the execution order. If a **simulated** variation calculation is triggered, it will be fully processed and completed first.
+</Info>
+
+
+
+A forced variation is treated the same as an evaluated variation. It is tracked in analytics and stored in the user context like any standard evaluated variation, ensuring consistency in reporting.
+
+The method may throw exceptions under certain conditions (e.g., invalid parameters, user context, or internal issues). Proper exception handling is essential to ensure that your application remains stable and resilient.
+
+
+
+<Warning>
+It’s important to distinguish **forced** variations from **[simulated](#getvisitorcode)** variations:
+- **Forced variations**: Are specific to an individual experiment.
+- **Simulated variations**: Affect the overall **feature flag** result.
+</Warning>
 
 <Tabs>
   <Tab title="TypeScript">
@@ -2324,15 +2313,44 @@ The `getFeatureFlags()` method returns a list of feature flags stored in the cli
 
 ##### Arguments
 
-<SetForcedVariation sec="arguments" c={Context} />
+An object of type `SetForcedVariationParametersType` with the following properties:
+
+
+
+
+
+
+
+| Name        | Type   | Description                    | Default |
+|-------------|--------|--------------------------------| ------- |
+| visitorCode (_required_) | `string` | Unique identifier of the user. | |
+| experimentId (_required_) | `number` | **Experiment Id** that will be targeted and selected during the evaluation process. | |
+| variationKey (_required_) | `string | null` | **Variation Key** corresponding to a `Variation` that should be forced as the returned value for the experiment. If the value is `null`, the forced variation will be reset. | |
+| forceTargeting (_optional_) | `boolean` | Indicates whether targeting for the experiment should be forced and skipped (`true`) or applied as in the standard evaluation process (`false`). | `true` |
 
 ##### Exceptions thrown
 
-<SetForcedVariation sec="exceptions___js" c={Context} />
+| Type | Description |
+|----- | ----------- |
+| `KameleoonException.VisitorCodeEmpty` | The visitor code is empty. |
+| `KameleoonException.VisitorCodeMaxLength` | The visitor code exceeded the maximum length (255 characters). |
+| `KameleoonException.Initialization` | Exception indicating that the SDK is not fully initialized yet. |
+| `KameleoonException.FeatureFlagExperimentNotFound` | Exception indicating that the requested experiment id has not been found in the SDK's internal configuration. This is usually normal and means that the rule's corresponding experiment has not yet been activated on Kameleoon's side. |
+| `KameleoonException.FeatureFlagVariationNotFound` | Exception indicating that the requested variation key(id) has not been found in the internal configuration of the SDK. This is usually normal and means that the variation's corresponding experiment has not yet been activated on Kameleoon's side. |
+| `KameleoonException.StorageRead` | Couldn't read storage data. |
+| `KameleoonException.StorageWrite` | Couldn't update storage data. |
+
+<SharedDiv sec="note_exceptions" c={props.c}/>
 
 #### evaluateAudiences()
 
-<EvaluateAudiences sec="description" c={Context} />
+* 📨 _Sends Tracking Data to Kameleoon_
+
+This method evaluates visitors against all available Audiences Explorer segments and tracks those who match.
+
+`evaluateAudiences()` should be called **after all relevant visitor data has been set or updated**, and **just before** getting a feature variation or checking a feature flag. This approach ensures that the visitor is evaluated against the most current data available, allowing for accurate audience assignment based on all criteria.
+
+After calling this method, you can perform a detailed analysis of segment performance in Audiences Explorer.
 
 <Tabs>
   <Tab title="TypeScript">
@@ -2381,17 +2399,27 @@ The `getFeatureFlags()` method returns a list of feature flags stored in the cli
 
 ##### Arguments
 
-<EvaluateAudiences sec="arguments" c={Context} />
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| visitorCode (_required_) | `string` | Unique identifier of the user. |
 
 ##### Exceptions thrown
 
-<EvaluateAudiences sec="exceptions___js" c={Context} />
+| Type | Description |
+| ---- | ----------- |
+| `KameleoonException.Initialization` | Method was executed before the `kameleoonClient` completed it's [`initialize`](#initialize) call. |
+| `KameleoonException.VisitorCodeEmpty` | The visitor code is empty. |
+| `KameleoonException.VisitorCodeMaxLength` | The visitor code exceeded the maximum length (255 characters). |
+
+<SharedDiv sec="note_exceptions" c={props.c}/>
 
 #### getDataFile()
 
-<GetDataFile sec="tip_qa" c={Context} />
+<Tip>
+To evaluate all feature flags, use [`getVariations()`](#getvariations). This method is more efficient than calling `DataFile` and iterating through flags with `getVariation()`.
+</Tip>
 
-<GetDataFile sec="description" c={Context} />
+Returns the current SDK configuration as a [`DataFile`](#datafile) object.
 
 <Tabs>
   <Tab title="TypeScript">
@@ -2422,7 +2450,9 @@ The `getFeatureFlags()` method returns a list of feature flags stored in the cli
 
 ##### Return value
 
-<GetDataFile sec="return_value" c={Context} />
+| Type                             | Description                               |
+| -------------------------------- | ----------------------------------------- |
+| [`DataFile`](#datafile)     | The data file containing the SDK configuration. |
 
 ### Visitor data
 
@@ -2430,7 +2460,30 @@ The `getFeatureFlags()` method returns a list of feature flags stored in the cli
 
 The `getVisitorCode()` method obtains a visitor code from the browser cookie. If the visitor code doesn't exist, the method generates a random visitor code (or uses the `defaultVisitorCode` value if you provided one) and sets the new visitor code in a cookie.
 
-<SharedDiv sec="get_visitor_code_simulated" c={Context} />
+<Info>
+The `getVisitorCode()` method allows you to set **simulated** variations for a visitor. When cookies (from a **request** or **document**) contain the key `kameleoonSimulationFFData`, the standard evaluation process is bypassed. Instead, the method directly returns a [`Variation`](#variation) based on the provided data.
+<details>
+<summary>View Details</summary>
+<p>
+You can apply simulations in two ways:
+
+- **Automatically (recommended):** If using Kameleoon Web Experimentation or the SDK in [Hybrid mode](https://developers.kameleoon.com/core-concepts/hybrid-experimentation#linking-feature-experiments-with-front-end-tracking-code), the cookie is created automatically when simulating a variant's display using the [Simulation Panel](https://help.kameleoon.com/use-simulation-mode/).
+- **Manually:** Set the `kameleoonSimulationFFData` cookie manually.
+
+It’s important to distinguish **simulated** variations from **[forced](#setforcedvariation)** variations:
+- **Simulated variations**: Affect the overall **feature flag** result.
+- **Forced variations**: Are specific to an individual experiment.
+
+⚙️ **Manual setup**
+
+Please ensure the `kameleoonSimulationFFData` cookie follows this format:
+- `kameleoonSimulationFFData={"featureKey":{"expId":10,"varId":20}}`: Simulates the variation with `varId` of experiment `expId` for the given `featureKey`.
+- `kameleoonSimulationFFData={"featureKey":{"expId":0}}`: Simulates the default variation (defined in the **Then, for everyone else in Production, serve** section) for the given `featureKey`.
+
+⚠️ To ensure proper functionality, the cookie value must be encoded as a URI component using a method such as [`encodeURIComponent`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/encodeURIComponent).
+</p>
+</details>
+</Info>
 
 <Tabs>
   <Tab title="TypeScript">
@@ -3169,7 +3222,7 @@ Here is the list of available `VisitorDataFiltersType` filters:
     | kcs (_optional_)                 | `boolean` | If true, Kameleoon Conversion Score (KCS) will be retrieved. Requires the [AI Predictive Targeting add-on](https://help.kameleoon.com/target-users-by-ai-propensity-score-kameleoon-conversion-score/)                                                                                                                                         | `false` |
     | visitorCode (_optional_)         | `boolean` | If true, Kameleoon will retrieve the `visitorCode` from the most recent visit and use it for the current visit. This is necessary if you want to ensure that the visitor, identified by their `visitorCode`, always receives the same variation across visits for [Cross-device experimentation](/core-concepts/cross-device-experimentation). | `true`  |
     | personalization (_optional_)     | `boolean` | If true, personalization data will be retrieved. This is required for the personalization condition                                                                                                                                                                                                                                            | `false` |
-    | cbs (_optional_)                 | `boolean` | <Text x={Shared.RemoteVisitorDataFilter.CBS} />                                                                                                                                                                                                                                                                                                | `false` |
+    | cbs (_optional_)                 | `boolean` | If true, Contextual Bandit score data will be retrieved.                                                                                                                                                                                                                                                                                                | `false` |
 </Note>
   </Tab>
 </Tabs>
@@ -3336,7 +3389,23 @@ The `setLegalConsent` method specifies whether the visitor has given legal conse
 
 <Tabs>
   <Tab title="TypeScript">
-    <TrackConversion sec="description___js_old" c={Context} />
+    * _📨 _Sends Tracking Data to Kameleoon_
+
+
+
+
+
+    Use this method to track a conversion for a specific [goal](https://help.kameleoon.com/create-new-goal/) and user. This method requires `visitorCode` and `goalId`. In addition, this method also accepts an optional `revenue` argument. The `visitorCode` is usually identical to the one that was used when triggering the experiment.
+
+    The `trackConversion()` method doesn't return any value. This method is non-blocking as the server call is made asynchronously.
+
+
+
+    If you specify a `visitorCode` and set `isUniqueIdentifier` to `true`, the `trackConversion()` method uses it as the unique visitor identifier, which is useful for [cross-device experimentation](#cross-device-experimentation) because the SDK links the flushed data with the visitor that is associated with the specified identifier.
+
+    <Note>
+    The `isUniqueIdentifier` can also be useful in other edge-case scenarios, such as when you can't access the anonymous `visitorCode` that was originally assigned to the visitor, but you do have access to an internal ID that is connected to the anonymous visitor using session merging capabilities.
+    </Note>
 
     <Tabs>
       <Tab title="TypeScript">
@@ -3408,14 +3477,31 @@ The `setLegalConsent` method specifies whether the visitor has given legal conse
 
     Parameters object consisting of:
 
-    <TrackConversion sec="arguments___js_old" c={Context} />
+    | Name | Type | Description | Default |
+    | ---- | ---- | ----------- | ------- |
+    | visitorCode (_required_) | `string` | Unique identifier of the user. | |
+    | goalId (_required_) | `number` | ID of the goal. | |
+    | revenue (_optional_)| `number` | Revenue of the conversion. | `0` |
+    | isUniqueIdentifier (_optional_) | `boolean` | An optional parameter for specifying if the visitorCode is a unique identifier. | `false` |
 
     ##### Exceptions thrown
 
-    <TrackConversion sec="exceptions___js" c={Context} />
+    | Type | Description |
+    |----- | ----------- |
+    | `KameleoonException.VisitorCodeMaxLength` | The visitor code exceeded the maximum length (255 characters). |
+    | `KameleoonException.VisitorCodeEmpty` | The visitor code is empty. |
+    | `KameleoonException.StorageWrite` | Couldn't update storage data. |
   </Tab>
   <Tab title="TypeScript">
-    <TrackConversion sec="description___js" c={Context} />
+    * 📨 _Sends Tracking Data to Kameleoon_
+
+
+
+
+
+    Use this method to track a conversion for a specific [goal](https://help.kameleoon.com/create-new-goal/) and user. This method requires `visitorCode` and `goalId`. In addition, this method also accepts an optional `revenue`, `negative` and `metadata` arguments. The `visitorCode` is usually identical to the one that was used when triggering the experiment.
+
+    The `trackConversion()` method doesn't return any value. This method is non-blocking as the server call is made asynchronously.
 
     <Tabs>
       <Tab title="TypeScript">
@@ -3481,10 +3567,22 @@ The `setLegalConsent` method specifies whether the visitor has given legal conse
 
     Parameters object consisting of:
 
-    <TrackConversion sec="arguments___js" c={Context} />
+    | Name | Type | Description | Default |
+    | ---- | ---- | ----------- | ------- |
+    | visitorCode (_required_) | `string` | Unique identifier of the user. | |
+    | goalId (_required_) | `number` | ID of the goal. | |
+    | negative (_optional_) | `boolean` | Defines if the revenue is positive or negative. | `false` |
+    | revenue (_optional_)| `number` | Revenue of the conversion. | `0` |
+    | metadata (_optional_) | `CustomData[]` | Metadata of the conversion. | `undefined` |
 
     <Note>
-<TrackConversion sec="note_metadata" c={Context} />
+Support for metadata in conversions is currently **only available to customers participating in the [beta program](https://help.kameleoon.com/kameleoon-beta-program/)**. Additionally, metadata values are accessible **exclusively through raw data exports.** For more information, see the guide on [accessing raw export data](https://help.kameleoon.com/experiments-results-actions/#Export).
+
+If the `metadata` parameter is provided, Kameleoon will use these specified values for the current conversion instead of what was previously collected using the [`addData()`](#adddata) method. If the parameter is omitted, Kameleoon will use the last tracked values for those [`CustomData`](#customdata) prior to the conversion and within the same visit.
+
+Kameleoon will only consider the metadata values that are explicitly passed as parameters to the `trackConversion()` method.
+
+In the example below, Kameleoon will associate the conversion only with the custom data value explicitly provided as a parameter (here: index 5 with the value 'Amex Credit Card').
 
     <Tabs>
       <Tab title="TypeScript">
@@ -3514,7 +3612,11 @@ The `setLegalConsent` method specifies whether the visitor has given legal conse
 
 ##### Exceptions thrown
 
-<TrackConversion sec="exceptions___js" c={Context} />
+| Type | Description |
+|----- | ----------- |
+| `KameleoonException.VisitorCodeMaxLength` | The visitor code exceeded the maximum length (255 characters). |
+| `KameleoonException.VisitorCodeEmpty` | The visitor code is empty. |
+| `KameleoonException.StorageWrite` | Couldn't update storage data. |
 
 ---
 
@@ -3865,11 +3967,21 @@ Each visitor can only have one `UniqueIdentifier`. Adding another `UniqueIdentif
 
 #### Conversion
 
-<Conversion sec="description" c={Context} />
+The `Conversion` data set stored here can be used to filter experiment and personalization reports by any goal associated with it.
+
+<Tip>
+- Each visitor can have multiple `Conversion` objects.
+- You can find the `goalId` in the Kameleoon app.
+</Tip>
 
 `ConversionParametersType` conversionParameters - an object with conversion parameters described below
 
-<Conversion sec="arguments" c={Context} />
+| Name | Type | Description | Default |
+| ---- | ---- | ----------- | ------- |
+| goalId (_required_) | `number` | ID of the goal. | |
+| revenue (_optional_) | `float` | Revenue of the conversion | `0` |
+| negative (_optional_) | `boolean` | Defines if the revenue is positive or negative. | `false` |
+| metadata (_optional_) | `CustomData[]` | Metadata of the conversion. | `undefined` |
 
 <Tabs>
   <Tab title="TypeScript">
@@ -4464,9 +4576,15 @@ If you use internal bots, we suggest that you pass the value **curl/8.0** of the
 
 #### ApplicationVersion
 
-<ApplicationVersion sec="description" c={Context} />
+`ApplicationVersion` represents the semantic version number of your application.
 
-<ApplicationVersion sec="arguments" c={Context} />
+<Tip>
+A **visitor** can have only one `ApplicationVersion`. Adding a second instance will overwrite the first one.
+</Tip>
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| version (_optional_) | `string` | The mobile application version. This field must follow semantic versioning. Accepted formats are `major`, `major.minor`, or `major.minor.patch`. |
 
 <Tabs>
   <Tab title="TypeScript">
@@ -4511,9 +4629,13 @@ If you use internal bots, we suggest that you pass the value **curl/8.0** of the
 
 #### DataFile
 
-<DataFile sec="description" c={Context} />
+The `DataFile` contains the SDK configuration details.
 
-<DataFile sec="arguments" c={Context} />
+It can be extended with additional information if required by clients. If you need more details, please contact your Customer Success Manager.
+
+| Name                                         | Type                                              | Description                                                         |
+| -------------------------------------------- | ------------------------------------------------- | ------------------------------------------------------------------- |
+| featureFlags | `Map<string, FeatureFlag>` | A map of [`FeatureFlag`](#featureflag) objects, keyed by feature flag keys. |
 
 <Tabs>
   <Tab title="TypeScript">
@@ -4532,9 +4654,16 @@ If you use internal bots, we suggest that you pass the value **curl/8.0** of the
 
 #### FeatureFlag
 
-<FeatureFlag sec="description_rules" c={Context} />
+The `FeatureFlag` represents a set of properties that define a feature flag itself — for example, its [`Variations`](#variation), [`Rules`](#rule), environment status, and other related details.
 
-<FeatureFlag sec="arguments_rules" c={Context} />
+It can be extended with additional information if required by clients. If you need more details, please contact your Customer Success Manager.
+
+| Name                                             | Type                                              | Description                                                           |
+| ------------------------------------------------ | ------------------------------------------------- | --------------------------------------------------------------------- |
+| environmentEnabled | `boolean` | Indicating whether the feature flag is enabled in the current environment. |
+| defaultVariationKey | `string` | The key of the default variation associated with the feature flag. |
+| variations | `Map<string, Variation>` | A map of `Variation` objects, keyed by variation keys. |
+| rules | `Rule[]` | A list of `Rule` objects |
 
 <Tabs>
   <Tab title="TypeScript">
@@ -4573,9 +4702,13 @@ If you use internal bots, we suggest that you pass the value **curl/8.0** of the
 
 #### Rule
 
-<Rule sec="description" c={Context} />
+The `Rule` represents a set of properties that define a rule itself — for example, its [`Variations`](#variation).
 
-<Rule sec="arguments" c={Context} />
+It can be extended with additional information if required by clients. If you need more details, please contact your Customer Success Manager.
+
+| Name                                             | Type                                              | Description                                                           |
+| ------------------------------------------------ | ------------------------------------------------- | --------------------------------------------------------------------- |
+| variations | `Map<string, Variation>` | A map of `Variation` objects, keyed by variation keys. |
 
 <Tabs>
   <Tab title="TypeScript">
