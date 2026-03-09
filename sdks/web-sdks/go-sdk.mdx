@@ -2,7 +2,7 @@
 title: 'Go SDK'
 ---
 
-import { Select, Text, Bold, Italic, Code, CodeRef, Ref, If } from '/snippets/sdks/utils.mdx';
+import { Select, Text, Bold, Italic, Code, CodeRef, Ref, If } from '/snippets/sdks/utils.jsx';
 import SharedDiv, { Shared } from '/snippets/sdks/shared.mdx';
 import CrossDeviceReconciliation from '/snippets/sdks/developer-guide/cross-device-reconciliation.mdx';
 import ActivatingAFeatureFlag from '/snippets/sdks/developer-guide/getting-started/activating-a-feature-flag.mdx';
@@ -25,6 +25,8 @@ import CustomBucketingKey from '/snippets/sdks/developer-guide/custom-bucketing-
 import DataFile from '/snippets/sdks/reference/returned-types/data-file.mdx';
 import FeatureFlag from '/snippets/sdks/reference/returned-types/feature-flag.mdx';
 import Rule from '/snippets/sdks/reference/returned-types/rule.mdx';
+
+export const SdkUi = { Select, Text, Bold, Italic, Code, CodeRef, Ref, If };
 
 export const Context = {
     IsServer: true,
@@ -333,31 +335,31 @@ client, err := KameleoonClientFactory.CreateFromFile("your-project-sitecode", "/
 
 ##### Assigning a unique ID to a user
 
-<ActivatingAFeatureFlag sec="assigning_a_unique_id_to_a_user" c={Context}/>
+<ActivatingAFeatureFlag sec="assigning_a_unique_id_to_a_user" c={Context} ui={SdkUi} shared={Shared}/>
 
 ##### Retrieving a flag configuration
 
-<ActivatingAFeatureFlag sec="retrieving_a_feature_flag_configuration___default" c={Context}/>
+<ActivatingAFeatureFlag sec="retrieving_a_feature_flag_configuration___default" c={Context} ui={SdkUi} shared={Shared}/>
 
 ##### Adding data points to target a user or filter / breakdown visits in reports
 
-<ActivatingAFeatureFlag sec="adding_data_points_to_target_a_user_or_filter_breakdown_visits_in_reports___server" c={Context}/>
+<ActivatingAFeatureFlag sec="adding_data_points_to_target_a_user_or_filter_breakdown_visits_in_reports___server" c={Context} ui={SdkUi} shared={Shared}/>
 
 ##### Tracking flag exposition and goal conversions
 
-<ActivatingAFeatureFlag sec="tracking_goal_conversions___method" c={Context}/>
+<ActivatingAFeatureFlag sec="tracking_goal_conversions___method" c={Context} ui={SdkUi} shared={Shared}/>
 
 ##### Sending events to analytics solutions
 
-<ActivatingAFeatureFlag sec="sending_events_to_analytics_solutions" c={Context}/>
+<ActivatingAFeatureFlag sec="sending_events_to_analytics_solutions" c={Context} ui={SdkUi} shared={Shared}/>
 
 ### Cross-device experimentation
 
-<CrossDeviceReconciliation sec="cross_device_experimentation" c={Context}/>
+<CrossDeviceReconciliation sec="cross_device_experimentation" c={Context} ui={SdkUi} shared={Shared}/>
 
 #### Synchronizing custom data across devices
 
-<CrossDeviceReconciliation sec="synchronizing_custom_data" c={Context}/>
+<CrossDeviceReconciliation sec="synchronizing_custom_data" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```go
 // In this example, Custom data with index `90` was set to "Visitor" scope in Kameleoon.
@@ -377,7 +379,7 @@ _, err := kameleoonClient.GetRemoteVisitorData(visitorCode, true)
 
 #### Using custom data for session merging
 
-<CrossDeviceReconciliation sec="using_custom_data_session_merging" c={Context}/>
+<CrossDeviceReconciliation sec="using_custom_data_session_merging" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```go
 // In this example, `91` represents the Custom Data's index
@@ -413,41 +415,41 @@ err := kameleoonClient.TrackConversionRevenue(userId, 123, 10.0)
 _, err := kameleoonClient.GetRemoteVisitorData(userId, true)
 ```
 
-<CrossDeviceReconciliation sec="cross_device_visitor_code" c={Context}/>
+<CrossDeviceReconciliation sec="cross_device_visitor_code" c={Context} ui={SdkUi} shared={Shared}/>
 
 ### Using a custom bucketing key
 
-<CustomBucketingKey sec="description" c={Context}/>
+<CustomBucketingKey sec="description" c={Context} ui={SdkUi} shared={Shared}/>
 
 #### Use cases
 
-<CustomBucketingKey sec="use_cases" c={Context}/>
+<CustomBucketingKey sec="use_cases" c={Context} ui={SdkUi} shared={Shared}/>
 
 #### Technical details
 
-<CustomBucketingKey sec="technical_details_1" c={Context}/>
+<CustomBucketingKey sec="technical_details_1" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```go
 client.AddData(visitorCode, types.NewCustomData(index, "newVisitorCode"))
 ```
 
-<CustomBucketingKey sec="technical_details_2" c={Context}/>
+<CustomBucketingKey sec="technical_details_2" c={Context} ui={SdkUi} shared={Shared}/>
 
 #### Technical requirementes
 
-<CustomBucketingKey sec="technical_requirements" c={Context}/>
+<CustomBucketingKey sec="technical_requirements" c={Context} ui={SdkUi} shared={Shared}/>
 
 ### Targeting conditions
 
-<TargetingConditions sec="targeting_conditons_description" c={Context}/>
+<TargetingConditions sec="targeting_conditons_description" c={Context} ui={SdkUi} shared={Shared}/>
 
 ### Logging
 
-<Logging sec="logging" c={Context}/>
+<Logging sec="logging" c={Context} ui={SdkUi} shared={Shared}/>
 
 #### Log levels
 
-<Logging sec="log_levels" c={Context}/>
+<Logging sec="log_levels" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```go
 import (
@@ -478,7 +480,7 @@ logging.SetLogLevel(logging.DEBUG)
 
 #### Custom handling of logs
 
-<Logging sec="custom_handling_of_logs" c={Context}/>
+<Logging sec="custom_handling_of_logs" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```go
 import (
@@ -680,7 +682,7 @@ errs.FeatureConfigNotFound | This error indicates that the requested feature key
 errs.VisitorCodeInvalid    | This error is returned when the visitor code provided is invalid, meaning that it is either empty or its length exceeds 255 characters.
 
 #### GetVariation()
-<GetVariation sec="description" c={Context}/>
+<GetVariation sec="description" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```go
 const featureKey = "new_checkout"
@@ -707,16 +709,16 @@ switch (variation.Key) {
 ```
 
 ##### Arguments
-<GetVariation sec="arguments" c={Context}/>
+<GetVariation sec="arguments" c={Context} ui={SdkUi} shared={Shared}/>
 
 ##### Return value
-<GetVariation sec="return_value" c={Context}/>
+<GetVariation sec="return_value" c={Context} ui={SdkUi} shared={Shared}/>
 
 ##### Exceptions thrown
-<GetVariation sec="exceptions" c={Context}/>
+<GetVariation sec="exceptions" c={Context} ui={SdkUi} shared={Shared}/>
 
 #### GetVariations()
-<GetVariations sec="description" c={Context}/>
+<GetVariations sec="description" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```go
 variations, err := client.GetVariations(visitorCode)
@@ -731,13 +733,13 @@ if err != nil {
 ```
 
 ##### Arguments
-<GetVariations sec="arguments" c={Context}/>
+<GetVariations sec="arguments" c={Context} ui={SdkUi} shared={Shared}/>
 
 ##### Return value
-<GetVariations sec="return_value" c={Context}/>
+<GetVariations sec="return_value" c={Context} ui={SdkUi} shared={Shared}/>
 
 ##### Exceptions thrown
-<GetVariations sec="exceptions" c={Context}/>
+<GetVariations sec="exceptions" c={Context} ui={SdkUi} shared={Shared}/>
 
 ##### Arguments
 
@@ -761,7 +763,7 @@ if err != nil {
 
 #### GetFeatureList()
 
-<GetFeatureList sec="description" c={Context}/>
+<GetFeatureList sec="description" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```go
 arrayFeatureKeys := client.GetFeatureList()
@@ -769,11 +771,11 @@ arrayFeatureKeys := client.GetFeatureList()
 
 ##### Return value
 
-<GetFeatureList sec="return_value" c={Context}/>
+<GetFeatureList sec="return_value" c={Context} ui={SdkUi} shared={Shared}/>
 
 #### SetForcedVariation()
 
-<SetForcedVariation sec="description" c={Context}/>
+<SetForcedVariation sec="description" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```go
 const experimentId = 9516
@@ -796,15 +798,15 @@ if err != nil {
 
 ##### Arguments
 
-<SetForcedVariation sec="arguments" c={Context}/>
+<SetForcedVariation sec="arguments" c={Context} ui={SdkUi} shared={Shared}/>
 
 ##### Exceptions thrown
 
-<SetForcedVariation sec="exceptions" c={Context}/>
+<SetForcedVariation sec="exceptions" c={Context} ui={SdkUi} shared={Shared}/>
 
 #### EvaluateAudiences()
 
-<EvaluateAudiences sec="description" c={Context}/>
+<EvaluateAudiences sec="description" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```go
 if err := client.EvaluateAudiences(visitorCode); err != nil {
@@ -814,17 +816,17 @@ if err := client.EvaluateAudiences(visitorCode); err != nil {
 
 ##### Arguments
 
-<EvaluateAudiences sec="arguments" c={Context}/>
+<EvaluateAudiences sec="arguments" c={Context} ui={SdkUi} shared={Shared}/>
 
 ##### Exceptions thrown
 
-<EvaluateAudiences sec="exceptions" c={Context}/>
+<EvaluateAudiences sec="exceptions" c={Context} ui={SdkUi} shared={Shared}/>
 
 #### GetDataFile()
 
-<GetDataFile sec="tip_qa" c={Context}/>
+<GetDataFile sec="tip_qa" c={Context} ui={SdkUi} shared={Shared}/>
 
-<GetDataFile sec="description" c={Context}/>
+<GetDataFile sec="description" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```go
 dataFile := client.GetDataFile()
@@ -832,7 +834,7 @@ dataFile := client.GetDataFile()
 
 ##### Return value
 
-<GetDataFile sec="return_value" c={Context}/>
+<GetDataFile sec="return_value" c={Context} ui={SdkUi} shared={Shared}/>
 
 ### Visitor data
 
@@ -856,7 +858,7 @@ For more information, please refer to this [article](https://developers.kameleoo
 If you decide to provide your own `User ID` instead of using the Kameleoon generated visitorCode, it is your responsibility to ensure that the User ID is unique. The SDK does not check for uniqueness. It's important to note that the User ID you provide must not exceed 255 characters, as any excess characters will result in an exception being thrown.
 </Note>
 
-<SharedDiv sec="get_visitor_code_simulated" c={Context}/>
+<SharedDiv sec="get_visitor_code_simulated" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```go
 visitorCode, err := client.GetVisitorCode(req, resp)
@@ -885,7 +887,7 @@ Error Message | Description
 errs.VisitorCodeInvalid | This error is returned when the visitor code provided is invalid, meaning that it is either empty or its length exceeds 255 characters.
 
 #### AddData()
-<AddData sec="description" c={Context}/>
+<AddData sec="description" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```go
 import (
@@ -901,10 +903,10 @@ client.AddData(visitorCode,
 ```
 
 ##### Arguments
-<AddData sec="arguments" c={Context}/>
+<AddData sec="arguments" c={Context} ui={SdkUi} shared={Shared}/>
 
 ##### Exceptions
-<AddData sec="exceptions" c={Context}/>
+<AddData sec="exceptions" c={Context} ui={SdkUi} shared={Shared}/>
 
 #### FlushAll() / FlushVisitor() / FlushVisitorInstantly()
 
@@ -1236,7 +1238,7 @@ errs.VisitorCodeInvalid | This error is returned when the visitor code provided 
 
 #### TrackConversion()
 
-<TrackConversion sec="description" c={Context}/>
+<TrackConversion sec="description" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```go
 import (
@@ -1259,10 +1261,10 @@ client.TrackConversionWithOptParams(visitorCode, goalID, TrackConversionOptParam
 ```
 
 ##### Arguments
-<TrackConversion sec="arguments" c={Context}/>
+<TrackConversion sec="arguments" c={Context} ui={SdkUi} shared={Shared}/>
 
 <Note>
-<TrackConversion sec="note_metadata" c={Context}/>
+<TrackConversion sec="note_metadata" c={Context} ui={SdkUi} shared={Shared}/>
 ```go
 kameleoonClient.AddData(visitorCode, types.NewCustomData(5, "Credit Card"), types.NewCustomData(9, "Express Delivery"));
 kameleoonClient.TrackConversionWithOptParams(visitorCode, 10, TrackConversionOptParams{
@@ -1274,11 +1276,11 @@ kameleoonClient.TrackConversionWithOptParams(visitorCode, 10, TrackConversionOpt
 </Note>
 
 ##### Exceptions
-<TrackConversion sec="exceptions" c={Context}/>
+<TrackConversion sec="exceptions" c={Context} ui={SdkUi} shared={Shared}/>
 
 #### GetEngineTrackingCode()
 
-<GetEngineTrackingCode sec="description" c={Context}/>
+<GetEngineTrackingCode sec="description" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```go
 engineTrackingCode := kameleoonClient.GetEngineTrackingCode(visitorCode)
@@ -1286,11 +1288,11 @@ engineTrackingCode := kameleoonClient.GetEngineTrackingCode(visitorCode)
 
 ##### Arguments
 
-<GetEngineTrackingCode sec="arguments" c={Context}/>
+<GetEngineTrackingCode sec="arguments" c={Context} ui={SdkUi} shared={Shared}/>
 
 ##### Return value
 
-<GetEngineTrackingCode sec="return_value" c={Context}/>
+<GetEngineTrackingCode sec="return_value" c={Context} ui={SdkUi} shared={Shared}/>
 
 ### Events
 
@@ -1301,19 +1303,19 @@ kameleoonClient.OnUpdateConfiguration(
 )
 ```
 
-<UpdateConfigurationHandler sec="description" c={Context}/>
+<UpdateConfigurationHandler sec="description" c={Context} ui={SdkUi} shared={Shared}/>
 
 ##### Arguments
 
-<UpdateConfigurationHandler sec="arguments" c={Context}/>
+<UpdateConfigurationHandler sec="arguments" c={Context} ui={SdkUi} shared={Shared}/>
 
 ### Data types
 
 #### Browser
 
-<Browser sec="description" c={Context}/>
+<Browser sec="description" c={Context} ui={SdkUi} shared={Shared}/>
 
-<Browser sec="arguments" c={Context}/>
+<Browser sec="arguments" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```go
 client.AddData(visitorCode, types.NewBrowser(types.BrowserTypeChrome))
@@ -1323,9 +1325,9 @@ client.AddData(visitorCode, types.NewBrowser(types.BrowserTypeSafari, 16.0))
 
 #### Conversion
 
-<Conversion sec="description" c={Context}/>
+<Conversion sec="description" c={Context} ui={SdkUi} shared={Shared}/>
 
-<Conversion sec="arguments" c={Context}/>
+<Conversion sec="arguments" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```go
 client.AddData(visitorCode, types.NewConversion(32, true))
@@ -1372,9 +1374,9 @@ client.AddData(visitorCode, cookie)
 
 #### Geolocation
 
-<Geolocation sec="description" c={Context}/>
+<Geolocation sec="description" c={Context} ui={SdkUi} shared={Shared}/>
 
-<Geolocation sec="arguments" c={Context}/>
+<Geolocation sec="arguments" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```go
 client.AddData(visitorCode, types.NewGeolocation("France", "Île-de-France", "Paris"))
@@ -1522,9 +1524,9 @@ client.AddData(types.NewUniqueIdentifier(true))
 
 #### DataFile
 
-<DataFile sec="description" c={Context}/>
+<DataFile sec="description" c={Context} ui={SdkUi} shared={Shared}/>
 
-<DataFile sec="arguments" c={Context}/>
+<DataFile sec="arguments" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```go
 featureFlags := dataFile.FeatureFlags
@@ -1532,9 +1534,9 @@ featureFlags := dataFile.FeatureFlags
 
 #### FeatureFlag
 
-<FeatureFlag sec="description_rules" c={Context}/>
+<FeatureFlag sec="description_rules" c={Context} ui={SdkUi} shared={Shared}/>
 
-<FeatureFlag sec="arguments_rules" c={Context}/>
+<FeatureFlag sec="arguments_rules" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```go
 // Check whether the feature flag is enabled in the current environment
@@ -1555,9 +1557,9 @@ rules := featureFlag.Rules
 
 #### Rule
 
-<Rule sec="description" c={Context}/>
+<Rule sec="description" c={Context} ui={SdkUi} shared={Shared}/>
 
-<Rule sec="arguments" c={Context}/>
+<Rule sec="arguments" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```go
 // Retrieve all variations of the rule as a map (key = variation key, value = Variation object)

@@ -1,8 +1,8 @@
 
-<Select name={props.sec}>
+<props.ui.Select name={props.sec}>
 <div name="description">
 
-The <Code x={props.c.FeatureFlag}/> represents a set of properties that define a feature flag itself — for example, its <CodeRef x={`${props.c.Variation.Name}s`} href={props.c.Variation.Ref}/>, environment status, and other related details.
+The <props.ui.Code x={props.c.FeatureFlag}/> represents a set of properties that define a feature flag itself — for example, its <props.ui.CodeRef x={`${props.c.Variation.Name}s`} href={props.c.Variation.Ref}/>, environment status, and other related details.
 
 It can be extended with additional information if required by clients. If you need more details, please contact your Customer Success Manager.
 
@@ -10,7 +10,7 @@ It can be extended with additional information if required by clients. If you ne
 
 <div name="description_rules">
 
-The <Code x={props.c.FeatureFlag}/> represents a set of properties that define a feature flag itself — for example, its <CodeRef x={`${props.c.Variation.Name}s`} href={props.c.Variation.Ref}/>, <CodeRef x={`${props.c.Rule?.Name}s`} href={props.c.Rule?.Ref}/>, environment status, and other related details.
+The <props.ui.Code x={props.c.FeatureFlag}/> represents a set of properties that define a feature flag itself — for example, its <props.ui.CodeRef x={`${props.c.Variation.Name}s`} href={props.c.Variation.Ref}/>, <props.ui.CodeRef x={`${props.c.Rule?.Name}s`} href={props.c.Rule?.Ref}/>, environment status, and other related details.
 
 It can be extended with additional information if required by clients. If you need more details, please contact your Customer Success Manager.
 
@@ -20,8 +20,8 @@ It can be extended with additional information if required by clients. If you ne
 
 | Name                                             | Type                                              | Description                                                           |
 | ------------------------------------------------ | ------------------------------------------------- | --------------------------------------------------------------------- |
-| <Text x={props.c.FeatureFlag.Params.EnvironmentEnabled}/> | <Code x={props.c.Common.Bool}/> | Indicating whether the feature flag is enabled in the current environment. |
-| <Text x={props.c.FeatureFlag.Params.Variations}/> | <Code x={props.c.FeatureFlag.Params.Variations.Type}/> | A map of <Code x={props.c.Variation}/> objects, keyed by variation keys. |
+| <props.ui.Text x={props.c.FeatureFlag.Params.EnvironmentEnabled}/> | <props.ui.Code x={props.c.Common.Bool}/> | Indicating whether the feature flag is enabled in the current environment. |
+| <props.ui.Text x={props.c.FeatureFlag.Params.Variations}/> | <props.ui.Code x={props.c.FeatureFlag.Params.Variations.Type}/> | A map of <props.ui.Code x={props.c.Variation}/> objects, keyed by variation keys. |
 
 </div>
 
@@ -29,11 +29,11 @@ It can be extended with additional information if required by clients. If you ne
 
 | Name                                             | Type                                              | Description                                                           |
 | ------------------------------------------------ | ------------------------------------------------- | --------------------------------------------------------------------- |
-| <Text x={props.c.FeatureFlag.Params.EnvironmentEnabled}/> | <Code x={props.c.Common.Bool}/> | Indicating whether the feature flag is enabled in the current environment. |
-| <Text x={props.c.FeatureFlag.Params.DefaultVariationKey}/> | <Code x={props.c.Common.String}/> | The key of the default variation associated with the feature flag. |
-| <Text x={props.c.FeatureFlag.Params.Variations}/> | <Code x={props.c.FeatureFlag.Params.Variations.Type}/> | A map of <Code x={props.c.Variation}/> objects, keyed by variation keys. |
-| <Text x={props.c.FeatureFlag.Params.Rules}/> | <Code x={props.c.FeatureFlag.Params.Rules?.Type}/> | A list of <Code x={props.c.Rule}/> objects |
+| <props.ui.Text x={props.c.FeatureFlag.Params.EnvironmentEnabled}/> | <props.ui.Code x={props.c.Common.Bool}/> | Indicating whether the feature flag is enabled in the current environment. |
+| <props.ui.Text x={props.c.FeatureFlag.Params.DefaultVariationKey}/> | <props.ui.Code x={props.c.Common.String}/> | The key of the default variation associated with the feature flag. |
+| <props.ui.Text x={props.c.FeatureFlag.Params.Variations}/> | <props.ui.Code x={props.c.FeatureFlag.Params.Variations.Type}/> | A map of <props.ui.Code x={props.c.Variation}/> objects, keyed by variation keys. |
+| <props.ui.Text x={props.c.FeatureFlag.Params.Rules}/> | <props.ui.Code x={props.c.FeatureFlag.Params.Rules?.Type}/> | A list of <props.ui.Code x={props.c.Rule}/> objects |
 
 </div>
 
-</Select>
+</props.ui.Select>

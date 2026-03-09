@@ -1,103 +1,103 @@
 
-<Select name={props.sec}>
+<props.ui.Select name={props.sec}>
 <div name="description">
 
-The method allows you to programmatically assign a specific <CodeRef x={props.c.Variation}/> to a user, bypassing the standard evaluation process. This is especially valuable for controlled experiments where the usual evaluation logic is not required or must be skipped. It can also be helpful in scenarios like debugging or custom testing.
+The method allows you to programmatically assign a specific <props.ui.CodeRef x={props.c.Variation}/> to a user, bypassing the standard evaluation process. This is especially valuable for controlled experiments where the usual evaluation logic is not required or must be skipped. It can also be helpful in scenarios like debugging or custom testing.
 
-When a **forced** variation is set, it overrides Kameleoon's real-time evaluation logic. Processes like segmentation, targeting conditions, and algorithmic calculations are skipped. To preserve segmentation and targeting conditions during an experiment, set <Code x={`${props.c.SetForcedVariation.Params.ForceTargeting.Name}=${props.c.Common.False}`}/> instead.
+When a **forced** variation is set, it overrides Kameleoon's real-time evaluation logic. Processes like segmentation, targeting conditions, and algorithmic calculations are skipped. To preserve segmentation and targeting conditions during an experiment, set <props.ui.Code x={`${props.c.SetForcedVariation.Params.ForceTargeting.Name}=${props.c.Common.False}`}/> instead.
 
-<If c={props.c.IsServer}>
+<props.ui.If c={props.c.IsServer}>
 
 <Info>
 **Simulated** variations always take precedence in the execution order. If a **simulated** variation calculation is triggered, it will be fully processed and completed first.
 </Info>
 
-</If>
+</props.ui.If>
 
 A forced variation is treated the same as an evaluated variation. It is tracked in analytics and stored in the user context like any standard evaluated variation, ensuring consistency in reporting.
 
 The method may throw exceptions under certain conditions (e.g., invalid parameters, user context, or internal issues). Proper exception handling is essential to ensure that your application remains stable and resilient.
 
-<If c={props.c.IsServer}>
+<props.ui.If c={props.c.IsServer}>
 
 <Warning>
-It’s important to distinguish **forced** variations from **<Ref x={"simulated"} href={props.c.GetVisitorCode.Ref}/>** variations:
+It’s important to distinguish **forced** variations from **<props.ui.Ref x={"simulated"} href={props.c.GetVisitorCode.Ref}/>** variations:
 - **Forced variations**: Are specific to an individual experiment.
 - **Simulated variations**: Affect the overall **feature flag** result.
 </Warning>
 
-</If>
+</props.ui.If>
 
 </div>
 
 <div name="arguments">
 
-<If c={props.c.IsJs}>
+<props.ui.If c={props.c.IsJs}>
 
 An object of type `SetForcedVariationParametersType` with the following properties:
 
-</If>
+</props.ui.If>
 
-<If c={props.c.IsServer}>
+<props.ui.If c={props.c.IsServer}>
 
-<If c={!props.c.SetForcedVariation.Params.Timeout}>
-
-| Name        | Type   | Description                    | Default |
-|-------------|--------|--------------------------------| ------- |
-| <Text x={props.c.Params.VisitorCode}/> (_required_) | <Code x={props.c.Common.String}/> | <Text x={Shared.Params.VisitorCode}/> | |
-| <Text x={props.c.SetForcedVariation.Params.ExperimentId}/> (_required_) | <Code x={props.c.Common.Int}/> | **Experiment Id** that will be targeted and selected during the evaluation process. | |
-| <Text x={props.c.SetForcedVariation.Params.VariationKey}/> (_required_) | <Code x={props.c.SetForcedVariation.Params.VariationKey.Type}/> | **Variation Key** corresponding to a <Code x={props.c.Variation}/> that should be forced as the returned value for the experiment. If the value is <Code x={props.c.SetForcedVariation.Params.VariationKey.RemVal}/>, the forced variation will be reset. | |
-| <Text x={props.c.SetForcedVariation.Params.ForceTargeting}/> (_optional_) | <Code x={props.c.Common.Bool}/> | Indicates whether targeting for the experiment should be forced and skipped (<Code x={props.c.Common.True}/>) or applied as in the standard evaluation process (<Code x={props.c.Common.False}/>). | <Code x={props.c.Common.True}/> |
-
-</If>
-
-<If c={props.c.SetForcedVariation.Params.Timeout}>
+<props.ui.If c={!props.c.SetForcedVariation.Params.Timeout}>
 
 | Name        | Type   | Description                    | Default |
 |-------------|--------|--------------------------------| ------- |
-| <Text x={props.c.Params.VisitorCode}/> (_required_) | <Code x={props.c.Common.String}/> | <Text x={Shared.Params.VisitorCode}/> | |
-| <Text x={props.c.SetForcedVariation.Params.ExperimentId}/> (_required_) | <Code x={props.c.Common.Int}/> | **Experiment Id** that will be targeted and selected during the evaluation process. | |
-| <Text x={props.c.SetForcedVariation.Params.VariationKey}/> (_required_) | <Code x={props.c.SetForcedVariation.Params.VariationKey.Type}/> | **Variation Key** corresponding to a <Code x={props.c.Variation}/> that should be forced as the returned value for the experiment. If the value is <Code x={props.c.SetForcedVariation.Params.VariationKey.RemVal}/>, the forced variation will be reset. | |
-| <Text x={props.c.SetForcedVariation.Params.ForceTargeting}/> (_optional_) | <Code x={props.c.Common.Bool}/> | Indicates whether targeting for the experiment should be forced and skipped (<Code x={props.c.Common.True}/>) or applied as in the standard evaluation process (<Code x={props.c.Common.False}/>). | <Code x={props.c.Common.True}/> |
-| <Text x={props.c.SetForcedVariation.Params.Timeout}/> (_optional_) | <Code x={props.c.SetForcedVariation.Params.Timeout?.Type}/> | Timeout (in milliseconds). This parameter specifies the maximum amount of time the method can block to wait for a result. If a timeout value is not provided, the SDK uses the <CodeRef x="default_timeout" href={props.c.KameleoonClientConfig.Ref}/> specified in your configuration. | <Code x={props.c.SetForcedVariation.Params.Timeout?.Default}/> |
+| <props.ui.Text x={props.c.Params.VisitorCode}/> (_required_) | <props.ui.Code x={props.c.Common.String}/> | <props.ui.Text x={props.shared.Params.VisitorCode}/> | |
+| <props.ui.Text x={props.c.SetForcedVariation.Params.ExperimentId}/> (_required_) | <props.ui.Code x={props.c.Common.Int}/> | **Experiment Id** that will be targeted and selected during the evaluation process. | |
+| <props.ui.Text x={props.c.SetForcedVariation.Params.VariationKey}/> (_required_) | <props.ui.Code x={props.c.SetForcedVariation.Params.VariationKey.Type}/> | **Variation Key** corresponding to a <props.ui.Code x={props.c.Variation}/> that should be forced as the returned value for the experiment. If the value is <props.ui.Code x={props.c.SetForcedVariation.Params.VariationKey.RemVal}/>, the forced variation will be reset. | |
+| <props.ui.Text x={props.c.SetForcedVariation.Params.ForceTargeting}/> (_optional_) | <props.ui.Code x={props.c.Common.Bool}/> | Indicates whether targeting for the experiment should be forced and skipped (<props.ui.Code x={props.c.Common.True}/>) or applied as in the standard evaluation process (<props.ui.Code x={props.c.Common.False}/>). | <props.ui.Code x={props.c.Common.True}/> |
 
-</If>
+</props.ui.If>
 
-</If>
-
-<If c={props.c.IsClient}>
+<props.ui.If c={props.c.SetForcedVariation.Params.Timeout}>
 
 | Name        | Type   | Description                    | Default |
 |-------------|--------|--------------------------------| ------- |
-| <Text x={props.c.SetForcedVariation.Params.ExperimentId}/> (_required_) | <Code x={props.c.Common.Int}/> | **Experiment Id** that will be targeted and selected during the evaluation process. | |
-| <Text x={props.c.SetForcedVariation.Params.VariationKey}/> (_required_) | <Code x={props.c.Common.String}/> | **Variation Key** corresponding to a <Code x={props.c.Variation}/> that should be forced as the returned value for the experiment. If the value is <Code x={props.c.Common.Null}/>, the forced variation will be reset. | |
-| <Text x={props.c.SetForcedVariation.Params.ForceTargeting}/> (_optional_) | <Code x={props.c.Common.Bool}/> | Indicates whether targeting for the experiment should be forced and skipped (<Code x={props.c.Common.True}/>) or applied as in the standard evaluation process (<Code x={props.c.Common.False}/>). | <Code x={props.c.Common.True}/>  |
+| <props.ui.Text x={props.c.Params.VisitorCode}/> (_required_) | <props.ui.Code x={props.c.Common.String}/> | <props.ui.Text x={props.shared.Params.VisitorCode}/> | |
+| <props.ui.Text x={props.c.SetForcedVariation.Params.ExperimentId}/> (_required_) | <props.ui.Code x={props.c.Common.Int}/> | **Experiment Id** that will be targeted and selected during the evaluation process. | |
+| <props.ui.Text x={props.c.SetForcedVariation.Params.VariationKey}/> (_required_) | <props.ui.Code x={props.c.SetForcedVariation.Params.VariationKey.Type}/> | **Variation Key** corresponding to a <props.ui.Code x={props.c.Variation}/> that should be forced as the returned value for the experiment. If the value is <props.ui.Code x={props.c.SetForcedVariation.Params.VariationKey.RemVal}/>, the forced variation will be reset. | |
+| <props.ui.Text x={props.c.SetForcedVariation.Params.ForceTargeting}/> (_optional_) | <props.ui.Code x={props.c.Common.Bool}/> | Indicates whether targeting for the experiment should be forced and skipped (<props.ui.Code x={props.c.Common.True}/>) or applied as in the standard evaluation process (<props.ui.Code x={props.c.Common.False}/>). | <props.ui.Code x={props.c.Common.True}/> |
+| <props.ui.Text x={props.c.SetForcedVariation.Params.Timeout}/> (_optional_) | <props.ui.Code x={props.c.SetForcedVariation.Params.Timeout?.Type}/> | Timeout (in milliseconds). This parameter specifies the maximum amount of time the method can block to wait for a result. If a timeout value is not provided, the SDK uses the <props.ui.CodeRef x="default_timeout" href={props.c.KameleoonClientConfig.Ref}/> specified in your configuration. | <props.ui.Code x={props.c.SetForcedVariation.Params.Timeout?.Default}/> |
 
-</If>
+</props.ui.If>
+
+</props.ui.If>
+
+<props.ui.If c={props.c.IsClient}>
+
+| Name        | Type   | Description                    | Default |
+|-------------|--------|--------------------------------| ------- |
+| <props.ui.Text x={props.c.SetForcedVariation.Params.ExperimentId}/> (_required_) | <props.ui.Code x={props.c.Common.Int}/> | **Experiment Id** that will be targeted and selected during the evaluation process. | |
+| <props.ui.Text x={props.c.SetForcedVariation.Params.VariationKey}/> (_required_) | <props.ui.Code x={props.c.Common.String}/> | **Variation Key** corresponding to a <props.ui.Code x={props.c.Variation}/> that should be forced as the returned value for the experiment. If the value is <props.ui.Code x={props.c.Common.Null}/>, the forced variation will be reset. | |
+| <props.ui.Text x={props.c.SetForcedVariation.Params.ForceTargeting}/> (_optional_) | <props.ui.Code x={props.c.Common.Bool}/> | Indicates whether targeting for the experiment should be forced and skipped (<props.ui.Code x={props.c.Common.True}/>) or applied as in the standard evaluation process (<props.ui.Code x={props.c.Common.False}/>). | <props.ui.Code x={props.c.Common.True}/>  |
+
+</props.ui.If>
 
 </div>
 
 <div name="exceptions">
 
-<If c={props.c.IsServer}>
+<props.ui.If c={props.c.IsServer}>
 
 | Type | Description |
 |----- | ----------- |
-| <Code x={props.c.Exceptions.VisitorCodeInvalid}/> | <Text x={Shared.Exceptions.VisitorCodeInvalid}/> |
-| <Code x={props.c.Exceptions.FeatureExperimentNotFound}/> | <Text x={Shared.Exceptions.FeatureExperimentNotFound}/> |
-| <Code x={props.c.Exceptions.FeatureVariationNotFound}/> | <Text x={Shared.Exceptions.FeatureVariationNotFound}/> |
+| <props.ui.Code x={props.c.Exceptions.VisitorCodeInvalid}/> | <props.ui.Text x={props.shared.Exceptions.VisitorCodeInvalid}/> |
+| <props.ui.Code x={props.c.Exceptions.FeatureExperimentNotFound}/> | <props.ui.Text x={props.shared.Exceptions.FeatureExperimentNotFound}/> |
+| <props.ui.Code x={props.c.Exceptions.FeatureVariationNotFound}/> | <props.ui.Text x={props.shared.Exceptions.FeatureVariationNotFound}/> |
 
-</If>
+</props.ui.If>
 
-<If c={props.c.IsClient}>
+<props.ui.If c={props.c.IsClient}>
 
 | Type | Description |
 |----- | ----------- |
-| <Code x={props.c.Exceptions.SdkNotReady}/> | <Text x={Shared.Exceptions.SdkNotReady}/> |
-| <Code x={props.c.Exceptions.FeatureExperimentNotFound}/> | <Text x={Shared.Exceptions.FeatureExperimentNotFound}/> |
-| <Code x={props.c.Exceptions.FeatureVariationNotFound}/> | <Text x={Shared.Exceptions.FeatureVariationNotFound}/> |
+| <props.ui.Code x={props.c.Exceptions.SdkNotReady}/> | <props.ui.Text x={props.shared.Exceptions.SdkNotReady}/> |
+| <props.ui.Code x={props.c.Exceptions.FeatureExperimentNotFound}/> | <props.ui.Text x={props.shared.Exceptions.FeatureExperimentNotFound}/> |
+| <props.ui.Code x={props.c.Exceptions.FeatureVariationNotFound}/> | <props.ui.Text x={props.shared.Exceptions.FeatureVariationNotFound}/> |
 
-</If>
+</props.ui.If>
 
 <SharedDiv sec="note_exceptions" c={props.c}/>
 
@@ -107,16 +107,16 @@ An object of type `SetForcedVariationParametersType` with the following properti
 
 | Type | Description |
 |----- | ----------- |
-| <Code x={props.c.Exceptions.VisitorCodeEmpty}/> | <Text x={Shared.Exceptions.VisitorCodeEmpty}/> |
-| <Code x={props.c.Exceptions.VisitorCodeMaxLength}/> | <Text x={Shared.Exceptions.VisitorCodeMaxLength}/> |
-| <Code x={props.c.Exceptions.Initialization}/> | <Text x={Shared.Exceptions.SdkNotReady}/> |
-| <Code x={props.c.Exceptions.FeatureExperimentNotFound}/> | <Text x={Shared.Exceptions.FeatureExperimentNotFound}/> |
-| <Code x={props.c.Exceptions.FeatureVariationNotFound}/> | <Text x={Shared.Exceptions.FeatureVariationNotFound}/> |
-| <Code x={props.c.Exceptions.StorageRead}/> | <Text x={Shared.Exceptions.StorageRead}/> |
-| <Code x={props.c.Exceptions.StorageWrite}/> | <Text x={Shared.Exceptions.StorageWrite}/> |
+| <props.ui.Code x={props.c.Exceptions.VisitorCodeEmpty}/> | <props.ui.Text x={props.shared.Exceptions.VisitorCodeEmpty}/> |
+| <props.ui.Code x={props.c.Exceptions.VisitorCodeMaxLength}/> | <props.ui.Text x={props.shared.Exceptions.VisitorCodeMaxLength}/> |
+| <props.ui.Code x={props.c.Exceptions.Initialization}/> | <props.ui.Text x={props.shared.Exceptions.SdkNotReady}/> |
+| <props.ui.Code x={props.c.Exceptions.FeatureExperimentNotFound}/> | <props.ui.Text x={props.shared.Exceptions.FeatureExperimentNotFound}/> |
+| <props.ui.Code x={props.c.Exceptions.FeatureVariationNotFound}/> | <props.ui.Text x={props.shared.Exceptions.FeatureVariationNotFound}/> |
+| <props.ui.Code x={props.c.Exceptions.StorageRead}/> | <props.ui.Text x={props.shared.Exceptions.StorageRead}/> |
+| <props.ui.Code x={props.c.Exceptions.StorageWrite}/> | <props.ui.Text x={props.shared.Exceptions.StorageWrite}/> |
 
 <SharedDiv sec="note_exceptions" c={props.c}/>
 
 </div>
 
-</Select>
+</props.ui.Select>

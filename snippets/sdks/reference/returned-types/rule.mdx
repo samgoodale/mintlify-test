@@ -1,8 +1,8 @@
 
-<Select name={props.sec}>
+<props.ui.Select name={props.sec}>
 <div name="description">
 
-The <Code x={props.c.Rule}/> represents a set of properties that define a rule itself — for example, its <CodeRef x={`${props.c.Variation.Name}s`} href={props.c.Variation.Ref}/>.
+The <props.ui.Code x={props.c.Rule}/> represents a set of properties that define a rule itself — for example, its <props.ui.CodeRef x={`${props.c.Variation.Name}s`} href={props.c.Variation.Ref}/>.
 
 It can be extended with additional information if required by clients. If you need more details, please contact your Customer Success Manager.
 
@@ -12,7 +12,7 @@ It can be extended with additional information if required by clients. If you ne
 
 | Name                                             | Type                                              | Description                                                           |
 | ------------------------------------------------ | ------------------------------------------------- | --------------------------------------------------------------------- |
-| <Text x={props.c.Rule.Params.Variations}/> | <Code x={props.c.Rule.Params.Variations.Type}/> | A map of <Code x={props.c.Variation}/> objects, keyed by variation keys. |
+| <props.ui.Text x={props.c.Rule.Params.Variations}/> | <props.ui.Code x={props.c.Rule.Params.Variations.Type}/> | A map of <props.ui.Code x={props.c.Variation}/> objects, keyed by variation keys. |
 
 </div>
-</Select>
+</props.ui.Select>

@@ -1,17 +1,17 @@
 
-<Select name={props.sec}>
+<props.ui.Select name={props.sec}>
 <div name="description">
 
-The <Code x={props.c.Browser}/> data set stored here can be used to filter experiment and personalization reports by any value associated with it.
+The <props.ui.Code x={props.c.Browser}/> data set stored here can be used to filter experiment and personalization reports by any value associated with it.
 </div>
 
 <div name="arguments">
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| <Text x={props.c.Browser.Params.BrowserType.Name}/> (_required_) | <Code x={props.c.Browser.Params.BrowserType.Type}/> | List of browsers: <Code x={props.c.Browser.Params.BrowserType.Chrome}/>, <Code x={props.c.Browser.Params.BrowserType.IE}/>, <Code x={props.c.Browser.Params.BrowserType.Firefox}/>, <Code x={props.c.Browser.Params.BrowserType.Safari}/>, <Code x={props.c.Browser.Params.BrowserType.Opera}/>, <Code x={props.c.Browser.Params.BrowserType.Other}/>. |
-| version (_optional_)  | <Code x={props.c.Browser.Params.Version.Type}/> | Version of the browser, floating point number represents major and minor version of the browser |
+| <props.ui.Text x={props.c.Browser.Params.BrowserType.Name}/> (_required_) | <props.ui.Code x={props.c.Browser.Params.BrowserType.Type}/> | List of browsers: <props.ui.Code x={props.c.Browser.Params.BrowserType.Chrome}/>, <props.ui.Code x={props.c.Browser.Params.BrowserType.IE}/>, <props.ui.Code x={props.c.Browser.Params.BrowserType.Firefox}/>, <props.ui.Code x={props.c.Browser.Params.BrowserType.Safari}/>, <props.ui.Code x={props.c.Browser.Params.BrowserType.Opera}/>, <props.ui.Code x={props.c.Browser.Params.BrowserType.Other}/>. |
+| version (_optional_)  | <props.ui.Code x={props.c.Browser.Params.Version.Type}/> | Version of the browser, floating point number represents major and minor version of the browser |
 
 </div>
-</Select>
+</props.ui.Select>
 

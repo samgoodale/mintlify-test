@@ -2,7 +2,7 @@
 title: 'iOS SDK'
 ---
 
-import { Select, Text, Bold, Italic, Code, CodeRef, Ref, If } from '/snippets/sdks/utils.mdx';
+import { Select, Text, Bold, Italic, Code, CodeRef, Ref, If } from '/snippets/sdks/utils.jsx';
 import SharedDiv, { Shared } from '/snippets/sdks/shared.mdx';
 import StarterKit from '/snippets/sdks/developer-guide/getting-started/starter-kit.mdx';
 import CrossDeviceReconciliation from '/snippets/sdks/developer-guide/cross-device-reconciliation.mdx';
@@ -26,6 +26,8 @@ import DataFile from '/snippets/sdks/reference/returned-types/data-file.mdx';
 import FeatureFlag from '/snippets/sdks/reference/returned-types/feature-flag.mdx';
 import Rule from '/snippets/sdks/reference/returned-types/rule.mdx';
 import ActivityTrackingInterval from '/snippets/sdks/developer-guide/getting-started/activity-tracking-interval.mdx';
+
+export const SdkUi = { Select, Text, Bold, Italic, Code, CodeRef, Ref, If };
 
 export const Context = {
   IsClient: true,
@@ -241,7 +243,7 @@ Follow these steps to install and configure the Kameleoon iOS SDK in your applic
 
 #### Starter kit
 
-<StarterKit sec="starter_kit_description" c={Context}/>
+<StarterKit sec="starter_kit_description" c={Context} ui={SdkUi} shared={Shared}/>
 
 #### Prerequisites
 
@@ -313,7 +315,7 @@ The `isUniqueIdentifier` can be useful in other edge-case scenarios, such as whe
 
 ##### Using `activityTrackingIntervalMillisecond`
 
-<ActivityTrackingInterval sec="description" c={Context}/>
+<ActivityTrackingInterval sec="description" c={Context} ui={SdkUi} shared={Shared}/>
 
 #### Initialize the Kameleoon Client
 
@@ -427,23 +429,23 @@ func applyDiscountIfApplicable() async throws {
 
 ##### Retrieving a flag configuration
 
-<ActivatingAFeatureFlag sec="retrieving_a_feature_flag_configuration___default" c={Context}/>
+<ActivatingAFeatureFlag sec="retrieving_a_feature_flag_configuration___default" c={Context} ui={SdkUi} shared={Shared}/>
 
 ##### Adding data points to target a user or filter / breakdown visits in reports
 
-<ActivatingAFeatureFlag sec="adding_data_points_to_target_a_user_or_filter_breakdown_visits_in_reports___mobile" c={Context}/>
+<ActivatingAFeatureFlag sec="adding_data_points_to_target_a_user_or_filter_breakdown_visits_in_reports___mobile" c={Context} ui={SdkUi} shared={Shared}/>
 
 ##### Tracking goal conversions
 
-<ActivatingAFeatureFlag sec="tracking_goal_conversions___param___mobile" c={Context}/>
+<ActivatingAFeatureFlag sec="tracking_goal_conversions___param___mobile" c={Context} ui={SdkUi} shared={Shared}/>
 
 ### Cross-device experimentation
 
-<CrossDeviceReconciliation sec="cross_device_experimentation" c={Context}/>
+<CrossDeviceReconciliation sec="cross_device_experimentation" c={Context} ui={SdkUi} shared={Shared}/>
 
 #### Synchronizing custom data across devices
 
-<CrossDeviceReconciliation sec="synchronizing_custom_data" c={Context}/>
+<CrossDeviceReconciliation sec="synchronizing_custom_data" c={Context} ui={SdkUi} shared={Shared}/>
 
 <Tabs>
 <Tab title="Swift">
@@ -486,7 +488,7 @@ try await kameleoonClient.getRemoteVisitorData()
 
 #### Using custom data for session merging
 
-<CrossDeviceReconciliation sec="using_custom_data_session_merging" c={Context}/>
+<CrossDeviceReconciliation sec="using_custom_data_session_merging" c={Context} ui={SdkUi} shared={Shared}/>
 
 <Tabs>
 <Tab title="Swift">
@@ -597,41 +599,41 @@ try await userKameleoonClient.getRemoteVisitorData()
 </Tab>
 </Tabs>
 
-<CrossDeviceReconciliation sec="cross_device_visitor_code" c={Context}/>
+<CrossDeviceReconciliation sec="cross_device_visitor_code" c={Context} ui={SdkUi} shared={Shared}/>
 
 ### Using a custom bucketing key
 
-<CustomBucketingKey sec="description" c={Context}/>
+<CustomBucketingKey sec="description" c={Context} ui={SdkUi} shared={Shared}/>
 
 #### Use cases
 
-<CustomBucketingKey sec="use_cases" c={Context}/>
+<CustomBucketingKey sec="use_cases" c={Context} ui={SdkUi} shared={Shared}/>
 
 #### Technical details
 
-<CustomBucketingKey sec="technical_details_1" c={Context}/>
+<CustomBucketingKey sec="technical_details_1" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```swift
 try? kameleoonClient.addData(CustomData(id: index, values: "newVisitorCode"))
 ```
 
-<CustomBucketingKey sec="technical_details_2" c={Context}/>
+<CustomBucketingKey sec="technical_details_2" c={Context} ui={SdkUi} shared={Shared}/>
 
 #### Technical requirementes
 
-<CustomBucketingKey sec="technical_requirements" c={Context}/>
+<CustomBucketingKey sec="technical_requirements" c={Context} ui={SdkUi} shared={Shared}/>
 
 ### Targeting conditions
 
-<TargetingConditions sec="targeting_conditons_description" c={Context}/>
+<TargetingConditions sec="targeting_conditons_description" c={Context} ui={SdkUi} shared={Shared}/>
 
 ### Logging
 
-<Logging sec="logging" c={Context}/>
+<Logging sec="logging" c={Context} ui={SdkUi} shared={Shared}/>
 
 #### Log levels
 
-<Logging sec="log_levels" c={Context}/>
+<Logging sec="log_levels" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```swift
 // The `none` log level does not allow logging.
@@ -658,7 +660,7 @@ KameleoonLogger.logLevel = .debug
 
 #### Custom handling of logs
 
-<Logging sec="custom_handling_of_logs" c={Context}/>
+<Logging sec="custom_handling_of_logs" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```swift
 public struct CustomLogger: Logging {
@@ -828,7 +830,7 @@ callback _(required)_ | `(Bool) -> Void` | Callback object. It is a lambda expre
 
 </Tab>
 <Tab title="Swift (Async)">
-<SharedDiv sec="swift_async_warning" c={Context}/>
+<SharedDiv sec="swift_async_warning" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```swift
 func applyRecommendedProductsVariation() async throws {
@@ -922,7 +924,7 @@ Type | Description
 `KameleoonError.Feature.notFound`  | Exception indicating that the requested feature ID has not been found in the SDK's internal configuration. This exception usually means that the feature flag has not yet been activated on Kameleoon's side (but code implementing the feature is already deployed in the web-application).
 
 #### getVariation()
-<GetVariation sec="description" c={Context}/>
+<GetVariation sec="description" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```swift
 let featureKey = "featureKey"
@@ -957,16 +959,16 @@ switch variation?.key {
 ```
 
 ##### Arguments
-<GetVariation sec="arguments" c={Context}/>
+<GetVariation sec="arguments" c={Context} ui={SdkUi} shared={Shared}/>
 
 ##### Return value
-<GetVariation sec="return_value" c={Context}/>
+<GetVariation sec="return_value" c={Context} ui={SdkUi} shared={Shared}/>
 
 ##### Errors thrown
-<GetVariation sec="exceptions" c={Context}/>
+<GetVariation sec="exceptions" c={Context} ui={SdkUi} shared={Shared}/>
 
 #### getVariations()
-<GetVariations sec="description" c={Context}/>
+<GetVariations sec="description" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```swift
 do {
@@ -981,17 +983,17 @@ do {
 ```
 
 ##### Arguments
-<GetVariations sec="arguments" c={Context}/>
+<GetVariations sec="arguments" c={Context} ui={SdkUi} shared={Shared}/>
 
 ##### Return value
-<GetVariations sec="return_value" c={Context}/>
+<GetVariations sec="return_value" c={Context} ui={SdkUi} shared={Shared}/>
 
 ##### Errors thrown
-<GetVariations sec="exceptions" c={Context}/>
+<GetVariations sec="exceptions" c={Context} ui={SdkUi} shared={Shared}/>
 
 #### setForcedVariation()
 
-<SetForcedVariation sec="description" c={Context}/>
+<SetForcedVariation sec="description" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```swift
 let experimentId = 9516
@@ -1011,15 +1013,15 @@ do {
 
 ##### Arguments
 
-<SetForcedVariation sec="arguments" c={Context}/>
+<SetForcedVariation sec="arguments" c={Context} ui={SdkUi} shared={Shared}/>
 
 ##### Errors thrown
 
-<SetForcedVariation sec="exceptions" c={Context}/>
+<SetForcedVariation sec="exceptions" c={Context} ui={SdkUi} shared={Shared}/>
 
 #### evaluateAudiences()
 
-<EvaluateAudiences sec="description" c={Context}/>
+<EvaluateAudiences sec="description" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```swift
 do {
@@ -1031,12 +1033,12 @@ do {
 
 ##### Errors thrown
 
-<EvaluateAudiences sec="exceptions" c={Context}/>
+<EvaluateAudiences sec="exceptions" c={Context} ui={SdkUi} shared={Shared}/>
 
 #### getFeatureList()
 
-<GetFeatureList sec="tip_get_variations" c={Context}/>
-<GetFeatureList sec="description" c={Context}/>
+<GetFeatureList sec="tip_get_variations" c={Context} ui={SdkUi} shared={Shared}/>
+<GetFeatureList sec="description" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```swift
 let allFeatureList = kameleoonClient.getFeatureList()
@@ -1044,12 +1046,12 @@ let allFeatureList = kameleoonClient.getFeatureList()
 
 ##### Return value
 
-<GetFeatureList sec="return_value" c={Context}/>
+<GetFeatureList sec="return_value" c={Context} ui={SdkUi} shared={Shared}/>
 
 #### getDataFile()
 
-<GetDataFile sec="tip_qa" c={Context}/>
-<GetDataFile sec="description" c={Context}/>
+<GetDataFile sec="tip_qa" c={Context} ui={SdkUi} shared={Shared}/>
+<GetDataFile sec="description" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```swift
 do {
@@ -1063,17 +1065,17 @@ do {
 
 ##### Return value
 
-<GetDataFile sec="return_value" c={Context}/>
+<GetDataFile sec="return_value" c={Context} ui={SdkUi} shared={Shared}/>
 
 ##### Errors thrown
 
-<GetDataFile sec="exceptions" c={Context}/>
+<GetDataFile sec="exceptions" c={Context} ui={SdkUi} shared={Shared}/>
 
 ### Goals
 
 #### trackConversion()
 
-<TrackConversion sec="description" c={Context}/>
+<TrackConversion sec="description" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```swift
 let goalId = 83023
@@ -1083,10 +1085,10 @@ kameleoonClient.trackConversion(goalId: goalId, revenue: 10.0, metadata: CustomD
 ```
 
 ##### Arguments
-<TrackConversion sec="arguments" c={Context}/>
+<TrackConversion sec="arguments" c={Context} ui={SdkUi} shared={Shared}/>
 
 <Note>
-<TrackConversion sec="note_metadata" c={Context}/>
+<TrackConversion sec="note_metadata" c={Context} ui={SdkUi} shared={Shared}/>
 ```swift
 kameleoonClient.addData([CustomData(id: 5, values: "Credit Card"), CustomData(id: 9, "Express Delivery")]);
 kameleoonClient.trackConversionWithOptParams(goalId: 1000, metadata: CustomData(5, "Amex Credit Card"));
@@ -1097,7 +1099,7 @@ kameleoonClient.trackConversionWithOptParams(goalId: 1000, metadata: CustomData(
 
 #### updateConfigurationHandler()
 
-<UpdateConfigurationHandler sec="description" c={Context}/>
+<UpdateConfigurationHandler sec="description" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```swift
 kameleoonClient.updateConfigurationHandler {
@@ -1107,23 +1109,23 @@ kameleoonClient.updateConfigurationHandler {
 
 ##### Arguments
 
-<UpdateConfigurationHandler sec="arguments" c={Context}/>
+<UpdateConfigurationHandler sec="arguments" c={Context} ui={SdkUi} shared={Shared}/>
 
 ### Visitor data
 
 #### visitorCode
-<GetVisitorCode sec="description" c={Context}/>
+<GetVisitorCode sec="description" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```swift
 let visitorCode = kameleoonClient.visitorCode
 ```
 
 #####  Return value
-<GetVisitorCode sec="return_value" c={Context}/>
+<GetVisitorCode sec="return_value" c={Context} ui={SdkUi} shared={Shared}/>
 
 #### addData()
 
-<AddData sec="description" c={Context}/>
+<AddData sec="description" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```swift
 kameleoonClient.addData(CustomData(id: 20, values: "true", "20"))
@@ -1136,7 +1138,7 @@ kameleoonClient.addData([
 ```
 
 ##### Arguments
-<AddData sec="arguments" c={Context}/>
+<AddData sec="arguments" c={Context} ui={SdkUi} shared={Shared}/>
 
 #### flush()
 
@@ -1225,7 +1227,7 @@ kameleoonClient.getRemoteData(key: "test") { (data: Result<Data, Error>) in
 </Tab>
 <Tab title="Swift (Async)">
 
-<SharedDiv sec="swift_async_warning" c={Context}/>
+<SharedDiv sec="swift_async_warning" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```swift
 struct Test1: Decodable {
@@ -1350,7 +1352,7 @@ completion _(required)_ | `(Result<[KameleoonData], Error>) -> Void` | The callb
 
 </Tab>
 <Tab title="Swift (Async)">
-<SharedDiv sec="swift_async_warning" c={Context}/>
+<SharedDiv sec="swift_async_warning" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```swift
 // Fetch visitor data and automatically add it
@@ -1486,7 +1488,7 @@ kameleoonClient.getVisitorWarehouseAudience(
 
 </Tab>
 <Tab title="Swift (Async)">
-<SharedDiv sec="swift_async_warning" c={Context}/>
+<SharedDiv sec="swift_async_warning" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```swift
 // Fetch visitor warehouse audience data
@@ -1554,8 +1556,8 @@ This section lists the data types supported by Kameleoon. We provide several sta
 
 #### Conversion
 
-<Conversion sec="description" c={Context}/>
-<Conversion sec="arguments" c={Context}/>
+<Conversion sec="description" c={Context} ui={SdkUi} shared={Shared}/>
+<Conversion sec="arguments" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```swift
 kameleoonClient.addData(Conversion(goalId: 32, revenue: 10.0, negative: false))
@@ -1613,9 +1615,9 @@ try? kameleoonClient.addData(Device.desktop);
 
 #### Geolocation
 
-<Geolocation sec="description" c={Context}/>
+<Geolocation sec="description" c={Context} ui={SdkUi} shared={Shared}/>
 
-<Geolocation sec="arguments" c={Context}/>
+<Geolocation sec="arguments" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```swift
 kameleoonClient.addData(Geolocation(country: "France", region: "Île-de-France", city: "Paris"));
@@ -1625,9 +1627,9 @@ kameleoonClient.addData(Geolocation(country: "France", region: "Île-de-France",
 
 #### DataFile
 
-<DataFile sec="description" c={Context}/>
+<DataFile sec="description" c={Context} ui={SdkUi} shared={Shared}/>
 
-<DataFile sec="arguments" c={Context}/>
+<DataFile sec="arguments" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```swift
 let featureFlags = dataFile.featureFlags
@@ -1635,9 +1637,9 @@ let featureFlags = dataFile.featureFlags
 
 #### FeatureFlag
 
-<FeatureFlag sec="description_rules" c={Context}/>
+<FeatureFlag sec="description_rules" c={Context} ui={SdkUi} shared={Shared}/>
 
-<FeatureFlag sec="arguments_rules" c={Context}/>
+<FeatureFlag sec="arguments_rules" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```swift
 // Check whether the feature flag is enabled in the current environment
@@ -1658,9 +1660,9 @@ let rules = featureFlag.rules
 
 #### Rule
 
-<Rule sec="description" c={Context}/>
+<Rule sec="description" c={Context} ui={SdkUi} shared={Shared}/>
 
-<Rule sec="arguments" c={Context}/>
+<Rule sec="arguments" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```swift
 // Retrieve all variations of the rule as a map (key = variation key, value = Variation object)

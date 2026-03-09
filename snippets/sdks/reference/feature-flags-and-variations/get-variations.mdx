@@ -1,26 +1,26 @@
 
-<Select name={props.sec}>
+<props.ui.Select name={props.sec}>
 <div name="description">
 
-* 📨 _Sends Tracking Data to Kameleoon (depending on the <Code x={props.c.GetVariations.Params.Track.Name}/> parameter)_
+* 📨 _Sends Tracking Data to Kameleoon (depending on the <props.ui.Code x={props.c.GetVariations.Params.Track.Name}/> parameter)_
 
-Retrieves a map of <CodeRef x={props.c.Variation}/> objects assigned to a given visitor across all feature flags.
+Retrieves a map of <props.ui.CodeRef x={props.c.Variation}/> objects assigned to a given visitor across all feature flags.
 
-<If c={props.c.IsServer}>
+<props.ui.If c={props.c.IsServer}>
 
-This method iterates over all available feature flags and returns the assigned <Code x={props.c.Variation}/> for each flag associated with the specified visitor. It takes <Code x={props.c.Params.VisitorCode}/> as a mandatory argument, while <Code x={props.c.GetVariations.Params.OnlyActive.Name}/> and <Code x={props.c.GetVariations.Params.Track.Name}/> are optional.
-</If>
+This method iterates over all available feature flags and returns the assigned <props.ui.Code x={props.c.Variation}/> for each flag associated with the specified visitor. It takes <props.ui.Code x={props.c.Params.VisitorCode}/> as a mandatory argument, while <props.ui.Code x={props.c.GetVariations.Params.OnlyActive.Name}/> and <props.ui.Code x={props.c.GetVariations.Params.Track.Name}/> are optional.
+</props.ui.If>
 
-<If c={props.c.IsClient}>
+<props.ui.If c={props.c.IsClient}>
 
-This method iterates over all available feature flags and returns the assigned <Code x={props.c.Variation}/> for each flag associated with the specified visitor. It takes <Code x={props.c.GetVariations.Params.OnlyActive.Name}/> and <Code x={props.c.GetVariations.Params.Track.Name}/> as optional arguments.
-</If>
+This method iterates over all available feature flags and returns the assigned <props.ui.Code x={props.c.Variation}/> for each flag associated with the specified visitor. It takes <props.ui.Code x={props.c.GetVariations.Params.OnlyActive.Name}/> and <props.ui.Code x={props.c.GetVariations.Params.Track.Name}/> as optional arguments.
+</props.ui.If>
 
 
-- If <Code x={props.c.GetVariations.Params.OnlyActive.Name}/> is set to <Code x={props.c.Common.True}/>, the method <Code x={props.c.GetVariations}/> will return feature flags variations provided the user is not bucketed with the `off` variation.
-- The <Code x={props.c.GetVariations.Params.Track.Name}/> parameter controls whether or not the method will track the variation assignments. By default, it is set to <Code x={props.c.Common.True}/>. If set to <Code x={props.c.Common.False}/>, the tracking will be disabled.
+- If <props.ui.Code x={props.c.GetVariations.Params.OnlyActive.Name}/> is set to <props.ui.Code x={props.c.Common.True}/>, the method <props.ui.Code x={props.c.GetVariations}/> will return feature flags variations provided the user is not bucketed with the `off` variation.
+- The <props.ui.Code x={props.c.GetVariations.Params.Track.Name}/> parameter controls whether or not the method will track the variation assignments. By default, it is set to <props.ui.Code x={props.c.Common.True}/>. If set to <props.ui.Code x={props.c.Common.False}/>, the tracking will be disabled.
 
-The returned map consists of feature flag keys as keys and their corresponding <Code x={props.c.Variation}/> as values. If no variation is assigned for a feature flag, the method returns the default <Code x={props.c.Variation}/> for that flag.
+The returned map consists of feature flag keys as keys and their corresponding <props.ui.Code x={props.c.Variation}/> as values. If no variation is assigned for a feature flag, the method returns the default <props.ui.Code x={props.c.Variation}/> for that flag.
 
 Proper error handling should be implemented to manage potential exceptions.
 
@@ -32,24 +32,24 @@ The default variation refers to the variation assigned to a visitor when they do
 
 <div name="description___js">
 
-* 📨 _Sends Tracking Data to Kameleoon (depending on the <Code x={props.c.GetVariations.Params.Track.Name}/> parameter)_
+* 📨 _Sends Tracking Data to Kameleoon (depending on the <props.ui.Code x={props.c.GetVariations.Params.Track.Name}/> parameter)_
 * 🎯 _Events:_ [`EventType.Evaluation`](#events-1)
 
-<If c={props.c.IsReact}>
+<props.ui.If c={props.c.IsReact}>
 
 <Info>
-Method is obtained using <Code x={"useFeatureFlag"} /> hook.
+Method is obtained using <props.ui.Code x={"useFeatureFlag"} /> hook.
 </Info>
-</If>
+</props.ui.If>
 
-Retrieves a map of <CodeRef x={props.c.Variation}/> objects assigned to a given visitor across all feature flags.
+Retrieves a map of <props.ui.CodeRef x={props.c.Variation}/> objects assigned to a given visitor across all feature flags.
 
-This method iterates over all available feature flags and returns the assigned <Code x={props.c.Variation}/> for each flag associated with the specified visitor. It takes <Code x={props.c.Params.VisitorCode}/> as a mandatory argument, while <Code x={props.c.GetVariations.Params.OnlyActive.Name}/> and <Code x={props.c.GetVariations.Params.Track.Name}/> are optional.
+This method iterates over all available feature flags and returns the assigned <props.ui.Code x={props.c.Variation}/> for each flag associated with the specified visitor. It takes <props.ui.Code x={props.c.Params.VisitorCode}/> as a mandatory argument, while <props.ui.Code x={props.c.GetVariations.Params.OnlyActive.Name}/> and <props.ui.Code x={props.c.GetVariations.Params.Track.Name}/> are optional.
 
-- If <Code x={props.c.GetVariations.Params.OnlyActive.Name}/> is set to <Code x={props.c.Common.True}/>, the method <Code x={props.c.GetVariations}/> will return feature flags variations provided the user is not bucketed with the `off` variation.
-- The <Code x={props.c.GetVariations.Params.Track.Name}/> parameter controls whether or not the method will track the variation assignments. By default, it is set to <Code x={props.c.Common.True}/>. If set to <Code x={props.c.Common.False}/>, the tracking will be disabled.
+- If <props.ui.Code x={props.c.GetVariations.Params.OnlyActive.Name}/> is set to <props.ui.Code x={props.c.Common.True}/>, the method <props.ui.Code x={props.c.GetVariations}/> will return feature flags variations provided the user is not bucketed with the `off` variation.
+- The <props.ui.Code x={props.c.GetVariations.Params.Track.Name}/> parameter controls whether or not the method will track the variation assignments. By default, it is set to <props.ui.Code x={props.c.Common.True}/>. If set to <props.ui.Code x={props.c.Common.False}/>, the tracking will be disabled.
 
-The returned map consists of feature flag keys as keys and their corresponding <Code x={props.c.Variation}/> as values. If no variation is assigned for a feature flag, the method returns the default <Code x={props.c.Variation}/> for that flag.
+The returned map consists of feature flag keys as keys and their corresponding <props.ui.Code x={props.c.Variation}/> as values. If no variation is assigned for a feature flag, the method returns the default <props.ui.Code x={props.c.Variation}/> for that flag.
 
 Proper error handling should be implemented to manage potential exceptions.
 
@@ -61,24 +61,24 @@ The default variation refers to the variation assigned to a visitor when they do
 
 <div name="arguments">
 
-<If c={props.c.IsServer}>
+<props.ui.If c={props.c.IsServer}>
 
 | Name        | Type   | Description                    | Default |
 |-------------|--------|--------------------------------| ------- |
-| <Text x={props.c.Params.VisitorCode}/> (_required_) | <Code x={props.c.Common.String}/> | <Text x={Shared.Params.VisitorCode}/> |  |
-| <Text x={props.c.GetVariations.Params.OnlyActive.Name}/> (_optional_)  | <Code x={props.c.Common.Bool}/> | An optional parameter indicating whether to return variations for active (<Code x={props.c.Common.True}/>) or all (<Code x={props.c.Common.False}/>) feature flags. | <Code x={props.c.Common.False}/> |
-| <Text x={props.c.GetVariations.Params.Track.Name}/> (_optional_) | <Code x={props.c.Common.Bool}/> | An optional parameter to enable or disable tracking of the feature evaluation.| <Code x={props.c.Common.True}/> |
+| <props.ui.Text x={props.c.Params.VisitorCode}/> (_required_) | <props.ui.Code x={props.c.Common.String}/> | <props.ui.Text x={props.shared.Params.VisitorCode}/> |  |
+| <props.ui.Text x={props.c.GetVariations.Params.OnlyActive.Name}/> (_optional_)  | <props.ui.Code x={props.c.Common.Bool}/> | An optional parameter indicating whether to return variations for active (<props.ui.Code x={props.c.Common.True}/>) or all (<props.ui.Code x={props.c.Common.False}/>) feature flags. | <props.ui.Code x={props.c.Common.False}/> |
+| <props.ui.Text x={props.c.GetVariations.Params.Track.Name}/> (_optional_) | <props.ui.Code x={props.c.Common.Bool}/> | An optional parameter to enable or disable tracking of the feature evaluation.| <props.ui.Code x={props.c.Common.True}/> |
 
-</If>
+</props.ui.If>
 
-<If c={props.c.IsClient}>
+<props.ui.If c={props.c.IsClient}>
 
 | Name        | Type   | Description                    | Default |
 |-------------|--------|--------------------------------| ------- |
-| <Text x={props.c.GetVariations.Params.OnlyActive.Name}/> (_optional_) | <Code x={props.c.Common.Bool}/> | An optional parameter indicating whether to return variations for active (<Code x={props.c.Common.True}/>) or all (<Code x={props.c.Common.False}/>) feature flags. | <Code x={props.c.Common.False}/> |
-| <Text x={props.c.GetVariations.Params.Track.Name}/> (_optional_) | <Code x={props.c.Common.Bool}/> | An optional parameter to enable or disable tracking of the feature evaluation. | <Code x={props.c.Common.True}/> |
+| <props.ui.Text x={props.c.GetVariations.Params.OnlyActive.Name}/> (_optional_) | <props.ui.Code x={props.c.Common.Bool}/> | An optional parameter indicating whether to return variations for active (<props.ui.Code x={props.c.Common.True}/>) or all (<props.ui.Code x={props.c.Common.False}/>) feature flags. | <props.ui.Code x={props.c.Common.False}/> |
+| <props.ui.Text x={props.c.GetVariations.Params.Track.Name}/> (_optional_) | <props.ui.Code x={props.c.Common.Bool}/> | An optional parameter to enable or disable tracking of the feature evaluation. | <props.ui.Code x={props.c.Common.True}/> |
 
-</If>
+</props.ui.If>
 
 </div>
 
@@ -86,36 +86,36 @@ The default variation refers to the variation assigned to a visitor when they do
 
 | Type | Description |
 | ---- | ----------- |
-| <Code x={props.c.GetVariations.Return}/> | Map that contains the assigned <CodeRef x={props.c.Variation}/> objects of the feature flags using the keys of the corresponding features. |
+| <props.ui.Code x={props.c.GetVariations.Return}/> | Map that contains the assigned <props.ui.CodeRef x={props.c.Variation}/> objects of the feature flags using the keys of the corresponding features. |
 
 </div>
 
 <div name="exceptions">
 
-<If c={props.c.IsServer}>
+<props.ui.If c={props.c.IsServer}>
 
 | Type | Description |
 |----- | ----------- |
-| <Code x={props.c.Exceptions.VisitorCodeInvalid}/> | <Text x={Shared.Exceptions.VisitorCodeInvalid}/> |
+| <props.ui.Code x={props.c.Exceptions.VisitorCodeInvalid}/> | <props.ui.Text x={props.shared.Exceptions.VisitorCodeInvalid}/> |
 
-</If>
+</props.ui.If>
 
-<If c={props.c.IsClient}>
+<props.ui.If c={props.c.IsClient}>
 
 | Type | Description |
 |----- | ----------- |
-| <Code x={props.c.Exceptions.SdkNotReady}/> | <Text x={Shared.Exceptions.SdkNotReady}/> |
+| <props.ui.Code x={props.c.Exceptions.SdkNotReady}/> | <props.ui.Text x={props.shared.Exceptions.SdkNotReady}/> |
 
-</If>
+</props.ui.If>
 </div>
 
 <div name="exceptions___js">
 
 | Type                                                | Description                                                                                       |
 | --------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
-| <Code x={props.c.Exceptions.Initialization}/>       | Method was executed before the `kameleoonClient` completed it's [`initialize`](#initialize) call. |
-| <Code x={props.c.Exceptions.VisitorCodeEmpty}/>     | <Text x={Shared.Exceptions.VisitorCodeEmpty}/>                                                    |
-| <Code x={props.c.Exceptions.VisitorCodeMaxLength}/> | <Text x={Shared.Exceptions.VisitorCodeMaxLength}/>                                                |
+| <props.ui.Code x={props.c.Exceptions.Initialization}/>       | Method was executed before the `kameleoonClient` completed it's [`initialize`](#initialize) call. |
+| <props.ui.Code x={props.c.Exceptions.VisitorCodeEmpty}/>     | <props.ui.Text x={props.shared.Exceptions.VisitorCodeEmpty}/>                                                    |
+| <props.ui.Code x={props.c.Exceptions.VisitorCodeMaxLength}/> | <props.ui.Text x={props.shared.Exceptions.VisitorCodeMaxLength}/>                                                |
 
 </div>
-</Select>
+</props.ui.Select>
