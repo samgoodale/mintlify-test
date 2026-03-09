@@ -1,22 +1,22 @@
 
-<Select name={props.sec}>
+<props.ui.Select name={props.sec}>
 <div name="description">
 
-* 📨 _Sends Tracking Data to Kameleoon (depending on the <Code x={props.c.GetVariation.Params.Track.Name}/> parameter)_
+* 📨 _Sends Tracking Data to Kameleoon (depending on the <props.ui.Code x={props.c.GetVariation.Params.Track.Name}/> parameter)_
 
-Retrieves the <CodeRef x={props.c.Variation}/> assigned to a given visitor for a specific feature flag.
+Retrieves the <props.ui.CodeRef x={props.c.Variation}/> assigned to a given visitor for a specific feature flag.
 
-<If c={props.c.IsServer}>
+<props.ui.If c={props.c.IsServer}>
 
-This method takes a <Code x={props.c.Params.VisitorCode}/> and <Code x={props.c.Params.FeatureKey}/> as mandatory arguments. The <Code x={props.c.GetVariation.Params.Track.Name}/> argument is optional and defaults to <Code x={props.c.Common.True}/>.
-</If>
+This method takes a <props.ui.Code x={props.c.Params.VisitorCode}/> and <props.ui.Code x={props.c.Params.FeatureKey}/> as mandatory arguments. The <props.ui.Code x={props.c.GetVariation.Params.Track.Name}/> argument is optional and defaults to <props.ui.Code x={props.c.Common.True}/>.
+</props.ui.If>
 
-<If c={props.c.IsClient}>
+<props.ui.If c={props.c.IsClient}>
 
-This method takes <Code x={props.c.Params.FeatureKey}/> as a mandatory argument and <Code x={props.c.GetVariation.Params.Track.Name}/> as an optional argument. The <Code x={props.c.GetVariation.Params.Track.Name}/> argument is optional and defaults to <Code x={props.c.Common.True}/>.
-</If>
+This method takes <props.ui.Code x={props.c.Params.FeatureKey}/> as a mandatory argument and <props.ui.Code x={props.c.GetVariation.Params.Track.Name}/> as an optional argument. The <props.ui.Code x={props.c.GetVariation.Params.Track.Name}/> argument is optional and defaults to <props.ui.Code x={props.c.Common.True}/>.
+</props.ui.If>
 
-It returns the assigned <Code x={props.c.Variation}/> for the visitor. If the visitor is not associated with any feature flag rules, the method returns the default <Code x={props.c.Variation}/> for the given feature flag.
+It returns the assigned <props.ui.Code x={props.c.Variation}/> for the visitor. If the visitor is not associated with any feature flag rules, the method returns the default <props.ui.Code x={props.c.Variation}/> for the given feature flag.
 
 Ensure that proper error handling is implemented in your code to manage potential exceptions.
 
@@ -28,21 +28,21 @@ The default variation refers to the variation assigned to a visitor when they do
 
 <div name="description___js">
 
-* 📨 _Sends Tracking Data to Kameleoon (depending on the <Code x={props.c.GetVariations.Params.Track.Name}/> parameter)_
+* 📨 _Sends Tracking Data to Kameleoon (depending on the <props.ui.Code x={props.c.GetVariations.Params.Track.Name}/> parameter)_
 * 🎯 _Events:_ [`EventType.Evaluation`](#events-1)
 
-<If c={props.c.IsReact}>
+<props.ui.If c={props.c.IsReact}>
 
 <Info>
-Method is obtained using <Code x={"useFeatureFlag"} /> hook.
+Method is obtained using <props.ui.Code x={"useFeatureFlag"} /> hook.
 </Info>
-</If>
+</props.ui.If>
 
-Retrieves the <CodeRef x={props.c.Variation}/> assigned to a given visitor for a specific feature flag.
+Retrieves the <props.ui.CodeRef x={props.c.Variation}/> assigned to a given visitor for a specific feature flag.
 
-This method takes a <Code x={props.c.Params.VisitorCode}/> and <Code x={props.c.Params.FeatureKey}/> as mandatory arguments. The <Code x={props.c.GetVariation.Params.Track.Name}/> argument is optional and defaults to <Code x={props.c.Common.True}/>.
+This method takes a <props.ui.Code x={props.c.Params.VisitorCode}/> and <props.ui.Code x={props.c.Params.FeatureKey}/> as mandatory arguments. The <props.ui.Code x={props.c.GetVariation.Params.Track.Name}/> argument is optional and defaults to <props.ui.Code x={props.c.Common.True}/>.
 
-It returns the assigned <Code x={props.c.Variation}/> for the visitor. If the visitor is not associated with any feature flag rules, the method returns the default <Code x={props.c.Variation}/> for the given feature flag.
+It returns the assigned <props.ui.Code x={props.c.Variation}/> for the visitor. If the visitor is not associated with any feature flag rules, the method returns the default <props.ui.Code x={props.c.Variation}/> for the given feature flag.
 
 Ensure that proper error handling is implemented in your code to manage potential exceptions.
 
@@ -53,24 +53,24 @@ The default variation refers to the variation assigned to a visitor when they do
 
 <div name="arguments">
 
-<If c={props.c.IsServer}>
+<props.ui.If c={props.c.IsServer}>
 
 | Name        | Type   | Description                    | Default |
 |-------------|--------|--------------------------------| ------- |
-| <Text x={props.c.Params.VisitorCode}/> (_required_) | <Code x={props.c.Common.String}/> | <Text x={Shared.Params.VisitorCode}/> |  |
-| <Text x={props.c.Params.FeatureKey}/> (_required_)  | <Code x={props.c.Common.String}/> | <Text x={Shared.Params.FeatureKey}/> | |
-| <Text x={props.c.GetVariation.Params.Track.Name}/> (_optional_) | <Code x={props.c.Common.Bool}/> | An optional parameter to enable or disable tracking of the feature evaluation.| <Code x={props.c.Common.True}/> |
+| <props.ui.Text x={props.c.Params.VisitorCode}/> (_required_) | <props.ui.Code x={props.c.Common.String}/> | <props.ui.Text x={props.shared.Params.VisitorCode}/> |  |
+| <props.ui.Text x={props.c.Params.FeatureKey}/> (_required_)  | <props.ui.Code x={props.c.Common.String}/> | <props.ui.Text x={props.shared.Params.FeatureKey}/> | |
+| <props.ui.Text x={props.c.GetVariation.Params.Track.Name}/> (_optional_) | <props.ui.Code x={props.c.Common.Bool}/> | An optional parameter to enable or disable tracking of the feature evaluation.| <props.ui.Code x={props.c.Common.True}/> |
 
-</If>
+</props.ui.If>
 
-<If c={props.c.IsClient}>
+<props.ui.If c={props.c.IsClient}>
 
 | Name        | Type   | Description                    | Default |
 |-------------|--------|--------------------------------| ------- |
-| <Text x={props.c.Params.FeatureKey}/> (_required_)  | <Code x={props.c.Common.String}/> | <Text x={Shared.Params.FeatureKey}/> | |
-| <Text x={props.c.GetVariation.Params.Track.Name}/> (_optional_) | <Code x={props.c.Common.Bool}/> | An optional parameter to enable or disable tracking of the feature evaluation. | <Code x={props.c.Common.True}/> |
+| <props.ui.Text x={props.c.Params.FeatureKey}/> (_required_)  | <props.ui.Code x={props.c.Common.String}/> | <props.ui.Text x={props.shared.Params.FeatureKey}/> | |
+| <props.ui.Text x={props.c.GetVariation.Params.Track.Name}/> (_optional_) | <props.ui.Code x={props.c.Common.Bool}/> | An optional parameter to enable or disable tracking of the feature evaluation. | <props.ui.Code x={props.c.Common.True}/> |
 
-</If>
+</props.ui.If>
 
 </div>
 
@@ -78,42 +78,42 @@ The default variation refers to the variation assigned to a visitor when they do
 
 | Type | Description |
 | ---- | ----------- |
-| <Code x={props.c.GetVariation.Return}/> | An assigned <CodeRef x={props.c.Variation}/> to a given visitor for a specific feature flag. |
+| <props.ui.Code x={props.c.GetVariation.Return}/> | An assigned <props.ui.CodeRef x={props.c.Variation}/> to a given visitor for a specific feature flag. |
 
 </div>
 
 <div name="exceptions">
 
-<If c={props.c.IsServer}>
+<props.ui.If c={props.c.IsServer}>
 
 | Type | Description |
 |----- | ----------- |
-| <Code x={props.c.Exceptions.VisitorCodeInvalid}/> | <Text x={Shared.Exceptions.VisitorCodeInvalid}/> |
-| <Code x={props.c.Exceptions.FeatureNotFound}/> | <Text x={Shared.Exceptions.FeatureNotFound}/> |
-| <Code x={props.c.Exceptions.FeatureEnvironmentDisabled}/> | <Text x={Shared.Exceptions.FeatureEnvironmentDisabled}/> |
+| <props.ui.Code x={props.c.Exceptions.VisitorCodeInvalid}/> | <props.ui.Text x={props.shared.Exceptions.VisitorCodeInvalid}/> |
+| <props.ui.Code x={props.c.Exceptions.FeatureNotFound}/> | <props.ui.Text x={props.shared.Exceptions.FeatureNotFound}/> |
+| <props.ui.Code x={props.c.Exceptions.FeatureEnvironmentDisabled}/> | <props.ui.Text x={props.shared.Exceptions.FeatureEnvironmentDisabled}/> |
 
-</If>
+</props.ui.If>
 
-<If c={props.c.IsClient}>
+<props.ui.If c={props.c.IsClient}>
 
 | Type | Description |
 |----- | ----------- |
-| <Code x={props.c.Exceptions.SdkNotReady}/> | <Text x={Shared.Exceptions.SdkNotReady}/> |
-| <Code x={props.c.Exceptions.FeatureNotFound}/> | <Text x={Shared.Exceptions.FeatureNotFound}/> |
-| <Code x={props.c.Exceptions.FeatureEnvironmentDisabled}/> | <Text x={Shared.Exceptions.FeatureEnvironmentDisabled}/> |
+| <props.ui.Code x={props.c.Exceptions.SdkNotReady}/> | <props.ui.Text x={props.shared.Exceptions.SdkNotReady}/> |
+| <props.ui.Code x={props.c.Exceptions.FeatureNotFound}/> | <props.ui.Text x={props.shared.Exceptions.FeatureNotFound}/> |
+| <props.ui.Code x={props.c.Exceptions.FeatureEnvironmentDisabled}/> | <props.ui.Text x={props.shared.Exceptions.FeatureEnvironmentDisabled}/> |
 
-</If>
+</props.ui.If>
 </div>
 
 <div name="exceptions___js">
 
 | Type | Description |
 | ---- | ----------- |
-| <Code x={props.c.Exceptions.Initialization}/> | Method was executed before the `kameleoonClient` completed it's [`initialize`](#initialize) call. |
-| <Code x={props.c.Exceptions.VisitorCodeEmpty}/> | <Text x={Shared.Exceptions.VisitorCodeEmpty}/> |
-| <Code x={props.c.Exceptions.VisitorCodeMaxLength}/> | <Text x={Shared.Exceptions.VisitorCodeMaxLength}/> |
-| <Code x={props.c.Exceptions.FeatureNotFound}/> | <Text x={Shared.Exceptions.FeatureNotFound}/> |
-| <Code x={props.c.Exceptions.FeatureEnvironmentDisabled}/> | <Text x={Shared.Exceptions.FeatureEnvironmentDisabled}/> |
+| <props.ui.Code x={props.c.Exceptions.Initialization}/> | Method was executed before the `kameleoonClient` completed it's [`initialize`](#initialize) call. |
+| <props.ui.Code x={props.c.Exceptions.VisitorCodeEmpty}/> | <props.ui.Text x={props.shared.Exceptions.VisitorCodeEmpty}/> |
+| <props.ui.Code x={props.c.Exceptions.VisitorCodeMaxLength}/> | <props.ui.Text x={props.shared.Exceptions.VisitorCodeMaxLength}/> |
+| <props.ui.Code x={props.c.Exceptions.FeatureNotFound}/> | <props.ui.Text x={props.shared.Exceptions.FeatureNotFound}/> |
+| <props.ui.Code x={props.c.Exceptions.FeatureEnvironmentDisabled}/> | <props.ui.Text x={props.shared.Exceptions.FeatureEnvironmentDisabled}/> |
 
 </div>
-</Select>
+</props.ui.Select>
