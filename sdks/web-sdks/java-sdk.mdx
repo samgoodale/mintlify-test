@@ -3,29 +3,30 @@ title: 'Java SDK'
 ---
 
 import { Select, Text, Bold, Italic, Code, CodeRef, Ref, If } from '/snippets/sdks/utils.jsx';
-import SharedDiv, { Shared } from '/snippets/sdks/shared.mdx';
-import StarterKit from '/snippets/sdks/developer-guide/getting-started/starter-kit.mdx';
-import CrossDeviceReconciliation from '/snippets/sdks/developer-guide/cross-device-reconciliation.mdx';
-import ActivatingAFeatureFlag from '/snippets/sdks/developer-guide/getting-started/activating-a-feature-flag.mdx';
+import SharedDiv from '/snippets/sdks/shared.jsx';
+import Shared from '/snippets/sdks/shared-data.jsx';
+import StarterKit from '/snippets/sdks/developer-guide/getting-started/starter-kit.jsx';
+import CrossDeviceReconciliation from '/snippets/sdks/developer-guide/cross-device-reconciliation.jsx';
+import ActivatingAFeatureFlag from '/snippets/sdks/developer-guide/getting-started/activating-a-feature-flag.jsx';
 import TargetingConditions from '/snippets/sdks/developer-guide/targeting-conditions.mdx';
-import Logging from '/snippets/sdks/developer-guide/logging.mdx';
-import GetVariations from '/snippets/sdks/reference/feature-flags-and-variations/get-variations.mdx';
-import GetVariation from '/snippets/sdks/reference/feature-flags-and-variations/get-variation.mdx';
-import GetFeatureList from '/snippets/sdks/reference/feature-flags-and-variations/get-feature-list.mdx';
-import SetForcedVariation from '/snippets/sdks/reference/feature-flags-and-variations/set-forced-variation.mdx';
-import EvaluateAudiences from '/snippets/sdks/reference/feature-flags-and-variations/evaluate-audiences.mdx';
-import GetDataFile from '/snippets/sdks/reference/feature-flags-and-variations/get-data-file.mdx';
-import GetEngineTrackingCode from '/snippets/sdks/reference/goals/get-engine-tracking-code.mdx';
-import Geolocation from '/snippets/sdks/reference/data-types/geolocation.mdx';
-import Browser from '/snippets/sdks/reference/data-types/browser.mdx';
-import Conversion from '/snippets/sdks/reference/data-types/conversion.mdx';
-import TrackConversion from '/snippets/sdks/reference/goals/track-conversion.mdx';
-import UpdateConfigurationHandler from '/snippets/sdks/reference/events/update-configuration-handler.mdx';
-import AddData from '/snippets/sdks/reference/visitor-data/add-data.mdx';
-import CustomBucketingKey from '/snippets/sdks/developer-guide/custom-bucketing-key.mdx';
-import DataFile from '/snippets/sdks/reference/returned-types/data-file.mdx';
-import FeatureFlag from '/snippets/sdks/reference/returned-types/feature-flag.mdx';
-import Rule from '/snippets/sdks/reference/returned-types/rule.mdx';
+import Logging from '/snippets/sdks/developer-guide/logging.jsx';
+import GetVariations from '/snippets/sdks/reference/feature-flags-and-variations/get-variations.jsx';
+import GetVariation from '/snippets/sdks/reference/feature-flags-and-variations/get-variation.jsx';
+import GetFeatureList from '/snippets/sdks/reference/feature-flags-and-variations/get-feature-list.jsx';
+import SetForcedVariation from '/snippets/sdks/reference/feature-flags-and-variations/set-forced-variation.jsx';
+import EvaluateAudiences from '/snippets/sdks/reference/feature-flags-and-variations/evaluate-audiences.jsx';
+import GetDataFile from '/snippets/sdks/reference/feature-flags-and-variations/get-data-file.jsx';
+import GetEngineTrackingCode from '/snippets/sdks/reference/goals/get-engine-tracking-code.jsx';
+import Geolocation from '/snippets/sdks/reference/data-types/geolocation.jsx';
+import Browser from '/snippets/sdks/reference/data-types/browser.jsx';
+import Conversion from '/snippets/sdks/reference/data-types/conversion.jsx';
+import TrackConversion from '/snippets/sdks/reference/goals/track-conversion.jsx';
+import UpdateConfigurationHandler from '/snippets/sdks/reference/events/update-configuration-handler.jsx';
+import AddData from '/snippets/sdks/reference/visitor-data/add-data.jsx';
+import CustomBucketingKey from '/snippets/sdks/developer-guide/custom-bucketing-key.jsx';
+import DataFile from '/snippets/sdks/reference/returned-types/data-file.jsx';
+import FeatureFlag from '/snippets/sdks/reference/returned-types/feature-flag.jsx';
+import Rule from '/snippets/sdks/reference/returned-types/rule.jsx';
 
 export const SdkUi = { Select, Text, Bold, Italic, Code, CodeRef, Ref, If };
 
@@ -297,7 +298,7 @@ The installation package is available on the Maven Central repository. You can i
 
 #### Additional configuration
 
-Create a `.properties` configuration file to provide credentials and customize SDK behavior. You can also [download our sample configuration](./assets/client%20configs/client-java.properties) file.
+Create a `.properties` configuration file to provide credentials and customize SDK behavior. You can also [download our sample configuration](./assets/client configs/client-java.properties) file.
 
 We recommend saving this file to the default path, `/etc/kameleoon/client-java.conf`, but you can save it anywhere in the classpath as `kameleoon-client-java.properties`.
 

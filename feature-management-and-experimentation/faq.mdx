@@ -1,0 +1,8 @@
+---
+title: "Feature Management FAQ"
+description: "Answers to common SDK and feature management questions referenced throughout the docs."
+---
+
+## When does the SDK send a tracking request for analytics?
+
+A tracking request is typically sent when you explicitly call a tracking method such as `trackConversion()` or `flush()`, or when a method is documented as emitting exposure or analytics data as part of its behavior. The exact triggers depend on the SDK and method being used.

@@ -3,25 +3,26 @@ title: 'C# SDK'
 ---
 
 import { Select, Text, Bold, Italic, Code, CodeRef, Ref, If } from '/snippets/sdks/utils.jsx';
-import SharedDiv, { Shared } from '/snippets/sdks/shared.mdx';
-import StarterKit from '/snippets/sdks/developer-guide/getting-started/starter-kit.mdx';
-import CrossDeviceReconciliation from '/snippets/sdks/developer-guide/cross-device-reconciliation.mdx';
-import ActivatingAFeatureFlag from '/snippets/sdks/developer-guide/getting-started/activating-a-feature-flag.mdx';
+import SharedDiv from '/snippets/sdks/shared.jsx';
+import Shared from '/snippets/sdks/shared-data.jsx';
+import StarterKit from '/snippets/sdks/developer-guide/getting-started/starter-kit.jsx';
+import CrossDeviceReconciliation from '/snippets/sdks/developer-guide/cross-device-reconciliation.jsx';
+import ActivatingAFeatureFlag from '/snippets/sdks/developer-guide/getting-started/activating-a-feature-flag.jsx';
 import TargetingConditions from '/snippets/sdks/developer-guide/targeting-conditions.mdx';
-import Logging from '/snippets/sdks/developer-guide/logging.mdx';
-import Geolocation from '/snippets/sdks/reference/data-types/geolocation.mdx';
-import Browser from '/snippets/sdks/reference/data-types/browser.mdx';
-import Conversion from '/snippets/sdks/reference/data-types/conversion.mdx';
-import GetVariations from '/snippets/sdks/reference/feature-flags-and-variations/get-variations.mdx';
-import GetVariation from '/snippets/sdks/reference/feature-flags-and-variations/get-variation.mdx';
-import TrackConversion from '/snippets/sdks/reference/goals/track-conversion.mdx';
-import AddData from '/snippets/sdks/reference/visitor-data/add-data.mdx';
-import GetFeatureList from '/snippets/sdks/reference/feature-flags-and-variations/get-feature-list.mdx';
-import SetForcedVariation from '/snippets/sdks/reference/feature-flags-and-variations/set-forced-variation.mdx';
-import EvaluateAudiences from '/snippets/sdks/reference/feature-flags-and-variations/evaluate-audiences.mdx';
-import GetEngineTrackingCode from '/snippets/sdks/reference/goals/get-engine-tracking-code.mdx';
-import UpdateConfigurationHandler from '/snippets/sdks/reference/events/update-configuration-handler.mdx';
-import CustomBucketingKey from '/snippets/sdks/developer-guide/custom-bucketing-key.mdx';
+import Logging from '/snippets/sdks/developer-guide/logging.jsx';
+import Geolocation from '/snippets/sdks/reference/data-types/geolocation.jsx';
+import Browser from '/snippets/sdks/reference/data-types/browser.jsx';
+import Conversion from '/snippets/sdks/reference/data-types/conversion.jsx';
+import GetVariations from '/snippets/sdks/reference/feature-flags-and-variations/get-variations.jsx';
+import GetVariation from '/snippets/sdks/reference/feature-flags-and-variations/get-variation.jsx';
+import TrackConversion from '/snippets/sdks/reference/goals/track-conversion.jsx';
+import AddData from '/snippets/sdks/reference/visitor-data/add-data.jsx';
+import GetFeatureList from '/snippets/sdks/reference/feature-flags-and-variations/get-feature-list.jsx';
+import SetForcedVariation from '/snippets/sdks/reference/feature-flags-and-variations/set-forced-variation.jsx';
+import EvaluateAudiences from '/snippets/sdks/reference/feature-flags-and-variations/evaluate-audiences.jsx';
+import GetEngineTrackingCode from '/snippets/sdks/reference/goals/get-engine-tracking-code.jsx';
+import UpdateConfigurationHandler from '/snippets/sdks/reference/events/update-configuration-handler.jsx';
+import CustomBucketingKey from '/snippets/sdks/developer-guide/custom-bucketing-key.jsx';
 
 export const SdkUi = { Select, Text, Bold, Italic, Code, CodeRef, Ref, If };
 
@@ -262,7 +263,7 @@ paket add KameleoonClient --version 4.17.0
 
 #### Additional configuration
 
-Create a ``.properties`` configuration file to provide credentials and customize the SDK's behavior. You can also [download a sample configuration](./assets/client%20configs/client-csharp.conf) file. Save this file in the default path `/etc/kameleoon/client-csharp.conf`. If you place the file in another location, you'll need to pass the path as an argument to `KameleoonClientFactory.Create()`. With the current version of the C# SDK, these are the available keys:
+Create a ``.properties`` configuration file to provide credentials and customize the SDK's behavior. You can also [download a sample configuration](./assets/client configs/client-csharp.conf) file. Save this file in the default path `/etc/kameleoon/client-csharp.conf`. If you place the file in another location, you'll need to pass the path as an argument to `KameleoonClientFactory.Create()`. With the current version of the C# SDK, these are the available keys:
 
 |Key                | Description    |
 |----------------- | ---------------------------------------------------------------------------- |
@@ -1216,7 +1217,7 @@ kameleoonClient.UpdateConfigurationHandler(async delegate () {
 ### Data types
 
 Data available in the SDK is not available for targeting and reporting in the Kameleoon app until it is added; for example, by using the `addData()` method.
-See [use visit history to target users](../using-visit-history-in-feature-flags-and-experiments) for more information.
+See [use visit history to target users](/feature-management-and-experimentation/using-visit-history-in-feature-flags-and-experiments) for more information.
 
 <Note>
 If you are in hybrid mode, you can call `GetRemoteVisitorData()` to automatically fill all data that Kameleoon collected previously.

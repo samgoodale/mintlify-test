@@ -3,27 +3,28 @@ title: 'PHP SDK'
 ---
 
 import { Select, Text, Bold, Italic, Code, CodeRef, Ref, If } from '/snippets/sdks/utils.jsx';
-import SharedDiv, { Shared } from '/snippets/sdks/shared.mdx';
-import CrossDeviceReconciliation from '/snippets/sdks/developer-guide/cross-device-reconciliation.mdx';
-import ActivatingAFeatureFlag from '/snippets/sdks/developer-guide/getting-started/activating-a-feature-flag.mdx';
+import SharedDiv from '/snippets/sdks/shared.jsx';
+import Shared from '/snippets/sdks/shared-data.jsx';
+import CrossDeviceReconciliation from '/snippets/sdks/developer-guide/cross-device-reconciliation.jsx';
+import ActivatingAFeatureFlag from '/snippets/sdks/developer-guide/getting-started/activating-a-feature-flag.jsx';
 import TargetingConditions from '/snippets/sdks/developer-guide/targeting-conditions.mdx';
-import Logging from '/snippets/sdks/developer-guide/logging.mdx';
-import GetVariations from '/snippets/sdks/reference/feature-flags-and-variations/get-variations.mdx';
-import GetVariation from '/snippets/sdks/reference/feature-flags-and-variations/get-variation.mdx';
-import Geolocation from '/snippets/sdks/reference/data-types/geolocation.mdx';
-import Browser from '/snippets/sdks/reference/data-types/browser.mdx';
-import Conversion from '/snippets/sdks/reference/data-types/conversion.mdx';
-import TrackConversion from '/snippets/sdks/reference/goals/track-conversion.mdx';
-import AddData from '/snippets/sdks/reference/visitor-data/add-data.mdx';
-import SetForcedVariation from '/snippets/sdks/reference/feature-flags-and-variations/set-forced-variation.mdx';
-import EvaluateAudiences from '/snippets/sdks/reference/feature-flags-and-variations/evaluate-audiences.mdx';
-import GetDataFile from '/snippets/sdks/reference/feature-flags-and-variations/get-data-file.mdx';
-import GetFeatureList from '/snippets/sdks/reference/feature-flags-and-variations/get-feature-list.mdx';
-import GetEngineTrackingCode from '/snippets/sdks/reference/goals/get-engine-tracking-code.mdx';
-import CustomBucketingKey from '/snippets/sdks/developer-guide/custom-bucketing-key.mdx';
-import DataFile from '/snippets/sdks/reference/returned-types/data-file.mdx';
-import FeatureFlag from '/snippets/sdks/reference/returned-types/feature-flag.mdx';
-import Rule from '/snippets/sdks/reference/returned-types/rule.mdx';
+import Logging from '/snippets/sdks/developer-guide/logging.jsx';
+import GetVariations from '/snippets/sdks/reference/feature-flags-and-variations/get-variations.jsx';
+import GetVariation from '/snippets/sdks/reference/feature-flags-and-variations/get-variation.jsx';
+import Geolocation from '/snippets/sdks/reference/data-types/geolocation.jsx';
+import Browser from '/snippets/sdks/reference/data-types/browser.jsx';
+import Conversion from '/snippets/sdks/reference/data-types/conversion.jsx';
+import TrackConversion from '/snippets/sdks/reference/goals/track-conversion.jsx';
+import AddData from '/snippets/sdks/reference/visitor-data/add-data.jsx';
+import SetForcedVariation from '/snippets/sdks/reference/feature-flags-and-variations/set-forced-variation.jsx';
+import EvaluateAudiences from '/snippets/sdks/reference/feature-flags-and-variations/evaluate-audiences.jsx';
+import GetDataFile from '/snippets/sdks/reference/feature-flags-and-variations/get-data-file.jsx';
+import GetFeatureList from '/snippets/sdks/reference/feature-flags-and-variations/get-feature-list.jsx';
+import GetEngineTrackingCode from '/snippets/sdks/reference/goals/get-engine-tracking-code.jsx';
+import CustomBucketingKey from '/snippets/sdks/developer-guide/custom-bucketing-key.jsx';
+import DataFile from '/snippets/sdks/reference/returned-types/data-file.jsx';
+import FeatureFlag from '/snippets/sdks/reference/returned-types/feature-flag.jsx';
+import Rule from '/snippets/sdks/reference/returned-types/rule.jsx';
 
 export const SdkUi = { Select, Text, Bold, Italic, Code, CodeRef, Ref, If };
 
@@ -298,7 +299,7 @@ The hybrid mode is useful for tracking purposes, but **does not enable backend d
 
 #### Additional configuration
 
-You can customize the behavior of the PHP SDK via a configuration file. We provide a sample configuration file named `client-php.json.sample` in the SDK archive. You can also [download a sample configuration](./assets/client%20configs/client-php.json) file. We suggest to install this file to the default path of `/tmp/kameleoon/client-php.json`. The following table shows the available properties that you can set:
+You can customize the behavior of the PHP SDK via a configuration file. We provide a sample configuration file named `client-php.json.sample` in the SDK archive. You can also [download a sample configuration](./assets/client configs/client-php.json) file. We suggest to install this file to the default path of `/tmp/kameleoon/client-php.json`. The following table shows the available properties that you can set:
 
 | Key | Description | Default value |
 | --- | ----------- | ------------- |

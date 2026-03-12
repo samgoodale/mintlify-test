@@ -3,22 +3,23 @@ title: 'NodeJS SDK'
 ---
 
 import { Select, Text, Bold, Italic, Code, CodeRef, Ref, If } from '/snippets/sdks/utils.jsx';
-import SharedDiv, { Shared } from '/snippets/sdks/shared.mdx';
-import CrossDeviceReconciliation from '/snippets/sdks/developer-guide/cross-device-reconciliation.mdx';
-import EvaluateAudiences from '/snippets/sdks/reference/feature-flags-and-variations/evaluate-audiences.mdx';
-import GetDataFile from '/snippets/sdks/reference/feature-flags-and-variations/get-data-file.mdx';
-import Logging from '/snippets/sdks/developer-guide/logging.mdx';
-import GetVariation from '/snippets/sdks/reference/feature-flags-and-variations/get-variation.mdx';
-import GetVariations from '/snippets/sdks/reference/feature-flags-and-variations/get-variations.mdx';
-import SetForcedVariation from '/snippets/sdks/reference/feature-flags-and-variations/set-forced-variation.mdx';
-import Conversion from '/snippets/sdks/reference/data-types/conversion.mdx';
-import TrackConversion from '/snippets/sdks/reference/goals/track-conversion.mdx';
-import CustomBucketingKey from '/snippets/sdks/developer-guide/custom-bucketing-key.mdx';
-import ActivatingAFeatureFlag from '/snippets/sdks/developer-guide/getting-started/activating-a-feature-flag.mdx';
-import DataFile from '/snippets/sdks/reference/returned-types/data-file.mdx';
-import FeatureFlag from '/snippets/sdks/reference/returned-types/feature-flag.mdx';
-import Rule from '/snippets/sdks/reference/returned-types/rule.mdx';
-import ApplicationVersion from '/snippets/sdks/reference/data-types/application-version.mdx';
+import SharedDiv from '/snippets/sdks/shared.jsx';
+import Shared from '/snippets/sdks/shared-data.jsx';
+import CrossDeviceReconciliation from '/snippets/sdks/developer-guide/cross-device-reconciliation.jsx';
+import EvaluateAudiences from '/snippets/sdks/reference/feature-flags-and-variations/evaluate-audiences.jsx';
+import GetDataFile from '/snippets/sdks/reference/feature-flags-and-variations/get-data-file.jsx';
+import Logging from '/snippets/sdks/developer-guide/logging.jsx';
+import GetVariation from '/snippets/sdks/reference/feature-flags-and-variations/get-variation.jsx';
+import GetVariations from '/snippets/sdks/reference/feature-flags-and-variations/get-variations.jsx';
+import SetForcedVariation from '/snippets/sdks/reference/feature-flags-and-variations/set-forced-variation.jsx';
+import Conversion from '/snippets/sdks/reference/data-types/conversion.jsx';
+import TrackConversion from '/snippets/sdks/reference/goals/track-conversion.jsx';
+import CustomBucketingKey from '/snippets/sdks/developer-guide/custom-bucketing-key.jsx';
+import ActivatingAFeatureFlag from '/snippets/sdks/developer-guide/getting-started/activating-a-feature-flag.jsx';
+import DataFile from '/snippets/sdks/reference/returned-types/data-file.jsx';
+import FeatureFlag from '/snippets/sdks/reference/returned-types/feature-flag.jsx';
+import Rule from '/snippets/sdks/reference/returned-types/rule.jsx';
+import ApplicationVersion from '/snippets/sdks/reference/data-types/application-version.jsx';
 
 export const SdkUi = { Select, Text, Bold, Italic, Code, CodeRef, Ref, If };
 
@@ -4941,7 +4942,7 @@ Events are defined in the `EventType` enum. The `eventData` parameter will have 
 Kameleoon Data types are helper classes used for storing data in predefined forms. During the [`flush()`](#flush) execution, the SDK collects all data and sends it along with the tracking request.
 
 Data available in the SDK is not available for targeting and reporting in the Kameleoon app until you add the data (for example, by using the `addData()` method).
-See [use visit history to target users](../using-visit-history-in-feature-flags-and-experiments) for more information.
+See [use visit history to target users](/feature-management-and-experimentation/using-visit-history-in-feature-flags-and-experiments) for more information.
 
 <Note>
 If you are using Kameleoon in hybrid mode, you can call `getRemoteVisitorData()` to automatically fill all data that Kameleoon previously collected.

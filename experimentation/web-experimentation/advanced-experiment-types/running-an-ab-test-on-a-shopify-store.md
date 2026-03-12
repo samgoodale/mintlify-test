@@ -25,7 +25,7 @@ Before getting started, ensure Kameleoon is installed on your Shopify store—th
 
 ## Content Swapping testing
 
-A **Content Swapping test** is an A/B/n experiment where users are shown different contents under the same URL, each representing a variant of the same page. Contrary to URL redirects, it doesn't create [Sample Ratio Mismatch](/experiment-analytics/statistical-methods/sample-ratio-mismatch.md)
+A **Content Swapping test** is an A/B/n experiment where users are shown different contents under the same URL, each representing a variant of the same page. Contrary to URL redirects, it doesn't create [Sample Ratio Mismatch](/experiment-analytics/statistical-methods/sample-ratio-mismatch)
 
 With Shopify, content swapping tests are easy to set up using the `?view` URL parameter, which lets you serve alternate templates for the same page. For example:
 
