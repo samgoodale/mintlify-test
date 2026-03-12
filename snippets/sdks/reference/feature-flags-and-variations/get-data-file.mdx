@@ -1,16 +1,16 @@
 
-<Select name={props.sec}>
+<props.ui.Select name={props.sec}>
 <div name="tip_qa">
 
 <Tip>
-To evaluate all feature flags, use <CodeRef x={props.c.GetVariations}/>. This method is more efficient than calling <Code x={props.c.DataFile}/> and iterating through flags with `getVariation()`.
+To evaluate all feature flags, use <props.ui.CodeRef x={props.c.GetVariations}/>. This method is more efficient than calling <props.ui.Code x={props.c.DataFile}/> and iterating through flags with `getVariation()`.
 </Tip>
 
 </div>
 
 <div name="description">
 
-Returns the current SDK configuration as a <CodeRef x={props.c.DataFile}/> object.
+Returns the current SDK configuration as a <props.ui.CodeRef x={props.c.DataFile}/> object.
 
 </div>
 
@@ -18,7 +18,7 @@ Returns the current SDK configuration as a <CodeRef x={props.c.DataFile}/> objec
 
 | Type                             | Description                               |
 | -------------------------------- | ----------------------------------------- |
-| <CodeRef x={props.c.DataFile}/>     | The data file containing the SDK configuration. |
+| <props.ui.CodeRef x={props.c.DataFile}/>     | The data file containing the SDK configuration. |
 
 </div>
 
@@ -27,8 +27,8 @@ Returns the current SDK configuration as a <CodeRef x={props.c.DataFile}/> objec
 
 | Type | Description |
 | ---- | ----------- |
-| <Code x={props.c.Exceptions.SdkNotReady}/> | <Text x={Shared.Exceptions.SdkNotReady}/> |
+| <props.ui.Code x={props.c.Exceptions.SdkNotReady}/> | <props.ui.Text x={props.shared.Exceptions.SdkNotReady}/> |
 
 
 </div>
-</Select>
+</props.ui.Select>

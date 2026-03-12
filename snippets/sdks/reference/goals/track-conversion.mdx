@@ -1,30 +1,30 @@
 
-<Select name={props.sec}>
+<props.ui.Select name={props.sec}>
 <div name="description">
 
 * 📨 _Sends Tracking Data to Kameleoon_
 
-<If c={props.c.IsServer}>
+<props.ui.If c={props.c.IsServer}>
 
-Use this method to track a conversion for a specific [goal](https://help.kameleoon.com/create-new-goal/) and user. This method requires <Code x={props.c.Params.VisitorCode}/> and <Code x={props.c.TrackConversion.Params.GoalId}/>. In addition, this method also accepts an optional <Code x={props.c.TrackConversion.Params.Revenue}/>, <Code x={props.c.TrackConversion.Params.Negative}/> and <Code x={props.c.TrackConversion.Params.Metadata}/> arguments. The <Code x={props.c.Params.VisitorCode}/> is usually identical to the one that was used when triggering the experiment.
+Use this method to track a conversion for a specific [goal](https://help.kameleoon.com/create-new-goal/) and user. This method requires <props.ui.Code x={props.c.Params.VisitorCode}/> and <props.ui.Code x={props.c.TrackConversion.Params.GoalId}/>. In addition, this method also accepts an optional <props.ui.Code x={props.c.TrackConversion.Params.Revenue}/>, <props.ui.Code x={props.c.TrackConversion.Params.Negative}/> and <props.ui.Code x={props.c.TrackConversion.Params.Metadata}/> arguments. The <props.ui.Code x={props.c.Params.VisitorCode}/> is usually identical to the one that was used when triggering the experiment.
 
-The <Code x={props.c.TrackConversion}/> method doesn't return any value. This method is non-blocking as the server call is made asynchronously.
+The <props.ui.Code x={props.c.TrackConversion}/> method doesn't return any value. This method is non-blocking as the server call is made asynchronously.
 
 <Note>
-The parameter <Code x={props.c.TrackConversion.Params.IsUniqueIdentifier}/> is deprecated. Please use <CodeRef x={props.c.UniqueIdentifier}/> instead.
+The parameter <props.ui.Code x={props.c.TrackConversion.Params.IsUniqueIdentifier}/> is deprecated. Please use <props.ui.CodeRef x={props.c.UniqueIdentifier}/> instead.
 
-The <Code x={props.c.TrackConversion.Params.IsUniqueIdentifier}/> can also be useful in other edge-case scenarios, such as when you can't access the anonymous <Code x={props.c.Params.VisitorCode}/> that was originally assigned to the visitor, but you do have access to an internal ID that is connected to the anonymous visitor using session merging capabilities.
+The <props.ui.Code x={props.c.TrackConversion.Params.IsUniqueIdentifier}/> can also be useful in other edge-case scenarios, such as when you can't access the anonymous <props.ui.Code x={props.c.Params.VisitorCode}/> that was originally assigned to the visitor, but you do have access to an internal ID that is connected to the anonymous visitor using session merging capabilities.
 </Note>
 
-</If>
+</props.ui.If>
 
-<If c={props.c.IsClient}>
+<props.ui.If c={props.c.IsClient}>
 
-Use this method to track conversions. This method requires <Code x={props.c.TrackConversion.Params.GoalId}/> to track conversion on this particular [goal](https://help.kameleoon.com/create-new-goal/). In addition, this method also accepts <Code x={props.c.TrackConversion.Params.Revenue}/>, <Code x={props.c.TrackConversion.Params.Metadata}/> and <Code x={props.c.TrackConversion.Params.Negative}/> arguments.
+Use this method to track conversions. This method requires <props.ui.Code x={props.c.TrackConversion.Params.GoalId}/> to track conversion on this particular [goal](https://help.kameleoon.com/create-new-goal/). In addition, this method also accepts <props.ui.Code x={props.c.TrackConversion.Params.Revenue}/>, <props.ui.Code x={props.c.TrackConversion.Params.Metadata}/> and <props.ui.Code x={props.c.TrackConversion.Params.Negative}/> arguments.
 
-The <Code x={props.c.TrackConversion}/> method doesn't return any value. This method is non-blocking as the server call is made asynchronously.
+The <props.ui.Code x={props.c.TrackConversion}/> method doesn't return any value. This method is non-blocking as the server call is made asynchronously.
 
-</If>
+</props.ui.If>
 
 </div>
 
@@ -32,19 +32,19 @@ The <Code x={props.c.TrackConversion}/> method doesn't return any value. This me
 
 * 📨 _Sends Tracking Data to Kameleoon_
 
-<If c={props.c.IsReact}>
+<props.ui.If c={props.c.IsReact}>
 
-The <Code x={props.c.TrackConversion}/> function, used with the <Code x={props.c.Hook.UseData}/> hook creates and adds <CodeRef x={props.c.Conversion}/> data to the visitor with specified parameters and executes <Code x={props.c.Flush}/>.
+The <props.ui.Code x={props.c.TrackConversion}/> function, used with the <props.ui.Code x={props.c.Hook.UseData}/> hook creates and adds <props.ui.CodeRef x={props.c.Conversion}/> data to the visitor with specified parameters and executes <props.ui.Code x={props.c.Flush}/>.
 
-</If>
+</props.ui.If>
 
-<If c={props.c.IsJs}>
+<props.ui.If c={props.c.IsJs}>
 
-Use this method to track a conversion for a specific [goal](https://help.kameleoon.com/create-new-goal/) and user. This method requires <Code x={props.c.Params.VisitorCode}/> and <Code x={props.c.TrackConversion.Params.GoalId}/>. In addition, this method also accepts an optional <Code x={props.c.TrackConversion.Params.Revenue}/>, <Code x={props.c.TrackConversion.Params.Negative}/> and <Code x={props.c.TrackConversion.Params.Metadata}/> arguments. The <Code x={props.c.Params.VisitorCode}/> is usually identical to the one that was used when triggering the experiment.
+Use this method to track a conversion for a specific [goal](https://help.kameleoon.com/create-new-goal/) and user. This method requires <props.ui.Code x={props.c.Params.VisitorCode}/> and <props.ui.Code x={props.c.TrackConversion.Params.GoalId}/>. In addition, this method also accepts an optional <props.ui.Code x={props.c.TrackConversion.Params.Revenue}/>, <props.ui.Code x={props.c.TrackConversion.Params.Negative}/> and <props.ui.Code x={props.c.TrackConversion.Params.Metadata}/> arguments. The <props.ui.Code x={props.c.Params.VisitorCode}/> is usually identical to the one that was used when triggering the experiment.
 
-The <Code x={props.c.TrackConversion}/> method doesn't return any value. This method is non-blocking as the server call is made asynchronously.
+The <props.ui.Code x={props.c.TrackConversion}/> method doesn't return any value. This method is non-blocking as the server call is made asynchronously.
 
-</If>
+</props.ui.If>
 
 </div>
 
@@ -52,53 +52,53 @@ The <Code x={props.c.TrackConversion}/> method doesn't return any value. This me
 
 * _📨 _Sends Tracking Data to Kameleoon_
 
-<If c={props.c.IsReact}>
+<props.ui.If c={props.c.IsReact}>
 
-The <Code x={props.c.TrackConversion}/> function, used with the <Code x={props.c.Hook.UseData}/> hook creates and adds <CodeRef x={props.c.Conversion}/> data to the visitor with specified parameters and executes <Code x={props.c.Flush}/>.
+The <props.ui.Code x={props.c.TrackConversion}/> function, used with the <props.ui.Code x={props.c.Hook.UseData}/> hook creates and adds <props.ui.CodeRef x={props.c.Conversion}/> data to the visitor with specified parameters and executes <props.ui.Code x={props.c.Flush}/>.
 
-</If>
+</props.ui.If>
 
-<If c={props.c.IsJs}>
+<props.ui.If c={props.c.IsJs}>
 
-Use this method to track a conversion for a specific [goal](https://help.kameleoon.com/create-new-goal/) and user. This method requires <Code x={props.c.Params.VisitorCode}/> and <Code x={props.c.TrackConversion.Params.GoalId}/>. In addition, this method also accepts an optional <Code x={props.c.TrackConversion.Params.Revenue}/> argument. The <Code x={props.c.Params.VisitorCode}/> is usually identical to the one that was used when triggering the experiment.
+Use this method to track a conversion for a specific [goal](https://help.kameleoon.com/create-new-goal/) and user. This method requires <props.ui.Code x={props.c.Params.VisitorCode}/> and <props.ui.Code x={props.c.TrackConversion.Params.GoalId}/>. In addition, this method also accepts an optional <props.ui.Code x={props.c.TrackConversion.Params.Revenue}/> argument. The <props.ui.Code x={props.c.Params.VisitorCode}/> is usually identical to the one that was used when triggering the experiment.
 
-The <Code x={props.c.TrackConversion}/> method doesn't return any value. This method is non-blocking as the server call is made asynchronously.
+The <props.ui.Code x={props.c.TrackConversion}/> method doesn't return any value. This method is non-blocking as the server call is made asynchronously.
 
-</If>
+</props.ui.If>
 
-If you specify a <Code x={props.c.Params.VisitorCode}/> and set <Code x={props.c.TrackConversion.Params.IsUniqueIdentifier}/> to <Code x={props.c.Common.True}/>, the <Code x={props.c.TrackConversion}/> method uses it as the unique visitor identifier, which is useful for [cross-device experimentation](#cross-device-experimentation) because the SDK links the flushed data with the visitor that is associated with the specified identifier.
+If you specify a <props.ui.Code x={props.c.Params.VisitorCode}/> and set <props.ui.Code x={props.c.TrackConversion.Params.IsUniqueIdentifier}/> to <props.ui.Code x={props.c.Common.True}/>, the <props.ui.Code x={props.c.TrackConversion}/> method uses it as the unique visitor identifier, which is useful for [cross-device experimentation](#cross-device-experimentation) because the SDK links the flushed data with the visitor that is associated with the specified identifier.
 
 <Note>
-The <Code x={props.c.TrackConversion.Params.IsUniqueIdentifier}/> can also be useful in other edge-case scenarios, such as when you can't access the anonymous <Code x={props.c.Params.VisitorCode}/> that was originally assigned to the visitor, but you do have access to an internal ID that is connected to the anonymous visitor using session merging capabilities.
+The <props.ui.Code x={props.c.TrackConversion.Params.IsUniqueIdentifier}/> can also be useful in other edge-case scenarios, such as when you can't access the anonymous <props.ui.Code x={props.c.Params.VisitorCode}/> that was originally assigned to the visitor, but you do have access to an internal ID that is connected to the anonymous visitor using session merging capabilities.
 </Note>
 
 </div>
 
 <div name="arguments">
 
-<If c={props.c.IsServer}>
+<props.ui.If c={props.c.IsServer}>
 
 | Name | Type | Description | Default |
 | ---- | ---- | ----------- | ------- |
-| <Text x={props.c.Params.VisitorCode}/> (_required_) | <Code x={props.c.Common.String}/> | <Text x={Shared.Params.VisitorCode}/> | |
-| <Text x={props.c.TrackConversion.Params.GoalId.Name}/> (_required_) | <Code x={props.c.Common.Int}/> | ID of the goal. | |
-| <Text x={props.c.TrackConversion.Params.Revenue.Name}/> (_optional_)| <Code x={props.c.TrackConversion.Params.Revenue.Type}/> | Revenue of the conversion. | `0` |
-| <Text x={props.c.TrackConversion.Params.Negative.Name}/> (_optional_) | <Code x={props.c.Common.Bool}/> | Defines if the revenue is positive or negative. | <Code x={props.c.Common.False}/> |
-| <Text x={props.c.TrackConversion.Params.Metadata.Name}/> (_optional_) | <Code x={props.c.TrackConversion.Params.Metadata.Type}/> | Lets you set specific values for custom data which have been defined as metadata for the goal in the Kameleoon App. Example: `[CustomData{id: 5, value: "Payment Type"}, CustomData{id: 6, value: "Delivery Method"}]`. In this example, `5` and `9` are the indexes of the custom data (5 = “Payment Type”, 9 = “Delivery Method”).  | <Code x={props.c.TrackConversion.Params.Metadata.DefaultValue}/> |
-| <Text x={props.c.TrackConversion.Params.IsUniqueIdentifier.Name}/> _(deprecated)_ | <Code x={props.c.Common.Bool}/> | An optional parameter for specifying if the <Text x={props.c.Params.VisitorCode}/> is a unique identifier. | <Code x={props.c.Common.False}/> |
+| <props.ui.Text x={props.c.Params.VisitorCode}/> (_required_) | <props.ui.Code x={props.c.Common.String}/> | <props.ui.Text x={props.shared.Params.VisitorCode}/> | |
+| <props.ui.Text x={props.c.TrackConversion.Params.GoalId.Name}/> (_required_) | <props.ui.Code x={props.c.Common.Int}/> | ID of the goal. | |
+| <props.ui.Text x={props.c.TrackConversion.Params.Revenue.Name}/> (_optional_)| <props.ui.Code x={props.c.TrackConversion.Params.Revenue.Type}/> | Revenue of the conversion. | `0` |
+| <props.ui.Text x={props.c.TrackConversion.Params.Negative.Name}/> (_optional_) | <props.ui.Code x={props.c.Common.Bool}/> | Defines if the revenue is positive or negative. | <props.ui.Code x={props.c.Common.False}/> |
+| <props.ui.Text x={props.c.TrackConversion.Params.Metadata.Name}/> (_optional_) | <props.ui.Code x={props.c.TrackConversion.Params.Metadata.Type}/> | Lets you set specific values for custom data which have been defined as metadata for the goal in the Kameleoon App. Example: `[CustomData{id: 5, value: "Payment Type"}, CustomData{id: 6, value: "Delivery Method"}]`. In this example, `5` and `9` are the indexes of the custom data (5 = “Payment Type”, 9 = “Delivery Method”).  | <props.ui.Code x={props.c.TrackConversion.Params.Metadata.DefaultValue}/> |
+| <props.ui.Text x={props.c.TrackConversion.Params.IsUniqueIdentifier.Name}/> _(deprecated)_ | <props.ui.Code x={props.c.Common.Bool}/> | An optional parameter for specifying if the <props.ui.Text x={props.c.Params.VisitorCode}/> is a unique identifier. | <props.ui.Code x={props.c.Common.False}/> |
 
-</If>
+</props.ui.If>
 
-<If c={props.c.IsClient}>
+<props.ui.If c={props.c.IsClient}>
 
 | Name | Type | Description | Default |
 | ---- | ---- | ----------- | ------- |
-| <Text x={props.c.TrackConversion.Params.GoalId.Name}/> (_required_) | <Code x={props.c.Common.Int}/> | ID of the goal. | |
-| <Text x={props.c.TrackConversion.Params.Revenue.Name}/> (_optional_) | <Code x={props.c.Common.Float}/> | Revenue of the conversion. | `0` |
-| <Text x={props.c.TrackConversion.Params.Negative.Name}/> (_optional_) | <Code x={props.c.Common.Bool}/> | Defines if the revenue is positive or negative. | <Code x={props.c.Common.False}/> |
-| <Text x={props.c.TrackConversion.Params.Metadata.Name}/> (_optional_) | <Code x={props.c.TrackConversion.Params.Metadata.Type}/> | Metadata of the conversion. | <Code x={props.c.TrackConversion.Params.Metadata.DefaultValue}/> |
+| <props.ui.Text x={props.c.TrackConversion.Params.GoalId.Name}/> (_required_) | <props.ui.Code x={props.c.Common.Int}/> | ID of the goal. | |
+| <props.ui.Text x={props.c.TrackConversion.Params.Revenue.Name}/> (_optional_) | <props.ui.Code x={props.c.Common.Float}/> | Revenue of the conversion. | `0` |
+| <props.ui.Text x={props.c.TrackConversion.Params.Negative.Name}/> (_optional_) | <props.ui.Code x={props.c.Common.Bool}/> | Defines if the revenue is positive or negative. | <props.ui.Code x={props.c.Common.False}/> |
+| <props.ui.Text x={props.c.TrackConversion.Params.Metadata.Name}/> (_optional_) | <props.ui.Code x={props.c.TrackConversion.Params.Metadata.Type}/> | Metadata of the conversion. | <props.ui.Code x={props.c.TrackConversion.Params.Metadata.DefaultValue}/> |
 
-</If>
+</props.ui.If>
 
 </div>
 
@@ -106,11 +106,11 @@ The <Code x={props.c.TrackConversion.Params.IsUniqueIdentifier}/> can also be us
 
 | Name | Type | Description | Default |
 | ---- | ---- | ----------- | ------- |
-| <Text x={props.c.Params.VisitorCode}/> (_required_) | <Code x={props.c.Common.String}/> | <Text x={Shared.Params.VisitorCode}/> | |
-| <Text x={props.c.TrackConversion.Params.GoalId.Name}/> (_required_) | <Code x={props.c.Common.Int}/> | ID of the goal. | |
-| <Text x={props.c.TrackConversion.Params.Negative.Name}/> (_optional_) | <Code x={props.c.Common.Bool}/> | Defines if the revenue is positive or negative. | <Code x={props.c.Common.False}/> |
-| <Text x={props.c.TrackConversion.Params.Revenue.Name}/> (_optional_)| <Code x={props.c.TrackConversion.Params.Revenue.Type}/> | Revenue of the conversion. | `0` |
-| <Text x={props.c.TrackConversion.Params.Metadata.Name}/> (_optional_) | <Code x={props.c.TrackConversion.Params.Metadata.Type}/> | Metadata of the conversion. | <Code x={props.c.TrackConversion.Params.Metadata.DefaultValue}/> |
+| <props.ui.Text x={props.c.Params.VisitorCode}/> (_required_) | <props.ui.Code x={props.c.Common.String}/> | <props.ui.Text x={props.shared.Params.VisitorCode}/> | |
+| <props.ui.Text x={props.c.TrackConversion.Params.GoalId.Name}/> (_required_) | <props.ui.Code x={props.c.Common.Int}/> | ID of the goal. | |
+| <props.ui.Text x={props.c.TrackConversion.Params.Negative.Name}/> (_optional_) | <props.ui.Code x={props.c.Common.Bool}/> | Defines if the revenue is positive or negative. | <props.ui.Code x={props.c.Common.False}/> |
+| <props.ui.Text x={props.c.TrackConversion.Params.Revenue.Name}/> (_optional_)| <props.ui.Code x={props.c.TrackConversion.Params.Revenue.Type}/> | Revenue of the conversion. | `0` |
+| <props.ui.Text x={props.c.TrackConversion.Params.Metadata.Name}/> (_optional_) | <props.ui.Code x={props.c.TrackConversion.Params.Metadata.Type}/> | Metadata of the conversion. | <props.ui.Code x={props.c.TrackConversion.Params.Metadata.DefaultValue}/> |
 
 </div>
 
@@ -118,20 +118,20 @@ The <Code x={props.c.TrackConversion.Params.IsUniqueIdentifier}/> can also be us
 
 | Name | Type | Description | Default |
 | ---- | ---- | ----------- | ------- |
-| <Text x={props.c.Params.VisitorCode}/> (_required_) | <Code x={props.c.Common.String}/> | <Text x={Shared.Params.VisitorCode}/> | |
-| <Text x={props.c.TrackConversion.Params.GoalId.Name}/> (_required_) | <Code x={props.c.Common.Int}/> | ID of the goal. | |
-| <Text x={props.c.TrackConversion.Params.Revenue.Name}/> (_optional_)| <Code x={props.c.TrackConversion.Params.Revenue.Type}/> | Revenue of the conversion. | `0` |
-| <Text x={props.c.TrackConversion.Params.IsUniqueIdentifier.Name}/> (_optional_) | <Code x={props.c.Common.Bool}/> | An optional parameter for specifying if the <Text x={props.c.Params.VisitorCode}/> is a unique identifier. | <Code x={props.c.Common.False}/> |
+| <props.ui.Text x={props.c.Params.VisitorCode}/> (_required_) | <props.ui.Code x={props.c.Common.String}/> | <props.ui.Text x={props.shared.Params.VisitorCode}/> | |
+| <props.ui.Text x={props.c.TrackConversion.Params.GoalId.Name}/> (_required_) | <props.ui.Code x={props.c.Common.Int}/> | ID of the goal. | |
+| <props.ui.Text x={props.c.TrackConversion.Params.Revenue.Name}/> (_optional_)| <props.ui.Code x={props.c.TrackConversion.Params.Revenue.Type}/> | Revenue of the conversion. | `0` |
+| <props.ui.Text x={props.c.TrackConversion.Params.IsUniqueIdentifier.Name}/> (_optional_) | <props.ui.Code x={props.c.Common.Bool}/> | An optional parameter for specifying if the <props.ui.Text x={props.c.Params.VisitorCode}/> is a unique identifier. | <props.ui.Code x={props.c.Common.False}/> |
 
 </div>
 
 <div name="note_metadata">
 
-Support for <Text x={props.c.TrackConversion.Params.Metadata.Name}/> in conversions is currently **only available to customers participating in the [beta program](https://help.kameleoon.com/kameleoon-beta-program/)**. Additionally, <Text x={props.c.TrackConversion.Params.Metadata.Name}/> values are accessible **exclusively through raw data exports.** For more information, see the guide on [accessing raw export data](https://help.kameleoon.com/experiments-results-actions/#Export).
+Support for <props.ui.Text x={props.c.TrackConversion.Params.Metadata.Name}/> in conversions is currently **only available to customers participating in the [beta program](https://help.kameleoon.com/kameleoon-beta-program/)**. Additionally, <props.ui.Text x={props.c.TrackConversion.Params.Metadata.Name}/> values are accessible **exclusively through raw data exports.** For more information, see the guide on [accessing raw export data](https://help.kameleoon.com/experiments-results-actions/#Export).
 
-If the <Code x={props.c.TrackConversion.Params.Metadata.Name}/> parameter is provided, Kameleoon will use these specified values for the current conversion instead of what was previously collected using the <CodeRef x={props.c.AddData}/> method. If the parameter is omitted, Kameleoon will use the last tracked values for those <CodeRef x={props.c.CustomData}/> prior to the conversion and within the same visit.
+If the <props.ui.Code x={props.c.TrackConversion.Params.Metadata.Name}/> parameter is provided, Kameleoon will use these specified values for the current conversion instead of what was previously collected using the <props.ui.CodeRef x={props.c.AddData}/> method. If the parameter is omitted, Kameleoon will use the last tracked values for those <props.ui.CodeRef x={props.c.CustomData}/> prior to the conversion and within the same visit.
 
-Kameleoon will only consider the metadata values that are explicitly passed as parameters to the <Code x={props.c.TrackConversion}/> method.
+Kameleoon will only consider the metadata values that are explicitly passed as parameters to the <props.ui.Code x={props.c.TrackConversion}/> method.
 
 In the example below, Kameleoon will associate the conversion only with the custom data value explicitly provided as a parameter (here: index 5 with the value 'Amex Credit Card').
 
@@ -139,20 +139,20 @@ In the example below, Kameleoon will associate the conversion only with the cust
 
 <div name="exceptions">
 
-<If c={props.c.IsServer}>
+<props.ui.If c={props.c.IsServer}>
 
 | Type | Description |
 | ---- | ----------- |
-| <Code x={props.c.Exceptions.VisitorCodeInvalid}/> | <Text x={Shared.Exceptions.VisitorCodeInvalid}/> |
+| <props.ui.Code x={props.c.Exceptions.VisitorCodeInvalid}/> | <props.ui.Text x={props.shared.Exceptions.VisitorCodeInvalid}/> |
 
-</If>
+</props.ui.If>
 
-<If c={props.c.IsFlutter}>
+<props.ui.If c={props.c.IsFlutter}>
 
 | Type | Description |
 |----- | ----------- |
-| <Code x={props.c.Exceptions.PlatformException}/> | <Text x={Shared.Exceptions.PlatformException}/> |
-</If>
+| <props.ui.Code x={props.c.Exceptions.PlatformException}/> | <props.ui.Text x={props.shared.Exceptions.PlatformException}/> |
+</props.ui.If>
 
 </div>
 
@@ -160,9 +160,9 @@ In the example below, Kameleoon will associate the conversion only with the cust
 
 | Type | Description |
 |----- | ----------- |
-| <Code x={props.c.Exceptions.VisitorCodeMaxLength}/> | <Text x={Shared.Exceptions.VisitorCodeMaxLength}/> |
-| <Code x={props.c.Exceptions.VisitorCodeEmpty}/> | <Text x={Shared.Exceptions.VisitorCodeEmpty}/> |
-| <Code x={props.c.Exceptions.StorageWrite}/> | <Text x={Shared.Exceptions.StorageWrite}/> |
+| <props.ui.Code x={props.c.Exceptions.VisitorCodeMaxLength}/> | <props.ui.Text x={props.shared.Exceptions.VisitorCodeMaxLength}/> |
+| <props.ui.Code x={props.c.Exceptions.VisitorCodeEmpty}/> | <props.ui.Text x={props.shared.Exceptions.VisitorCodeEmpty}/> |
+| <props.ui.Code x={props.c.Exceptions.StorageWrite}/> | <props.ui.Text x={props.shared.Exceptions.StorageWrite}/> |
 
 </div>
-</Select>
+</props.ui.Select>

@@ -2,26 +2,29 @@
 title: 'C# SDK'
 ---
 
-import { Select, Text, Bold, Italic, Code, CodeRef, Ref, If } from '/snippets/sdks/utils.mdx';
-import SharedDiv, { Shared } from '/snippets/sdks/shared.mdx';
-import StarterKit from '/snippets/sdks/developer-guide/getting-started/starter-kit.mdx';
-import CrossDeviceReconciliation from '/snippets/sdks/developer-guide/cross-device-reconciliation.mdx';
-import ActivatingAFeatureFlag from '/snippets/sdks/developer-guide/getting-started/activating-a-feature-flag.mdx';
+import { Select, Text, Bold, Italic, Code, CodeRef, Ref, If } from '/snippets/sdks/utils.jsx';
+import SharedDiv from '/snippets/sdks/shared.jsx';
+import Shared from '/snippets/sdks/shared-data.jsx';
+import StarterKit from '/snippets/sdks/developer-guide/getting-started/starter-kit.jsx';
+import CrossDeviceReconciliation from '/snippets/sdks/developer-guide/cross-device-reconciliation.jsx';
+import ActivatingAFeatureFlag from '/snippets/sdks/developer-guide/getting-started/activating-a-feature-flag.jsx';
 import TargetingConditions from '/snippets/sdks/developer-guide/targeting-conditions.mdx';
-import Logging from '/snippets/sdks/developer-guide/logging.mdx';
-import Geolocation from '/snippets/sdks/reference/data-types/geolocation.mdx';
-import Browser from '/snippets/sdks/reference/data-types/browser.mdx';
-import Conversion from '/snippets/sdks/reference/data-types/conversion.mdx';
-import GetVariations from '/snippets/sdks/reference/feature-flags-and-variations/get-variations.mdx';
-import GetVariation from '/snippets/sdks/reference/feature-flags-and-variations/get-variation.mdx';
-import TrackConversion from '/snippets/sdks/reference/goals/track-conversion.mdx';
-import AddData from '/snippets/sdks/reference/visitor-data/add-data.mdx';
-import GetFeatureList from '/snippets/sdks/reference/feature-flags-and-variations/get-feature-list.mdx';
-import SetForcedVariation from '/snippets/sdks/reference/feature-flags-and-variations/set-forced-variation.mdx';
-import EvaluateAudiences from '/snippets/sdks/reference/feature-flags-and-variations/evaluate-audiences.mdx';
-import GetEngineTrackingCode from '/snippets/sdks/reference/goals/get-engine-tracking-code.mdx';
-import UpdateConfigurationHandler from '/snippets/sdks/reference/events/update-configuration-handler.mdx';
-import CustomBucketingKey from '/snippets/sdks/developer-guide/custom-bucketing-key.mdx';
+import Logging from '/snippets/sdks/developer-guide/logging.jsx';
+import Geolocation from '/snippets/sdks/reference/data-types/geolocation.jsx';
+import Browser from '/snippets/sdks/reference/data-types/browser.jsx';
+import Conversion from '/snippets/sdks/reference/data-types/conversion.jsx';
+import GetVariations from '/snippets/sdks/reference/feature-flags-and-variations/get-variations.jsx';
+import GetVariation from '/snippets/sdks/reference/feature-flags-and-variations/get-variation.jsx';
+import TrackConversion from '/snippets/sdks/reference/goals/track-conversion.jsx';
+import AddData from '/snippets/sdks/reference/visitor-data/add-data.jsx';
+import GetFeatureList from '/snippets/sdks/reference/feature-flags-and-variations/get-feature-list.jsx';
+import SetForcedVariation from '/snippets/sdks/reference/feature-flags-and-variations/set-forced-variation.jsx';
+import EvaluateAudiences from '/snippets/sdks/reference/feature-flags-and-variations/evaluate-audiences.jsx';
+import GetEngineTrackingCode from '/snippets/sdks/reference/goals/get-engine-tracking-code.jsx';
+import UpdateConfigurationHandler from '/snippets/sdks/reference/events/update-configuration-handler.jsx';
+import CustomBucketingKey from '/snippets/sdks/developer-guide/custom-bucketing-key.jsx';
+
+export const SdkUi = { Select, Text, Bold, Italic, Code, CodeRef, Ref, If };
 
 export const Context = {
     IsServer: true,
@@ -229,7 +232,7 @@ This guide is designed to help you integrate our SDK into your C# applications.
 
 #### Starter kit
 
-<StarterKit sec="starter_kit_description" c={Context}/>
+<StarterKit sec="starter_kit_description" c={Context} ui={SdkUi} shared={Shared}/>
 
 #### Install the C# client
 
@@ -260,7 +263,7 @@ paket add KameleoonClient --version 4.17.0
 
 #### Additional configuration
 
-Create a ``.properties`` configuration file to provide credentials and customize the SDK's behavior. You can also [download a sample configuration](./assets/client%20configs/client-csharp.conf) file. Save this file in the default path `/etc/kameleoon/client-csharp.conf`. If you place the file in another location, you'll need to pass the path as an argument to `KameleoonClientFactory.Create()`. With the current version of the C# SDK, these are the available keys:
+Create a ``.properties`` configuration file to provide credentials and customize the SDK's behavior. You can also [download a sample configuration](./assets/client configs/client-csharp.conf) file. Save this file in the default path `/etc/kameleoon/client-csharp.conf`. If you place the file in another location, you'll need to pass the path as an argument to `KameleoonClientFactory.Create()`. With the current version of the C# SDK, these are the available keys:
 
 |Key                | Description    |
 |----------------- | ---------------------------------------------------------------------------- |
@@ -329,31 +332,31 @@ As a developer, you must ensure your app uses the correct logic for A/B testing 
 
 ##### Assigning a unique ID to a user
 
-<ActivatingAFeatureFlag sec="assigning_a_unique_id_to_a_user" c={Context}/>
+<ActivatingAFeatureFlag sec="assigning_a_unique_id_to_a_user" c={Context} ui={SdkUi} shared={Shared}/>
 
 ##### Retrieving a flag configuration
 
-<ActivatingAFeatureFlag sec="retrieving_a_feature_flag_configuration___default" c={Context}/>
+<ActivatingAFeatureFlag sec="retrieving_a_feature_flag_configuration___default" c={Context} ui={SdkUi} shared={Shared}/>
 
 ##### Adding data points to target a user or filter / breakdown visits in reports
 
-<ActivatingAFeatureFlag sec="adding_data_points_to_target_a_user_or_filter_breakdown_visits_in_reports___server" c={Context}/>
+<ActivatingAFeatureFlag sec="adding_data_points_to_target_a_user_or_filter_breakdown_visits_in_reports___server" c={Context} ui={SdkUi} shared={Shared}/>
 
 ##### Tracking goal conversions
 
-<ActivatingAFeatureFlag sec="tracking_goal_conversions___param" c={Context}/>
+<ActivatingAFeatureFlag sec="tracking_goal_conversions___param" c={Context} ui={SdkUi} shared={Shared}/>
 
 ##### Sending events to analytics solutions
 
-<ActivatingAFeatureFlag sec="sending_events_to_analytics_solutions" c={Context}/>
+<ActivatingAFeatureFlag sec="sending_events_to_analytics_solutions" c={Context} ui={SdkUi} shared={Shared}/>
 
 ### Cross-device experimentation
 
-<CrossDeviceReconciliation sec="cross_device_experimentation" c={Context}/>
+<CrossDeviceReconciliation sec="cross_device_experimentation" c={Context} ui={SdkUi} shared={Shared}/>
 
 #### Synchronizing custom data across devices
 
-<CrossDeviceReconciliation sec="synchronizing_custom_data" c={Context}/>
+<CrossDeviceReconciliation sec="synchronizing_custom_data" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```csharp
 // In this example Custom data with index `90` was set to "Visitor" scope on Kameleoon Platform.
@@ -373,7 +376,7 @@ await kameleoonClient.GetRemoteVisitorData(visitorCode);
 
 #### Using custom data for session merging
 
-<CrossDeviceReconciliation sec="using_custom_data_session_merging" c={Context}/>
+<CrossDeviceReconciliation sec="using_custom_data_session_merging" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```csharp
 // In this example, `91` represents the index of the Custom Data
@@ -409,41 +412,41 @@ kameleoonClient.TrackConversion(userId, 123, 10.0);
 await kameleoonClient.GetRemoteVisitorData(userId);
 ```
 
-<CrossDeviceReconciliation sec="cross_device_visitor_code" c={Context}/>
+<CrossDeviceReconciliation sec="cross_device_visitor_code" c={Context} ui={SdkUi} shared={Shared}/>
 
 ### Using a custom bucketing key
 
-<CustomBucketingKey sec="description" c={Context}/>
+<CustomBucketingKey sec="description" c={Context} ui={SdkUi} shared={Shared}/>
 
 #### Use cases
 
-<CustomBucketingKey sec="use_cases" c={Context}/>
+<CustomBucketingKey sec="use_cases" c={Context} ui={SdkUi} shared={Shared}/>
 
 #### Technical details
 
-<CustomBucketingKey sec="technical_details_1" c={Context}/>
+<CustomBucketingKey sec="technical_details_1" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```csharp
 kameleoonClient.AddData(visitorCode, new CustomData(index, "newVisitorCode"));
 ```
 
-<CustomBucketingKey sec="technical_details_2" c={Context}/>
+<CustomBucketingKey sec="technical_details_2" c={Context} ui={SdkUi} shared={Shared}/>
 
 #### Technical requirementes
 
-<CustomBucketingKey sec="technical_requirements" c={Context}/>
+<CustomBucketingKey sec="technical_requirements" c={Context} ui={SdkUi} shared={Shared}/>
 
 ### Targeting conditions
 
-<TargetingConditions sec="targeting_conditons_description" c={Context}/>
+<TargetingConditions sec="targeting_conditons_description" c={Context} ui={SdkUi} shared={Shared}/>
 
 ### Logging
 
-<Logging sec="logging" c={Context}/>
+<Logging sec="logging" c={Context} ui={SdkUi} shared={Shared}/>
 
 #### Log levels
 
-<Logging sec="log_levels" c={Context}/>
+<Logging sec="log_levels" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```csharp
 // The `None` log level does not allow logging.
@@ -470,7 +473,7 @@ Kameleoon.Logging.KameleoonLogger.LogLevel = Kameleoon.Logging.LogLevel.Debug;
 
 #### Custom handling of logs
 
-<Logging sec="custom_handling_of_logs" c={Context}/>
+<Logging sec="custom_handling_of_logs" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```csharp
 class CustomLogger : Kameleoon.Logging.ILogger
@@ -683,7 +686,7 @@ if (hasNewCheckout)
 |KameleoonException.FeatureNotFound | Exception indicating that the requested feature ID has not been found in the internal configuration of the SDK. This is usually normal and means that the feature flag has not yet been activated on Kameleoon's side (but code implementing the feature is already deployed on the web-application's side).|
 
 #### GetVariation()
-<GetVariation sec="description" c={Context}/>
+<GetVariation sec="description" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```csharp
 const string featureKey = "new_checkout";
@@ -723,16 +726,16 @@ switch (variation.Key)
 ```
 
 ##### Arguments
-<GetVariation sec="arguments" c={Context}/>
+<GetVariation sec="arguments" c={Context} ui={SdkUi} shared={Shared}/>
 
 ##### Return value
-<GetVariation sec="return_value" c={Context}/>
+<GetVariation sec="return_value" c={Context} ui={SdkUi} shared={Shared}/>
 
 ##### Exceptions thrown
-<GetVariation sec="exceptions" c={Context}/>
+<GetVariation sec="exceptions" c={Context} ui={SdkUi} shared={Shared}/>
 
 #### GetVariations()
-<GetVariations sec="description" c={Context}/>
+<GetVariations sec="description" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```csharp
 IReadOnlyDictionary<string, Types.Variation> variations;
@@ -751,13 +754,13 @@ catch (VisitorCodeInvalid e)
 ```
 
 ##### Arguments
-<GetVariations sec="arguments" c={Context}/>
+<GetVariations sec="arguments" c={Context} ui={SdkUi} shared={Shared}/>
 
 ##### Return value
-<GetVariations sec="return_value" c={Context}/>
+<GetVariations sec="return_value" c={Context} ui={SdkUi} shared={Shared}/>
 
 ##### Exceptions thrown
-<GetVariations sec="exceptions" c={Context}/>
+<GetVariations sec="exceptions" c={Context} ui={SdkUi} shared={Shared}/>
 
 #### GetFeatureList()
 
@@ -765,7 +768,7 @@ catch (VisitorCodeInvalid e)
 This method was previously named `ObtainFeatureList()`, which was removed in SDK version `4.0.0`.
 </Note>
 
-<GetFeatureList sec="description" c={Context}/>
+<GetFeatureList sec="description" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```csharp
 const featureFlagIds = kameleoonClient.GetFeatureList()
@@ -773,11 +776,11 @@ const featureFlagIds = kameleoonClient.GetFeatureList()
 
 ##### Return value
 
-<GetFeatureList sec="return_value" c={Context}/>
+<GetFeatureList sec="return_value" c={Context} ui={SdkUi} shared={Shared}/>
 
 #### SetForcedVariation()
 
-<SetForcedVariation sec="description" c={Context}/>
+<SetForcedVariation sec="description" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```csharp
 const int experimentId = 9516;
@@ -800,15 +803,15 @@ catch (KameleoonException ex)
 
 ##### Arguments
 
-<SetForcedVariation sec="arguments" c={Context}/>
+<SetForcedVariation sec="arguments" c={Context} ui={SdkUi} shared={Shared}/>
 
 ##### Exceptions thrown
 
-<SetForcedVariation sec="exceptions" c={Context}/>
+<SetForcedVariation sec="exceptions" c={Context} ui={SdkUi} shared={Shared}/>
 
 #### EvaluateAudiences()
 
-<EvaluateAudiences sec="description" c={Context}/>
+<EvaluateAudiences sec="description" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```csharp
 try
@@ -823,11 +826,11 @@ catch (KameleoonException ex)
 
 ##### Arguments
 
-<EvaluateAudiences sec="arguments" c={Context}/>
+<EvaluateAudiences sec="arguments" c={Context} ui={SdkUi} shared={Shared}/>
 
 ##### Exceptions thrown
 
-<EvaluateAudiences sec="exceptions" c={Context}/>
+<EvaluateAudiences sec="exceptions" c={Context} ui={SdkUi} shared={Shared}/>
 
 ### Visitor data
 
@@ -849,7 +852,7 @@ To get the Kameleoon **visitorCode** for the current visitor, use the `GetVisito
 If you provide your own `visitorCode`, make sure it is unique! Also note that the length of `visitorCode` is limited to **255** characters. Using an identifier with too many characters will result in an exception.
 </Warning>
 
-<SharedDiv sec="get_visitor_code_simulated" c={Context}/>
+<SharedDiv sec="get_visitor_code_simulated" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```csharp
 try
@@ -885,7 +888,7 @@ catch (VisitorCodeInvalid e)
 |KameleoonException.VisitorCodeInvalid | Exception indicating that the provided visitor code is not valid (it is either empty or longer than 255 characters).|
 
 #### AddData()
-<AddData sec="description" c={Context}/>
+<AddData sec="description" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```csharp
 kameleoonClient.AddData(new Browser(Browser.Browsers.CHROME));
@@ -896,10 +899,10 @@ kameleoonClient.AddData(
 );
 ```
 ##### Arguments
-<AddData sec="arguments" c={Context}/>
+<AddData sec="arguments" c={Context} ui={SdkUi} shared={Shared}/>
 
 ##### Exceptions
-<AddData sec="exceptions" c={Context}/>
+<AddData sec="exceptions" c={Context} ui={SdkUi} shared={Shared}/>
 
 #### Flush()
 
@@ -1151,7 +1154,7 @@ kameleoonClient.SetLegalConsent(visitorCode, true, httpResponse);
 
 #### TrackConversion()
 
-<TrackConversion sec="description" c={Context}/>
+<TrackConversion sec="description" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```csharp
 using Kameleoon;
@@ -1167,10 +1170,10 @@ kameleoonClient.TrackConversion(visitorCode, goalId, metadata: cd)
 ```
 
 ##### Arguments
-<TrackConversion sec="arguments" c={Context}/>
+<TrackConversion sec="arguments" c={Context} ui={SdkUi} shared={Shared}/>
 
 <Note>
-<TrackConversion sec="note_metadata" c={Context}/>
+<TrackConversion sec="note_metadata" c={Context} ui={SdkUi} shared={Shared}/>
 ```csharp
 kameleoonClient.AddData(visitorCode, new CustomData(5, "Credit Card"), new CustomData(9, "Express Delivery"));
 kameleoonClient.TrackConversion(visitorCode, 10, metadata: new CustomData(5, "Amex Credit Card"));
@@ -1178,11 +1181,11 @@ kameleoonClient.TrackConversion(visitorCode, 10, metadata: new CustomData(5, "Am
 </Note>
 
 ##### Exceptions
-<TrackConversion sec="exceptions" c={Context}/>
+<TrackConversion sec="exceptions" c={Context} ui={SdkUi} shared={Shared}/>
 
 #### GetEngineTrackingCode()
 
-<GetEngineTrackingCode sec="description" c={Context}/>
+<GetEngineTrackingCode sec="description" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```csharp
 string engineTrackingCode = kameleoonClient.GetEngineTrackingCode(visitorCode);
@@ -1190,17 +1193,17 @@ string engineTrackingCode = kameleoonClient.GetEngineTrackingCode(visitorCode);
 
 ##### Arguments
 
-<GetEngineTrackingCode sec="arguments" c={Context}/>
+<GetEngineTrackingCode sec="arguments" c={Context} ui={SdkUi} shared={Shared}/>
 
 ##### Return value
 
-<GetEngineTrackingCode sec="return_value" c={Context}/>
+<GetEngineTrackingCode sec="return_value" c={Context} ui={SdkUi} shared={Shared}/>
 
 ### Events
 
 #### UpdateConfigurationHandler()
 
-<UpdateConfigurationHandler sec="description" c={Context}/>
+<UpdateConfigurationHandler sec="description" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```csharp
 kameleoonClient.UpdateConfigurationHandler(async delegate () {
@@ -1209,12 +1212,12 @@ kameleoonClient.UpdateConfigurationHandler(async delegate () {
 ```
 ##### Arguments
 
-<UpdateConfigurationHandler sec="arguments" c={Context}/>
+<UpdateConfigurationHandler sec="arguments" c={Context} ui={SdkUi} shared={Shared}/>
 
 ### Data types
 
 Data available in the SDK is not available for targeting and reporting in the Kameleoon app until it is added; for example, by using the `addData()` method.
-See [use visit history to target users](../using-visit-history-in-feature-flags-and-experiments) for more information.
+See [use visit history to target users](/feature-management-and-experimentation/using-visit-history-in-feature-flags-and-experiments) for more information.
 
 <Note>
 If you are in hybrid mode, you can call `GetRemoteVisitorData()` to automatically fill all data that Kameleoon collected previously.
@@ -1224,9 +1227,9 @@ The following data types are available in `Kameleoon.Data.IData`.
 
 #### Browser
 
-<Browser sec="description" c={Context}/>
+<Browser sec="description" c={Context} ui={SdkUi} shared={Shared}/>
 
-<Browser sec="arguments" c={Context}/>
+<Browser sec="arguments" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```csharp
 kameleoonClient.AddData(visitorCode, new Browser(Browser.Browsers.CHROME));
@@ -1254,9 +1257,9 @@ kameleoonClient.AddData(
 
 #### Conversion
 
-<Conversion sec="description" c={Context}/>
+<Conversion sec="description" c={Context} ui={SdkUi} shared={Shared}/>
 
-<Conversion sec="arguments" c={Context}/>
+<Conversion sec="arguments" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```csharp
 kameleoonClient.AddData(visitorCode, new Conversion(32, 10f));
@@ -1379,8 +1382,8 @@ kameleoonClient.addData(visitorCode, cookie);
 
 #### Geolocation
 
-<Geolocation sec="description" c={Context}/>
-<Geolocation sec="arguments" c={Context}/>
+<Geolocation sec="description" c={Context} ui={SdkUi} shared={Shared}/>
+<Geolocation sec="arguments" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```csharp
 kameleoonClient.addData(visitorCode, new Geolocation("France", "Île-de-France", "Paris"));

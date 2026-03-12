@@ -2,23 +2,26 @@
 title: 'NodeJS SDK'
 ---
 
-import { Select, Text, Bold, Italic, Code, CodeRef, Ref, If } from '/snippets/sdks/utils.mdx';
-import SharedDiv, { Shared } from '/snippets/sdks/shared.mdx';
-import CrossDeviceReconciliation from '/snippets/sdks/developer-guide/cross-device-reconciliation.mdx';
-import EvaluateAudiences from '/snippets/sdks/reference/feature-flags-and-variations/evaluate-audiences.mdx';
-import GetDataFile from '/snippets/sdks/reference/feature-flags-and-variations/get-data-file.mdx';
-import Logging from '/snippets/sdks/developer-guide/logging.mdx';
-import GetVariation from '/snippets/sdks/reference/feature-flags-and-variations/get-variation.mdx';
-import GetVariations from '/snippets/sdks/reference/feature-flags-and-variations/get-variations.mdx';
-import SetForcedVariation from '/snippets/sdks/reference/feature-flags-and-variations/set-forced-variation.mdx';
-import Conversion from '/snippets/sdks/reference/data-types/conversion.mdx';
-import TrackConversion from '/snippets/sdks/reference/goals/track-conversion.mdx';
-import CustomBucketingKey from '/snippets/sdks/developer-guide/custom-bucketing-key.mdx';
-import ActivatingAFeatureFlag from '/snippets/sdks/developer-guide/getting-started/activating-a-feature-flag.mdx';
-import DataFile from '/snippets/sdks/reference/returned-types/data-file.mdx';
-import FeatureFlag from '/snippets/sdks/reference/returned-types/feature-flag.mdx';
-import Rule from '/snippets/sdks/reference/returned-types/rule.mdx';
-import ApplicationVersion from '/snippets/sdks/reference/data-types/application-version.mdx';
+import { Select, Text, Bold, Italic, Code, CodeRef, Ref, If } from '/snippets/sdks/utils.jsx';
+import SharedDiv from '/snippets/sdks/shared.jsx';
+import Shared from '/snippets/sdks/shared-data.jsx';
+import CrossDeviceReconciliation from '/snippets/sdks/developer-guide/cross-device-reconciliation.jsx';
+import EvaluateAudiences from '/snippets/sdks/reference/feature-flags-and-variations/evaluate-audiences.jsx';
+import GetDataFile from '/snippets/sdks/reference/feature-flags-and-variations/get-data-file.jsx';
+import Logging from '/snippets/sdks/developer-guide/logging.jsx';
+import GetVariation from '/snippets/sdks/reference/feature-flags-and-variations/get-variation.jsx';
+import GetVariations from '/snippets/sdks/reference/feature-flags-and-variations/get-variations.jsx';
+import SetForcedVariation from '/snippets/sdks/reference/feature-flags-and-variations/set-forced-variation.jsx';
+import Conversion from '/snippets/sdks/reference/data-types/conversion.jsx';
+import TrackConversion from '/snippets/sdks/reference/goals/track-conversion.jsx';
+import CustomBucketingKey from '/snippets/sdks/developer-guide/custom-bucketing-key.jsx';
+import ActivatingAFeatureFlag from '/snippets/sdks/developer-guide/getting-started/activating-a-feature-flag.jsx';
+import DataFile from '/snippets/sdks/reference/returned-types/data-file.jsx';
+import FeatureFlag from '/snippets/sdks/reference/returned-types/feature-flag.jsx';
+import Rule from '/snippets/sdks/reference/returned-types/rule.jsx';
+import ApplicationVersion from '/snippets/sdks/reference/data-types/application-version.jsx';
+
+export const SdkUi = { Select, Text, Bold, Italic, Code, CodeRef, Ref, If };
 
 export const Context = {
     IsJs: true,
@@ -422,7 +425,7 @@ The `domain` parameter is deprecated and will be removed in the future. Use `coo
 | trackingInterval (_optional_)             | `number`                | Specifies the interval for tracking requests in milliseconds. All visitors who were evaluated for any feature flag or had associated data will be included in this tracking request. The tracking request is performed once per interval. The minimum value is `100` ms and the maximum value is `1_000` ms                                                                                                                                                                                                                                                                                                                                               | `1_000` (1 second)       |
 | defaultDataFile (_optional_)              | `string`                | The `defaultDataFile` feature ensures the Kameleoon SDK is always **READY** by providing a fallback configuration when no cached data file exists. Developers can preload a valid configuration by fetching it from `https://sdk-config.kameleoon.eu/v3/<sitecode>` and passing it as `defaultDataFile` during initialization. When a `dateModified` timestamp (in milliseconds) is provided and is newer than the cached version, the SDK will use the default datafile instead of the cached version. **If `dateModified` is omitted, the default datafile is only applied when no cached version exists**. This ensures the SDK always has a valid configuration, whether default, cached, or updated.                                                       | `undefined`              |
 
-<SharedDiv sec="set_default_data_file_js" c={Context}/>
+<SharedDiv sec="set_default_data_file_js" c={Context} ui={SdkUi} shared={Shared}/>
 
 </Tab>
 
@@ -441,23 +444,23 @@ Use the SDK parameter `compatibility` to disable some of the SDK's features to i
 
 ##### Assigning a unique ID to a user
 
-<ActivatingAFeatureFlag sec="assigning_a_unique_id_to_a_user" c={Context}/>
+<ActivatingAFeatureFlag sec="assigning_a_unique_id_to_a_user" c={Context} ui={SdkUi} shared={Shared}/>
 
 ##### Retrieving a flag configuration
 
-<ActivatingAFeatureFlag sec="retrieving_a_feature_flag_configuration___default" c={Context}/>
+<ActivatingAFeatureFlag sec="retrieving_a_feature_flag_configuration___default" c={Context} ui={SdkUi} shared={Shared}/>
 
 ##### Adding data points to target a user or filter / breakdown visits in reports
 
-<ActivatingAFeatureFlag sec="adding_data_points_to_target_a_user_or_filter_breakdown_visits_in_reports___server" c={Context}/>
+<ActivatingAFeatureFlag sec="adding_data_points_to_target_a_user_or_filter_breakdown_visits_in_reports___server" c={Context} ui={SdkUi} shared={Shared}/>
 
 ##### Tracking goal conversions
 
-<ActivatingAFeatureFlag sec="tracking_goal_conversions___param" c={Context}/>
+<ActivatingAFeatureFlag sec="tracking_goal_conversions___param" c={Context} ui={SdkUi} shared={Shared}/>
 
 ##### Sending events to analytics solutions
 
-<ActivatingAFeatureFlag sec="sending_events_to_analytics_solutions" c={Context}/>
+<ActivatingAFeatureFlag sec="sending_events_to_analytics_solutions" c={Context} ui={SdkUi} shared={Shared}/>
 
 ### Error Handling
 
@@ -642,11 +645,11 @@ For other edge providers, use [External Dependencies](#external-dependencies) fo
 
 ### Cross-device experimentation
 
-<CrossDeviceReconciliation sec="cross_device_experimentation" c={Context}/>
+<CrossDeviceReconciliation sec="cross_device_experimentation" c={Context} ui={SdkUi} shared={Shared}/>
 
 #### Synchronizing custom data across devices
 
-<CrossDeviceReconciliation sec="synchronizing_custom_data" c={Context}/>
+<CrossDeviceReconciliation sec="synchronizing_custom_data" c={Context} ui={SdkUi} shared={Shared}/>
 
 <Tabs>
 <Tab title="TypeScript">
@@ -1157,15 +1160,15 @@ init();
 
 ### Using a custom bucketing key
 
-<CustomBucketingKey sec="description" c={Context}/>
+<CustomBucketingKey sec="description" c={Context} ui={SdkUi} shared={Shared}/>
 
 #### Use cases
 
-<CustomBucketingKey sec="use_cases" c={Context}/>
+<CustomBucketingKey sec="use_cases" c={Context} ui={SdkUi} shared={Shared}/>
 
 #### Technical details
 
-<CustomBucketingKey sec="technical_details_1" c={Context}/>
+<CustomBucketingKey sec="technical_details_1" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```js
 client.addData(visitorCode, new CustomData(index, 'newVisitorCode'));
@@ -1175,11 +1178,11 @@ client.addData(visitorCode, new CustomData(index, 'newVisitorCode'));
 [More information in addData()](#adddata)
 </Tip>
 
-<CustomBucketingKey sec="technical_details_2" c={Context}/>
+<CustomBucketingKey sec="technical_details_2" c={Context} ui={SdkUi} shared={Shared}/>
 
 #### Technical requirementes
 
-<CustomBucketingKey sec="technical_requirements" c={Context}/>
+<CustomBucketingKey sec="technical_requirements" c={Context} ui={SdkUi} shared={Shared}/>
 
 ### Targeting conditions
 
@@ -1189,11 +1192,11 @@ You can also use your own [external data to target users](/feature-management-an
 
 ### Logging
 
-<Logging sec="logging" c={Context}/>
+<Logging sec="logging" c={Context} ui={SdkUi} shared={Shared}/>
 
 #### Log levels
 
-<Logging sec="log_levels" c={Context}/>
+<Logging sec="log_levels" c={Context} ui={SdkUi} shared={Shared}/>
 
 <Tabs>
 <Tab title="TypeScript">
@@ -1280,7 +1283,7 @@ KameleoonLogger.setLogLevel(LogLevel.DEBUG);
 
 #### Custom handling of logs
 
-<Logging sec="custom_handling_of_logs" c={Context}/>
+<Logging sec="custom_handling_of_logs" c={Context} ui={SdkUi} shared={Shared}/>
 
 <Tabs>
 <Tab title="TypeScript">
@@ -2469,7 +2472,7 @@ init();
 
 #### getVariation()
 
-<GetVariation sec="description___js" c={Context}/>
+<GetVariation sec="description___js" c={Context} ui={SdkUi} shared={Shared}/>
 
 <Tabs>
 <Tab title="TypeScript">
@@ -2590,19 +2593,19 @@ init();
 
 An object of type `GetVariationParamsType` with the following properties:
 
-<GetVariation sec="arguments" c={Context}/>
+<GetVariation sec="arguments" c={Context} ui={SdkUi} shared={Shared}/>
 
 ##### Return value
 
-<GetVariation sec="return_value" c={Context}/>
+<GetVariation sec="return_value" c={Context} ui={SdkUi} shared={Shared}/>
 
 ##### Exceptions thrown
 
-<GetVariation sec="exceptions___js" c={Context}/>
+<GetVariation sec="exceptions___js" c={Context} ui={SdkUi} shared={Shared}/>
 
 #### getVariations()
 
-<GetVariations sec="description___js" c={Context}/>
+<GetVariations sec="description___js" c={Context} ui={SdkUi} shared={Shared}/>
 
 <Tabs>
 <Tab title="TypeScript">
@@ -2737,15 +2740,15 @@ init();
 
 An object of type `GetVariationsParamsType` with the following properties:
 
-<GetVariations sec="arguments" c={Context}/>
+<GetVariations sec="arguments" c={Context} ui={SdkUi} shared={Shared}/>
 
 ##### Return value
 
-<GetVariations sec="return_value" c={Context}/>
+<GetVariations sec="return_value" c={Context} ui={SdkUi} shared={Shared}/>
 
 ##### Exceptions thrown
 
-<GetVariations sec="exceptions___js" c={Context}/>
+<GetVariations sec="exceptions___js" c={Context} ui={SdkUi} shared={Shared}/>
 
 #### isFeatureFlagActive()
 
@@ -2965,7 +2968,7 @@ init();
 
 #### setForcedVariation()
 
-<SetForcedVariation sec="description" c={Context}/>
+<SetForcedVariation sec="description" c={Context} ui={SdkUi} shared={Shared}/>
 
 <Tabs>
 <Tab title="TypeScript">
@@ -3060,15 +3063,15 @@ init();
 
 ##### Arguments
 
-<SetForcedVariation sec="arguments" c={Context}/>
+<SetForcedVariation sec="arguments" c={Context} ui={SdkUi} shared={Shared}/>
 
 ##### Exceptions thrown
 
-<SetForcedVariation sec="exceptions___js" c={Context}/>
+<SetForcedVariation sec="exceptions___js" c={Context} ui={SdkUi} shared={Shared}/>
 
 #### evaluateAudiences()
 
-<EvaluateAudiences sec="description" c={Context}/>
+<EvaluateAudiences sec="description" c={Context} ui={SdkUi} shared={Shared}/>
 
 <Tabs>
 <Tab title="TypeScript">
@@ -3131,17 +3134,17 @@ init();
 
 ##### Arguments
 
-<EvaluateAudiences sec="arguments" c={Context}/>
+<EvaluateAudiences sec="arguments" c={Context} ui={SdkUi} shared={Shared}/>
 
 ##### Exceptions thrown
 
-<EvaluateAudiences sec="exceptions___js" c={Context}/>
+<EvaluateAudiences sec="exceptions___js" c={Context} ui={SdkUi} shared={Shared}/>
 
 #### getDataFile()
 
-<GetDataFile sec="tip_qa" c={Context}/>
+<GetDataFile sec="tip_qa" c={Context} ui={SdkUi} shared={Shared}/>
 
-<GetDataFile sec="description" c={Context}/>
+<GetDataFile sec="description" c={Context} ui={SdkUi} shared={Shared}/>
 
 <Tabs>
 <Tab title="TypeScript">
@@ -3186,7 +3189,7 @@ const dataFile = client.getDataFile();
 
 ##### Return value
 
-<GetDataFile sec="return_value" c={Context}/>
+<GetDataFile sec="return_value" c={Context} ui={SdkUi} shared={Shared}/>
 
 ### Visitor data
 
@@ -3200,7 +3203,7 @@ This method utilizes Node.js's native types for `request` and `response`, specif
 When using `getVisitorCode()` with Deno, `Next.js SSR`, `Node`, or `Express`, ensure that you've implemented the correct external dependencies.
 </Note>
 
-<SharedDiv sec="get_visitor_code_simulated" c={Context}/>
+<SharedDiv sec="get_visitor_code_simulated" c={Context} ui={SdkUi} shared={Shared}/>
 
 <Tabs>
 <Tab title="TypeScript">
@@ -4446,7 +4449,7 @@ The parameters object is overloaded with the following types:
 <Tabs>
 <Tab title="SDK Version 4">
 
-<TrackConversion sec="description___js_old" c={Context}/>
+<TrackConversion sec="description___js_old" c={Context} ui={SdkUi} shared={Shared}/>
 
 <Tabs>
 <Tab title="TypeScript">
@@ -4543,17 +4546,17 @@ init();
 
 Parameters object consisting of:
 
-<TrackConversion sec="arguments___js_old" c={Context}/>
+<TrackConversion sec="arguments___js_old" c={Context} ui={SdkUi} shared={Shared}/>
 
 ##### Exceptions thrown
 
-<TrackConversion sec="exceptions___js" c={Context}/>
+<TrackConversion sec="exceptions___js" c={Context} ui={SdkUi} shared={Shared}/>
 
 </Tab>
 
 <Tab title="SDK Version 5">
 
-<TrackConversion sec="description___js" c={Context}/>
+<TrackConversion sec="description___js" c={Context} ui={SdkUi} shared={Shared}/>
 
 <Tabs>
 <Tab title="TypeScript">
@@ -4644,10 +4647,10 @@ init();
 
 Parameters object consisting of:
 
-<TrackConversion sec="arguments___js" c={Context}/>
+<TrackConversion sec="arguments___js" c={Context} ui={SdkUi} shared={Shared}/>
 
 <Note>
-<TrackConversion sec="note_metadata" c={Context}/>
+<TrackConversion sec="note_metadata" c={Context} ui={SdkUi} shared={Shared}/>
 
 <Tabs>
 <Tab title="TypeScript">
@@ -4678,7 +4681,7 @@ kameleoonClient.trackConversion({
 
 ##### Exceptions thrown
 
-<TrackConversion sec="exceptions___js" c={Context}/>
+<TrackConversion sec="exceptions___js" c={Context} ui={SdkUi} shared={Shared}/>
 
 </Tab>
 </Tabs>
@@ -4939,7 +4942,7 @@ Events are defined in the `EventType` enum. The `eventData` parameter will have 
 Kameleoon Data types are helper classes used for storing data in predefined forms. During the [`flush()`](#flush) execution, the SDK collects all data and sends it along with the tracking request.
 
 Data available in the SDK is not available for targeting and reporting in the Kameleoon app until you add the data (for example, by using the `addData()` method).
-See [use visit history to target users](../using-visit-history-in-feature-flags-and-experiments) for more information.
+See [use visit history to target users](/feature-management-and-experimentation/using-visit-history-in-feature-flags-and-experiments) for more information.
 
 <Note>
 If you are using Kameleoon in hybrid mode, you can call `getRemoteVisitorData()` to automatically fill all data that Kameleoon previously collected.
@@ -5104,11 +5107,11 @@ init();
 
 #### Conversion
 
-<Conversion sec="description" c={Context}/>
+<Conversion sec="description" c={Context} ui={SdkUi} shared={Shared}/>
 
 `ConversionParametersType` conversionParameters - an object with conversion parameters described below
 
-<Conversion sec="arguments" c={Context}/>
+<Conversion sec="arguments" c={Context} ui={SdkUi} shared={Shared}/>
 
 <Tabs>
 <Tab title="TypeScript">
@@ -5915,9 +5918,9 @@ init();
 
 #### ApplicationVersion
 
-<ApplicationVersion sec="description" c={Context}/>
+<ApplicationVersion sec="description" c={Context} ui={SdkUi} shared={Shared}/>
 
-<ApplicationVersion sec="arguments" c={Context}/>
+<ApplicationVersion sec="arguments" c={Context} ui={SdkUi} shared={Shared}/>
 
 <Tabs>
 <Tab title="TypeScript">
@@ -5988,9 +5991,9 @@ init();
 
 #### DataFile
 
-<DataFile sec="description" c={Context}/>
+<DataFile sec="description" c={Context} ui={SdkUi} shared={Shared}/>
 
-<DataFile sec="arguments" c={Context}/>
+<DataFile sec="arguments" c={Context} ui={SdkUi} shared={Shared}/>
 
 <Tabs>
 <Tab title="TypeScript">
@@ -6013,9 +6016,9 @@ const featureFlags = dataFile.featureFlags;
 
 #### FeatureFlag
 
-<FeatureFlag sec="description_rules" c={Context}/>
+<FeatureFlag sec="description_rules" c={Context} ui={SdkUi} shared={Shared}/>
 
-<FeatureFlag sec="arguments_rules" c={Context}/>
+<FeatureFlag sec="arguments_rules" c={Context} ui={SdkUi} shared={Shared}/>
 
 <Tabs>
 <Tab title="TypeScript">
@@ -6058,9 +6061,9 @@ const rules = featureFlag.rules;
 
 #### Rule
 
-<Rule sec="description" c={Context}/>
+<Rule sec="description" c={Context} ui={SdkUi} shared={Shared}/>
 
-<Rule sec="arguments" c={Context}/>
+<Rule sec="arguments" c={Context} ui={SdkUi} shared={Shared}/>
 
 <Tabs>
 <Tab title="TypeScript">

@@ -2,25 +2,28 @@
 title: 'Python SDK'
 ---
 
-import { Select, Text, Bold, Italic, Code, CodeRef, Ref, If } from '/snippets/sdks/utils.mdx';
-import SharedDiv, { Shared } from '/snippets/sdks/shared.mdx';
-import ActivatingAFeatureFlag from '/snippets/sdks/developer-guide/getting-started/activating-a-feature-flag.mdx';
-import CrossDeviceReconciliation from '/snippets/sdks/developer-guide/cross-device-reconciliation.mdx';
+import { Select, Text, Bold, Italic, Code, CodeRef, Ref, If } from '/snippets/sdks/utils.jsx';
+import SharedDiv from '/snippets/sdks/shared.jsx';
+import Shared from '/snippets/sdks/shared-data.jsx';
+import ActivatingAFeatureFlag from '/snippets/sdks/developer-guide/getting-started/activating-a-feature-flag.jsx';
+import CrossDeviceReconciliation from '/snippets/sdks/developer-guide/cross-device-reconciliation.jsx';
 import TargetingConditions from '/snippets/sdks/developer-guide/targeting-conditions.mdx';
-import Logging from '/snippets/sdks/developer-guide/logging.mdx';
-import GetVariations from '/snippets/sdks/reference/feature-flags-and-variations/get-variations.mdx';
-import GetVariation from '/snippets/sdks/reference/feature-flags-and-variations/get-variation.mdx';
-import Geolocation from '/snippets/sdks/reference/data-types/geolocation.mdx';
-import Browser from '/snippets/sdks/reference/data-types/browser.mdx';
-import Conversion from '/snippets/sdks/reference/data-types/conversion.mdx';
-import TrackConversion from '/snippets/sdks/reference/goals/track-conversion.mdx';
-import UpdateConfigurationHandler from '/snippets/sdks/reference/events/update-configuration-handler.mdx';
-import AddData from '/snippets/sdks/reference/visitor-data/add-data.mdx';
-import SetForcedVariation from '/snippets/sdks/reference/feature-flags-and-variations/set-forced-variation.mdx';
-import EvaluateAudiences from '/snippets/sdks/reference/feature-flags-and-variations/evaluate-audiences.mdx';
-import GetFeatureList from '/snippets/sdks/reference/feature-flags-and-variations/get-feature-list.mdx';
-import GetEngineTrackingCode from '/snippets/sdks/reference/goals/get-engine-tracking-code.mdx';
-import CustomBucketingKey from '/snippets/sdks/developer-guide/custom-bucketing-key.mdx';
+import Logging from '/snippets/sdks/developer-guide/logging.jsx';
+import GetVariations from '/snippets/sdks/reference/feature-flags-and-variations/get-variations.jsx';
+import GetVariation from '/snippets/sdks/reference/feature-flags-and-variations/get-variation.jsx';
+import Geolocation from '/snippets/sdks/reference/data-types/geolocation.jsx';
+import Browser from '/snippets/sdks/reference/data-types/browser.jsx';
+import Conversion from '/snippets/sdks/reference/data-types/conversion.jsx';
+import TrackConversion from '/snippets/sdks/reference/goals/track-conversion.jsx';
+import UpdateConfigurationHandler from '/snippets/sdks/reference/events/update-configuration-handler.jsx';
+import AddData from '/snippets/sdks/reference/visitor-data/add-data.jsx';
+import SetForcedVariation from '/snippets/sdks/reference/feature-flags-and-variations/set-forced-variation.jsx';
+import EvaluateAudiences from '/snippets/sdks/reference/feature-flags-and-variations/evaluate-audiences.jsx';
+import GetFeatureList from '/snippets/sdks/reference/feature-flags-and-variations/get-feature-list.jsx';
+import GetEngineTrackingCode from '/snippets/sdks/reference/goals/get-engine-tracking-code.jsx';
+import CustomBucketingKey from '/snippets/sdks/developer-guide/custom-bucketing-key.jsx';
+
+export const SdkUi = { Select, Text, Bold, Italic, Code, CodeRef, Ref, If };
 
 export const Context = {
     IsServer: true,
@@ -229,7 +232,7 @@ pip install kameleoon-client-python
 
 #### Additional configuration
 
-You should provide credentials for the Python SDK via a configuration file, which you can also use to customize the SDK's behavior. A sample configuration file [can be obtained here](./assets/client%20configs/client-python.yaml). We suggest installing this file to the default path `/etc/kameleoon/client-python.yaml`, but you can put it in another location and pass the path as an argument to the `KameleoonClient()` constructor method. With the current version of the Python SDK, these are the available keys:
+You should provide credentials for the Python SDK via a configuration file, which you can also use to customize the SDK's behavior. A sample configuration file [can be obtained here](./assets/client configs/client-python.yaml). We suggest installing this file to the default path `/etc/kameleoon/client-python.yaml`, but you can put it in another location and pass the path as an argument to the `KameleoonClient()` constructor method. With the current version of the Python SDK, these are the available keys:
 
 - **client_id**: a [`client_id`](https://help.kameleoon.com/api-credentials/) is required for authentication to Kameleoon.
 - **client_secret**: a [`client_secret`](https://help.kameleoon.com/api-credentials/) is required for authentication to Kameleoon.
@@ -288,23 +291,23 @@ kameleoon_client = KameleoonClientFactory.create(SITE_CODE, configuration_object
 
 ##### Assigning a unique ID to a user
 
-<ActivatingAFeatureFlag sec="assigning_a_unique_id_to_a_user" c={Context}/>
+<ActivatingAFeatureFlag sec="assigning_a_unique_id_to_a_user" c={Context} ui={SdkUi} shared={Shared}/>
 
 ##### Retrieving a flag configuration
 
-<ActivatingAFeatureFlag sec="retrieving_a_feature_flag_configuration___default" c={Context}/>
+<ActivatingAFeatureFlag sec="retrieving_a_feature_flag_configuration___default" c={Context} ui={SdkUi} shared={Shared}/>
 
 ##### Adding data points to target a user or filter / breakdown visits in reports
 
-<ActivatingAFeatureFlag sec="adding_data_points_to_target_a_user_or_filter_breakdown_visits_in_reports___server" c={Context}/>
+<ActivatingAFeatureFlag sec="adding_data_points_to_target_a_user_or_filter_breakdown_visits_in_reports___server" c={Context} ui={SdkUi} shared={Shared}/>
 
 ##### Tracking goal conversions
 
-<ActivatingAFeatureFlag sec="tracking_goal_conversions___param" c={Context}/>
+<ActivatingAFeatureFlag sec="tracking_goal_conversions___param" c={Context} ui={SdkUi} shared={Shared}/>
 
 ##### Sending events to analytics solutions
 
-<ActivatingAFeatureFlag sec="sending_events_to_analytics_solutions" c={Context}/>
+<ActivatingAFeatureFlag sec="sending_events_to_analytics_solutions" c={Context} ui={SdkUi} shared={Shared}/>
 
 ### Using the Kameleoon Python SDK in a Django environment
 
@@ -342,11 +345,11 @@ Another advantage of using Django is that the SDK will automaticallyo read and w
 
 ### Cross-device experimentation
 
-<CrossDeviceReconciliation sec="cross_device_experimentation" c={Context}/>
+<CrossDeviceReconciliation sec="cross_device_experimentation" c={Context} ui={SdkUi} shared={Shared}/>
 
 #### Synchronizing custom data across devices
 
-<CrossDeviceReconciliation sec="synchronizing_custom_data" c={Context}/>
+<CrossDeviceReconciliation sec="synchronizing_custom_data" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```python
 # In this example, Custom data with index `90` was set to "Visitor" scope in Kameleoon.
@@ -366,7 +369,7 @@ kameleoon_client.get_remote_visitor_data(visitor_code)
 
 #### Using custom data for session merging
 
-<CrossDeviceReconciliation sec="using_custom_data_session_merging" c={Context}/>
+<CrossDeviceReconciliation sec="using_custom_data_session_merging" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```python
 # In this example, `91` represents the Custom Data's index configured as a unique identifier in Kameleoon.
@@ -401,19 +404,19 @@ kameleoon_client.track_conversion(user_id, 123, 10.0)
 kameleoon_client.get_remote_visitor_data(user_id)
 ```
 
-<CrossDeviceReconciliation sec="cross_device_visitor_code" c={Context}/>
+<CrossDeviceReconciliation sec="cross_device_visitor_code" c={Context} ui={SdkUi} shared={Shared}/>
 
 ### Using a custom bucketing key
 
-<CustomBucketingKey sec="description" c={Context}/>
+<CustomBucketingKey sec="description" c={Context} ui={SdkUi} shared={Shared}/>
 
 #### Use cases
 
-<CustomBucketingKey sec="use_cases" c={Context}/>
+<CustomBucketingKey sec="use_cases" c={Context} ui={SdkUi} shared={Shared}/>
 
 #### Technical details
 
-<CustomBucketingKey sec="technical_details_1" c={Context}/>
+<CustomBucketingKey sec="technical_details_1" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```python
 from kameleoon.data import CustomData
@@ -421,23 +424,23 @@ from kameleoon.data import CustomData
 kameleoon_client.add_data(visitor_code, CustomData(index, "new_visitor_code"))
 ```
 
-<CustomBucketingKey sec="technical_details_2" c={Context}/>
+<CustomBucketingKey sec="technical_details_2" c={Context} ui={SdkUi} shared={Shared}/>
 
 #### Technical requirementes
 
-<CustomBucketingKey sec="technical_requirements" c={Context}/>
+<CustomBucketingKey sec="technical_requirements" c={Context} ui={SdkUi} shared={Shared}/>
 
 ### Targeting conditions
 
-<TargetingConditions sec="targeting_conditons_description" c={Context}/>
+<TargetingConditions sec="targeting_conditons_description" c={Context} ui={SdkUi} shared={Shared}/>
 
 ### Logging
 
-<Logging sec="logging" c={Context}/>
+<Logging sec="logging" c={Context} ui={SdkUi} shared={Shared}/>
 
 #### Log levels
 
-<Logging sec="log_levels" c={Context}/>
+<Logging sec="log_levels" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```python
 from kameleoon.logging.log_level import LogLevel
@@ -467,7 +470,7 @@ KameleoonLogger.set_log_level(LogLevel.DEBUG)
 
 #### Custom handling of logs
 
-<Logging sec="custom_handling_of_logs" c={Context}/>
+<Logging sec="custom_handling_of_logs" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```python
 from loguru import logger
@@ -632,7 +635,7 @@ if has_new_checkout
 
 #### get_variation()
 
-<GetVariation sec="description" c={Context}/>
+<GetVariation sec="description" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```python
 feature_key = "new_checkout"
@@ -661,19 +664,19 @@ else:
 
 ##### Arguments
 
-<GetVariation sec="arguments" c={Context}/>
+<GetVariation sec="arguments" c={Context} ui={SdkUi} shared={Shared}/>
 
 ##### Return value
 
-<GetVariation sec="return_value" c={Context}/>
+<GetVariation sec="return_value" c={Context} ui={SdkUi} shared={Shared}/>
 
 ##### Exceptions thrown
 
-<GetVariation sec="exceptions" c={Context}/>
+<GetVariation sec="exceptions" c={Context} ui={SdkUi} shared={Shared}/>
 
 #### get_variations()
 
-<GetVariations sec="description" c={Context}/>
+<GetVariations sec="description" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```python
 try:
@@ -688,15 +691,15 @@ except VisitorCodeInvalid as ex:
 
 ##### Arguments
 
-<GetVariations sec="arguments" c={Context}/>
+<GetVariations sec="arguments" c={Context} ui={SdkUi} shared={Shared}/>
 
 ##### Return value
 
-<GetVariations sec="return_value" c={Context}/>
+<GetVariations sec="return_value" c={Context} ui={SdkUi} shared={Shared}/>
 
 ##### Exceptions thrown
 
-<GetVariations sec="exceptions" c={Context}/>
+<GetVariations sec="exceptions" c={Context} ui={SdkUi} shared={Shared}/>
 
 #### get_feature_list()
 
@@ -704,7 +707,7 @@ except VisitorCodeInvalid as ex:
 Previously called `obtain_feature_list`, which was removed in SDK version `3.0.0`.
 </Note>
 
-<GetFeatureList sec="description" c={Context}/>
+<GetFeatureList sec="description" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```python
 all_feature_list = kameleoon_client.get_feature_list()
@@ -712,11 +715,11 @@ all_feature_list = kameleoon_client.get_feature_list()
 
 ##### Return value
 
-<GetFeatureList sec="return_value" c={Context}/>
+<GetFeatureList sec="return_value" c={Context} ui={SdkUi} shared={Shared}/>
 
 #### set_forced_variation()
 
-<SetForcedVariation sec="description" c={Context}/>
+<SetForcedVariation sec="description" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```python
 experiment_id = 9516
@@ -735,15 +738,15 @@ except KameleoonError as e:
 
 ##### Arguments
 
-<SetForcedVariation sec="arguments" c={Context}/>
+<SetForcedVariation sec="arguments" c={Context} ui={SdkUi} shared={Shared}/>
 
 ##### Exceptions thrown
 
-<SetForcedVariation sec="exceptions" c={Context}/>
+<SetForcedVariation sec="exceptions" c={Context} ui={SdkUi} shared={Shared}/>
 
 #### evaluate_audiences()
 
-<EvaluateAudiences sec="description" c={Context}/>
+<EvaluateAudiences sec="description" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```python
 try:
@@ -754,11 +757,11 @@ except KameleoonError as e:
 
 ##### Arguments
 
-<EvaluateAudiences sec="arguments" c={Context}/>
+<EvaluateAudiences sec="arguments" c={Context} ui={SdkUi} shared={Shared}/>
 
 ##### Exceptions thrown
 
-<EvaluateAudiences sec="exceptions" c={Context}/>
+<EvaluateAudiences sec="exceptions" c={Context} ui={SdkUi} shared={Shared}/>
 
 ### Visitor data
 
@@ -778,7 +781,7 @@ The `get_visitor_code()` helper method should be called to obtain the current vi
 If you provide your own `visitor_code`, you must guarantee its uniqueness. The SDK doesn't validate the value passed as an argument. Also note that the length of `visitor_code` is limited to **255** characters. A `VisitorCodeInvalid` exception is raised if this limit is exceeded.
 </Note>
 
-<SharedDiv sec="get_visitor_code_simulated" c={Context}/>
+<SharedDiv sec="get_visitor_code_simulated" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```python
 ### if you use KameleoonWSGIMiddleware service
@@ -816,7 +819,7 @@ cookie_header = simple_cookies.output()
 
 #### add_data()
 
-<AddData sec="description" c={Context}/>
+<AddData sec="description" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```python
 require "kameleoon"
@@ -834,10 +837,10 @@ kameleoon_client.add_data(visitor_code, Conversion(32, 10, false))
 ```
 
 ##### Arguments
-<AddData sec="arguments" c={Context}/>
+<AddData sec="arguments" c={Context} ui={SdkUi} shared={Shared}/>
 
 ##### Exceptions
-<AddData sec="exceptions" c={Context}/>
+<AddData sec="exceptions" c={Context} ui={SdkUi} shared={Shared}/>
 
 #### flush()
 
@@ -1264,7 +1267,7 @@ kameleoon_client.track_conversion(visitor_code, goal_id)
 
 #### get_engine_tracking_code()
 
-<GetEngineTrackingCode sec="description" c={Context}/>
+<GetEngineTrackingCode sec="description" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```python
 engine_tracking_code = kameleoon_client.get_engine_tracking_code(visitor_code)
@@ -1272,15 +1275,15 @@ engine_tracking_code = kameleoon_client.get_engine_tracking_code(visitor_code)
 
 ##### Arguments
 
-<GetEngineTrackingCode sec="arguments" c={Context}/>
+<GetEngineTrackingCode sec="arguments" c={Context} ui={SdkUi} shared={Shared}/>
 
 ##### Return value
 
-<GetEngineTrackingCode sec="return_value" c={Context}/>
+<GetEngineTrackingCode sec="return_value" c={Context} ui={SdkUi} shared={Shared}/>
 
 #### track_conversion()
 
-<TrackConversion sec="description" c={Context}/>
+<TrackConversion sec="description" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```python
 visitor_code = "visitorCode"
@@ -1300,10 +1303,10 @@ kameleoon_client.track_conversion(visitorCode, goalId, metadata=[cd])
 ```
 
 ##### Arguments
-<TrackConversion sec="arguments" c={Context}/>
+<TrackConversion sec="arguments" c={Context} ui={SdkUi} shared={Shared}/>
 
 <Note>
-<TrackConversion sec="note_metadata" c={Context}/>
+<TrackConversion sec="note_metadata" c={Context} ui={SdkUi} shared={Shared}/>
 ```python
 kameleoon_client.add_data(visitor_code, CustomData(5, "Credit Card"), CustomData(9, "Express Delivery"))
 kameleoon_client.track_conversion(visitor_code, 10, metadata=[CustomData(5, "Amex Credit Card")])
@@ -1311,13 +1314,13 @@ kameleoon_client.track_conversion(visitor_code, 10, metadata=[CustomData(5, "Ame
 </Note>
 
 ##### Exceptions
-<TrackConversion sec="exceptions" c={Context}/>
+<TrackConversion sec="exceptions" c={Context} ui={SdkUi} shared={Shared}/>
 
 ### Events
 
 #### on_update_configuration()
 
-<UpdateConfigurationHandler sec="description" c={Context}/>
+<UpdateConfigurationHandler sec="description" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```python
 kameleoon_client.on_update_configuration(
@@ -1327,15 +1330,15 @@ kameleoon_client.on_update_configuration(
 
 ##### Arguments
 
-<UpdateConfigurationHandler sec="arguments" c={Context}/>
+<UpdateConfigurationHandler sec="arguments" c={Context} ui={SdkUi} shared={Shared}/>
 
 ### Data types
 
 #### Browser
 
-<Browser sec="description" c={Context}/>
+<Browser sec="description" c={Context} ui={SdkUi} shared={Shared}/>
 
-<Browser sec="arguments" c={Context}/>
+<Browser sec="arguments" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```python
 kameleoon_client.add_data(visitor_code, Browser(BrowserType.CHROME))
@@ -1361,8 +1364,8 @@ kameleoon_client.add_data(visitor_code, PageView("https://url.com", "title", [3]
 
 #### Conversion
 
-<Conversion sec="description" c={Context}/>
-<Conversion sec="arguments" c={Context}/>
+<Conversion sec="description" c={Context} ui={SdkUi} shared={Shared}/>
+<Conversion sec="arguments" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```python
 kameleoon_client.add_data(visitor_code, Conversion(32, 10))
@@ -1495,9 +1498,9 @@ kameleoon_client.add_data(visitor_code, cookie)
 
 #### Geolocation
 
-<Geolocation sec="description" c={Context}/>
+<Geolocation sec="description" c={Context} ui={SdkUi} shared={Shared}/>
 
-<Geolocation sec="arguments" c={Context}/>
+<Geolocation sec="arguments" c={Context} ui={SdkUi} shared={Shared}/>
 
 ```python
 from kameleoon.data import Geolocation

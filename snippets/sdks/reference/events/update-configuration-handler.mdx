@@ -1,15 +1,15 @@
 
-<Select name={props.sec}>
+<props.ui.Select name={props.sec}>
 <div name="description">
 
-The <Code x={props.c.UpdateConfigurationHandler}/> method allows you to handle the event when configuration has updated data. It takes one input parameter, **<Text x={props.c.UpdateConfigurationHandler.Params.Handler.Name}/>**. The <Text x={props.c.UpdateConfigurationHandler.Params.Handler.Name}/> that will be called when the configuration is updated using a real-time configuration event.
+The <props.ui.Code x={props.c.UpdateConfigurationHandler}/> method allows you to handle the event when configuration has updated data. It takes one input parameter, **<props.ui.Text x={props.c.UpdateConfigurationHandler.Params.Handler.Name}/>**. The <props.ui.Text x={props.c.UpdateConfigurationHandler.Params.Handler.Name}/> that will be called when the configuration is updated using a real-time configuration event.
 
 </div>
 <div name="arguments">
 
 | Name | Type | Description |
 |------|------|-------------|
-| <Text x={props.c.UpdateConfigurationHandler.Params.Handler.Name}/> | <Code x={props.c.UpdateConfigurationHandler.Params.Handler.Type}/> | The handler that will be called when the configuration is updated using a real-time configuration event. |
+| <props.ui.Text x={props.c.UpdateConfigurationHandler.Params.Handler.Name}/> | <props.ui.Code x={props.c.UpdateConfigurationHandler.Params.Handler.Type}/> | The handler that will be called when the configuration is updated using a real-time configuration event. |
 
 </div>
-</Select>
+</props.ui.Select>

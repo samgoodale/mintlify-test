@@ -1,0 +1,12 @@
+---
+title: "Technical Considerations"
+description: "Operational notes and rollout considerations for Kameleoon SDK integrations."
+---
+
+This page collects technical notes that are referenced from the SDK guides.
+
+## Streaming premium option
+
+Streaming mode uses server-sent events (SSE) to push configuration changes to the SDK in real time, reducing the delay between a change in Kameleoon and its application in production.
+
+If streaming is not enabled, SDKs continue to rely on their configured polling interval to fetch updated configurations.

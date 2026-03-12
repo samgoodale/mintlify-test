@@ -1,10 +1,10 @@
 
-<Select name={props.sec}>
+<props.ui.Select name={props.sec}>
 <div name="consent_revocation_behavior">
 
-When you call <Code x={props.c.SetLegalConsent}/> with <Code x={`${props.c.SetLegalConsent.Params.LegalConsent.Name}=${props.c.Common.False}`}/>, the SDK does not delete the `kameleoonVisitorCode` cookie. Instead, it stops extending the cookie's expiration date, allowing the cookie to persist until it naturally expires.
+When you call <props.ui.Code x={props.c.SetLegalConsent}/> with <props.ui.Code x={`${props.c.SetLegalConsent.Params.LegalConsent.Name}=${props.c.Common.False}`}/>, the SDK does not delete the `kameleoonVisitorCode` cookie. Instead, it stops extending the cookie's expiration date, allowing the cookie to persist until it naturally expires.
 
 If your compliance requirements demand the immediate removal of the cookie file upon opt-out, you must delete it manually using your framework’s native cookie management methods. The SDK will not remove the file automatically.
 
 </div>
-</Select>
+</props.ui.Select>
