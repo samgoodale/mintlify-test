@@ -27,6 +27,7 @@ import CustomBucketingKey from '/snippets/sdks/developer-guide/custom-bucketing-
 import DataFile from '/snippets/sdks/reference/returned-types/data-file.jsx';
 import FeatureFlag from '/snippets/sdks/reference/returned-types/feature-flag.jsx';
 import Rule from '/snippets/sdks/reference/returned-types/rule.jsx';
+import ApplicationVersion from '/snippets/sdks/reference/data-types/application-version.jsx';
 
 export const SdkUi = { Select, Text, Bold, Italic, Code, CodeRef, Ref, If };
 
@@ -93,6 +94,13 @@ export const Context = {
     UserAgent: {
         Name: 'UserAgent',
         Ref: '#useragent',
+    },
+    ApplicationVersion: {
+        Name: 'ApplicationVersion',
+        Ref: '#applicationversion',
+        Params: {
+            Version: { Type: 'String' },
+        },
     },
     Geolocation: {
         Name: 'Geolocation',
@@ -1395,6 +1403,16 @@ Each visitor can only have one `OperatingSystem`. Adding a second `OperatingSyst
 kameleoonClient.addData(visitorCode, new OperatingSystem(OperatingSystem.Type.WINDOWS));
 
 kameleoonClient.addData(visitorCode, OperatingSystem.mac());
+```
+
+#### ApplicationVersion
+
+<ApplicationVersion sec="description" c={Context} ui={SdkUi} shared={Shared}/>
+
+<ApplicationVersion sec="arguments" c={Context} ui={SdkUi} shared={Shared}/>
+
+```java
+kameleoonClient.addData(visitorCode, new ApplicationVersion("1.2.3"));
 ```
 
 ### Returned Types

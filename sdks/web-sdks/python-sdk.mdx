@@ -22,6 +22,11 @@ import EvaluateAudiences from '/snippets/sdks/reference/feature-flags-and-variat
 import GetFeatureList from '/snippets/sdks/reference/feature-flags-and-variations/get-feature-list.jsx';
 import GetEngineTrackingCode from '/snippets/sdks/reference/goals/get-engine-tracking-code.jsx';
 import CustomBucketingKey from '/snippets/sdks/developer-guide/custom-bucketing-key.jsx';
+import GetDataFile from '/snippets/sdks/reference/feature-flags-and-variations/get-data-file.jsx';
+import DataFile from '/snippets/sdks/reference/returned-types/data-file.jsx';
+import FeatureFlag from '/snippets/sdks/reference/returned-types/feature-flag.jsx';
+import Rule from '/snippets/sdks/reference/returned-types/rule.jsx';
+import ApplicationVersion from '/snippets/sdks/reference/data-types/application-version.jsx';
 
 export const SdkUi = { Select, Text, Bold, Italic, Code, CodeRef, Ref, If };
 
@@ -84,6 +89,13 @@ export const Context = {
         Name: "UserAgent",
         Ref: "#useragent"
     },
+    ApplicationVersion: {
+        Name: "ApplicationVersion",
+        Ref: "#applicationversion",
+        Params: {
+            Version: { Type: "str" },
+        },
+    },
     Geolocation: {
         Name: "Geolocation",
         Ref: "#geolocation",
@@ -117,6 +129,33 @@ export const Context = {
         Name: "Variation",
         FullName: "types.Variation",
         Ref: "#variation"
+    },
+    DataFile: {
+        Name: "DataFile",
+        FullName: "types.DataFile",
+        Ref: "#datafile",
+        Params: {
+            FeatureFlags: { Name: "feature_flags", Type: "Dict[str, FeatureFlag]" },
+        }
+    },
+    FeatureFlag: {
+        Name: "FeatureFlag",
+        FullName: "types.FeatureFlag",
+        Ref: "#featureflag",
+        Params: {
+            EnvironmentEnabled: { Name: "environment_enabled" },
+            Variations: { Name: "variations", Type: "Dict[str, Variation]" },
+            Rules: { Name: "rules", Type: "List[Rule]" },
+            DefaultVariationKey: { Name: "default_variation_key", Type: "str" },
+        }
+    },
+    Rule: {
+        Name: "Rule",
+        FullName: "types.Rule",
+        Ref: "#rule",
+        Params: {
+            Variations: { Name: "variations", Type: "Dict[str, Variation]" },
+        }
     },
     // methods
     Flush: {
@@ -205,7 +244,11 @@ export const Context = {
         Name: "get_feature_list()",
         Ref: "#get_feature_list",
         Return: "List[str]",
-    }
+    },
+    GetDataFile: {
+        Name: "get_data_file()",
+        Ref: "#get_data_file",
+    },
 };
 
 With the Python SDK, you can  run experiments and activate feature flags on your back-end Python server. Integrating our SDK into your web-application is easy, and its footprint (memory and network usage) is low.
@@ -762,6 +805,24 @@ except KameleoonError as e:
 ##### Exceptions thrown
 
 <EvaluateAudiences sec="exceptions" c={Context} ui={SdkUi} shared={Shared}/>
+
+#### get_data_file()
+
+<GetDataFile sec="tip_qa" c={Context} ui={SdkUi} shared={Shared}/>
+
+<GetDataFile sec="description" c={Context} ui={SdkUi} shared={Shared}/>
+
+```python
+try:
+    data_file = kameleoon_client.get_data_file()
+except Exception as e:
+    # Recommended (but optional) safeguard for unexpected exceptions from third-party libraries
+    pass
+```
+
+##### Return value
+
+<GetDataFile sec="return_value" c={Context} ui={SdkUi} shared={Shared}/>
 
 ### Visitor data
 
@@ -1508,7 +1569,60 @@ from kameleoon.data import Geolocation
 kameleoon_client.add_data(visitor_code, Geolocation("France", "Île-de-France", "Paris"))
 ```
 
+#### ApplicationVersion
+
+<ApplicationVersion sec="description" c={Context} ui={SdkUi} shared={Shared}/>
+
+<ApplicationVersion sec="arguments" c={Context} ui={SdkUi} shared={Shared}/>
+
+```python
+from kameleoon.data import ApplicationVersion
+
+kameleoon_client.add_data(visitor_code, ApplicationVersion("1.2.3"))
+```
+
 ### Returned Types
+
+#### DataFile
+
+<DataFile sec="description" c={Context} ui={SdkUi} shared={Shared}/>
+
+<DataFile sec="arguments" c={Context} ui={SdkUi} shared={Shared}/>
+
+```python
+feature_flags = data_file.feature_flags
+```
+
+#### FeatureFlag
+
+<FeatureFlag sec="description_rules" c={Context} ui={SdkUi} shared={Shared}/>
+
+<FeatureFlag sec="arguments_rules" c={Context} ui={SdkUi} shared={Shared}/>
+
+```python
+# Check whether the feature flag is enabled in the current environment
+is_environment_enabled = feature_flag.environment_enabled
+
+# Retrieve all variations of the feature flag as a dictionary (key = variation key, value = Variation object)
+variations = feature_flag.variations
+
+# Retrieve the default variation key of the feature flag
+default_variation_key = feature_flag.default_variation_key
+
+# Retrieve all rules of the feature flag
+rules = feature_flag.rules
+```
+
+#### Rule
+
+<Rule sec="description" c={Context} ui={SdkUi} shared={Shared}/>
+
+<Rule sec="arguments" c={Context} ui={SdkUi} shared={Shared}/>
+
+```python
+# Retrieve all variations of the rule as a dictionary (key = variation key, value = Variation object)
+variations = rule.variations
+```
 
 #### Variation
 
