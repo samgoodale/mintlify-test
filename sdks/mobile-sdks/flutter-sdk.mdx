@@ -24,6 +24,7 @@ import GetDataFile from '/snippets/sdks/reference/feature-flags-and-variations/g
 import DataFile from '/snippets/sdks/reference/returned-types/data-file.jsx';
 import FeatureFlag from '/snippets/sdks/reference/returned-types/feature-flag.jsx';
 import Rule from '/snippets/sdks/reference/returned-types/rule.jsx';
+import ApplicationVersion from '/snippets/sdks/reference/data-types/application-version.jsx';
 
 export const SdkUi = { Select, Text, Bold, Italic, Code, CodeRef, Ref, If };
 
@@ -69,6 +70,13 @@ export const Context = {
     Name: "CustomData",
     FullName: "data.CustomData",
     Ref: "#customdata"
+  },
+  ApplicationVersion: {
+    Name: "ApplicationVersion",
+    Ref: "#applicationversion",
+    Params: {
+      Version: { Type: "String" },
+    },
   },
   Geolocation: {
     Name: "Geolocation",
@@ -1316,6 +1324,20 @@ try {
     })]);
 } on KameleoonException {
     // Generic exception in native plugin integration occurred.
+}
+```
+
+#### ApplicationVersion
+
+<ApplicationVersion sec="description" c={Context} ui={SdkUi} shared={Shared}/>
+
+<ApplicationVersion sec="arguments" c={Context} ui={SdkUi} shared={Shared}/>
+
+```dart
+try {
+  kameleoonClient.addData([ApplicationVersion("1.2.3")]);
+} on KameleoonException {
+  // Handle the error
 }
 ```
 

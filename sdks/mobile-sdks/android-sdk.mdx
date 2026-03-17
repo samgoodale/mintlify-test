@@ -26,6 +26,7 @@ import DataFile from '/snippets/sdks/reference/returned-types/data-file.jsx';
 import FeatureFlag from '/snippets/sdks/reference/returned-types/feature-flag.jsx';
 import Rule from '/snippets/sdks/reference/returned-types/rule.jsx';
 import ActivityTrackingInterval from '/snippets/sdks/developer-guide/getting-started/activity-tracking-interval.jsx';
+import ApplicationVersion from '/snippets/sdks/reference/data-types/application-version.jsx';
 
 export const SdkUi = { Select, Text, Bold, Italic, Code, CodeRef, Ref, If };
 
@@ -80,6 +81,13 @@ export const Context = {
         Name: "CustomData",
         FullName: "data.CustomData",
         Ref: "#customdata"
+    },
+    ApplicationVersion: {
+        Name: "ApplicationVersion",
+        Ref: "#applicationversion",
+        Params: {
+            Version: { Type: "String" },
+        },
     },
     Geolocation: {
         Name: "Geolocation",
@@ -2238,6 +2246,25 @@ kameleoonClient.addData(CustomData(1, false, "value"))
 
 // To use a name instead of the index
 kameleoonClient.addData(CustomData("my-custom-data", "value"))
+```
+</Tab>
+</Tabs>
+
+#### ApplicationVersion
+
+<ApplicationVersion sec="description" c={Context} ui={SdkUi} shared={Shared}/>
+
+<ApplicationVersion sec="arguments" c={Context} ui={SdkUi} shared={Shared}/>
+
+<Tabs>
+<Tab title="Java">
+```java
+kameleoonClient.addData(new ApplicationVersion("1.2.3"));
+```
+</Tab>
+<Tab title="Kotlin">
+```kotlin
+kameleoonClient.addData(ApplicationVersion("1.2.3"))
 ```
 </Tab>
 </Tabs>

@@ -23,6 +23,11 @@ import EvaluateAudiences from '/snippets/sdks/reference/feature-flags-and-variat
 import GetEngineTrackingCode from '/snippets/sdks/reference/goals/get-engine-tracking-code.jsx';
 import UpdateConfigurationHandler from '/snippets/sdks/reference/events/update-configuration-handler.jsx';
 import CustomBucketingKey from '/snippets/sdks/developer-guide/custom-bucketing-key.jsx';
+import GetDataFile from '/snippets/sdks/reference/feature-flags-and-variations/get-data-file.jsx';
+import DataFile from '/snippets/sdks/reference/returned-types/data-file.jsx';
+import FeatureFlag from '/snippets/sdks/reference/returned-types/feature-flag.jsx';
+import Rule from '/snippets/sdks/reference/returned-types/rule.jsx';
+import ApplicationVersion from '/snippets/sdks/reference/data-types/application-version.jsx';
 
 export const SdkUi = { Select, Text, Bold, Italic, Code, CodeRef, Ref, If };
 
@@ -89,6 +94,13 @@ export const Context = {
         Name: "UserAgent",
         Ref: "#useragent"
     },
+    ApplicationVersion: {
+        Name: "ApplicationVersion",
+        Ref: "#applicationversion",
+        Params: {
+            Version: { Type: "string" },
+        },
+    },
     Geolocation: {
         Name: "Geolocation",
         Ref: "#geolocation",
@@ -122,6 +134,33 @@ export const Context = {
         Name: "Variation",
         FullName: "Types.Variation",
         Ref: "#variation"
+    },
+    DataFile: {
+        Name: "DataFile",
+        FullName: "Types.DataFile",
+        Ref: "#datafile",
+        Params: {
+            FeatureFlags: { Name: "FeatureFlags", Type: "IReadOnlyDictionary<string, FeatureFlag>" },
+        }
+    },
+    FeatureFlag: {
+        Name: "FeatureFlag",
+        FullName: "Types.FeatureFlag",
+        Ref: "#featureflag",
+        Params: {
+            EnvironmentEnabled: { Name: "EnvironmentEnabled" },
+            Variations: { Name: "Variations", Type: "IReadOnlyDictionary<string, Variation>" },
+            Rules: { Name: "Rules", Type: "IReadOnlyList<Rule>" },
+            DefaultVariationKey: { Name: "DefaultVariationKey", Type: "string" },
+        }
+    },
+    Rule: {
+        Name: "Rule",
+        FullName: "Types.Rule",
+        Ref: "#rule",
+        Params: {
+            Variations: { Name: "Variations", Type: "IReadOnlyDictionary<string, Variation>" },
+        }
     },
     // methods
     Flush: {
@@ -213,6 +252,10 @@ export const Context = {
         Name: "GetFeatureList()",
         Ref: "#getfeaturelist",
         Return: "List<string>",
+    },
+    GetDataFile: {
+        Name: "GetDataFile()",
+        Ref: "#getdatafile",
     },
 };
 
@@ -832,6 +875,27 @@ catch (KameleoonException ex)
 
 <EvaluateAudiences sec="exceptions" c={Context} ui={SdkUi} shared={Shared}/>
 
+#### GetDataFile()
+
+<GetDataFile sec="tip_qa" c={Context} ui={SdkUi} shared={Shared}/>
+
+<GetDataFile sec="description" c={Context} ui={SdkUi} shared={Shared}/>
+
+```csharp
+try
+{
+    var dataFile = kameleoonClient.GetDataFile();
+}
+catch (Exception e)
+{
+    // Recommended (but optional) safeguard for unexpected exceptions from third-party libraries
+}
+```
+
+##### Return value
+
+<GetDataFile sec="return_value" c={Context} ui={SdkUi} shared={Shared}/>
+
 ### Visitor data
 
 #### GetVisitorCode()
@@ -1389,7 +1453,58 @@ kameleoonClient.addData(visitorCode, cookie);
 kameleoonClient.addData(visitorCode, new Geolocation("France", "Île-de-France", "Paris"));
 ```
 
+#### ApplicationVersion
+
+<ApplicationVersion sec="description" c={Context} ui={SdkUi} shared={Shared}/>
+
+<ApplicationVersion sec="arguments" c={Context} ui={SdkUi} shared={Shared}/>
+
+```csharp
+kameleoonClient.AddData(visitorCode, new ApplicationVersion("1.2.3"));
+```
+
 ### Returned Types
+
+#### DataFile
+
+<DataFile sec="description" c={Context} ui={SdkUi} shared={Shared}/>
+
+<DataFile sec="arguments" c={Context} ui={SdkUi} shared={Shared}/>
+
+```csharp
+var featureFlags = dataFile.FeatureFlags;
+```
+
+#### FeatureFlag
+
+<FeatureFlag sec="description_rules" c={Context} ui={SdkUi} shared={Shared}/>
+
+<FeatureFlag sec="arguments_rules" c={Context} ui={SdkUi} shared={Shared}/>
+
+```csharp
+// Check whether the feature flag is enabled in the current environment
+var isEnvironmentEnabled = featureFlag.EnvironmentEnabled;
+
+// Retrieve all variations of the feature flag as a dictionary (key = variation key, value = Variation object)
+var variations = featureFlag.Variations;
+
+// Retrieve the default variation key of the feature flag
+var defaultVariationKey = featureFlag.DefaultVariationKey;
+
+// Retrieve all rules of the feature flag
+var rules = featureFlag.Rules;
+```
+
+#### Rule
+
+<Rule sec="description" c={Context} ui={SdkUi} shared={Shared}/>
+
+<Rule sec="arguments" c={Context} ui={SdkUi} shared={Shared}/>
+
+```csharp
+// Retrieve all variations of the rule as a dictionary (key = variation key, value = Variation object)
+var variations = rule.Variations;
+```
 
 #### Variation
 
