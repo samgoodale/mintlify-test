@@ -26,6 +26,7 @@ import CustomBucketingKey from '/snippets/sdks/developer-guide/custom-bucketing-
 import DataFile from '/snippets/sdks/reference/returned-types/data-file.jsx';
 import FeatureFlag from '/snippets/sdks/reference/returned-types/feature-flag.jsx';
 import Rule from '/snippets/sdks/reference/returned-types/rule.jsx';
+import ApplicationVersion from '/snippets/sdks/reference/data-types/application-version.jsx';
 
 export const SdkUi = { Select, Text, Bold, Italic, Code, CodeRef, Ref, If };
 
@@ -87,6 +88,13 @@ export const Context = {
   UserAgent: {
     Name: "UserAgent",
     Ref: "#useragent"
+  },
+  ApplicationVersion: {
+    Name: 'ApplicationVersion',
+    Ref: '#applicationversion',
+    Params: {
+      Version: { Type: 'String' },
+    },
   },
   Geolocation: {
     Name: "Geolocation",
@@ -255,7 +263,7 @@ With the Ruby SDK, you can run experiments and activate feature flags on your ba
 
 This section shows you how to integrate our SDK and start running experiments in your Ruby applications. Follow this tutorial to set up a simple A/B test to change the number of recommended products based on different variations.
 
-### Getting Started
+### Getting started
 
 #### Install the SDK
 
@@ -1292,6 +1300,16 @@ If you use internal bots, we suggest passing the value **curl/8.0** of the userA
 
 ```ruby
 kameleoon_client.add_data(visitor_code, Kameleoon::UserAgent.new("Your User Agent"))
+```
+
+#### ApplicationVersion
+
+<ApplicationVersion sec="description" c={Context} ui={SdkUi} shared={Shared} />
+
+<ApplicationVersion sec="arguments" c={Context} ui={SdkUi} shared={Shared} />
+
+```ruby
+kameleoon_client.add_data(visitor_code, Kameleoon::ApplicationVersion.new("1.2"))
 ```
 
 #### UniqueIdentifier
